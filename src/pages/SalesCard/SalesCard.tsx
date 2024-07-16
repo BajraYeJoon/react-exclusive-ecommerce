@@ -31,13 +31,24 @@ const productCardsContent = [
     rating: 98,
     image: "/products-img/product-chair.png",
   },
+  {
+    title: "S-Series Comfort Chair ",
+    price: 400,
+    discountPrice: 375,
+    rating: 98,
+    image: "/products-img/product-chair.png",
+  },
 ];
 
 const SalesCard = () => {
   return (
     <section className="flex flex-col gap-7 border-b border-foreground/30 pb-14 max-2xl:pb-10">
-      <PagesHeader />
-      <div className="flex w-full items-center justify-center overflow-x-auto gap-4">
+      <PagesHeader
+        subHeading="Today's Sales"
+        Heading="Flash Sales"
+        flashTimer
+      />
+      <div className="flex w-full items-center justify-start overflow-x-auto gap-4">
         {productCardsContent.map((productCard, index) => (
           <ProductCard key={index} {...productCard} />
         ))}
