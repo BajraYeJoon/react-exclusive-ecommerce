@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Carousel from "../../components/Carousel/carousel";
-import { AlignRightIcon, ChevronRight, MoveRightIcon } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 const categories = [
   {
@@ -17,10 +17,19 @@ const categories = [
   { id: 8, name: "Beauty & Personal Care" },
 ];
 
-const images = [
-  "https://plus.unsplash.com/premium_photo-1688045722767-8d8672f6950b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
-  "https://images.unsplash.com/photo-1720728659925-9ca9a38afb2c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8",
-  "https://images.unsplash.com/photo-1720937172267-575f3575386b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwzfHx8ZW58MHx8fHx8",
+const heroContent = [
+  {
+    title: "Up to 10% off Voucher",
+    brandName: "Iphone 14 Series",
+  },
+  {
+    title: "Get the best deals",
+    brandName: "Iphone 14 Series",
+  },
+  {
+    title: "Get the best deals",
+    brandName: "Iphone 14 Series",
+  },
 ];
 
 const Hero = () => {
@@ -38,7 +47,7 @@ const Hero = () => {
   return (
     <section className="flex">
       <aside className="text-foreground/80 text-lg z-10 flex flex-col items-start gap-4 mt-14 mr-6">
-        <ul className="flex flex-col gap-3 font-semibold">
+        <ul className="flex flex-col gap-3 font-medium tracking-tighter">
           {categories.map((category) => (
             <li key={category.id} className="relative">
               <div className="flex items-center justify-between">
@@ -67,7 +76,7 @@ const Hero = () => {
       </aside>
       <div className="bg-foreground/20 w-px min-h-full"></div>
 
-      <Carousel images={images} />
+      <Carousel heroContent={heroContent} />
     </section>
   );
 };

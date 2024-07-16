@@ -5,6 +5,7 @@ import {
   SearchIcon,
   HamIcon,
 } from "lucide-react";
+import { cn } from "../../lib/utils";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -22,28 +23,26 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="border-b">
-      <div className="flex items-center justify-between pt-9 pb-4 max-2xl:pt-7 max-2xl:pb-3 mx-64 max-3xl:mx-24 max-2xl:mx-14 ">
-        {/* Logo and primary menu */}
-        <div className="flex items-center gap-16">
-          {/* Logo */}
-          <a href="/" className="flex items-center">
-            <span className="self-center text-2xl font-semibold whitespace-nowrap">
+    <nav className="navbar border-b">
+      <div className="navbar-container flex items-center justify-between pt-9 pb-4 max-2xl:pt-7 max-2xl:pb-3 mx-64 max-3xl:mx-24 max-2xl:mx-14">
+        <div className="logo-container flex items-center gap-16">
+          <a href="/" className="logo flex items-center">
+            <span className="logo-text self-center text-2xl font-semibold whitespace-nowrap">
               Exclusive
             </span>
           </a>
         </div>
 
-        <div className="hidden lg:flex gap-8 ">
-          <ul className="flex flex-col font-medium md:space-x-4 md:flex-row md:mt-0">
+        <div className="nav-links hidden lg:flex gap-8">
+          <ul className="nav-menu flex flex-col font-medium md:space-x-4 md:flex-row md:mt-0">
             {navLinks.map((link, index) => (
-              <li key={index}>
+              <li key={index} className="nav-item">
                 <a
                   href={link.href}
                   onClick={() => handleLinkClick({ href: link.href })}
-                  className={`block font-normal py-1 px-3 text-foreground ${
+                  className={`nav-link block font-normal py-1 px-3 text-foreground ${
                     activeLink === link.href
-                      ? "border-b border-b-foreground/50 "
+                      ? "active-link border-b border-b-foreground/50"
                       : ""
                   }`}
                 >
@@ -53,43 +52,51 @@ const Navbar = () => {
             ))}
           </ul>
         </div>
-        {/* Secondary menu and icons */}
         <div className="flex gap-6 items-center">
-          {/* Search bar */}
-          <div className="hidden md:flex w-42 h-10 px-3 py-2 text-sm border border-background/20 rounded-md focus-within:ring focus-within:ring-accent text-foreground hover:border-b hover:border-b-foreground/25">
+          <div className="search-bar hidden md:flex w-42 h-10 px-3 py-2 text-sm  bg-card rounded-md  text-foreground ">
             <input
               type="search"
-              className="flex-grow focus:outline-none"
+              className="search-input bg-card w-full placeholder:text-xs"
               placeholder="What are you looking for?"
             />
-            <SearchIcon className="my-auto" size={20} />
+            <SearchIcon className="search-icon my-auto" size={20} />
           </div>
-          {/* Icons */}
           <HeartIcon size={20} />
           <LucideShoppingCart size={20} />
-          {/* Mobile navigation toggle */}
-          <div className="lg:hidden flex items-center">
-            <button onClick={() => setToggleMenu(!toggleMenu)}>
-              <HamIcon className="h-6" />
+          <div className="mobile-nav-toggle lg:hidden flex items-center">
+            <button
+              onClick={() => setToggleMenu(!toggleMenu)}
+              className="menu-toggle"
+            >
+              <HamIcon className="menu-icon h-6" />
             </button>
           </div>
         </div>
       </div>
-      {/* Mobile navigation */}
       <div
-        className={`fixed z-40 w-full bg-gray-100 overflow-hidden flex flex-col lg:hidden gap-12 origin-top duration-700 ${
+        className={cn(
+          "mobile-nav fixed z-40 w-full bg-gray-100 overflow-hidden flex flex-col lg:hidden gap-12 origin-top duration-700",
           !toggleMenu ? "h-0" : "h-full"
-        }`}
+        )}
       >
-        <div className="px-8">
-          <div className="flex flex-col gap-8 font-bold tracking-wider">
-            <a href="#" className="border-l-4 border-gray-600">
-              Features
-            </a>
-            <a href="#">Pricing</a>
-            <a href="#">Download</a>
-            <a href="#">Classic</a>
-          </div>
+        <div className="px-8 mobile-nav-menu flex flex-col gap-8 font-bold tracking-wider">
+          <ul className="nav-menu flex flex-col font-medium md:space-x-4 md:flex-row md:mt-0">
+            {navLinks.map((link, index) => (
+              <li key={index} className="nav-item">
+                <a
+                  href={link.href}
+                  onClick={() => handleLinkClick({ href: link.href })}
+                  className={`nav-link block font-normal py-1 px-3 text-foreground ${
+                    activeLink === link.href
+                      ? "active-link border-b border-b-foreground/50"
+                      : ""
+                  }`}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </nav>
