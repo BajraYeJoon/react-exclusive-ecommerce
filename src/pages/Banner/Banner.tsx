@@ -10,7 +10,7 @@ const Banner = () => {
             </a>
           </p>
         </div>
-        <div className="language-selector-section flex md:absolute md:right-0 md:top-2/4 md:-translate-y-2/4">
+        <div className="language-selector flex md:absolute md:right-0 md:top-2/4 md:-translate-y-2/4">
           <select className=" cursor-pointer text-background bg-transparent">
             <option value="en" className="text-foreground">
               English

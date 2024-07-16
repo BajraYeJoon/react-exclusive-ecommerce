@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   HeartIcon,
   LucideShoppingCart,
@@ -26,25 +26,28 @@ const Navbar = () => {
     <nav className="navbar border-b">
       <div className="navbar-container flex items-center justify-between pt-9 pb-4 max-2xl:pt-7 max-2xl:pb-3 mx-64 max-3xl:mx-24 max-2xl:mx-14">
         <div className="logo-container flex items-center gap-16">
-          <a href="/" className="logo flex items-center">
-            <span className="logo-text self-center text-2xl font-semibold whitespace-nowrap">
+          <a href="/" className=" flex items-center">
+            <span className=" self-center text-2xl font-semibold whitespace-nowrap">
               Exclusive
             </span>
           </a>
         </div>
 
         <div className="nav-links hidden lg:flex gap-8">
-          <ul className="nav-menu flex flex-col font-medium md:space-x-4 md:flex-row md:mt-0">
+          <ul className=" flex flex-col font-medium md:space-x-4 md:flex-row md:mt-0">
             {navLinks.map((link, index) => (
               <li key={index} className="nav-item">
                 <a
                   href={link.href}
-                  onClick={() => handleLinkClick({ href: link.href })}
-                  className={`nav-link block font-normal py-1 px-3 text-foreground ${
+                  onClick={() => {
+                    handleLinkClick({ href: link.href });
+                  }}
+                  className={cn(
+                    `nav-link block font-normal py-1 px-3 text-foreground`,
                     activeLink === link.href
-                      ? "active-link border-b border-b-foreground/50"
+                      ? "active-link border-b-2 border-foreground"
                       : ""
-                  }`}
+                  )}
                 >
                   {link.label}
                 </a>
