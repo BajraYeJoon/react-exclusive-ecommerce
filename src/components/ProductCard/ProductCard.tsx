@@ -7,6 +7,7 @@ interface ProductCardProps {
   discountPrice: number;
   rating: number;
   image: string;
+  discountTag?: boolean;
 }
 
 const ProductCard = ({
@@ -15,6 +16,7 @@ const ProductCard = ({
   discountPrice,
   rating,
   image,
+  discountTag,
 }: ProductCardProps) => {
   return (
     <div className="w-full max-w-72 ">
@@ -24,9 +26,11 @@ const ProductCard = ({
           src={image}
           alt="product image"
         />
-        <span className="text-[10px] font-light absolute top-2 left-2 px-2 py-1 text-background bg-primary rounded-sm">
-          -{Math.round(((price - discountPrice) / price) * 100)}%
-        </span>
+        {discountTag && (
+          <span className="text-[10px] font-light absolute top-2 left-2 px-2 py-1 text-background bg-primary rounded-sm">
+            -{Math.round(((price - discountPrice) / price) * 100)}%
+          </span>
+        )}
 
         <div className="absolute right-4 top-4 flex gap-2 flex-col">
           <span className="h-7 w-7 bg-foreground/20 rounded-full flex justify-center items-center">

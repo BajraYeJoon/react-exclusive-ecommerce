@@ -33,9 +33,9 @@ const categories = [
 
 const Category = () => {
   return (
-    <section className="flex flex-col gap-7 border-b border-foreground/30 pb-14 max-2xl:pb-10">
+    <section className="category-container flex flex-col gap-7 border-b border-foreground/30 pb-14 max-2xl:pb-10">
       <PagesHeader subHeading="Categories" Heading="Browse by Category" />
-      <div className="my-10">
+      <div className="category-grid my-10">
         <div className="grid w-full md:grid-cols-6 grid-cols-3 gap-6">
           {categories.map((category, index) => {
             const CategoryIcon = category.icon;

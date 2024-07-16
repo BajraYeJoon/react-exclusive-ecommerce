@@ -1,13 +1,20 @@
 import FlashSaleTimer from "../FlashSaleTimer/FlashSaleTimer";
 import NavigationArrows from "../NavigationalArrows/NavigationalArrows";
+import { Button } from "../ui/button";
 
 interface PagesHeaderProps {
   flashTimer?: boolean;
   subHeading: string;
   Heading: string;
+  cta?: boolean;
 }
 
-const PagesHeader = ({ flashTimer, subHeading, Heading }: PagesHeaderProps) => {
+const PagesHeader = ({
+  flashTimer,
+  subHeading,
+  Heading,
+  cta,
+}: PagesHeaderProps) => {
   return (
     <div className="page-header-container flex flex-col gap-3">
       <div className="flex items-center gap-3 text-primary">
@@ -24,10 +31,14 @@ const PagesHeader = ({ flashTimer, subHeading, Heading }: PagesHeaderProps) => {
           {flashTimer && <FlashSaleTimer />}
           <div className="flex items-center gap-3 text-color-text-3 mb-3"></div>
         </div>
-        <div className="page-navigations flex items-center gap-2">
-          <NavigationArrows direction="prev" onClick={() => {}} />
-          <NavigationArrows direction="next" onClick={() => {}} />
-        </div>
+        {!cta ? (
+          <div className="page-navigations flex items-center gap-2">
+            <NavigationArrows direction="prev" onClick={() => {}} />
+            <NavigationArrows direction="next" onClick={() => {}} />
+          </div>
+        ) : (
+          <Button>View All</Button>
+        )}
       </div>
     </div>
   );
