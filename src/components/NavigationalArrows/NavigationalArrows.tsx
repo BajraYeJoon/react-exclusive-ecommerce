@@ -15,7 +15,7 @@ const NavigationArrows = ({
   return (
     <div
       className={cn(
-        "group flex h-10 w-10 items-center justify-center rounded-full bg-card hover:bg-primary",
+        "group flex h-10 w-10 items-center justify-center rounded-full bg-card hover:bg-primary cursor-pointer",
         {
           "cursor-not-allowed opacity-50": disabled,
         }

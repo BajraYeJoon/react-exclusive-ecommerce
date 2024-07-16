@@ -46,7 +46,7 @@ const Hero = () => {
 
   return (
     <section className="flex">
-      <aside className="text-foreground/80 text-lg z-10 flex flex-col items-start gap-4 mt-14 mr-6">
+      <aside className="text-foreground/80 hidden lg:flex text-lg z-10  flex-col items-start gap-4 mt-14 mr-6">
         <ul className="flex flex-col gap-3 font-medium tracking-tighter">
           {categories.map((category) => (
             <li key={category.id} className="relative">
@@ -74,7 +74,7 @@ const Hero = () => {
           ))}
         </ul>
       </aside>
-      <div className="bg-foreground/20 w-px min-h-full"></div>
+      <div className="bg-foreground/20 hidden lg:block w-px min-h-full"></div>
 
       <Carousel heroContent={heroContent} />
     </section>

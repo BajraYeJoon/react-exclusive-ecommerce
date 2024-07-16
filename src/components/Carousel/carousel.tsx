@@ -17,7 +17,7 @@ const Carousel = ({ heroContent }: { heroContent: HeroContent }) => {
   }, [heroContent.length]);
 
   return (
-    <div className="carousel-container flex-1 pl-14 pt-14 w-full">
+    <div className="carousel-container flex-1 lg:pl-14 pt-12 lg:pt-14 w-full">
       <div className="carousel-wrapper relative rounded-lg">
         {heroContent.map((content, index) => (
           <div
@@ -28,10 +28,12 @@ const Carousel = ({ heroContent }: { heroContent: HeroContent }) => {
             )}
           >
             <div className="carousel-content grid grid-cols-2 align-middle bg-foreground w-full h-96 ">
-              <div className="carousel-text gap-6 pl-14 text-background flex flex-col justify-center items-start">
-                <span className="brand-icon inline-flex items-center gap-6">
-                  <SiApple size={40} />
-                  <span className="font-light">{content.brandName}</span>
+              <div className="carousel-text gap-6 pl-4 md:pl-10 lg:pl-14 text-background flex flex-col justify-center items-start">
+                <span className="brand-icon inline-flex items-center gap-3 md:gap-6">
+                  <SiApple className="text-md md:text-base lg:text-xl" />
+                  <span className="text-sm md:text-base lg:text-lg font-light">
+                    {content.brandName}
+                  </span>
                 </span>
                 <h1 className="carousel-title text-5xl text-balance font-medium tracking-wide leading-[4.2rem]">
                   {content.title}
