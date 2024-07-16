@@ -49,20 +49,20 @@ const Hero = () => {
       <aside className="text-foreground/80 hidden lg:flex text-lg z-10  flex-col items-start gap-4 mt-14 mr-6">
         <ul className="flex flex-col gap-3 font-medium tracking-tighter">
           {categories.map((category) => (
-            <li key={category.id} className="relative">
+            <li key={category.id} className="relative cursor-pointer">
               <div className="flex items-center justify-between">
                 {category.name}
                 {category.subcategories && (
-                  <button
-                    onClick={() => toggleSubcategories(category.id)}
-                    className="ml-2"
-                  >
-                    <ChevronRight />
+                  <button className="ml-2">
+                    <ChevronRight
+                      onMouseEnter={() => toggleSubcategories(category.id)}
+                      onMouseLeave={() => toggleSubcategories(category.id)}
+                    />
                   </button>
                 )}
               </div>
               {category.subcategories && visibleSubcategories[category.id] && (
-                <div className="absolute right-0-full z-20 top-0 mt-2 bg-white border shadow-lg p-2">
+                <div className="absolute -right-6 z-20 top-0 mt-2 bg-white border shadow-lg p-2">
                   <ul>
                     {category.subcategories.map((subcategory, index) => (
                       <li key={index}>{subcategory}</li>

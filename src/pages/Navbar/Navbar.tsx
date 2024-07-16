@@ -56,14 +56,14 @@ const Navbar = () => {
             ))}
           </ul>
         </div>
-        <div className="flex gap-6 items-center">
-          <div className="search-bar hidden md:flex w-42 h-10 px-3 py-2 text-sm  bg-card rounded-md  text-foreground ">
+        <div className="search-bar flex gap-6 items-center">
+          <div className="search-bar hidden md:flex w-42 h-10 px-3 py-2 text-sm group bg-card rounded-md  text-foreground ">
             <input
               type="search"
-              className="search-input bg-card w-full placeholder:text-xs"
+              className="search-input bg-card w-full placeholder:text-xs focus:outline-none"
               placeholder="What are you looking for?"
             />
-            <SearchIcon className="search-icon my-auto" size={20} />
+            <SearchIcon className=" search-icon my-auto" size={20} />
           </div>
           <HeartIcon size={20} />
           <LucideShoppingCart size={20} />
