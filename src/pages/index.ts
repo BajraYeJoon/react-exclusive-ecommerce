@@ -7,7 +7,8 @@ import BestProducts from "./BestProducts/BestProducts";
 import ArrivalProductsGrid from "./ArrivalsProductsGrid/ArrivalProductsGrid";
 import LimitedEditionCTA from "./CTA/LimitedEditionCTA";
 import GeneralProducts from "./GeneralProducts/GeneralProducts";
-
+import ServiceDetails from "./ServiceDetails/ServiceDetails";
+import Footer from "./Footer/Footer";
 
 export {
   Banner,
@@ -19,4 +20,6 @@ export {
   ArrivalProductsGrid,
   LimitedEditionCTA,
   GeneralProducts,
+  Footer,
+  ServiceDetails,
 };

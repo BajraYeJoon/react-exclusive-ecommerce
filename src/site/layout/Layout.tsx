@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { Banner, Navbar } from "../../pages";
+import { Banner, Navbar, Footer } from "../../pages";
 
 const Layout = () => {
   return (
@@ -7,6 +7,7 @@ const Layout = () => {
       <Banner />
       <Navbar />
       <Outlet />
+      <Footer />
     </>
   );
 };

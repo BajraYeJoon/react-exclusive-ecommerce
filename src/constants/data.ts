@@ -7,6 +7,40 @@ import {
   CameraIcon,
 } from "./images";
 
+import { CiDeliveryTruck } from "react-icons/ci";
+import { GrSecure } from "react-icons/gr";
+import { IconType } from "react-icons";
+import { BiHeadphone } from "react-icons/bi";
+
+interface ServiceDetail {
+  id: number;
+  title: string;
+  description: string;
+  icon: IconType;
+}
+
+export const serviceDetailsInfo: ServiceDetail[] = [
+  {
+    id: 1,
+    title: "Fast Delivery",
+    description: "Lorem ipsum dolor sit amet.",
+    icon: CiDeliveryTruck,
+  },
+  {
+    id: 2,
+    title: "Quality Products",
+    description: "Lorem ipsum dolor sit amet.",
+    icon: BiHeadphone,
+  },
+  {
+    id: 3,
+    title: "24/7 Support",
+    description: "Lorem ipsum dolor sit amet.",
+    icon: GrSecure,
+  },
+];
+
+
 export const navLinks = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },

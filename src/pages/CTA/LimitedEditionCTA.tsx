@@ -9,7 +9,7 @@ const timeUnits = [
 
 const LimitedEditionCTA = () => {
   return (
-    <section className="bg-foreground rounded-md md:rounded-none flex-col items-center flex md:px-16 py-10 md:py-20">
+    <section className="bg-foreground rounded-md md:rounded-none flex-col md:flex-row items-center flex md:px-16 py-10 md:py-20">
       <div className="flex flex-col items-start gap-6 justify-between md:gap-8 flex-1">
         <span className="text-lg capitalize max-2xl:text-base text-accent">
           Categories
@@ -21,10 +21,10 @@ const LimitedEditionCTA = () => {
           {timeUnits.map(({ unit, value }) => (
             <div
               key={unit}
-              className="flex flex-col bg-background items-center justify-center w-14 h-14 md:w-[80px] md:h-[80px] rounded-full -space-y-2 "
+              className="flex flex-col bg-background items-center justify-center w-14 h-14 md:w-[80px] md:h-[80px] rounded-full -space-y-1 "
             >
-              <span>{value}</span>
-              <p className="text-xs md:text-sm">{unit}</p>
+              <span className="font-bold">{value}</span>
+              <p className="text-xs font-medium md:text-sm">{unit}</p>
             </div>
           ))}
         </div>

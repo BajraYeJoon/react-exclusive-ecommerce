@@ -6,6 +6,7 @@ import {
   ArrivalProductsGrid,
   LimitedEditionCTA,
   GeneralProducts,
+  ServiceDetails,
 } from "../../pages";
 
 const Home = () => {
@@ -18,6 +19,7 @@ const Home = () => {
       <LimitedEditionCTA />
       <GeneralProducts />
       <ArrivalProductsGrid />
+      <ServiceDetails />
     </div>
   );
 };

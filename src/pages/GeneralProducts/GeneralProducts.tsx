@@ -1,5 +1,4 @@
-import { PagesHeader, ProductCard } from "../../components";
-
+import { PagesHeader, Button, ProductCard } from "../../components";
 import { generalProducts } from "../../constants/data";
 
 const GeneralProducts = () => {
@@ -12,6 +11,8 @@ const GeneralProducts = () => {
           <ProductCard key={index} {...gproduct} />
         ))}
       </div>
+
+      <Button className="mx-auto w-full md:w-fit">View All Products</Button>
     </section>
   );
 };

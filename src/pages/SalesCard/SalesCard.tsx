@@ -9,7 +9,7 @@ const SalesCard = () => {
         Heading="Flash Sales"
         flashTimer
       />
-      <div className="product-card-container flex w-full items-center justify-between overflow-x-scroll gap-4">
+      <div className="product-card-container flex w-full items-center justify-between overflow-x-auto gap-4">
         {productCardsContent.map((productCard, index) => (
           <ProductCard key={index} {...productCard} discountTag />
         ))}
