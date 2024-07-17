@@ -22,7 +22,7 @@ const ProductCard = ({
     <div className="w-full max-w-72 ">
       <div className="bg-card group rounded-b-md h-32 md:h-56 w-full relative overflow-hidden">
         <img
-          className="object-contain p-4 md:p-12 h-full w-full group-hover:opacity-40 transition-opacity duration-300"
+          className="object-contain p-4 md:p-8 lg:p-12 h-full w-full group-hover:opacity-40 transition-opacity duration-300"
           src={image}
           alt="product image"
         />

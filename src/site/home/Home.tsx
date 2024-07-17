@@ -11,7 +11,7 @@ import {
 
 const Home = () => {
   return (
-    <div className="flex flex-col gap-20 lg:gap-32 md:gap-28 mb-12 lg:mb-28 lg:mx-72 mx-6">
+    <div className="mx-72 mb-28 flex flex-col gap-40 max-2xl:mx-6 max-2xl:gap-28">
       <Hero />
       <SalesCard />
       <Category />

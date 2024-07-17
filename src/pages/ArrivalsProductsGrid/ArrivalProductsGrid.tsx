@@ -8,45 +8,43 @@ const ShopNowButton = () => (
 
 const ArrivalProductsGrid = () => {
   return (
-    <section className="arrival-products-container flex flex-col lg:gap-20 gap-10">
+    <section className="arrival-products-container flex flex-col gap-10 lg:gap-20">
       <PagesHeader subHeading="Featured" Heading="New Arrivals" cta />
 
-      <div className="grid grid-cols-2 md:grid-cols-4 grid-rows-2 h-[500px] md:h-[600px] gap-4 ">
-        <div className="col-span-2 md:row-span-2 bg-[url(/new-arrivals/gaming.png)] bg-foreground bg-no-repeat bg-contain md:bg-auto bg-bottom flex items-end p-4 md:p-10 rounded-sm">
+      <div className="grid h-[500px] grid-cols-2 grid-rows-2 gap-4 md:h-[400px] md:grid-cols-4">
+        <div className="col-span-2 flex items-end rounded-sm bg-foreground bg-[url(/new-arrivals/gaming.png)] bg-contain bg-bottom bg-no-repeat p-4 md:row-span-2 md:p-6 lg:bg-auto lg:p-10">
           <div className="space-y-2 md:space-y-4">
-            <div className="text-background space-y-1">
-              <h3 className="text-base md:text-[26px]  lg:text-2xl ">
+            <div className="space-y-1 text-background">
+              <h3 className="text-base md:text-[26px] lg:text-2xl">
                 Playstation 5
               </h3>
-              <p className="text-xs md:text-base text-background/60 tracking-wide">
+              <p className="text-xs tracking-wide text-background/60 md:text-base">
                 Experience the next generation of gaming
               </p>
               <ShopNowButton />
             </div>
           </div>
         </div>
-        <div className="col-span-2 flex items-end p-4 md:p-10 rounded-sm bg-[url(/new-arrivals/woman.png)] bg-foreground bg-no-repeat bg-contain md:bg-contain bg-right shadow-[inset_-100px_0_100px_10px_rgba(255,255,255,0.2)]">
+        <div className="col-span-2 flex items-end rounded-sm bg-foreground bg-[url(/new-arrivals/woman.png)] bg-contain bg-right bg-no-repeat p-4 shadow-[inset_-100px_0_100px_10px_rgba(255,255,255,0.2)] md:p-6 lg:bg-contain lg:p-10">
           <div className="space-y-2 md:space-y-4">
-            <div className="text-background space-y-1">
-              <h3 className="text-sm md:text-[26px]  lg:text-2xl ">
+            <div className="space-y-1 text-background">
+              <h3 className="text-sm md:text-base lg:text-2xl">
                 Playstation 5
               </h3>
-              <p className="text-xs md:text-base text-background/60 tracking-wide">
+              <p className="text-xs tracking-wide text-background/60 md:text-base">
                 Experience the next generation of gaming
               </p>
             </div>
             <ShopNowButton />
           </div>
         </div>
-        <div className="flex items-end p-10 rounded-sm bg-foreground relative bg-[url(/new-arrivals/alexa.png)] bg-no-repeat bg-contain bg-center md:bg-auto">
+        <div className="relative flex items-end rounded-sm bg-foreground bg-[url(/new-arrivals/alexa.png)] bg-contain bg-center bg-no-repeat p-10 lg:bg-auto">
           {/* img */}
 
-          <div className="space-y-2 md:space-y-4 absolute bottom-0 left-0 p-2 md:p-10">
-            <div className="text-background space-y-1">
-              <h3 className="text-xs md:text-[26px] capitalize lg:text-xl ">
-                Playstation 5
-              </h3>
-              <p className="hidden md:block md:text-sm">
+          <div className="absolute bottom-0 left-0 space-y-2 p-2 md:space-y-4 md:p-4 lg:p-10">
+            <div className="space-y-1 text-background">
+              <h3 className="text-xs md:text-base lg:text-xl">Playstation 5</h3>
+              <p className="hidden md:text-sm lg:block">
                 Experience the next generation of gaming
               </p>
             </div>
@@ -54,15 +52,13 @@ const ArrivalProductsGrid = () => {
           </div>
         </div>
 
-        <div className="flex items-end p-14 md:p-10 rounded-sm bg-foreground relative bg-[url(/new-arrivals/perfume.png)]  bg-no-repeat bg-contain md:bg-auto bg-center">
+        <div className="relative flex items-end rounded-sm bg-foreground bg-[url(/new-arrivals/perfume.png)] bg-contain bg-center bg-no-repeat p-14 md:p-10 lg:bg-auto">
           {/* img */}
 
-          <div className="space-y-2 md:space-y-4  absolute bottom-0 left-0 p-2 md:p-10">
-            <div className="text-background space-y-1">
-              <h3 className="text-xs md:text-[26px] capitalize lg:text-xl ">
-                Playstation 5
-              </h3>
-              <p className="hidden md:block md:text-sm">
+          <div className="absolute bottom-0 left-0 space-y-2 p-2 md:space-y-4 md:p-4 lg:p-10">
+            <div className="space-y-1 text-background">
+              <h3 className="text-xs md:text-base lg:text-xl">Playstation 5</h3>
+              <p className="hidden md:text-sm lg:block">
                 Experience the next generation of gaming
               </p>
             </div>

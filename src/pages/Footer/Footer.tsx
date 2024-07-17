@@ -6,28 +6,24 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <footer className="bg-foreground text-background">
-      <section className="mt-16 flex flex-wrap justify-between gap-10 mx-8 lg:mx-72 pt-24 pb-6">
+      <section className="mx-8 mt-16 flex flex-wrap gap-10 pb-6 pt-24 md:justify-start lg:mx-72 lg:justify-between">
         <div className="flex flex-col items-start gap-3">
           <Link to="/">
-            <span className="self-center text-2xl tracking-wider font-semibold ">
+            <span className="self-center text-2xl font-semibold tracking-wider">
               Exclusive
             </span>
           </Link>
-          <p className="text-sm md:text-base tracking-wider">Subscribe</p>
-          <span className="text-xs md:text-sm font-extralight tracking-wide">
+          <p className="text-sm tracking-wider md:text-base">Subscribe</p>
+          <span className="text-xs font-extralight tracking-wide md:text-sm">
             Get 10% off your first order
           </span>
-          <div className="search-bar hidden md:flex w-42 h-10 px-3 py-2 text-sm group bg-transparent rounded-sm border border-background  text-foreground ">
+          <div className="search-bar w-42 group hidden h-10 rounded-sm border border-background bg-transparent px-3 py-2 text-sm text-foreground md:flex">
             <input
               type="search"
-              className="search-input bg-transparent w-full placeholder:text-xs focus:outline-none"
+              className="search-input w-full bg-transparent placeholder:text-xs focus:outline-none"
               placeholder="Enter your email"
             />
-            <MailCheck
-              className=" search-icon my-auto"
-              size={20}
-              fill="#ffff"
-            />
+            <MailCheck className="search-icon my-auto" size={20} fill="#ffff" />
           </div>
         </div>
         <div className="flex flex-col items-start gap-3">
@@ -56,9 +52,9 @@ const Footer = () => {
         </div>
         <div className="flex flex-col items-start gap-3">
           <h3 className="text-lg font-semibold tracking-wider">Follow Us</h3>
-          <div className="flex flex-col justify-center items-center gap-2">
+          <div className="flex flex-col items-center justify-center gap-2">
             <span className="text-xs">Save 3$ with App New User Only</span>
-            <div className="flex items- w-full justify-between">
+            <div className="items- flex w-full justify-between">
               <div className="h-20 w-20 bg-background">qr code</div>
               <div className="flex flex-col gap-2">
                 <img src="/footer-img/gplay.png" alt="" className="w-full" />
@@ -66,7 +62,7 @@ const Footer = () => {
               </div>
             </div>
           </div>
-          <div className="flex items-center w-full px-4 justify-between">
+          <div className="flex w-full items-center justify-between px-4">
             <FaFacebook />
             <BsInstagram />
             <Linkedin />

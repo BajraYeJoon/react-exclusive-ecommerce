@@ -9,7 +9,7 @@ const timeUnits = [
 
 const LimitedEditionCTA = () => {
   return (
-    <section className="bg-foreground rounded-md md:rounded-none flex-col md:flex-row items-center flex md:px-16 py-10 md:py-20">
+    <section className="bg-foreground rounded-md md:rounded-none flex-col md:flex-row items-center flex md:px-10 lg:px-16 py-10 md:py-20">
       <div className="flex flex-col items-start gap-6 justify-between md:gap-8 flex-1">
         <span className="text-lg capitalize max-2xl:text-base text-accent">
           Categories
@@ -21,10 +21,10 @@ const LimitedEditionCTA = () => {
           {timeUnits.map(({ unit, value }) => (
             <div
               key={unit}
-              className="flex flex-col bg-background items-center justify-center w-14 h-14 md:w-[80px] md:h-[80px] rounded-full -space-y-1 "
+              className="flex flex-col bg-background items-center justify-center w-14 h-14 lg:w-[80px] md:w-14 md:h-14 lg:h-[80px] rounded-full -space-y-1 "
             >
               <span className="font-bold">{value}</span>
-              <p className="text-xs font-medium md:text-sm">{unit}</p>
+              <p className="text-xs font-medium lg:text-sm">{unit}</p>
             </div>
           ))}
         </div>
@@ -33,7 +33,7 @@ const LimitedEditionCTA = () => {
       <img
         src="/limitededitioncta.webp"
         alt=""
-        className="hidden md:block object-contain drop-shadow-[0_0_100px_rgba(255,255,255,0.5)] w-auto h-12 md:h-72"
+        className="hidden md:block object-contain drop-shadow-[0_0_100px_rgba(255,255,255,0.5)] w-auto h-12 md:h-44 lg:h-72"
       />
     </section>
   );
