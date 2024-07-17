@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Carousel from "../../components/Carousel/carousel";
 import { ChevronRight } from "lucide-react";
 
@@ -33,36 +32,18 @@ const heroContent = [
 ];
 
 const Hero = () => {
-  const [visibleSubcategories, setVisibleSubcategories] = useState<{
-    [key: number]: boolean;
-  }>({});
-
-  const toggleSubcategories = (id: number) => {
-    setVisibleSubcategories((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
-  };
-
   return (
     <section className="flex">
       <aside className="text-foreground/80 hidden lg:flex text-lg z-10  flex-col items-start gap-4 mt-14 mr-6">
         <ul className="flex flex-col gap-3 font-medium tracking-tighter">
           {categories.map((category) => (
-            <li key={category.id} className="relative cursor-pointer">
+            <li key={category.id} className="relative cursor-pointer group">
               <div className="flex items-center justify-between">
                 {category.name}
-                {category.subcategories && (
-                  <button className="ml-2">
-                    <ChevronRight
-                      onMouseEnter={() => toggleSubcategories(category.id)}
-                      onMouseLeave={() => toggleSubcategories(category.id)}
-                    />
-                  </button>
-                )}
+                {category.subcategories && <ChevronRight />}
               </div>
-              {category.subcategories && visibleSubcategories[category.id] && (
-                <div className="absolute -right-6 z-20 top-0 mt-2 bg-white border shadow-lg p-2">
+              {category.subcategories && (
+                <div className="subcategories hidden absolute -right-6 z-20 top-0 mt-2 bg-white border shadow-lg p-2 group-hover:block">
                   <ul>
                     {category.subcategories.map((subcategory, index) => (
                       <li key={index}>{subcategory}</li>

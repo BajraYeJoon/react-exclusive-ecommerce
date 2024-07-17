@@ -1,6 +1,9 @@
 import { Hero, SalesCard } from "../../pages";
 import Category from "../../pages/Category/Category";
 import BestProducts from "../../pages/BestProducts/BestProducts";
+import LimitedEditionCTA from "../../pages/CTA/LimitedEditionCTA";
+import GeneralProducts from "../../pages/GeneralProducts/GeneralProducts";
+import ArrivalProductsGrid from "../../pages/ArrivalsProductsGrid/ArrivalProductsGrid";
 
 const Home = () => {
   return (
@@ -9,6 +12,9 @@ const Home = () => {
       <SalesCard />
       <Category />
       <BestProducts />
+      <LimitedEditionCTA />
+      <GeneralProducts />
+      <ArrivalProductsGrid />
     </div>
   );
 };
