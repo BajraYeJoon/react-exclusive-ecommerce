@@ -20,9 +20,9 @@ const ProductCard = ({
 }: ProductCardProps) => {
   return (
     <div className="w-full max-w-72 ">
-      <div className="bg-card group rounded-b-md h-56 w-full relative overflow-hidden">
+      <div className="bg-card group rounded-b-md h-32 md:h-56 w-full relative overflow-hidden">
         <img
-          className="object-contain p-12 h-full w-full group-hover:opacity-40 transition-opacity duration-300"
+          className="object-contain p-4 md:p-12 h-full w-full group-hover:opacity-40 transition-opacity duration-300"
           src={image}
           alt="product image"
         />
@@ -62,7 +62,7 @@ const ProductCard = ({
         <div className="flex items-center text-xs">
           <div className="flex items-center space-x-1 ">
             {Array.from({ length: 5 }).map((_, index) => (
-              <FaStar key={index} size={15} className="text-accent" />
+              <FaStar key={index} className="text-accent md:h-8" />
             ))}
           </div>
           <span className="ml-2 text-foreground/70">({rating})</span>

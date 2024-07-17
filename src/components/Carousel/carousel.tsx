@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { cn } from "../../lib/utils";
 import { ArrowRight } from "lucide-react";
 import { SiApple } from "react-icons/si";
+import { Link } from "react-router-dom";
 
 type HeroContent = { title: string; brandName: string }[];
 
@@ -11,14 +12,14 @@ const Carousel = ({ heroContent }: { heroContent: HeroContent }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % heroContent.length);
-    }, 30000);
+    }, 300000);
 
     return () => clearInterval(interval);
   }, [heroContent.length]);
 
   return (
-    <div className="carousel-container flex-1 lg:pl-14 pt-12 lg:pt-14 w-full">
-      <div className="carousel-wrapper relative rounded-lg">
+    <div className="carousel-container flex-1 lg:pl-14 pt-4 lg:pt-14 w-full">
+      <div className="carousel-wrapper relative ">
         {heroContent.map((content, index) => (
           <div
             key={index}
@@ -27,29 +28,29 @@ const Carousel = ({ heroContent }: { heroContent: HeroContent }) => {
               index === currentIndex ? "block" : "hidden"
             )}
           >
-            <div className="carousel-content grid grid-cols-2 align-middle bg-foreground w-full h-96 ">
-              <div className="carousel-text gap-6 pl-4 md:pl-10 lg:pl-14 text-background flex flex-col justify-center items-start">
+            <div className="carousel-content grid grid-cols-1 md:grid-cols-2 align-middle bg-foreground w-full h-56 lg:h-96 p-4 md:p-0">
+              <div className="carousel-text gap-0 md:gap-6 md:pl-10 lg:pl-14 text-background flex flex-col justify-center items-start">
                 <span className="brand-icon inline-flex items-center gap-3 md:gap-6">
                   <SiApple className="text-md md:text-base lg:text-xl" />
-                  <span className="text-sm md:text-base lg:text-lg font-light">
+                  <span className="text-xs md:text-base lg:text-lg font-light">
                     {content.brandName}
                   </span>
                 </span>
-                <h1 className="carousel-title text-5xl text-balance font-medium tracking-wide leading-[4.2rem]">
+                <h1 className="carousel-title text-2xl lg:text-5xl text-balance font-medium tracking-wide leading-[4.2rem]">
                   {content.title}
                 </h1>
-                <a
-                  href="/products"
-                  className="shop-now-link inline-flex items-center gap-1 text-background border-b border-background/25"
+                <Link
+                  to="/products"
+                  className="shop-now-link inline-flex items-center gap-1 text-background text-xs md:text-base lg:text-lg border-b border-background/25"
                 >
                   Shop Now <ArrowRight size={20} className="ml-2" />
-                </a>
+                </Link>
               </div>
               <div className="carousel-image w-full flex items-center">
                 <img
                   src="/iphone-hero.png"
                   alt="Description"
-                  className="object-cover"
+                  className="object-cover  opacity-50 md:opacity-100"
                 />
               </div>
             </div>

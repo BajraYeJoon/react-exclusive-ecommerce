@@ -10,7 +10,7 @@ import {
 
 const Home = () => {
   return (
-    <div className="flex flex-col gap-40 max-3xl:gap-32 max-2xl:gap-28 mb-28 mx-72 max-3xl:mx-24 max-2xl:mx-14 ">
+    <div className="flex flex-col gap-20 lg:gap-32 md:gap-28 mb-12 lg:mb-28 lg:mx-72 mx-6">
       <Hero />
       <SalesCard />
       <Category />

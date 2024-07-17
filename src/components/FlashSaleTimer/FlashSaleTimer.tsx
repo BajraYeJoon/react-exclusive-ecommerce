@@ -19,19 +19,19 @@ const timer = [
 
 function FlashSaleTimer() {
   return (
-    <div className="flex justify-center items-center gap-4">
+    <div className="flex justify-center items-center gap-2 md:gap-4">
       {timer.map((time, index) => (
         <>
           <div className="flex flex-col gap-2" key={index}>
-            <span className="text-sm font-medium text-foreground">
+            <span className="text-xs md:text-sm font-medium text-foreground">
               {time.unit}
             </span>
-            <span className="text-3xl font-bold text-foreground">
+            <span className="text-sm md:text-3xl font-bold text-foreground">
               {time.value}
             </span>
           </div>
           {index !== timer.length - 1 && (
-            <span className="text-4xl text-primary">:</span>
+            <span className=" text-base md:text-4xl text-primary">:</span>
           )}
         </>
       ))}

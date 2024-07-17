@@ -15,7 +15,7 @@ const NavigationArrows = ({
   return (
     <div
       className={cn(
-        "group flex h-10 w-10 items-center justify-center rounded-full bg-card hover:bg-primary cursor-pointer",
+        "group flex h-6 w-6 md:h-10 md:w-10 items-center justify-center rounded-full bg-card hover:bg-primary cursor-pointer",
         {
           "cursor-not-allowed opacity-50": disabled,
         }
@@ -24,13 +24,13 @@ const NavigationArrows = ({
     >
       {direction === "prev" ? (
         <ArrowLeft
-          className={cn("group-hover:text-white", {
+          className={cn("group-hover:text-white h-4 md:h-6", {
             "text-gray-400": disabled,
           })}
         />
       ) : (
         <ArrowRight
-          className={cn("group-hover:text-white", {
+          className={cn("group-hover:text-white h-4 md:h-6", {
             "text-gray-400": disabled,
           })}
         />
