@@ -12,7 +12,7 @@ const Carousel = ({ heroContent }: { heroContent: HeroContent }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % heroContent.length);
-    }, 300000);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [heroContent.length]);

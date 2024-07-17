@@ -1,6 +1,22 @@
 import { PagesHeader } from "../../components";
 import { categories } from "../../constants/data";
+// import { fetchCategories } from "../../api/fetch";
+// import { useQuery } from "react-query";
 const Category = () => {
+
+  // const {
+  //   data: categories,
+  //   error,
+  //   isLoading,
+  // } = useQuery(["categories"], fetchCategories, {
+  //   select: (categories) => categories.slice(0, 4),
+  // });
+
+  // if (isLoading) return <div>Loading...</div>;
+  // if (error) return <div>An error occurred: {(error as Error).message}</div>;
+
+  // console.log(categories, "all-categories");
+
   return (
     <section className="category-container flex flex-col gap-2 md:gap-7 border-b border-foreground/30 md:pb-14 pb-5">
       <PagesHeader subHeading="Categories" Heading="Browse by Category" />
@@ -19,7 +35,7 @@ const Category = () => {
                 </p>
               </div>
             );
-          })}
+          })} 
         </div>
       </div>
     </section>

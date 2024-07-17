@@ -1,7 +1,7 @@
 import { serviceDetailsInfo } from "../../constants/data";
 const ServiceDetails = () => {
   return (
-    <section className="flex items-center justify-evenly">
+    <section className="flex flex-col gap-12 md:flex-row items-center justify-evenly">
       {serviceDetailsInfo.map((serviceDetail) => {
         const ServiceIcon = serviceDetail.icon;
 

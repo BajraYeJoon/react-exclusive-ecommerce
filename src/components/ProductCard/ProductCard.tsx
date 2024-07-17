@@ -4,8 +4,8 @@ import { FaStar } from "react-icons/fa";
 interface ProductCardProps {
   title: string;
   price: number;
-  discountPrice: number;
-  rating: number;
+  // discountPrice: number;
+  rating: { count: number };
   image: string;
   discountTag?: boolean;
 }
@@ -13,7 +13,7 @@ interface ProductCardProps {
 const ProductCard = ({
   title,
   price,
-  discountPrice,
+  // discountPrice,
   rating,
   image,
   discountTag,
@@ -28,7 +28,7 @@ const ProductCard = ({
         />
         {discountTag && (
           <span className="text-[10px] font-light absolute top-2 left-2 px-2 py-1 text-background bg-primary rounded-sm">
-            -{Math.round(((price - discountPrice) / price) * 100)}%
+            {Math.round(((price - 50) / price) * 100)}%
           </span>
         )}
 
@@ -56,8 +56,8 @@ const ProductCard = ({
         </h5>
 
         <div className="flex text-sm font-medium  items-center justify-start gap-3">
-          <span className="text-primary ">${discountPrice}</span>
-          <span className="line-through text-foreground/40">${price}</span>
+          <span className="text-primary ">${price}</span>
+          <span className="line-through text-foreground/40">100</span>
         </div>
         <div className="flex items-center text-xs">
           <div className="flex items-center space-x-1 ">
@@ -65,7 +65,7 @@ const ProductCard = ({
               <FaStar key={index} className="text-accent md:h-8" />
             ))}
           </div>
-          <span className="ml-2 text-foreground/70">({rating})</span>
+          <span className="ml-2 text-foreground/70">({rating?.count})</span>
         </div>
       </div>
     </div>
