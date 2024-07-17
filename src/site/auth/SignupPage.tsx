@@ -2,7 +2,7 @@ import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from "../../firebase/config";
 import { Button } from "../../components";
 
-// import Cookies from "js-cookie";
+import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 
 const SignupPage = () => {
@@ -14,7 +14,9 @@ const SignupPage = () => {
       const data = await signInWithPopup(auth, provider);
 
       if (data) {
+        Cookies.set("loggedin", "logged");
         navigate("/profile");
+        window.location.reload();
       }
       //   const credential = GoogleAuthProvider.credentialFromResult(data);
       //   const token = credential?.accessToken;
@@ -28,9 +30,11 @@ const SignupPage = () => {
   };
 
   return (
-    <div>
-      <Button onClick={GoogleSignIn}>Sign In google</Button>
-    </div>
+    <section className="sigup-container flex flex-col">
+      <div>
+        <Button onClick={GoogleSignIn}>Sign In google</Button>
+      </div>
+    </section>
   );
 };
 

@@ -1,5 +1,5 @@
 import { Button } from "../components";
-// import Cookies from "js-cookie";
+import Cookies from "js-cookie";
 import { signOut, deleteUser } from "firebase/auth";
 import { auth } from "../firebase/config";
 import { useNavigate } from "react-router-dom";
@@ -8,8 +8,9 @@ const ProfilePage = () => {
   const logOut = async () => {
     await signOut(auth);
     // Cookies.remove("accessToken");
-
+    Cookies.remove("loggedin");
     navigate("/sign-up");
+    window.location.reload();
   };
 
   const deleteUserAccount = async () => {

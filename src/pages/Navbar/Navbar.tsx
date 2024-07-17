@@ -1,4 +1,5 @@
-import { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState } from "react";
 import { HeartIcon, LucideShoppingCart, SearchIcon } from "lucide-react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { cn } from "../../lib/utils";
@@ -7,12 +8,9 @@ import { navLinks } from "../../constants/data";
 import { Link } from "react-router-dom";
 import { RxCross2 } from "react-icons/rx";
 import { auth } from "../../firebase/config";
-
+import Cookies from "js-cookie";
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
-  const userAuthenticated = auth.currentUser;
-
-  console.log(userAuthenticated);
 
   const handleLinkClick = () => {
     setToggleMenu(false);
@@ -32,7 +30,7 @@ const Navbar = () => {
         <div className="nav-links hidden gap-8 lg:flex">
           <ul className="flex flex-col font-medium md:mt-0 md:flex-row md:space-x-4">
             {navLinks.map((link, index) => {
-              if (userAuthenticated && link.label === "Sign Up") {
+              if (Cookies.get("loggedin") && link.label === "Sign Up") {
                 return null;
               }
 
