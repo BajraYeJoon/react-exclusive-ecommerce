@@ -1,44 +1,5 @@
-import PagesHeader from "../../components/PagesHeader/PagesHeader";
-import ProductCard from "../../components/ProductCard/ProductCard";
-import { Button } from "../../components/ui/button";
-
-const productCardsContent = [
-  {
-    title: "HAVIT HV-G92 Gamepad",
-    price: 160,
-    discountPrice: 120,
-    rating: 88,
-    image: "/products-img/product-headphone.png",
-  },
-  {
-    title: "AK-900 Wired Keyboard",
-    price: 1160,
-    discountPrice: 960,
-    rating: 75,
-    image: "/products-img/product-gaming-keyboard.png",
-  },
-  {
-    title: "IPS LCD Gaming Monitor",
-    price: 400,
-    discountPrice: 370,
-    rating: 99,
-    image: "/products-img/product-gaming-monitor.png",
-  },
-  {
-    title: "S-Series Comfort Chair ",
-    price: 400,
-    discountPrice: 375,
-    rating: 98,
-    image: "/products-img/product-chair.png",
-  },
-  {
-    title: "S-Series Comfort Chair ",
-    price: 400,
-    discountPrice: 375,
-    rating: 98,
-    image: "/products-img/product-chair.png",
-  },
-];
+import { PagesHeader, ProductCard, Button } from "../../components";
+import { productCardsContent } from "../../constants/data";
 
 const SalesCard = () => {
   return (

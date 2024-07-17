@@ -7,37 +7,31 @@ import {
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { NavLink } from "react-router-dom";
-
-const navLinks = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
-  { label: "Sign Up", href: "/sign-up" },
-];
+import { navLinks } from "../../constants/data";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
-  const [activeLink, setActiveLink] = useState("/");
   const [toggleMenu, setToggleMenu] = useState(false);
 
-  const handleLinkClick = ({ href }) => {
-    setActiveLink(href);
+  const handleLinkClick = () => {
+    setToggleMenu(false);
   };
 
   return (
     <nav className="navbar border-b">
-      <div className="navbar-container flex items-center justify-between pt-9 pb-4 max-2xl:pt-7 max-2xl:pb-3 mx-72 max-3xl:mx-24 max-2xl:mx-14">
+      <div className="navbar-container flex items-center justify-between pt-4 md:pt-9 pb-4 mx-6 lg:mx-72 ">
         <div className="logo-container flex items-center gap-16">
-          <a href="/" className=" flex items-center">
-            <span className=" self-center text-2xl font-semibold whitespace-nowrap">
+          <Link to="/" className=" flex items-center">
+            <span className="self-center text-2xl font-semibold ">
               Exclusive
             </span>
-          </a>
+          </Link>
         </div>
 
         <div className="nav-links hidden lg:flex gap-8">
           <ul className=" flex flex-col font-medium md:space-x-4 md:flex-row md:mt-0">
             {navLinks.map((link, index) => (
-              <li key={index} className="nav-item">
+              <li key={index} className="nav-item cursor-pointer">
                 <NavLink
                   to={link.href}
                   className={({ isActive, isPending }) =>
@@ -79,25 +73,20 @@ const Navbar = () => {
       </div>
       <div
         className={cn(
-          "mobile-nav fixed z-40 w-full bg-gray-100 overflow-hidden flex flex-col lg:hidden gap-12 origin-top duration-700",
+          "mobile-nav fixed z-40 w-full bg-foreground  overflow-hidden flex flex-col lg:hidden gap-12 origin-top duration-700",
           !toggleMenu ? "h-0" : "h-full"
         )}
       >
-        <div className="px-8 mobile-nav-menu flex flex-col gap-8 font-bold tracking-wider">
+        <div className="px-4 py-4 mobile-nav-menu flex flex-col gap-8 font-bold tracking-wider">
           <ul className="nav-menu flex flex-col font-medium md:space-x-4 md:flex-row md:mt-0">
             {navLinks.map((link, index) => (
-              <li key={index} className="nav-item">
-                <a
-                  href={link.href}
-                  onClick={() => handleLinkClick({ href: link.href })}
-                  className={`nav-link block font-normal py-1 px-3 text-foreground ${
-                    activeLink === link.href
-                      ? "active-link border-b border-b-foreground/50"
-                      : ""
-                  }`}
-                >
+              <li
+                key={index}
+                className="nav-item nav-link block my-2 font-normal  text-background "
+              >
+                <Link to={link.href} onClick={handleLinkClick}>
                   {link.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>

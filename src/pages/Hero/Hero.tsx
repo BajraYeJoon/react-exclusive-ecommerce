@@ -1,42 +1,13 @@
-import Carousel from "../../components/Carousel/carousel";
+import { Carousel } from "../../components";
 import { ChevronRight } from "lucide-react";
-
-const categories = [
-  {
-    id: 1,
-    name: "Women's Fashion",
-    subcategories: ["Dresses", "Tops", "Shoes"],
-  },
-  { id: 2, name: "Men's Fashion", subcategories: ["Shirts", "Pants", "Shoes"] },
-  { id: 3, name: "Home & Kitchen" },
-  { id: 4, name: "Sports" },
-  { id: 5, name: "Toys & Games" },
-  { id: 6, name: "Books" },
-  { id: 7, name: "Electronics" },
-  { id: 8, name: "Beauty & Personal Care" },
-];
-
-const heroContent = [
-  {
-    title: "Up to 10% off Voucher",
-    brandName: "Iphone 14 Series",
-  },
-  {
-    title: "Get the best deals",
-    brandName: "Iphone 14 Series",
-  },
-  {
-    title: "Get the best deals",
-    brandName: "Iphone 14 Series",
-  },
-];
+import { heroCategories, heroContent } from "../../constants/data";
 
 const Hero = () => {
   return (
     <section className="flex">
       <aside className="text-foreground/80 hidden lg:flex text-lg z-10  flex-col items-start gap-4 mt-14 mr-6">
         <ul className="flex flex-col gap-3 font-medium tracking-tighter">
-          {categories.map((category) => (
+          {heroCategories.map((category) => (
             <li key={category.id} className="relative cursor-pointer group">
               <div className="flex items-center justify-between">
                 {category.name}
