@@ -1,6 +1,4 @@
-import FlashSaleTimer from "../FlashSaleTimer/FlashSaleTimer";
-import NavigationArrows from "../NavigationalArrows/NavigationalArrows";
-import { Button } from "../ui/button";
+import { FlashSaleTimer, NavigationArrows, Button } from "../../components";
 
 interface PagesHeaderProps {
   flashTimer?: boolean;

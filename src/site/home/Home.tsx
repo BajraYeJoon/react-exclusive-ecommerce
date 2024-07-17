@@ -1,9 +1,12 @@
-import { Hero, SalesCard } from "../../pages";
-import Category from "../../pages/Category/Category";
-import BestProducts from "../../pages/BestProducts/BestProducts";
-import LimitedEditionCTA from "../../pages/CTA/LimitedEditionCTA";
-import GeneralProducts from "../../pages/GeneralProducts/GeneralProducts";
-import ArrivalProductsGrid from "../../pages/ArrivalsProductsGrid/ArrivalProductsGrid";
+import {
+  Hero,
+  SalesCard,
+  Category,
+  BestProducts,
+  ArrivalProductsGrid,
+  LimitedEditionCTA,
+  GeneralProducts,
+} from "../../pages";
 
 const Home = () => {
   return (

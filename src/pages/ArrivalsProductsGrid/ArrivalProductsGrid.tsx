@@ -1,5 +1,4 @@
-import PagesHeader from "../../components/PagesHeader/PagesHeader";
-import { Button } from "../../components/ui/button";
+import { Button, PagesHeader } from "../../components";
 
 const ArrivalProductsGrid = () => {
   return (

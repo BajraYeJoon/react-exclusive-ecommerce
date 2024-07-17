@@ -22,6 +22,12 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
+    // "paths": {
+    //   "baseUrl": "./src",
+    //   "paths" : []
+
+    //   }
+    // }
   },
   "include": ["src"]
 }

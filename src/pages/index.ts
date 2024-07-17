@@ -2,5 +2,21 @@ import Banner from "./Banner/Banner";
 import Navbar from "./Navbar/Navbar";
 import Hero from "./Hero/Hero";
 import SalesCard from "./SalesCard/SalesCard";
+import Category from "./Category/Category";
+import BestProducts from "./BestProducts/BestProducts";
+import ArrivalProductsGrid from "./ArrivalsProductsGrid/ArrivalProductsGrid";
+import LimitedEditionCTA from "./CTA/LimitedEditionCTA";
+import GeneralProducts from "./GeneralProducts/GeneralProducts";
 
-export { Banner, Navbar, Hero, SalesCard };
+
+export {
+  Banner,
+  Navbar,
+  Hero,
+  SalesCard,
+  Category,
+  BestProducts,
+  ArrivalProductsGrid,
+  LimitedEditionCTA,
+  GeneralProducts,
+};

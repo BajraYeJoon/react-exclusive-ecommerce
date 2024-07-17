@@ -1,36 +1,6 @@
 import PagesHeader from "../../components/PagesHeader/PagesHeader";
 import ProductCard from "../../components/ProductCard/ProductCard";
-
-const bestSellingProducts = [
-  {
-    title: "The North Coat",
-    price: 360,
-    discountPrice: 260,
-    rating: 65,
-    image: "/best-selling-products/b-coat.png",
-  },
-  {
-    title: "Gucci duffle bag",
-    price: 360,
-    discountPrice: 260,
-    rating: 65,
-    image: "/best-selling-products/b-bag.png",
-  },
-  {
-    title: "RGB liquid CPU Cooler",
-    price: 360,
-    discountPrice: 260,
-    rating: 65,
-    image: "/best-selling-products/b-fan.png",
-  },
-  {
-    title: "The North Coat",
-    price: 360,
-    discountPrice: 260,
-    rating: 65,
-    image: "/best-selling-products/b-shelf.png",
-  },
-];
+import { bestSellingProducts } from "../../constants/data";
 
 const BestProducts = () => {
   return (

@@ -1,36 +1,5 @@
-import { FaMobile } from "react-icons/fa";
-import PagesHeader from "../../components/PagesHeader/PagesHeader";
-import { CameraIcon, ComputerIcon, HeadphonesIcon } from "lucide-react";
-import { BsSmartwatch } from "react-icons/bs";
-import { MdVideogameAsset } from "react-icons/md";
-
-const categories = [
-  {
-    icon: FaMobile,
-    categoryName: "Phones",
-  },
-  {
-    icon: ComputerIcon,
-    categoryName: "Computers",
-  },
-  {
-    icon: BsSmartwatch,
-    categoryName: "Smartwatch",
-  },
-  {
-    icon: CameraIcon,
-    categoryName: "Camera",
-  },
-  {
-    icon: HeadphonesIcon,
-    categoryName: "Headphones",
-  },
-  {
-    icon: MdVideogameAsset,
-    categoryName: "Gaming",
-  },
-];
-
+import { PagesHeader } from "../../components";
+import { categories } from "../../constants/data";
 const Category = () => {
   return (
     <section className="category-container flex flex-col gap-7 border-b border-foreground/30 pb-14 max-2xl:pb-10">
