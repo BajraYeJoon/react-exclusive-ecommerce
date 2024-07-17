@@ -14,7 +14,7 @@ const SignupPage = () => {
       const data = await signInWithPopup(auth, provider);
 
       if (data) {
-        navigate("/sign-in");
+        navigate("/profile");
       }
       //   const credential = GoogleAuthProvider.credentialFromResult(data);
       //   const token = credential?.accessToken;

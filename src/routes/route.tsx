@@ -1,5 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
-import { Layout, Home, SignupPage, SignInPage } from "../site";
+import {
+  Layout,
+  Home,
+  SignupPage,
+  AuthLayout,
+  ProfilePage,
+  SignInPage,
+} from "../site";
 
 import ErrorPage from "../error-page";
 
@@ -11,7 +18,7 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        path: "/",
+
         element: <Home />,
       },
       {
@@ -19,17 +26,21 @@ export const router = createBrowserRouter([
         element: <div>About</div>,
       },
       {
-        path: "/contact",
-        element: <div>Contact</div>,
+        element: <AuthLayout />,
+        children: [
+          {
+            path: "/sign-up",
+            element: <SignupPage />,
+          },
+          {
+            path: "/sign-in",
+            element: <SignInPage />,
+          },
+        ],
       },
       {
-        path: "/sign-up",
-        element: <SignupPage />,
-      },
-
-      {
-        path: "/sign-in",
-        element: <SignInPage />,
+        path: "profile",
+        element: <ProfilePage />,
       },
     ],
   },

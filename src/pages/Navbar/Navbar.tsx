@@ -6,9 +6,13 @@ import { NavLink } from "react-router-dom";
 import { navLinks } from "../../constants/data";
 import { Link } from "react-router-dom";
 import { RxCross2 } from "react-icons/rx";
+import { auth } from "../../firebase/config";
 
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
+  const userAuthenticated = auth.currentUser;
+
+  console.log(userAuthenticated);
 
   const handleLinkClick = () => {
     setToggleMenu(false);
@@ -27,24 +31,30 @@ const Navbar = () => {
 
         <div className="nav-links hidden gap-8 lg:flex">
           <ul className="flex flex-col font-medium md:mt-0 md:flex-row md:space-x-4">
-            {navLinks.map((link, index) => (
-              <li key={index} className="nav-item cursor-pointer">
-                <NavLink
-                  to={link.href}
-                  className={({ isActive, isPending }) =>
-                    `nav-link block px-3 py-1 font-normal text-foreground ${
-                      isPending
-                        ? "pending"
-                        : isActive
-                          ? "active-link border-b-2 border-foreground"
-                          : ""
-                    }`
-                  }
-                >
-                  {link.label}
-                </NavLink>
-              </li>
-            ))}
+            {navLinks.map((link, index) => {
+              if (userAuthenticated && link.label === "Sign Up") {
+                return null;
+              }
+
+              return (
+                <li key={index} className="nav-item cursor-pointer">
+                  <NavLink
+                    to={link.href}
+                    className={({ isActive, isPending }) =>
+                      `nav-link block px-3 py-1 font-normal text-foreground ${
+                        isPending
+                          ? "pending"
+                          : isActive
+                            ? "active-link border-b-2 border-foreground"
+                            : ""
+                      }`
+                    }
+                  >
+                    {link.label}
+                  </NavLink>
+                </li>
+              );
+            })}
           </ul>
         </div>
         <div className="search-bar flex items-center gap-6">
