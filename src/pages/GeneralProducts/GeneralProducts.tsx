@@ -3,12 +3,16 @@ import { generalProducts } from "../../constants/data";
 
 const GeneralProducts = () => {
   return (
-    <section className="general-products-container flex flex-col lg:gap-20 gap-10">
+    <section className="general-products-container flex flex-col gap-10 lg:gap-20">
       <PagesHeader subHeading="Our Products" Heading="Explore Our Products" />
 
-      <div className="general-product-card-container flex w-full items-center justify-between overflow-x-auto gap-4">
+      <div className="general-product-card-container flex w-full items-center justify-between gap-4 overflow-x-auto">
         {generalProducts.map((gproduct, index) => (
-          <ProductCard key={index} {...gproduct} />
+          <ProductCard
+            key={index}
+            {...gproduct}
+            rating={{ count: gproduct.rating }}
+          />
         ))}
       </div>
 

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { HeartIcon, LucideShoppingCart, SearchIcon } from "lucide-react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { cn } from "../../lib/utils";
@@ -7,7 +7,7 @@ import { NavLink } from "react-router-dom";
 import { navLinks } from "../../constants/data";
 import { Link } from "react-router-dom";
 import { RxCross2 } from "react-icons/rx";
-import { auth } from "../../firebase/config";
+// import { auth } from "../../firebase/config";
 import Cookies from "js-cookie";
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState(false);

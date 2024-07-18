@@ -11,7 +11,7 @@ const ArrivalProductsGrid = () => {
     <section className="arrival-products-container flex flex-col gap-10 lg:gap-20">
       <PagesHeader subHeading="Featured" Heading="New Arrivals" cta />
 
-      <div className="grid h-[500px] grid-cols-2 grid-rows-2 gap-4 md:h-[400px] md:grid-cols-4">
+      <div className="grid h-[500px] grid-cols-2 grid-rows-2 gap-4 md:h-[400px] md:grid-cols-4 lg:h-[600px]">
         <div className="col-span-2 flex items-end rounded-sm bg-foreground bg-[url(/new-arrivals/gaming.png)] bg-contain bg-bottom bg-no-repeat p-4 md:row-span-2 md:p-6 lg:bg-auto lg:p-10">
           <div className="space-y-2 md:space-y-4">
             <div className="space-y-1 text-background">

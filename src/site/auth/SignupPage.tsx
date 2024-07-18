@@ -30,10 +30,14 @@ const SignupPage = () => {
   };
 
   return (
-    <section className="sigup-container flex flex-col">
-      <div>
-        <Button onClick={GoogleSignIn}>Sign In google</Button>
+    <section className="sigup-container m-24 flex flex-col items-center justify-center gap-10 lg:flex-row">
+      <div className="flex flex-col items-start gap-5">
+        <h2 className="text-base lg:text-3xl">Create an account</h2>
+        <p className="text-lg lg:text-base">Enter your details below</p>
       </div>
+      {/* <div>
+        <Button onClick={GoogleSignIn}>Sign In google</Button>
+      </div> */}
     </section>
   );
 };

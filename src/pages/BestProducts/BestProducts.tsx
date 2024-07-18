@@ -10,9 +10,13 @@ const BestProducts = () => {
         Heading="Best Selling Products"
         cta
       />
-      <div className="product-card-container flex w-full items-center justify-between overflow-x-auto gap-4">
+      <div className="product-card-container flex w-full items-center justify-between gap-4 overflow-x-auto">
         {bestSellingProducts.map((bestProductCard, index) => (
-          <ProductCard key={index} {...bestProductCard} />
+          <ProductCard
+            key={index}
+            {...bestProductCard}
+            rating={{ count: bestProductCard.rating }}
+          />
         ))}
       </div>
     </section>
