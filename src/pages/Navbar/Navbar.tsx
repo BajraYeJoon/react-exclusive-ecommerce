@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { HeartIcon, LucideShoppingCart, SearchIcon } from "lucide-react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { cn } from "../../lib/utils";
@@ -9,8 +9,26 @@ import { Link } from "react-router-dom";
 import { RxCross2 } from "react-icons/rx";
 // import { auth } from "../../firebase/config";
 import Cookies from "js-cookie";
+import { auth } from "../../firebase/config";
+import { onAuthStateChanged } from "firebase/auth";
+
+interface User {
+  uid: string;
+}
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+      } else {
+        setUser(null);
+      }
+    });
+    return () => unsubscribe();
+  }, [auth.currentUser]);
 
   const handleLinkClick = () => {
     setToggleMenu(false);
@@ -30,7 +48,7 @@ const Navbar = () => {
         <div className="nav-links hidden gap-8 lg:flex">
           <ul className="flex flex-col font-medium md:mt-0 md:flex-row md:space-x-4">
             {navLinks.map((link, index) => {
-              if (Cookies.get("loggedin") && link.label === "Sign Up") {
+              if (user && link.label === "Sign Up") {
                 return null;
               }
 
