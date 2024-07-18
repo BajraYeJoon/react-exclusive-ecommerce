@@ -1,51 +1,29 @@
-import {
-  signInWithPopup,
-  GoogleAuthProvider,
-  createUserWithEmailAndPassword,
-} from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebase/config";
 import { Button } from "../../components";
 import { useForm } from "react-hook-form";
 // import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import FormInput from "../../components/FormInput/FormInput";
-import { FormData } from "../../schemas/types";
+import { SignUpFormData } from "../../schemas/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import FormSchema from "../../schemas/zodSchema";
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { SignUpFormSchema } from "../../schemas/zodSchema";
+import { GoogleSignInComponent } from "./GoogleSignIn";
+import { Link } from "react-router-dom";
 
 const SignupPage = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>({
-    resolver: zodResolver(FormSchema),
+  } = useForm<SignUpFormData>({
+    resolver: zodResolver(SignUpFormSchema),
   });
 
   const navigate = useNavigate();
 
-  const GoogleSignIn = async () => {
-    try {
-      const provider = new GoogleAuthProvider();
-      const data = await signInWithPopup(auth, provider);
-
-      if (data) {
-        navigate("/profile");
-        // window.location.reload();
-      }
-      //   const credential = GoogleAuthProvider.credentialFromResult(data);
-      //   const token = credential?.accessToken;
-
-      //   if (token) {
-      //     Cookies.set("accessToken", token, { expires: 1 });
-      //     navigate("/sign-in");
-    } catch (error: any) {
-      console.log(error.code, error.message, error.email, "error");
-    }
-  };
-
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: SignUpFormData) => {
     const { email, password, name, phoneNumber } = data;
 
     try {
@@ -74,46 +52,53 @@ const SignupPage = () => {
   };
 
   return (
-    <section className="sigup-container m-24 flex flex-col items-center justify-center gap-10">
-      <div className="flex flex-col items-start gap-5">
-        <h2 className="text-base lg:text-3xl">Create an account</h2>
-        <p className="text-lg lg:text-base">Enter your details below</p>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex flex-col">
-            <FormInput
-              type="text"
-              placeholder="Name"
-              name="name"
-              register={register}
-              error={errors.name}
-            />
-            <FormInput
-              type="email"
-              placeholder="Email"
-              name="email"
-              register={register}
-              error={errors.email}
-            />
-            <FormInput
-              type="text"
-              placeholder="Phone Number"
-              name="phoneNumber"
-              register={register}
-              error={errors.phoneNumber}
-            />
-            <FormInput
-              type="passsword"
-              placeholder="Password"
-              name="password"
-              register={register}
-              error={errors.password}
-            />
-          </div>
-          <Button type="submit">Sign Up</Button>
-        </form>
+    <div className="sign-up-content flex flex-col space-y-4">
+      <h2 className="text-lg lg:text-3xl">Create an account</h2>
+      <p className="text-sm lg:text-base">Enter your details below</p>
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+        {" "}
+        <div className="flex w-full flex-col gap-4">
+          <FormInput
+            type="text"
+            placeholder="Name"
+            name="name"
+            register={register}
+            error={errors.name}
+          />
+          <FormInput
+            type="email"
+            placeholder="Email"
+            name="email"
+            register={register}
+            error={errors.email}
+          />
+          <FormInput
+            type="text"
+            placeholder="Phone Number"
+            name="phoneNumber"
+            register={register}
+            error={errors.phoneNumber}
+          />
+          <FormInput
+            type="passsword"
+            placeholder="Password"
+            name="password"
+            register={register}
+            error={errors.password}
+          />
+          <Button type="submit" className="w-full">
+            Create Account
+          </Button>
+        </div>
+      </form>
+      <GoogleSignInComponent text={"Sign up with Google"} />
+      <div className="inline-flex gap-3 text-sm">
+        Already have an account?{" "}
+        <Link to="/sign-in" className="text-primary underline">
+          Sign in
+        </Link>
       </div>
-      <Button onClick={GoogleSignIn}>Sign In google</Button>
-    </section>
+    </div>
   );
 };
 

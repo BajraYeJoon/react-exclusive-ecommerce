@@ -1,7 +1,7 @@
 import { z, ZodType } from "zod";
-import { FormData } from "./types";
+import { SignUpFormData, LoginFormData } from "./types";
 
-const FormSchema: ZodType<FormData> = z.object({
+const SignUpFormSchema: ZodType<SignUpFormData> = z.object({
   email: z.string().email(),
   password: z
     .string()
@@ -12,4 +12,12 @@ const FormSchema: ZodType<FormData> = z.object({
   phoneNumber: z.string().min(10),
 });
 
-export default FormSchema;
+const LoginFormSchema: ZodType<LoginFormData> = z.object({
+  name: z.string().min(2),
+  password: z
+    .string()
+
+    .max(20, { message: "Password is too long" }),
+});
+
+export { LoginFormSchema, SignUpFormSchema };

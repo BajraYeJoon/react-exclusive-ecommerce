@@ -8,12 +8,13 @@ import { navLinks } from "../../constants/data";
 import { Link } from "react-router-dom";
 import { RxCross2 } from "react-icons/rx";
 // import { auth } from "../../firebase/config";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 import { auth } from "../../firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 
 interface User {
   uid: string;
+  photoURL: string | null | undefined;
 }
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
@@ -29,6 +30,8 @@ const Navbar = () => {
     });
     return () => unsubscribe();
   }, [auth.currentUser]);
+
+  console.log(user)
 
   const handleLinkClick = () => {
     setToggleMenu(false);
@@ -84,6 +87,13 @@ const Navbar = () => {
           </div>
           <HeartIcon size={20} />
           <LucideShoppingCart size={20} />
+          {user && (
+            <div className="profile-badge h-6 w-6 rounded-full overflow-hidden cursor-pointer">
+              <Link to={`/profile`}>
+              <img src={user?.photoURL ?? ""} alt="profile-image" className="h-full w-full" />
+              </Link>
+            </div>
+          )}
           <div className="mobile-nav-toggle flex items-center lg:hidden">
             <button
               onClick={() => setToggleMenu(!toggleMenu)}

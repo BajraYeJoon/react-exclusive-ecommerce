@@ -1,16 +1,17 @@
 import { FormInputProps } from "../../schemas/types";
 
-const FormInput = ({
-  type,
-  placeholder,
-  name,
-  register,
-  error,
-}: FormInputProps) => {
+const FormInput = ({ type, placeholder, name, register, error }: any) => {
   return (
-    <div className="flex flex-col gap-2">
-      <input type={type} placeholder={placeholder} {...register(name)} />
-      {error && <span className="error">{error.message}</span>}
+    <div className="flex w-full flex-col px-2 py-1">
+      <input
+        type={type}
+        placeholder={placeholder}
+        {...register(name)}
+        className="border-b-2 focus:outline-none"
+      />
+      {error && (
+        <span className="error text-xs text-primary">{error.message}</span>
+      )}
     </div>
   );
 };
