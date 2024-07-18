@@ -2,13 +2,7 @@
 import { createContext, useContext, useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
-
-type UserInfoProps = {
-  username: string;
-  password: string;
-  name: string;
-  phoneNumber: string;
-};
+import { toast } from "sonner";
 
 type LoginProps = {
   name: string;
@@ -16,16 +10,22 @@ type LoginProps = {
 };
 
 type AuthContextType = {
-  user: UserInfoProps[];
+  isLoggedIn: boolean;
   login: ({ name, password }: LoginProps) => void;
+  logout: () => void;
+  isLoading: boolean;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<UserInfoProps[]>([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    Cookies.get("token") ? true : false,
+  );
+  const [isLoading, setIsLoading] = useState(false);
 
   const login = async ({ name, password }: LoginProps) => {
+    setIsLoading(true);
     console.log("Logging in", name, password);
     try {
       const response = await axios.post("https://fakestoreapi.com/auth/login", {
@@ -34,15 +34,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
       const data = response.data;
       Cookies.set("token", data.token, { expires: 7 });
-      setUser(data);
+      setIsLoggedIn(true);
       console.log("Login successful", data);
     } catch (error) {
       console.error("Login failed", error);
+    } finally {
+      setIsLoading(false);
     }
+  };
+  const logout = async () => {
+    setIsLoggedIn(false);
+    toast.success("You are now logged out");
+    Cookies.remove("token");
   };
 
   return (
-    <AuthContext.Provider value={{ user, login }}>
+    <AuthContext.Provider value={{ isLoggedIn, isLoading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

@@ -9,6 +9,7 @@ import {
 } from "../site";
 
 import ErrorPage from "../error-page";
+import { ProtectedRoute } from "../components";
 
 export const router = createBrowserRouter([
   {
@@ -40,7 +41,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "profile",
-        element: <ProfilePage />,
+        element: (
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        ),
       },
     ],
   },

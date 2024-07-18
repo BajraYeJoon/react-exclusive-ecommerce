@@ -5,6 +5,7 @@ import { PostHogProvider } from "posthog-js/react";
 import App from "./App";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { AuthProvider } from "./context/useAuthContext";
+import { Toaster } from "sonner";
 
 const options = {
   api_host: "https://us.i.posthog.com",
@@ -21,6 +22,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       >
         <AuthProvider>
           <App />
+          <Toaster />
         </AuthProvider>
       </PostHogProvider>
     </QueryClientProvider>

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { HeartIcon, LucideShoppingCart, SearchIcon } from "lucide-react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { cn } from "../../lib/utils";
@@ -7,31 +7,29 @@ import { NavLink } from "react-router-dom";
 import { navLinks } from "../../constants/data";
 import { Link } from "react-router-dom";
 import { RxCross2 } from "react-icons/rx";
-// import { auth } from "../../firebase/config";
-// import Cookies from "js-cookie";
-import { auth } from "../../firebase/config";
-import { onAuthStateChanged } from "firebase/auth";
+import { useAuthContext } from "../../context/useAuthContext";
 
-interface User {
-  uid: string;
-  photoURL: string | null | undefined;
-}
+// import { auth } from "../../firebase/config";
+// import { onAuthStateChanged } from "firebase/auth";
+
+// interface User {
+//   uid: string;
+//   photoURL: string | null | undefined;
+// }
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
+  const { isLoggedIn } = useAuthContext();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-      } else {
-        setUser(null);
-      }
-    });
-    return () => unsubscribe();
-  }, [auth.currentUser]);
-
-  console.log(user)
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+  //     if (currentUser) {
+  //       setUser(currentUser);
+  //     } else {
+  //       setUser(null);
+  //     }
+  //   });
+  //   return () => unsubscribe();
+  // }, [auth.currentUser]);
 
   const handleLinkClick = () => {
     setToggleMenu(false);
@@ -51,7 +49,7 @@ const Navbar = () => {
         <div className="nav-links hidden gap-8 lg:flex">
           <ul className="flex flex-col font-medium md:mt-0 md:flex-row md:space-x-4">
             {navLinks.map((link, index) => {
-              if (user && link.label === "Sign Up") {
+              if (isLoggedIn && link.label === "Sign Up") {
                 return null;
               }
 
@@ -87,12 +85,10 @@ const Navbar = () => {
           </div>
           <HeartIcon size={20} />
           <LucideShoppingCart size={20} />
-          {user && (
-            <div className="profile-badge h-6 w-6 rounded-full overflow-hidden cursor-pointer">
-              <Link to={`/profile`}>
-              <img src={user?.photoURL ?? ""} alt="profile-image" className="h-full w-full" />
-              </Link>
-            </div>
+          {isLoggedIn && (
+            <Link to={`/profile`}>
+              <div className="profile-badge h-6 w-6 cursor-pointer overflow-hidden rounded-full bg-slate-400"></div>
+            </Link>
           )}
           <div className="mobile-nav-toggle flex items-center lg:hidden">
             <button

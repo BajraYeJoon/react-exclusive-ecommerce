@@ -1,18 +1,17 @@
 import { useForm } from "react-hook-form";
-import FormInput from "../../components/FormInput/FormInput";
 import { LoginFormData } from "../../schemas/types";
 import { LoginFormSchema } from "../../schemas/zodSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "../../components";
+import { Button, FormInput } from "../../components";
 import { GoogleSignInComponent } from "./GoogleSignIn";
 import { useAuthContext } from "../../context/useAuthContext";
-// import { useNavigate } from "react-router-dom";
-// import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { CgSpinner } from "react-icons/cg";
 
 const SignInPage = () => {
-  // const [loginError, setLoginError] = useState("");
-  const { login } = useAuthContext();
-  // const navigate = useNavigate();
+  const { login, isLoading } = useAuthContext();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -21,8 +20,10 @@ const SignInPage = () => {
   } = useForm<LoginFormData>({
     resolver: zodResolver(LoginFormSchema),
   });
-  const onSubmit = (data: LoginFormData) => {
-    login(data);
+  const onSubmit = async (data: LoginFormData) => {
+    await login(data);
+    toast.success("You are now logged in");
+    navigate("/profile");
   };
 
   return (
@@ -49,7 +50,11 @@ const SignInPage = () => {
             error={errors.password}
           />
           <Button type="submit" className="w-full">
-            Create Account
+            {isLoading ? (
+              <CgSpinner className="animate-spin" size={20} />
+            ) : (
+              "Login"
+            )}
           </Button>
           <GoogleSignInComponent text="Sign in with Google" />
         </div>
