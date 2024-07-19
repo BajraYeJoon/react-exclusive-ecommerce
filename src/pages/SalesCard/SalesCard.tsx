@@ -1,6 +1,12 @@
 import { useQuery } from "react-query";
 import { PagesHeader, ProductCard, Button } from "../../components";
 import { fetchProducts } from "../../api/fetch";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+
+// import "./styles.css";
+import { Pagination } from "swiper/modules";
 
 interface SalesCardProps {
   title: string;
@@ -24,17 +30,32 @@ const SalesCard = () => {
   console.log(products, "all-products");
 
   return (
-    <section className="sales-card-container flex flex-col gap-5 md:gap-7 border-b border-foreground/30 pb-8 md:pb-14 ">
+    <section className="sales-card-container flex flex-col gap-5 border-b border-foreground/30 pb-8 md:gap-7 md:pb-14">
       <PagesHeader
         subHeading="Today's Sales"
         Heading="Flash Sales"
         flashTimer
       />
-      <div className="product-card-container flex w-full items-center justify-between overflow-hidden gap-4">
-        {products.map((productCard: SalesCardProps, index: number) => (
-          <ProductCard key={index} {...productCard} discountTag />
-        ))}
-      </div>
+      {/* <div className="product-card-container flex w-full items-center justify-between gap-4 overflow-hidden"> */}
+      <>
+        <Swiper
+          spaceBetween={20}
+          slidesPerView={4}
+          pagination={{ clickable: true }}
+          onSlideChange={() => console.log("slide change")}
+          onSwiper={(swiper) => console.log(swiper)}
+          className=""
+          modules={[Pagination]}
+        >
+          <SwiperSlide className="">
+            {products.map((productCard: SalesCardProps, index: number) => (
+              <ProductCard key={index} {...productCard} discountTag />
+            ))}
+          </SwiperSlide>
+        </Swiper>
+      </>
+
+      {/* </div> */}
       <Button className="mx-auto w-full md:w-fit">View All Products</Button>
     </section>
   );
