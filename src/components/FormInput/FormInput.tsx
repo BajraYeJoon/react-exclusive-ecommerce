@@ -1,5 +1,3 @@
-import { FormInputProps } from "../../schemas/types";
-
 const FormInput = ({ type, placeholder, name, register, error }: any) => {
   return (
     <div className="flex w-full flex-col px-2 py-1">
