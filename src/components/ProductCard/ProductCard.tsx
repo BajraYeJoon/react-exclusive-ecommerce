@@ -1,5 +1,8 @@
 import { EyeIcon, HeartIcon } from "lucide-react";
 import { FaStar } from "react-icons/fa";
+// import { useRecoilState } from "recoil";
+// import { cartState } from "../../atoms/cartState";
+// import { toast } from "sonner";
 
 interface ProductCardProps {
   title: string;
@@ -8,6 +11,7 @@ interface ProductCardProps {
   rating: { count: number };
   image: string;
   discountTag?: boolean;
+  index: number;
 }
 
 const ProductCard = ({
@@ -17,33 +21,41 @@ const ProductCard = ({
   rating,
   image,
   discountTag,
+  // index,
 }: ProductCardProps) => {
+  // const [cart, setCart] = useRecoilState(cartState);
+
+
+
   return (
-    <div className="w-full max-w-72 ">
-      <div className="bg-card group rounded-b-md h-32 md:h-56 w-full relative overflow-hidden">
+    <div className="w-full max-w-72">
+      <div className="group relative h-32 w-full overflow-hidden rounded-b-md bg-card md:h-56">
         <img
-          className="object-contain p-4 md:p-8 lg:p-12 h-full w-full group-hover:opacity-40 transition-opacity duration-300"
+          className="h-full w-full object-contain p-4 transition-opacity duration-300 group-hover:opacity-40 md:p-8 lg:p-12"
           src={image}
           alt="product image"
         />
         {discountTag && (
-          <span className="text-[10px] font-light absolute top-2 left-2 px-2 py-1 text-background bg-primary rounded-sm">
+          <span className="absolute left-2 top-2 rounded-sm bg-primary px-2 py-1 text-[10px] font-light text-background">
             {Math.round(((price - 50) / price) * 100)}%
           </span>
         )}
 
-        <div className="absolute right-4 top-4 flex gap-2 flex-col">
-          <span className="h-7 w-7 bg-foreground/20 rounded-full flex justify-center items-center">
+        <div className="absolute right-4 top-4 flex flex-col gap-2">
+          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-foreground/20">
             <HeartIcon size={18} />
           </span>
-          <span className="h-7 w-7 bg-foreground/20 rounded-full flex justify-center items-center">
+          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-foreground/20">
             <EyeIcon size={18} />
           </span>
         </div>
 
-        <div className="group cursor-pointer ">
-          <div className="absolute bottom-0 left-0 bg-foreground w-full opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-            <p className="text-center py-2 text-sm font-normal tracking-tight text-background ">
+        <div
+          className="group cursor-pointer"
+          // onClick={() => handleAddToCart({ index })}
+        >
+          <div className="absolute bottom-0 left-0 w-full bg-foreground opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+            <p className="py-2 text-center text-sm font-normal tracking-tight text-background">
               Add to Cart
             </p>
           </div>
@@ -55,12 +67,12 @@ const ProductCard = ({
           {title}
         </h5>
 
-        <div className="flex text-sm font-medium  items-center justify-start gap-3">
-          <span className="text-primary ">${price}</span>
-          <span className="line-through text-foreground/40">100</span>
+        <div className="flex items-center justify-start gap-3 text-sm font-medium">
+          <span className="text-primary">${price}</span>
+          <span className="text-foreground/40 line-through">100</span>
         </div>
         <div className="flex items-center text-xs">
-          <div className="flex items-center space-x-1 ">
+          <div className="flex items-center space-x-1">
             {Array.from({ length: 5 }).map((_, index) => (
               <FaStar key={index} className="text-accent md:h-8" />
             ))}

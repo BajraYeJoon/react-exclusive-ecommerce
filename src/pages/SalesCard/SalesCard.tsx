@@ -53,7 +53,7 @@ const SalesCard = () => {
         >
           {products.map((productCard: SalesCardProps, index: number) => (
             <SwiperSlide key={index} className="">
-              <ProductCard {...productCard} discountTag />
+              <ProductCard {...productCard} discountTag index={index} />
             </SwiperSlide>
           ))}
         </Swiper>

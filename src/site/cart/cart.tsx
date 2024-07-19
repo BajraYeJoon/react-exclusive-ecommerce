@@ -1,5 +1,7 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "../../components";
+// import { useRecoilValue } from "recoil";
+// import { cartState } from "../../atoms/cartState";
 
 const cartHeaderData = [
   { label: "Price" },
@@ -19,11 +21,33 @@ const cartItems = [
 ];
 
 const Cart = () => {
+//   const cart = Object.entries(useRecoilValue(cartState));
+
+//   if (Object.keys(cart).length === 0) {
+//     return (
+//       <section className="flex h-screen items-center justify-center">
+//         <h1 className="text-3xl font-semibold text-gray-400">
+//           No items in cart
+//         </h1>
+//       </section>
+//     );
+//   }
+
   return (
-    <section className="relative mx-8 my-6 md:mx-auto md:my-12 lg:max-w-7xl">
-      <div className="hidden grid-cols-2 py-6 text-foreground/40 md:grid">
+    <section className="relative mx-8 my-6 md:mx-12 lg:mx-auto  md:my-12 lg:max-w-7xl">
+      {/* <>
+        <h1>
+          {cart.map(([index, quantity]) => (
+            <div key={index}>
+              {index} - {quantity}
+            </div>
+          ))}
+        </h1>
+      </> */}
+
+      <div className=" grid-cols-2 py-6 text-foreground/40 grid">
         <div className="text-xl font-normal leading-8">Product</div>
-        <p className="flex items-center justify-between text-xl font-normal leading-8">
+        <p className="hidden sm:flex items-center justify-between text-xl font-normal leading-8">
           <span className={`w-full text-center`}>
             {cartHeaderData[0].label}
           </span>
@@ -49,7 +73,7 @@ const Cart = () => {
                 {item.title}
               </h5>
             </div>
-            <div className="flex w-fit flex-col items-center justify-around gap-2 md:w-full md:flex-row">
+            <div className="flex w-fit flex-col items-center justify-around gap-2 md:w-full sm:flex-row">
               <h6 className="text-center text-sm font-medium leading-9 text-foreground md:text-base">
                 {item.singleprice}{" "}
               </h6>
