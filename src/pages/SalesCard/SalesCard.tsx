@@ -1,14 +1,13 @@
 import { useQuery } from "react-query";
 import { PagesHeader, ProductCard, Button } from "../../components";
 import { fetchProducts } from "../../api/fetch";
-// import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 // import "./style.css";
-
-// import "./styles.css";
-// import { Navigation, Pagination } from "swiper/modules";
+import "./styles.css";
+import { Navigation } from "swiper/modules";
 
 interface SalesCardProps {
   title: string;
@@ -24,7 +23,8 @@ const SalesCard = () => {
     error,
     isLoading,
   } = useQuery(["products"], fetchProducts, {
-    select: (products) => products.slice(0, 4),
+    select: (products) => products.slice(0, 7),
+    staleTime: 60000,
   });
 
   if (isLoading) return <div>Loading...</div>;
@@ -37,38 +37,29 @@ const SalesCard = () => {
         subHeading="Today's Sales"
         Heading="Flash Sales"
         flashTimer
+        // handleNext={handleNext}
       />
       <div className="product-card-container flex w-full items-center justify-between gap-4 overflow-hidden">
-        {/* <>
         <Swiper
           spaceBetween={1}
           slidesPerView={4}
           pagination={{ clickable: true }}
           onSlideChange={() => console.log("slide change")}
           onSwiper={(swiper) => console.log(swiper)}
-          className=""
-          modules={[Pagination, Navigation]}
-          navigation={{
-            nextEl: ".swiper-custom-next",
-            prevEl: ".swiper-custom-prev",
-          }}
+          className="mySwiper"
+          modules={[Navigation]}
+          navigation={true}
+          // onNavigationNext={handleNext}
         >
           {products.map((productCard: SalesCardProps, index: number) => (
             <SwiperSlide key={index} className="">
               <ProductCard {...productCard} discountTag />
             </SwiperSlide>
           ))}
-        </Swiper> */}
-
-        {products.map((productCard: SalesCardProps, index: number) => (
-          <ProductCard {...productCard} discountTag key={index} />
-        ))}
+        </Swiper>
       </div>
 
-      {/* </div> */}
       <Button className="mx-auto w-full md:w-fit">View All Products</Button>
-      <div className="swiper-custom-next">next</div>
-      <div className="">prev</div>
     </section>
   );
 };

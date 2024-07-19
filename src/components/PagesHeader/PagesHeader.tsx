@@ -5,25 +5,27 @@ interface PagesHeaderProps {
   subHeading: string;
   Heading: string;
   cta?: boolean;
+  handleNext?: () => void;
 }
 
 const PagesHeader = ({
   flashTimer,
   subHeading,
   Heading,
+  handleNext = () => {},
   cta,
 }: PagesHeaderProps) => {
   return (
     <div className="page-header-container flex flex-col gap-3">
       <div className="flex items-center gap-3 text-primary">
-        <div className="h-10 w-5 bg-primary rounded-sm max-2xl:h-8 max-2xl:w-4"></div>
-        <h1 className="text-xs capitalize md:text-base font-medium ">
+        <div className="h-10 w-5 rounded-sm bg-primary max-2xl:h-8 max-2xl:w-4"></div>
+        <h1 className="text-xs font-medium capitalize md:text-base">
           {subHeading}
         </h1>
       </div>
       <div className="flex items-center justify-between">
-        <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-20">
-          <h2 className="lg:text-4xl font-medium tracking-wide text-foreground capitalize text-lg ">
+        <div className="flex flex-col items-start gap-2 md:flex-row md:items-center md:gap-20">
+          <h2 className="text-lg font-medium capitalize tracking-wide text-foreground lg:text-4xl">
             {Heading}
           </h2>
           {flashTimer && <FlashSaleTimer />}
@@ -32,7 +34,7 @@ const PagesHeader = ({
         {!cta ? (
           <div className="page-navigations flex items-center gap-2">
             <NavigationArrows direction="prev" onClick={() => {}} />
-            <NavigationArrows direction="next" onClick={() => {}} />
+            <NavigationArrows direction="next" onClick={handleNext} />
           </div>
         ) : (
           <Button className="max-w-20 text-xs md:text-sm">View All</Button>
