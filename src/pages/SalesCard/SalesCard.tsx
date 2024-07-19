@@ -1,12 +1,14 @@
 import { useQuery } from "react-query";
 import { PagesHeader, ProductCard, Button } from "../../components";
 import { fetchProducts } from "../../api/fetch";
-import { Swiper, SwiperSlide } from "swiper/react";
+// import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
+import "swiper/css/navigation";
+// import "./style.css";
 
 // import "./styles.css";
-import { Pagination } from "swiper/modules";
+// import { Navigation, Pagination } from "swiper/modules";
 
 interface SalesCardProps {
   title: string;
@@ -36,27 +38,37 @@ const SalesCard = () => {
         Heading="Flash Sales"
         flashTimer
       />
-      {/* <div className="product-card-container flex w-full items-center justify-between gap-4 overflow-hidden"> */}
-      <>
+      <div className="product-card-container flex w-full items-center justify-between gap-4 overflow-hidden">
+        {/* <>
         <Swiper
-          spaceBetween={20}
+          spaceBetween={1}
           slidesPerView={4}
           pagination={{ clickable: true }}
           onSlideChange={() => console.log("slide change")}
           onSwiper={(swiper) => console.log(swiper)}
           className=""
-          modules={[Pagination]}
+          modules={[Pagination, Navigation]}
+          navigation={{
+            nextEl: ".swiper-custom-next",
+            prevEl: ".swiper-custom-prev",
+          }}
         >
-          <SwiperSlide className="">
-            {products.map((productCard: SalesCardProps, index: number) => (
-              <ProductCard key={index} {...productCard} discountTag />
-            ))}
-          </SwiperSlide>
-        </Swiper>
-      </>
+          {products.map((productCard: SalesCardProps, index: number) => (
+            <SwiperSlide key={index} className="">
+              <ProductCard {...productCard} discountTag />
+            </SwiperSlide>
+          ))}
+        </Swiper> */}
+
+        {products.map((productCard: SalesCardProps, index: number) => (
+          <ProductCard {...productCard} discountTag key={index} />
+        ))}
+      </div>
 
       {/* </div> */}
       <Button className="mx-auto w-full md:w-fit">View All Products</Button>
+      <div className="swiper-custom-next">next</div>
+      <div className="">prev</div>
     </section>
   );
 };

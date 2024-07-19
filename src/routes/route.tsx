@@ -6,6 +6,7 @@ import {
   AuthLayout,
   ProfilePage,
   SignInPage,
+  Cart,
 } from "../site";
 
 import ErrorPage from "../error-page";
@@ -46,6 +47,10 @@ export const router = createBrowserRouter([
             <ProfilePage />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: "cart",
+        element: <Cart />,
       },
     ],
   },

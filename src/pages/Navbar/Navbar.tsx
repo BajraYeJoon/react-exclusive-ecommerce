@@ -84,7 +84,9 @@ const Navbar = () => {
             <SearchIcon className="search-icon my-auto" size={20} />
           </div>
           <HeartIcon size={20} />
-          <LucideShoppingCart size={20} />
+          <Link to="/cart">
+            <LucideShoppingCart size={20} />
+          </Link>
           {isLoggedIn && (
             <Link to={`/profile`}>
               <div className="profile-badge h-6 w-6 cursor-pointer overflow-hidden rounded-full bg-slate-400"></div>
