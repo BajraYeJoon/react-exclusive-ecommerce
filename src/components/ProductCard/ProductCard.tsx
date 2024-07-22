@@ -8,21 +8,19 @@ import { CartItem } from "../../atoms/cartState";
 interface ProductCardProps {
   title: string;
   price: number;
-  // discountPrice: number;
-  rating: { count: number };
+  rating: number;
   image: string;
   discountTag?: boolean;
-  index: number;
+  id: number;
 }
 
 const ProductCard = ({
   title,
   price,
-  // discountPrice,
-  rating,
+  // rating,
   image,
   discountTag,
-  // index,
+  id,
 }: ProductCardProps) => {
   const [, setCart] = useRecoilState(cartState);
 
@@ -31,19 +29,23 @@ const ProductCard = ({
       title,
       price,
       image,
-      id: 0,
-    }; // Assuming these are the properties you want to include
+      id,
+    };
     setCart((currentCart) => {
-      const productIndex = currentCart.findIndex(
-        (item) => item.title === title,
-      );
+      const productIndex = currentCart.findIndex((item) => item.id === id);
       if (productIndex !== -1) {
+        toast.success(
+          `Your ${title} has been added to the cart ${
+            currentCart[productIndex].quantity + 1
+          } times`,
+        );
         return currentCart.map((item, index) =>
           index === productIndex
             ? { ...item, quantity: item.quantity + 1 }
             : item,
         );
       } else {
+        toast.success(`Your ${title} has been added to the cart`);
         return [...currentCart, { ...newProduct, quantity: 1 }];
       }
     });
@@ -96,7 +98,7 @@ const ProductCard = ({
               <FaStar key={index} className="text-accent md:h-8" />
             ))}
           </div>
-          <span className="ml-2 text-foreground/70">({rating?.count})</span>
+          {/* <span className="ml-2 text-foreground/70">{rating}</span> */}
         </div>
       </div>
     </div>

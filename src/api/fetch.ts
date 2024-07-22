@@ -12,3 +12,11 @@ export const fetchCategories = async () => {
     .then((res) => res.data);
   return data;
 };
+
+export const fetchAllProducts = async () => {
+  const allproducts = await axios
+    .get("https://dummyjson.com/products")
+    .then((res) => res.data);
+
+  return allproducts;
+};

@@ -6,6 +6,8 @@ import ProductCard from "./ProductCard/ProductCard";
 import { Button } from "./ui/button";
 import FormInput from "./FormInput/FormInput";
 import ProtectedRoute from "./ProtectedRoute/ProtectedRoute";
+import AllProducts from "./allProducts/AllProducts";
+import Favorites from "./Favorites/Favorites";
 
 export {
   Carousel,
@@ -16,4 +18,6 @@ export {
   ProductCard,
   Button,
   ProtectedRoute,
+  AllProducts,
+  Favorites,
 };
