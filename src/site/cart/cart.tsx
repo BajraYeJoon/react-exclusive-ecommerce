@@ -1,7 +1,7 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "../../components";
-// import { useRecoilValue } from "recoil";
-// import { cartState } from "../../atoms/cartState";
+import { useRecoilValue } from "recoil";
+import { cartState } from "../../atoms/cartState";
 
 const cartHeaderData = [
   { label: "Price" },
@@ -9,45 +9,34 @@ const cartHeaderData = [
   { label: "Total" },
 ];
 
-const cartItems = [
-  {
-    id: 1,
-    image: "https://pagedone.io/asset/uploads/1701162850.png",
-    title: "Latest N-5 Perfume",
-    singleprice: "$120.00",
-    quantity: 1,
-    total: "$120.00",
-  },
-];
-
 const Cart = () => {
-//   const cart = Object.entries(useRecoilValue(cartState));
+  const cartItems = useRecoilValue(cartState);
 
-//   if (Object.keys(cart).length === 0) {
-//     return (
-//       <section className="flex h-screen items-center justify-center">
-//         <h1 className="text-3xl font-semibold text-gray-400">
-//           No items in cart
-//         </h1>
-//       </section>
-//     );
-//   }
+  if (cartItems.length === 0) {
+    return (
+      <section className="flex h-screen items-center justify-center">
+        <h1 className="text-3xl font-semibold text-gray-400">
+          No items in cart
+        </h1>
+      </section>
+    );
+  }
 
   return (
-    <section className="relative mx-8 my-6 md:mx-12 lg:mx-auto  md:my-12 lg:max-w-7xl">
-      {/* <>
+    <section className="relative mx-8 my-6 md:mx-12 md:my-12 lg:mx-auto lg:max-w-7xl">
+      <>
         <h1>
-          {cart.map(([index, quantity]) => (
-            <div key={index}>
-              {index} - {quantity}
+          {cartItems.map((item) => (
+            <div key={item.id}>
+              {item.price} - {item.quantity}
             </div>
           ))}
         </h1>
-      </> */}
+      </>
 
-      <div className=" grid-cols-2 py-6 text-foreground/40 grid">
+      <div className="grid grid-cols-2 py-6 text-foreground/40">
         <div className="text-xl font-normal leading-8">Product</div>
-        <p className="hidden sm:flex items-center justify-between text-xl font-normal leading-8">
+        <p className="hidden items-center justify-between text-xl font-normal leading-8 sm:flex">
           <span className={`w-full text-center`}>
             {cartHeaderData[0].label}
           </span>
@@ -73,9 +62,9 @@ const Cart = () => {
                 {item.title}
               </h5>
             </div>
-            <div className="flex w-fit flex-col items-center justify-around gap-2 md:w-full sm:flex-row">
+            <div className="flex w-fit flex-col items-center justify-around gap-2 sm:flex-row md:w-full">
               <h6 className="text-center text-sm font-medium leading-9 text-foreground md:text-base">
-                {item.singleprice}{" "}
+                {item.price}{" "}
               </h6>
               <div className="flex items-center justify-center rounded-md border p-1">
                 <input
@@ -89,7 +78,7 @@ const Cart = () => {
                 </div>
               </div>
               <h6 className="text-center text-sm font-medium leading-9 md:text-lg">
-                {item.total}
+                {item.price * item.quantity}
               </h6>
             </div>
           </div>

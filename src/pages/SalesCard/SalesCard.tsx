@@ -8,6 +8,8 @@ import "swiper/css/navigation";
 // import "./style.css";
 import "./styles.css";
 import { Navigation } from "swiper/modules";
+import { prismaDBClient } from "../../lib/prisma";
+import { useEffect } from "react";
 
 interface SalesCardProps {
   title: string;
@@ -18,6 +20,19 @@ interface SalesCardProps {
 }
 
 const SalesCard = () => {
+  useEffect(() => {
+    const dbdata = async () => {
+      try {
+        const res = await prismaDBClient.product.findMany();
+        console.log(res, "res");
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      }
+    };
+
+    dbdata();
+  }, []);
+
   const {
     data: products,
     error,
@@ -39,6 +54,8 @@ const SalesCard = () => {
         flashTimer
         // handleNext={handleNext}
       />
+      <h1>{}</h1>
+
       <div className="product-card-container flex w-full items-center justify-between gap-4 overflow-hidden">
         <Swiper
           spaceBetween={1}

@@ -1,8 +1,9 @@
 import { EyeIcon, HeartIcon } from "lucide-react";
 import { FaStar } from "react-icons/fa";
-// import { useRecoilState } from "recoil";
-// import { cartState } from "../../atoms/cartState";
-// import { toast } from "sonner";
+import { useRecoilState } from "recoil";
+import { cartState } from "../../atoms/cartState";
+import { toast } from "sonner";
+import { CartItem } from "../../atoms/cartState";
 
 interface ProductCardProps {
   title: string;
@@ -23,9 +24,30 @@ const ProductCard = ({
   discountTag,
   // index,
 }: ProductCardProps) => {
-  // const [cart, setCart] = useRecoilState(cartState);
+  const [, setCart] = useRecoilState(cartState);
 
-
+  const handleAddToCart = () => {
+    const newProduct: Omit<CartItem, "quantity"> = {
+      title,
+      price,
+      image,
+      id: 0,
+    }; // Assuming these are the properties you want to include
+    setCart((currentCart) => {
+      const productIndex = currentCart.findIndex(
+        (item) => item.title === title,
+      );
+      if (productIndex !== -1) {
+        return currentCart.map((item, index) =>
+          index === productIndex
+            ? { ...item, quantity: item.quantity + 1 }
+            : item,
+        );
+      } else {
+        return [...currentCart, { ...newProduct, quantity: 1 }];
+      }
+    });
+  };
 
   return (
     <div className="w-full max-w-72">
@@ -50,10 +72,7 @@ const ProductCard = ({
           </span>
         </div>
 
-        <div
-          className="group cursor-pointer"
-          // onClick={() => handleAddToCart({ index })}
-        >
+        <div className="group cursor-pointer" onClick={handleAddToCart}>
           <div className="absolute bottom-0 left-0 w-full bg-foreground opacity-0 transition-opacity duration-500 group-hover:opacity-100">
             <p className="py-2 text-center text-sm font-normal tracking-tight text-background">
               Add to Cart
