@@ -2,8 +2,9 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "../../components";
 import { selector, useRecoilState, useRecoilValue } from "recoil";
 import { cartState } from "../../atoms/cartState";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { checkoutState } from "../../atoms/checkoutState";
 
 const cartHeaderData = [
   { label: "Price" },
@@ -12,9 +13,24 @@ const cartHeaderData = [
 ];
 
 const Cart = () => {
-  const cartvalues = useRecoilValue(cartState);
+  // const cartvalues = useRecoilValue(cartState);
+
+  const [, setCheckoutData] = useRecoilState(checkoutState);
 
   const [cartItems, setCartItems] = useRecoilState(cartState);
+
+  const navigate = useNavigate();
+
+  const navigateToCheckout = (cartItems: any, total: number) => {
+    const checkoutData = {
+      cartItems,
+      total,
+    };
+
+    setCheckoutData(checkoutData);
+    navigate("/checkout");
+    // console.log(checkoutData, "checkoutData");
+  };
 
   const increaseQuantity = (id: number) => {
     const newCartvalue = cartItems.map((cart) => {
@@ -35,8 +51,8 @@ const Cart = () => {
           if (cart.quantity === 1 && !itemremoved) {
             itemremoved = true;
             toast.error(`Your ${cart.title} has been removed from the cart`);
-            return { ...cart, quantity: cart.quantity - 1 };
           }
+          return { ...cart, quantity: cart.quantity - 1 };
         }
         return cart;
       })
@@ -67,7 +83,6 @@ const Cart = () => {
 
   const total = useRecoilValue(calculateTotal);
 
-  console.log(cartvalues, "iniitial cart values");
   console.log(cartItems, "after in or de");
 
   if (cartItems.length === 0) {
@@ -172,7 +187,12 @@ const Cart = () => {
               {total.total}
             </h6>
           </div>
-          <Button className="w-full">Proceed to Checkout</Button>
+          <Button
+            className="w-full"
+            onClick={() => navigateToCheckout(cartItems, total.total)}
+          >
+            Proceed to Checkout
+          </Button>
         </div>
       </div>
     </section>

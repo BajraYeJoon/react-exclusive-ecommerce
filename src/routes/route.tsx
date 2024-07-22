@@ -10,7 +10,12 @@ import {
 } from "../site";
 
 import ErrorPage from "../error-page";
-import { AllProducts, ProtectedRoute, Favorites } from "../components";
+import {
+  AllProducts,
+  ProtectedRoute,
+  Favorites,
+  Checkout,
+} from "../components";
 
 export const router = createBrowserRouter([
   {
@@ -59,6 +64,10 @@ export const router = createBrowserRouter([
       {
         path: "favorites",
         element: <Favorites />,
+      },
+      {
+        path: "checkout",
+        element: <Checkout />,
       },
     ],
   },
