@@ -4,6 +4,8 @@ import { Button } from "../ui/button";
 import { Fragment } from "react/jsx-runtime";
 import { useForm } from "react-hook-form";
 import FormInput from "../FormInput/FormInput";
+import { orderplaceState } from "../../atoms/orderplaceState";
+import { useRecoilState } from "recoil";
 
 const Checkout = () => {
   const {
@@ -14,9 +16,16 @@ const Checkout = () => {
 
   const checkoutValues = useRecoilValue(checkoutState);
 
-  console.log(checkoutValues, "checkoutValues");
+  const [orderPlaceData, setOrderPlaceData] = useRecoilState(orderplaceState);
 
-  const onSubmit = () => {};
+  // console.log(checkoutValues, "checkoutValues");
+
+  const onSubmit = (data: any) => {
+    setOrderPlaceData(data);
+    console.log(data, "order data");
+  };
+
+  console.log(orderPlaceData, "orderPlaceData from recoil");
 
   return (
     <section className="mb-28 mt-32 lg:mx-72">
@@ -116,16 +125,16 @@ const Checkout = () => {
             <p>${checkoutValues.total}</p>
           </div>
 
-          <div className="flex flex-col gap-4 space-y-4">
+          <div className="flex flex-col gap-4 space-y-4" id="group">
             <div className="flex items-center justify-between">
               <div className="space-x-3">
-                <input type="radio" name="bank" id="bank" />
+                <input type="radio" name="group" />
                 <label htmlFor="bank">Bank</label>
               </div>
               <img src={"/card.png"} alt="" className="h-6" />
             </div>
             <div className="space-x-3">
-              <input type="radio" name="cash" id="cash" />
+              <input type="radio" name="group" />
               <label htmlFor="cash">Cash on Delivery</label>
             </div>
           </div>
