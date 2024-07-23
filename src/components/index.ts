@@ -11,6 +11,7 @@ import Favorites from "./Favorites/Favorites";
 import Checkout from "./checkout/Checkout";
 import OrderPlaced from "./OrderPlaced/OrderPlaced";
 import FetchSingleCategory from "./FetchSingleCategory/FetchSingleCategory";
+import CustomBreakcrumb from "./CustomBreakcrumb/CustomBreakcrumb";
 
 export {
   Carousel,
@@ -26,4 +27,5 @@ export {
   Checkout,
   OrderPlaced,
   FetchSingleCategory,
+  CustomBreakcrumb,
 };

@@ -1,5 +1,5 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { Button } from "../../components";
+import { Button, CustomBreakcrumb } from "../../components";
 import { selector, useRecoilState, useRecoilValue } from "recoil";
 import { cartState } from "../../atoms/cartState";
 import { Link, useNavigate } from "react-router-dom";
@@ -103,6 +103,11 @@ const Cart = () => {
 
   return (
     <section className="relative mx-8 my-6 md:mx-12 md:my-12 lg:mx-auto lg:max-w-7xl">
+      <CustomBreakcrumb
+        breadcrumbTitle="Cart"
+        breadcrumbValue={cartItems as []}
+      />
+
       <div className="grid grid-cols-2 py-6 text-foreground/40">
         <div className="text-xl font-normal leading-8">Product</div>
         <p className="hidden items-center justify-between text-xl font-normal leading-8 sm:flex">

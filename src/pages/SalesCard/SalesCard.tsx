@@ -68,9 +68,9 @@ const SalesCard = () => {
         </Swiper>
       </div>
 
-      <Button className="mx-auto w-full md:w-fit">
-        <Link to={"/products"}>View All Products</Link>
-      </Button>
+      <Link to={"/products"} className="mx-auto w-full md:w-fit">
+        <Button>View All Products</Button>
+      </Link>
     </section>
   );
 };

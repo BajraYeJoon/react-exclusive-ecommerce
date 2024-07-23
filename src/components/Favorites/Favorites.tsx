@@ -2,34 +2,17 @@ import { Link } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { favoriteState } from "../../atoms/favoriteState";
 import ProductCard from "../ProductCard/ProductCard";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "../ui/breadcrumb";
+import CustomBreakcrumb from "../CustomBreakcrumb/CustomBreakcrumb";
+
 const Favorites = () => {
   const addedFavoritesProductInfo = useRecoilValue(favoriteState);
 
-  console.log("addedFavoritesProductInfo", addedFavoritesProductInfo);
-
   return (
     <section className="relative mx-8 my-6 md:mx-12 md:my-12 lg:mx-auto lg:max-w-7xl">
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/">Home</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/components">
-              favorites ({addedFavoritesProductInfo.length})
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+      <CustomBreakcrumb
+        breadcrumbTitle="Favorites"
+        breadcrumbValue={addedFavoritesProductInfo as []}
+      />
 
       {addedFavoritesProductInfo.length === 0 ? (
         <div className="my-12 flex flex-col items-center justify-center gap-4 text-center">
