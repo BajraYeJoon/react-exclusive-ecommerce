@@ -1,4 +1,4 @@
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { checkoutState } from "../../atoms/checkoutState";
 import { Button } from "../ui/button";
 import { Fragment } from "react/jsx-runtime";
@@ -6,26 +6,46 @@ import { useForm } from "react-hook-form";
 import FormInput from "../FormInput/FormInput";
 import { orderplaceState } from "../../atoms/orderplaceState";
 import { useRecoilState } from "recoil";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+import { cartState } from "../../atoms/cartState";
+import Cookies from "js-cookie";
 
 const Checkout = () => {
   const {
     handleSubmit,
     register,
     formState: { errors },
+    reset,
   } = useForm();
 
   const checkoutValues = useRecoilValue(checkoutState);
+  const resetCartAfterORderPlace = useSetRecoilState(cartState);
+  const resetCheckoutCartAfterOrderPlace = useSetRecoilState(checkoutState);
+  const Navigate = useNavigate();
+  const [, setOrderPlaceData] = useRecoilState(orderplaceState);
 
-  const [orderPlaceData, setOrderPlaceData] = useRecoilState(orderplaceState);
+  const onSubmit = (data) => {
+    const orderData = {
+      id: Math.random().toString(36).substring(2, 15),
+      billingInfo: data,
+      products: checkoutValues.cartItems,
+      shipping: 45,
+      total: checkoutValues.total,
+      paymentMethod: data.paymentMethod,
+    };
 
-  // console.log(checkoutValues, "checkoutValues");
+    toast.success("Order placed successfully");
+    setOrderPlaceData(orderData);
+    reset();
+    resetCheckoutCartAfterOrderPlace({ cartItems: [], total: 0 });
+    Cookies.remove("checkoutData");
+    resetCartAfterORderPlace([]);
+    Cookies.set("order-placed", "true");
+    Navigate("/order-placed");
 
-  const onSubmit = (data: any) => {
-    setOrderPlaceData(data);
-    console.log(data, "order data");
+    console.log(orderData, "Complete order data");
   };
-
-  console.log(orderPlaceData, "orderPlaceData from recoil");
 
   return (
     <section className="mb-28 mt-32 lg:mx-72">
@@ -128,13 +148,17 @@ const Checkout = () => {
           <div className="flex flex-col gap-4 space-y-4" id="group">
             <div className="flex items-center justify-between">
               <div className="space-x-3">
-                <input type="radio" name="group" />
+                <input
+                  type="radio"
+                  value="bank"
+                  {...register("paymentMethod")}
+                />
                 <label htmlFor="bank">Bank</label>
               </div>
               <img src={"/card.png"} alt="" className="h-6" />
             </div>
             <div className="space-x-3">
-              <input type="radio" name="group" />
+              <input type="radio" value="cash" {...register("paymentMethod")} />
               <label htmlFor="cash">Cash on Delivery</label>
             </div>
           </div>

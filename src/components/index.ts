@@ -9,6 +9,7 @@ import ProtectedRoute from "./ProtectedRoute/ProtectedRoute";
 import AllProducts from "./allProducts/AllProducts";
 import Favorites from "./Favorites/Favorites";
 import Checkout from "./checkout/Checkout";
+import OrderPlaced from "./OrderPlaced/OrderPlaced";
 
 export {
   Carousel,
@@ -22,4 +23,5 @@ export {
   AllProducts,
   Favorites,
   Checkout,
+  OrderPlaced,
 };

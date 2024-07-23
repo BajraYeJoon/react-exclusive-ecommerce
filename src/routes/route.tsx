@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, redirect } from "react-router-dom";
 import {
   Layout,
   Home,
@@ -8,6 +8,7 @@ import {
   SignInPage,
   Cart,
 } from "../site";
+import Cookies from "js-cookie";
 
 import ErrorPage from "../error-page";
 import {
@@ -15,6 +16,7 @@ import {
   ProtectedRoute,
   Favorites,
   Checkout,
+  OrderPlaced,
 } from "../components";
 
 export const router = createBrowserRouter([
@@ -68,6 +70,14 @@ export const router = createBrowserRouter([
       {
         path: "checkout",
         element: <Checkout />,
+        loader: () =>
+          !Cookies.get("checkoutData") ? redirect("/products") : null,
+      },
+      {
+        path: "order-placed",
+        element: <OrderPlaced />,
+        loader: () =>
+          !Cookies.get("order-placed") ? redirect("/products") : null,
       },
     ],
   },

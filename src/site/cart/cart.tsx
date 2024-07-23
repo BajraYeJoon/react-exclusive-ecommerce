@@ -5,6 +5,7 @@ import { cartState } from "../../atoms/cartState";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { checkoutState } from "../../atoms/checkoutState";
+import Cookies from "js-cookie";
 
 const cartHeaderData = [
   { label: "Price" },
@@ -23,11 +24,13 @@ const Cart = () => {
 
   const navigateToCheckout = (cartItems: any, total: number) => {
     const checkoutData = {
+      id: Math.random().toString(36).substring(2, 15),
       cartItems,
       total,
     };
 
     setCheckoutData(checkoutData);
+    Cookies.set("checkoutData", checkoutData.id);
     navigate("/checkout");
     // console.log(checkoutData, "checkoutData");
   };
