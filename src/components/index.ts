@@ -10,6 +10,7 @@ import AllProducts from "./allProducts/AllProducts";
 import Favorites from "./Favorites/Favorites";
 import Checkout from "./checkout/Checkout";
 import OrderPlaced from "./OrderPlaced/OrderPlaced";
+import FetchSingleCategory from "./FetchSingleCategory/FetchSingleCategory";
 
 export {
   Carousel,
@@ -24,4 +25,5 @@ export {
   Favorites,
   Checkout,
   OrderPlaced,
+  FetchSingleCategory,
 };

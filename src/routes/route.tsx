@@ -17,6 +17,7 @@ import {
   Favorites,
   Checkout,
   OrderPlaced,
+  FetchSingleCategory,
 } from "../components";
 
 export const router = createBrowserRouter([
@@ -78,6 +79,10 @@ export const router = createBrowserRouter([
         element: <OrderPlaced />,
         loader: () =>
           !Cookies.get("order-placed") ? redirect("/products") : null,
+      },
+      {
+        path: "category/:category",
+        element: <FetchSingleCategory />,
       },
     ],
   },
