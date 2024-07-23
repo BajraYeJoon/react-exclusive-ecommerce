@@ -48,13 +48,13 @@ const Checkout = () => {
   };
 
   return (
-    <section className="mb-28 mt-32 lg:mx-72">
+    <section className="mx-8 mb-28 mt-12 md:mx-12 lg:mx-72 lg:mt-32">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="grid w-full grid-cols-2 items-start justify-between gap-24"
+        className="grid w-full grid-cols-1 items-start justify-between gap-24 md:grid-cols-2"
       >
-        <div className="flex flex-col gap-8">
-          <h2 className="text-lg lg:text-3xl">Billing Details</h2>
+        <div className="order-1 flex flex-col gap-8 md:order-2">
+          <h2 className="text-sm md:text-lg lg:text-3xl">Billing Details</h2>
 
           <div className="checkout-info-content flex flex-col space-y-4">
             {" "}
@@ -116,7 +116,7 @@ const Checkout = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-4 md:gap-7 lg:gap-8">
           {checkoutValues.cartItems.map(
             (
               cartData: { image: string; title: string; price: number },
@@ -124,28 +124,39 @@ const Checkout = () => {
             ) => (
               <Fragment key={index}>
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-5">
-                    <img src={cartData.image} alt="" className="h-12 w-12" />
-                    <h4>{cartData.title}</h4>
+                  <div className="flex items-center gap-2 lg:gap-5">
+                    <img
+                      src={cartData.image}
+                      alt=""
+                      className="h-10 w-10 md:h-12 md:w-12"
+                    />
+                    <h4 className="text-xs md:text-lg lg:text-xl">
+                      {cartData.title}
+                    </h4>
                   </div>
 
-                  <p>${cartData.price}</p>
+                  <p className="text-sm md:text-lg lg:text-xl">
+                    ${cartData.price}
+                  </p>
                 </div>
               </Fragment>
             ),
           )}
 
-          <div className="flex items-center justify-between border-b pb-3">
+          <div className="flex items-center justify-between border-b pb-3 text-sm lg:text-base">
             <h3>Shipping:</h3>
             <p>$45</p>
           </div>
 
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between text-sm lg:text-base">
             <h4>Total:</h4>
             <p>${checkoutValues.total}</p>
           </div>
 
-          <div className="flex flex-col gap-4 space-y-4" id="group">
+          <div
+            className="flex flex-col gap-4 text-sm lg:gap-4 lg:text-xl"
+            id="group"
+          >
             <div className="flex items-center justify-between">
               <div className="space-x-3">
                 <input
@@ -155,7 +166,7 @@ const Checkout = () => {
                 />
                 <label htmlFor="bank">Bank</label>
               </div>
-              <img src={"/card.png"} alt="" className="h-6" />
+              <img src={"/card.png"} alt="" className="h-4 lg:h-6" />
             </div>
             <div className="space-x-3">
               <input type="radio" value="cash" {...register("paymentMethod")} />
@@ -163,7 +174,9 @@ const Checkout = () => {
             </div>
           </div>
 
-          <Button type="submit">Place Order</Button>
+          <Button type="submit" className="w-full md:w-fit">
+            Place Order
+          </Button>
         </div>
       </form>
     </section>
