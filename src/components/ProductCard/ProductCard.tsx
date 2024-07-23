@@ -4,10 +4,10 @@ import { useRecoilState } from "recoil";
 import { cartState } from "../../atoms/cartState";
 import { toast } from "sonner";
 import { CartItem } from "../../atoms/cartState";
-import { Link } from "react-router-dom";
 import { favoriteState } from "../../atoms/favoriteState";
 import { favoriteItem } from "../../atoms/favoriteState";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
+import useWindow from "../../lib/useWindow";
 
 interface ProductCardProps {
   title: string;
@@ -28,6 +28,7 @@ const ProductCard = ({
 }: ProductCardProps) => {
   const [, setCart] = useRecoilState(cartState);
   const [favorites, setFavorites] = useRecoilState(favoriteState);
+  const { dimension } = useWindow();
 
   const handleFavorite = () => {
     const newFavorite: favoriteItem = { id, title, price, image };
@@ -94,17 +95,21 @@ const ProductCard = ({
 
         <div className="absolute right-4 top-4 flex flex-col gap-2">
           <span
-            className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-foreground/20"
+            className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-foreground/20 lg:h-7 lg:w-7"
             onClick={() => handleFavorite()}
           >
             {favorites.some((item) => item.id === id) ? (
-              <HeartIcon size={18} fill="red" className="text-primary" />
+              <HeartIcon
+                size={dimension.width < 768 ? 10 : 18}
+                fill="red"
+                className="text-primary"
+              />
             ) : (
-              <HeartIcon size={18} />
+              <HeartIcon size={dimension.width < 768 ? 10 : 18} />
             )}
           </span>
-          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-foreground/20">
-            <EyeIcon size={18} />
+          <span className="flex h-4 w-4 items-center justify-center rounded-full bg-foreground/20 lg:h-7 lg:w-7">
+            <EyeIcon size={dimension.width < 768 ? 10 : 18} />
           </span>
         </div>
 

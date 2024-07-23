@@ -3,13 +3,23 @@ import { useState } from "react";
 import { HeartIcon, LucideShoppingCart, SearchIcon } from "lucide-react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { cn } from "../../lib/utils";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { navLinks } from "../../constants/data";
 import { Link } from "react-router-dom";
 import { RxCross2 } from "react-icons/rx";
 import { useAuthContext } from "../../context/useAuthContext";
 import { useRecoilValue } from "recoil";
 import { cartState } from "../../atoms/cartState";
+// import useWindow from "../../lib/useWindow";
+// import { Cart } from "../../site";
+// import {
+//   Drawer,
+//   DrawerClose,
+//   DrawerContent,
+//   DrawerTrigger,
+//   DrawerFooter,
+// } from "../../components/ui/drawer";
+// import { Button } from "../../components";
 
 // import { auth } from "../../firebase/config";
 // import { onAuthStateChanged } from "firebase/auth";
@@ -21,6 +31,8 @@ import { cartState } from "../../atoms/cartState";
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
   const { isLoggedIn } = useAuthContext();
+  const params = useParams();
+  // const { dimension } = useWindow();
 
   // useEffect(() => {
   //   const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -90,9 +102,11 @@ const Navbar = () => {
             />
             <SearchIcon className="search-icon my-auto" size={20} />
           </div>
-          <Link to="/favorites" className="flex gap-1">
+
+          <Link to="/favorites">
             <HeartIcon size={20} />
           </Link>
+
           <Link to="/cart" className="flex gap-1">
             <LucideShoppingCart size={20} />
             {cartquantity > 0 && (
@@ -101,6 +115,38 @@ const Navbar = () => {
               </span>
             )}
           </Link>
+          {/* For mobile drawer */}
+          {/* {dimension.width > 768 ? (
+            <Link to="/cart" className="flex gap-1">
+              <LucideShoppingCart size={20} />
+              {cartquantity > 0 && (
+                <span className="cart-quantity rounded-full bg-primary px-2 py-1 text-xs font-light text-background">
+                  {cartquantity}
+                </span>
+              )}
+            </Link>
+          ) : (
+            <Drawer>
+              <DrawerTrigger className="flex gap-1">
+                <LucideShoppingCart size={20} />
+                {cartquantity > 0 && (
+                  <span className="cart-quantity rounded-full bg-primary px-2 py-1 text-xs font-light text-background">
+                    {cartquantity}
+                  </span>
+                )}
+              </DrawerTrigger>
+              <DrawerContent>
+                <Cart />
+                <DrawerFooter>
+                  <Button>Submit</Button>
+                  <DrawerClose>
+                    <Button variant="outline">Cancel</Button>
+                  </DrawerClose>
+                </DrawerFooter>
+              </DrawerContent>
+            </Drawer>
+          )} */}
+
           {isLoggedIn && (
             <Link to={`/profile`}>
               <div className="profile-badge h-6 w-6 cursor-pointer overflow-hidden rounded-full bg-foreground/35"></div>

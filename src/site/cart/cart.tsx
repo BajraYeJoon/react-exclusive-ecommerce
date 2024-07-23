@@ -102,7 +102,7 @@ const Cart = () => {
   }
 
   return (
-    <section className="relative mx-8 my-6 md:mx-12 md:my-12 lg:mx-auto lg:max-w-7xl">
+    <section className="relative mx-8 my-6 h-fit md:mx-12 md:my-12 lg:mx-auto lg:max-w-7xl">
       <CustomBreakcrumb
         breadcrumbTitle="Cart"
         breadcrumbValue={cartItems as []}

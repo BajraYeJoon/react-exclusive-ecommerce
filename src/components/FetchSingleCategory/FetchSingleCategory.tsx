@@ -24,7 +24,7 @@ const FetchSingleCategory = () => {
 
   return (
     <section className="mx-72 mb-28 gap-40 max-2xl:mx-6 max-2xl:gap-28">
-      <div className="product-card-container flex w-full flex-wrap items-center justify-between gap-4 overflow-hidden">
+      <div className="product-card-container grid w-full grid-cols-2 items-center justify-between gap-4 overflow-hidden md:grid-cols-3 lg:grid-cols-4">
         {category.products.map((category: any) => (
           <ProductCard
             key={category.id}

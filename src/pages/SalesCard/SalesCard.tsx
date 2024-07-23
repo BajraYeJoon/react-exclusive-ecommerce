@@ -1,6 +1,6 @@
-// import { useQuery } from "react-query";
+import { useQuery } from "react-query";
 import { PagesHeader, ProductCard, Button } from "../../components";
-// import { fetchProducts } from "../../api/fetch";
+import { fetchProducts } from "../../api/fetch";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -8,8 +8,9 @@ import "swiper/css/navigation";
 // import "./style.css";
 import "./styles.css";
 import { Navigation } from "swiper/modules";
-import { bestSellingProducts } from "../../constants/data";
+// import { bestSellingProducts } from "../../constants/data";
 import { Link } from "react-router-dom";
+import useWindow from "../../lib/useWindow";
 
 interface SalesCardProps {
   title: string;
@@ -21,18 +22,20 @@ interface SalesCardProps {
 }
 
 const SalesCard = () => {
-  // const {
-  //   data: products,
-  //   error,
-  //   isLoading,
-  // } = useQuery(["products"], fetchProducts, {
-  //   select: (products) => products.slice(0, 7),
-  //   staleTime: 60000,
-  // });
+  const {
+    data: products,
+    error,
+    isLoading,
+  } = useQuery(["products"], fetchProducts, {
+    select: (products) => products.slice(0, 7),
+    staleTime: 60000,
+  });
 
-  // if (isLoading) return <div>Loading...</div>;
-  // if (error) return <div>An error occurred: {(error as Error).message}</div>;
-  // console.log(products, "all-products");
+  const { dimension } = useWindow();
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>An error occurred: {(error as Error).message}</div>;
+  console.log(products, "all-products");
 
   return (
     <section className="sales-card-container flex flex-col gap-5 border-b border-foreground/30 pb-8 md:gap-7 md:pb-14">
@@ -46,31 +49,35 @@ const SalesCard = () => {
       <div className="product-card-container w-full items-center justify-between gap-4 overflow-hidden">
         <Swiper
           spaceBetween={1}
-          slidesPerView={4}
+          slidesPerView={dimension.width > 768 ? 4 : 2}
           pagination={{ clickable: true }}
           onSlideChange={() => console.log("slide change")}
           className="mySwiper"
           modules={[Navigation]}
-          navigation={true}
+          navigation={{
+            enabled: true,
+            nextEl: ".arrow-right",
+            prevEl: ".arrow-left",
+          }}
           // onNavigationNext={handleNext}
         >
-          {/* {products.map((productCard: SalesCardProps, index: number) => (
+          {products.map((productCard: SalesCardProps, index: number) => (
             <SwiperSlide key={index} className="">
-              <ProductCard {...productCard} discountTag index={index} />
-            </SwiperSlide>
-          ))} */}
-
-          {bestSellingProducts.map((productCard: SalesCardProps) => (
-            <SwiperSlide key={productCard.id} className="">
               <ProductCard {...productCard} discountTag />
             </SwiperSlide>
           ))}
+
+          {/* {bestSellingProducts.map((productCard: SalesCardProps) => (
+            <SwiperSlide key={productCard.id} className="">
+              <ProductCard {...productCard} discountTag />
+            </SwiperSlide>
+          ))} */}
         </Swiper>
       </div>
 
-      <Link to={"/products"} className="mx-auto w-full md:w-fit">
-        <Button>View All Products</Button>
-      </Link>
+      <Button className="mx-auto w-full md:w-fit">
+        <Link to={"/products"}>View All Products</Link>
+      </Button>
     </section>
   );
 };
