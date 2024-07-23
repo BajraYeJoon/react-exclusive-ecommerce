@@ -81,7 +81,7 @@ export const router = createBrowserRouter([
           !Cookies.get("order-placed") ? redirect("/products") : null,
       },
       {
-        path: "category/:category",
+        path: "category/:categoryName",
         element: <FetchSingleCategory />,
       },
     ],

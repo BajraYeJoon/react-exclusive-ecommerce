@@ -12,7 +12,7 @@ import Cookies from "js-cookie";
 interface ProductCardProps {
   title: string;
   price: number;
-  rating: number;
+  rating?: number;
   image: string;
   discountTag?: boolean;
   id: number;
@@ -34,18 +34,18 @@ const ProductCard = ({
     setFavorites((currentFavorites) => {
       const productIndex = currentFavorites.findIndex((item) => item.id === id);
       if (productIndex !== -1) {
-        Cookies.remove(
-          "favorites",
-          currentFavorites.filter((item) => item.id !== id),
-        );
+        // Cookies.remove(
+        //   "favorites",
+        //   currentFavorites.filter((item) => item.id !== id),
+        // );
         toast.success(`Your ${title} has been removed from favorites`);
         return currentFavorites.filter((item) => item.id !== id);
       } else {
         toast.success(`Your ${title} has been added to favorites`);
-        Cookies.set(
-          "favorites",
-          JSON.stringify([...currentFavorites, newFavorite]),
-        );
+        // Cookies.set(
+        //   "favorites",
+        //   JSON.stringify([...currentFavorites, newFavorite]),
+        // );
         return [...currentFavorites, newFavorite];
       }
     });

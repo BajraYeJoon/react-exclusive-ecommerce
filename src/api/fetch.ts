@@ -8,7 +8,7 @@ export const fetchProducts = async () => {
 
 export const fetchCategories = async () => {
   const data = await axios
-    .get("'https://dummyjson.com/products/categories'")
+    .get("https://dummyjson.com/products/categories")
     .then((res) => res.data);
   return data;
 };
@@ -19,4 +19,11 @@ export const fetchAllProducts = async () => {
     .then((res) => res.data);
 
   return allproducts;
+};
+
+export const fetchProductByCategory = async (category: string) => {
+  const data = await axios
+    .get(`https://dummyjson.com/products/category/${category}`)
+    .then((res) => res.data);
+  return data;
 };
