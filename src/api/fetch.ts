@@ -8,7 +8,7 @@ export const fetchProducts = async () => {
 
 export const fetchCategories = async () => {
   const data = await axios
-    .get(`${URL}/products/categories`)
+    .get("'https://dummyjson.com/products/categories'")
     .then((res) => res.data);
   return data;
 };

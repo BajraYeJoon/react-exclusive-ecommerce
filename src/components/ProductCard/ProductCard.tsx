@@ -4,6 +4,9 @@ import { useRecoilState } from "recoil";
 import { cartState } from "../../atoms/cartState";
 import { toast } from "sonner";
 import { CartItem } from "../../atoms/cartState";
+import { Link } from "react-router-dom";
+import { favoriteState } from "../../atoms/favoriteState";
+import { favoriteItem } from "../../atoms/favoriteState";
 
 interface ProductCardProps {
   title: string;
@@ -23,6 +26,22 @@ const ProductCard = ({
   id,
 }: ProductCardProps) => {
   const [, setCart] = useRecoilState(cartState);
+  const [favorites, setFavorites] = useRecoilState(favoriteState);
+
+  const handleFavorite = () => {
+    const newFavorite: favoriteItem = { id, title, price, image };
+    setFavorites((currentFavorites) => {
+      const productIndex = currentFavorites.findIndex((item) => item.id === id);
+      if (productIndex !== -1) {
+        toast.success(`Your ${title} has been removed from favorites`);
+        return currentFavorites.filter((item) => item.id !== id);
+      } else {
+        toast.success(`Your ${title} has been added to favorites`);
+        return [...currentFavorites, newFavorite];
+      }
+    });
+  };
+
 
   const handleAddToCart = () => {
     const newProduct: Omit<CartItem, "quantity"> = {
@@ -66,8 +85,15 @@ const ProductCard = ({
         )}
 
         <div className="absolute right-4 top-4 flex flex-col gap-2">
-          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-foreground/20">
-            <HeartIcon size={18} />
+          <span
+            className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-foreground/20"
+            onClick={() => handleFavorite()}
+          >
+            {favorites.some((item) => item.id === id) ? (
+              <HeartIcon size={18} fill="red" className="text-primary" />
+            ) : (
+              <HeartIcon size={18} />
+            )}
           </span>
           <span className="flex h-7 w-7 items-center justify-center rounded-full bg-foreground/20">
             <EyeIcon size={18} />
