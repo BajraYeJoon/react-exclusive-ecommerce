@@ -113,6 +113,7 @@ export const categories = [
 
 export const generalProducts = [
   {
+    id: 1,
     title: "The North Coat",
     price: 360,
     // discountPrice: 260,
@@ -120,6 +121,7 @@ export const generalProducts = [
     image: "/best-selling-products/b-coat.png",
   },
   {
+    id: 2,
     title: "Gucci duffle bag",
     price: 360,
     // discountPrice: 260,
@@ -127,6 +129,7 @@ export const generalProducts = [
     image: "/best-selling-products/b-bag.png",
   },
   {
+    id: 3,
     title: "RGB liquid CPU Cooler",
     price: 360,
     // discountPrice: 260,
@@ -134,6 +137,7 @@ export const generalProducts = [
     image: "/best-selling-products/b-fan.png",
   },
   {
+    id: 4,
     title: "The North Coat",
     price: 360,
     // discountPrice: 260,

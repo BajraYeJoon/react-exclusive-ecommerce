@@ -2,7 +2,7 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { checkoutState } from "../../atoms/checkoutState";
 import { Button } from "../ui/button";
 import { Fragment } from "react/jsx-runtime";
-import { useForm } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
 import FormInput from "../FormInput/FormInput";
 import { orderplaceState } from "../../atoms/orderplaceState";
 import { useRecoilState } from "recoil";
@@ -25,7 +25,7 @@ const Checkout = () => {
   const Navigate = useNavigate();
   const [, setOrderPlaceData] = useRecoilState(orderplaceState);
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: FieldValues) => {
     const orderData = {
       id: Math.random().toString(36).substring(2, 15),
       billingInfo: data,

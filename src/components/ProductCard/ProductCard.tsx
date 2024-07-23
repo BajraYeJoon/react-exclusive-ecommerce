@@ -12,7 +12,7 @@ import useWindow from "../../lib/useWindow";
 interface ProductCardProps {
   title: string;
   price: number;
-  rating?: number;
+  // rating?: number;
   image: string;
   discountTag?: boolean;
   id: number;

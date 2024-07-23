@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { recoilPersist } from "recoil-persist";
+// import { recoilPersist } from "recoil-persist";
 
 // const { persistAtom } = recoilPersist({
 //   key: "recoil-persist", // this key is using to store data in local storage

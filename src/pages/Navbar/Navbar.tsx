@@ -3,7 +3,7 @@ import { useState } from "react";
 import { HeartIcon, LucideShoppingCart, SearchIcon } from "lucide-react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { cn } from "../../lib/utils";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { navLinks } from "../../constants/data";
 import { Link } from "react-router-dom";
 import { RxCross2 } from "react-icons/rx";
@@ -31,7 +31,6 @@ import { cartState } from "../../atoms/cartState";
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
   const { isLoggedIn } = useAuthContext();
-  const params = useParams();
   // const { dimension } = useWindow();
 
   // useEffect(() => {

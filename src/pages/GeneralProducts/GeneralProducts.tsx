@@ -8,11 +8,7 @@ const GeneralProducts = () => {
 
       <div className="general-product-card-container flex w-full items-center justify-between gap-4 overflow-x-auto">
         {generalProducts.map((gproduct, index) => (
-          <ProductCard
-            key={index}
-            {...gproduct}
-            rating={{ count: gproduct.rating }}
-          />
+          <ProductCard key={index} {...gproduct} />
         ))}
       </div>
 
