@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { cartState } from "../../atoms/cartState";
 import Cookies from "js-cookie";
+import axios from "axios";
 
 const Checkout = () => {
   const {
@@ -26,6 +27,31 @@ const Checkout = () => {
   const [, setOrderPlaceData] = useRecoilState(orderplaceState);
 
   const onSubmit = (data: FieldValues) => {
+    if (data.paymentMethod === "khalti") {
+      const payload = {
+        return_url: "http://localhost:5173/order-placed",
+        website_url: "http://localhost:5173",
+        amount: checkoutValues.total,
+        purchase_order_id: Math.random().toString(36).substring(2, 15),
+        purchase_order_name: "Order",
+        customer_info: {
+          name: data.fullName,
+          email: data.email,
+          phone: data.phoneNumber,
+        },
+      };
+
+      const sendData = async () => {
+        const res = await axios.post("/epayment/initiate/", payload, {
+          headers: {
+            Authorization: "Key c41315ed137f4f29be00330b856b3cf7",
+          },
+        });
+        console.log(res.data);
+      };
+      sendData();
+    }
+
     const orderData = {
       id: Math.random().toString(36).substring(2, 15),
       billingInfo: data,
@@ -171,6 +197,14 @@ const Checkout = () => {
             <div className="space-x-3">
               <input type="radio" value="cash" {...register("paymentMethod")} />
               <label htmlFor="cash">Cash on Delivery</label>
+            </div>
+            <div className="space-x-3">
+              <input
+                type="radio"
+                value="khalti"
+                {...register("paymentMethod")}
+              />
+              <label htmlFor="khalti">Pay with Khalti</label>
             </div>
           </div>
 
