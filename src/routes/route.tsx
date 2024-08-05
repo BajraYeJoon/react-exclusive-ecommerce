@@ -19,6 +19,8 @@ import {
   OrderPlaced,
   FetchSingleCategory,
 } from "../components";
+import Contact from "../site/contact/contact";
+import About from "../site/about/about";
 
 export const router = createBrowserRouter([
   {
@@ -33,7 +35,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "/about",
-        element: <div>About</div>,
+        element: <About />,
+      },
+      {
+        path: "contact",
+        element: <Contact />,
       },
       {
         element: <AuthLayout />,

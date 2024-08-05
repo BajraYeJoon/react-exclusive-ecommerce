@@ -11,7 +11,7 @@ const CustomBreakcrumb = ({
   breadcrumbValue,
 }: {
   breadcrumbTitle: string;
-  breadcrumbValue: [];
+  breadcrumbValue?: [];
 }) => {
   return (
     <>
@@ -23,7 +23,7 @@ const CustomBreakcrumb = ({
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbLink href="/components">
-              {breadcrumbTitle} ({breadcrumbValue.length})
+              {breadcrumbTitle} ({breadcrumbValue && breadcrumbValue.length})
             </BreadcrumbLink>
           </BreadcrumbItem>
         </BreadcrumbList>
