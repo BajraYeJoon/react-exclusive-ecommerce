@@ -8,31 +8,19 @@ import "swiper/css/navigation";
 // import "./style.css";
 import "./styles.css";
 import { Navigation } from "swiper/modules";
-import { prismaDBClient } from "../../lib/prisma";
-import { useEffect } from "react";
+// import { bestSellingProducts } from "../../constants/data";
+import { Link } from "react-router-dom";
 
 interface SalesCardProps {
   title: string;
   price: number;
-  rating: { count: number };
+  rating: number;
   image: string;
   discountTag?: boolean;
+  id: number;
 }
 
 const SalesCard = () => {
-  useEffect(() => {
-    const dbdata = async () => {
-      try {
-        const res = await prismaDBClient.product.findMany();
-        console.log(res, "res");
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
-      }
-    };
-
-    dbdata();
-  }, []);
-
   const {
     data: products,
     error,
@@ -54,29 +42,43 @@ const SalesCard = () => {
         flashTimer
         // handleNext={handleNext}
       />
-      <h1>{}</h1>
 
-      <div className="product-card-container flex w-full items-center justify-between gap-4 overflow-hidden">
+      <div className="product-card-container w-full items-center justify-between gap-4 overflow-hidden">
         <Swiper
-          spaceBetween={1}
-          slidesPerView={4}
+          spaceBetween={20}
           pagination={{ clickable: true }}
           onSlideChange={() => console.log("slide change")}
-          onSwiper={(swiper) => console.log(swiper)}
           className="mySwiper"
           modules={[Navigation]}
-          navigation={true}
+          navigation={{
+            enabled: true,
+            nextEl: ".arrow-right",
+            prevEl: ".arrow-left",
+          }}
+          breakpoints={{
+            640: {
+              slidesPerView: 2,
+            },
+            768: {
+              slidesPerView: 3,
+            },
+            1024: {
+              slidesPerView: 4,
+            },
+          }}
           // onNavigationNext={handleNext}
         >
           {products.map((productCard: SalesCardProps, index: number) => (
             <SwiperSlide key={index} className="">
-              <ProductCard {...productCard} discountTag index={index} />
+              <ProductCard {...productCard} discountTag />
             </SwiperSlide>
           ))}
         </Swiper>
       </div>
 
-      <Button className="mx-auto w-full md:w-fit">View All Products</Button>
+      <Button className="mx-auto w-full md:w-fit">
+        <Link to={"/products"}>View All Products</Link>
+      </Button>
     </section>
   );
 };

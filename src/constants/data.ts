@@ -51,31 +51,35 @@ export const navLinks = [
 
 export const bestSellingProducts = [
   {
+    id: 1,
     title: "The North Coat",
     price: 360,
-    // discountPrice: 260,
+    discountPrice: 120,
     rating: 65,
     image: "/best-selling-products/b-coat.png",
   },
   {
+    id: 2,
     title: "Gucci duffle bag",
-    price: 360,
-    // discountPrice: 260,
-    rating: 65,
+    price: 800,
+    discountPrice: 260,
+    rating: 80,
     image: "/best-selling-products/b-bag.png",
   },
   {
+    id: 3,
     title: "RGB liquid CPU Cooler",
-    price: 360,
-    // discountPrice: 260,
-    rating: 65,
+    price: 600,
+    discountPrice: 260,
+    rating: 80,
     image: "/best-selling-products/b-fan.png",
   },
   {
+    id: 4,
     title: "The North Coat",
-    price: 360,
-    // discountPrice: 260,
-    rating: 65,
+    price: 460,
+    discountPrice: 60,
+    rating: 121,
     image: "/best-selling-products/b-shelf.png",
   },
 ];
@@ -109,6 +113,7 @@ export const categories = [
 
 export const generalProducts = [
   {
+    id: 1,
     title: "The North Coat",
     price: 360,
     // discountPrice: 260,
@@ -116,6 +121,7 @@ export const generalProducts = [
     image: "/best-selling-products/b-coat.png",
   },
   {
+    id: 2,
     title: "Gucci duffle bag",
     price: 360,
     // discountPrice: 260,
@@ -123,6 +129,7 @@ export const generalProducts = [
     image: "/best-selling-products/b-bag.png",
   },
   {
+    id: 3,
     title: "RGB liquid CPU Cooler",
     price: 360,
     // discountPrice: 260,
@@ -130,6 +137,7 @@ export const generalProducts = [
     image: "/best-selling-products/b-fan.png",
   },
   {
+    id: 4,
     title: "The North Coat",
     price: 360,
     // discountPrice: 260,

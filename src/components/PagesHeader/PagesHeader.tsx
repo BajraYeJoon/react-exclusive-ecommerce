@@ -1,4 +1,5 @@
 import { FlashSaleTimer, NavigationArrows, Button } from "../../components";
+import { Link } from "react-router-dom";
 
 interface PagesHeaderProps {
   flashTimer?: boolean;
@@ -37,7 +38,9 @@ const PagesHeader = ({
             <NavigationArrows direction="next" onClick={handleNext} />
           </div>
         ) : (
-          <Button className="max-w-20 text-xs md:text-sm">View All</Button>
+          <Link to={"/products"} className="max-w-20 text-xs md:text-sm">
+            <Button className="px-4 md:p-4">View All</Button>
+          </Link>
         )}
       </div>
     </div>

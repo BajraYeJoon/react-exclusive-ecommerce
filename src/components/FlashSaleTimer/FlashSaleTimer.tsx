@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 const timer = [
   {
     unit: "Days",
@@ -19,21 +21,21 @@ const timer = [
 
 function FlashSaleTimer() {
   return (
-    <div className="flex justify-center items-center gap-2 md:gap-4">
+    <div className="flex items-center justify-center gap-2 md:gap-4">
       {timer.map((time, index) => (
-        <>
-          <div className="flex flex-col gap-2" key={index}>
-            <span className="text-xs md:text-sm font-medium text-foreground">
+        <Fragment key={index}>
+          <div className="flex flex-col gap-2">
+            <span className="text-xs font-medium text-foreground md:text-sm">
               {time.unit}
             </span>
-            <span className="text-sm md:text-3xl font-bold text-foreground">
+            <span className="text-sm font-bold text-foreground md:text-3xl">
               {time.value}
             </span>
           </div>
           {index !== timer.length - 1 && (
-            <span className=" text-base md:text-4xl text-primary">:</span>
+            <span className="text-base text-primary md:text-4xl">:</span>
           )}
-        </>
+        </Fragment>
       ))}
     </div>
   );

@@ -1,7 +1,11 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { Button } from "../../components";
-import { useRecoilValue } from "recoil";
+import { Button, CustomBreakcrumb } from "../../components";
+import { selector, useRecoilState, useRecoilValue } from "recoil";
 import { cartState } from "../../atoms/cartState";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { checkoutState } from "../../atoms/checkoutState";
+import Cookies from "js-cookie";
 
 const cartHeaderData = [
   { label: "Price" },
@@ -10,29 +14,99 @@ const cartHeaderData = [
 ];
 
 const Cart = () => {
-  const cartItems = useRecoilValue(cartState);
+  // const cartvalues = useRecoilValue(cartState);
+
+  const [, setCheckoutData] = useRecoilState(checkoutState);
+
+  const [cartItems, setCartItems] = useRecoilState(cartState);
+
+  const navigate = useNavigate();
+
+  const navigateToCheckout = (cartItems: any, total: number) => {
+    const checkoutData = {
+      id: Math.random().toString(36).substring(2, 15),
+      cartItems,
+      total,
+    };
+
+    setCheckoutData(checkoutData);
+    Cookies.set("checkoutData", checkoutData.id);
+    navigate("/checkout");
+    // console.log(checkoutData, "checkoutData");
+  };
+
+  const increaseQuantity = (id: number) => {
+    const newCartvalue = cartItems.map((cart) => {
+      if (cart.id === id) {
+        return { ...cart, quantity: cart.quantity + 1 };
+      }
+      return cart;
+    });
+    setCartItems(newCartvalue);
+  };
+
+  const decreaseQuantity = (id: number) => {
+    let itemremoved = false;
+
+    const newCartValue = cartItems
+      .map((cart) => {
+        if (cart.id === id) {
+          if (cart.quantity === 1 && !itemremoved) {
+            itemremoved = true;
+            toast.error(`Your ${cart.title} has been removed from the cart`);
+          }
+          return { ...cart, quantity: cart.quantity - 1 };
+        }
+        return cart;
+      })
+      .filter((cart) => cart.quantity > 0);
+
+    if (newCartValue.length === 0) {
+      toast.error("Your cart is empty now");
+    }
+
+    setCartItems(newCartValue);
+  };
+
+  const calculateTotal = selector({
+    key: "calculateTotal",
+    get: ({ get }) => {
+      const subTotal = get(cartState).reduce((acc, item) => {
+        return acc + item.price * item.quantity;
+      }, 0);
+
+      const charge = 45;
+
+      return {
+        subTotal,
+        total: subTotal + charge,
+      };
+    },
+  });
+
+  const total = useRecoilValue(calculateTotal);
+
+  console.log(cartItems, "after in or de");
 
   if (cartItems.length === 0) {
     return (
-      <section className="flex h-screen items-center justify-center">
-        <h1 className="text-3xl font-semibold text-gray-400">
+      <section className="flex h-screen flex-col items-center justify-center">
+        <h1 className="flex flex-col text-3xl font-semibold text-gray-400">
           No items in cart
         </h1>
+        <Link to={"/products"} className="underline">
+          Add some products from here....
+        </Link>
       </section>
     );
   }
 
   return (
-    <section className="relative mx-8 my-6 md:mx-12 md:my-12 lg:mx-auto lg:max-w-7xl">
-      <>
-        <h1>
-          {cartItems.map((item) => (
-            <div key={item.id}>
-              {item.price} - {item.quantity}
-            </div>
-          ))}
-        </h1>
-      </>
+    <section className="relative mx-8 my-6 h-fit md:mx-12 md:my-12 lg:mx-auto lg:max-w-7xl">
+      <CustomBreakcrumb
+        breadcrumbTitle="Cart"
+        breadcrumbValue={cartItems as []}
+      />
 
       <div className="grid grid-cols-2 py-6 text-foreground/40">
         <div className="text-xl font-normal leading-8">Product</div>
@@ -73,8 +147,14 @@ const Cart = () => {
                   placeholder={item.quantity.toString()}
                 />
                 <div className="flex flex-col items-center justify-center">
-                  <ChevronUp size={14} />
-                  <ChevronDown size={14} />
+                  <ChevronUp
+                    size={14}
+                    onClick={() => increaseQuantity(item.id)}
+                  />
+                  <ChevronDown
+                    size={14}
+                    onClick={() => decreaseQuantity(item.id)}
+                  />
                 </div>
               </div>
               <h6 className="text-center text-sm font-medium leading-9 md:text-lg">
@@ -95,7 +175,7 @@ const Cart = () => {
               Sub Total
             </p>
             <h6 className="text-base font-semibold leading-8 text-gray-900 md:text-xl">
-              $360.00
+              {total.subTotal}
             </h6>
           </div>
 
@@ -112,10 +192,15 @@ const Cart = () => {
               Total
             </p>
             <h6 className="text-lg font-medium leading-9 md:text-2xl">
-              $405.00
+              {total.total}
             </h6>
           </div>
-          <Button className="w-full">Proceed to Checkout</Button>
+          <Button
+            className="w-full"
+            onClick={() => navigateToCheckout(cartItems, total.total)}
+          >
+            Proceed to Checkout
+          </Button>
         </div>
       </div>
     </section>

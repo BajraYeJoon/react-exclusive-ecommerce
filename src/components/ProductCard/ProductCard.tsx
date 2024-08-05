@@ -4,46 +4,77 @@ import { useRecoilState } from "recoil";
 import { cartState } from "../../atoms/cartState";
 import { toast } from "sonner";
 import { CartItem } from "../../atoms/cartState";
+import { favoriteState } from "../../atoms/favoriteState";
+import { favoriteItem } from "../../atoms/favoriteState";
+// import Cookies from "js-cookie";
+import useWindow from "../../lib/useWindow";
+import { Link } from "react-router-dom";
 
 interface ProductCardProps {
   title: string;
   price: number;
-  // discountPrice: number;
-  rating: { count: number };
+  // rating?: number;
   image: string;
   discountTag?: boolean;
-  index: number;
+  id: number;
 }
 
 const ProductCard = ({
   title,
   price,
-  // discountPrice,
-  rating,
+  // rating,
   image,
   discountTag,
-  // index,
+  id,
 }: ProductCardProps) => {
   const [, setCart] = useRecoilState(cartState);
+  const [favorites, setFavorites] = useRecoilState(favoriteState);
+  const { dimension } = useWindow();
+
+  const handleFavorite = () => {
+    const newFavorite: favoriteItem = { id, title, price, image };
+    setFavorites((currentFavorites) => {
+      const productIndex = currentFavorites.findIndex((item) => item.id === id);
+      if (productIndex !== -1) {
+        // Cookies.remove(
+        //   "favorites",
+        //   currentFavorites.filter((item) => item.id !== id),
+        // );
+        toast.success(`Your ${title} has been removed from favorites`);
+        return currentFavorites.filter((item) => item.id !== id);
+      } else {
+        toast.success(`Your ${title} has been added to favorites`);
+        // Cookies.set(
+        //   "favorites",
+        //   JSON.stringify([...currentFavorites, newFavorite]),
+        // );
+        return [...currentFavorites, newFavorite];
+      }
+    });
+  };
 
   const handleAddToCart = () => {
     const newProduct: Omit<CartItem, "quantity"> = {
       title,
       price,
       image,
-      id: 0,
-    }; // Assuming these are the properties you want to include
+      id,
+    };
     setCart((currentCart) => {
-      const productIndex = currentCart.findIndex(
-        (item) => item.title === title,
-      );
+      const productIndex = currentCart.findIndex((item) => item.id === id);
       if (productIndex !== -1) {
+        toast.success(
+          `Your ${title} has been added to the cart ${
+            currentCart[productIndex].quantity + 1
+          } times`,
+        );
         return currentCart.map((item, index) =>
           index === productIndex
             ? { ...item, quantity: item.quantity + 1 }
             : item,
         );
       } else {
+        toast.success(`Your ${title} has been added to the cart`);
         return [...currentCart, { ...newProduct, quantity: 1 }];
       }
     });
@@ -64,12 +95,26 @@ const ProductCard = ({
         )}
 
         <div className="absolute right-4 top-4 flex flex-col gap-2">
-          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-foreground/20">
-            <HeartIcon size={18} />
+          <span
+            className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-foreground/20 lg:h-7 lg:w-7"
+            onClick={() => handleFavorite()}
+          >
+            {favorites.some((item) => item.id === id) ? (
+              <HeartIcon
+                size={dimension.width < 768 ? 10 : 18}
+                fill="red"
+                className="text-primary"
+              />
+            ) : (
+              <HeartIcon size={dimension.width < 768 ? 10 : 18} />
+            )}
           </span>
-          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-foreground/20">
-            <EyeIcon size={18} />
-          </span>
+          <Link
+            to={`product/${id}`}
+            className="flex h-4 w-4 items-center justify-center rounded-full bg-foreground/20 lg:h-7 lg:w-7"
+          >
+            <EyeIcon size={dimension.width < 768 ? 10 : 18} />
+          </Link>
         </div>
 
         <div className="group cursor-pointer" onClick={handleAddToCart}>
@@ -96,7 +141,7 @@ const ProductCard = ({
               <FaStar key={index} className="text-accent md:h-8" />
             ))}
           </div>
-          <span className="ml-2 text-foreground/70">({rating?.count})</span>
+          {/* <span className="ml-2 text-foreground/70">{rating}</span> */}
         </div>
       </div>
     </div>
