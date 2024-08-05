@@ -8,6 +8,7 @@ import { favoriteState } from "../../atoms/favoriteState";
 import { favoriteItem } from "../../atoms/favoriteState";
 // import Cookies from "js-cookie";
 import useWindow from "../../lib/useWindow";
+import { Link } from "react-router-dom";
 
 interface ProductCardProps {
   title: string;
@@ -108,9 +109,12 @@ const ProductCard = ({
               <HeartIcon size={dimension.width < 768 ? 10 : 18} />
             )}
           </span>
-          <span className="flex h-4 w-4 items-center justify-center rounded-full bg-foreground/20 lg:h-7 lg:w-7">
+          <Link
+            to={`product/${id}`}
+            className="flex h-4 w-4 items-center justify-center rounded-full bg-foreground/20 lg:h-7 lg:w-7"
+          >
             <EyeIcon size={dimension.width < 768 ? 10 : 18} />
-          </span>
+          </Link>
         </div>
 
         <div className="group cursor-pointer" onClick={handleAddToCart}>

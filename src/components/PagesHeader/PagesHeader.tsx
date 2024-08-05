@@ -39,7 +39,7 @@ const PagesHeader = ({
           </div>
         ) : (
           <Link to={"/products"} className="max-w-20 text-xs md:text-sm">
-            <Button>View All</Button>
+            <Button className="px-4 md:p-4">View All</Button>
           </Link>
         )}
       </div>

@@ -1,23 +1,26 @@
 import { Carousel } from "../../components";
 import { ChevronRight } from "lucide-react";
 import { heroCategories, heroContent } from "../../constants/data";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
     <section className="flex">
-      <aside className="text-foreground/80 hidden lg:flex text-lg z-10  flex-col items-start gap-4 mt-14 mr-6">
+      <aside className="z-10 mr-6 mt-14 hidden flex-col items-start gap-4 text-lg text-foreground/80 lg:flex">
         <ul className="flex flex-col gap-3 font-medium tracking-tighter">
           {heroCategories.map((category) => (
-            <li key={category.id} className="relative cursor-pointer group">
+            <li key={category.id} className="group relative cursor-pointer">
               <div className="flex items-center justify-between">
-                {category.name}
+                <Link to={"/products"}>{category.name}</Link>
                 {category.subcategories && <ChevronRight />}
               </div>
               {category.subcategories && (
-                <div className="subcategories hidden absolute -right-6 z-20 top-0 mt-2 bg-white border shadow-lg p-2 group-hover:block">
+                <div className="subcategories absolute -right-6 top-0 z-20 mt-2 hidden border bg-white p-2 shadow-lg group-hover:block">
                   <ul>
                     {category.subcategories.map((subcategory, index) => (
-                      <li key={index}>{subcategory}</li>
+                      <li key={index}>
+                        <Link to={"/products"}>{subcategory}</Link>
+                      </li>
                     ))}
                   </ul>
                 </div>
@@ -26,7 +29,7 @@ const Hero = () => {
           ))}
         </ul>
       </aside>
-      <div className="bg-foreground/20 hidden lg:block w-px min-h-full"></div>
+      <div className="hidden min-h-full w-px bg-foreground/20 lg:block"></div>
 
       <Carousel heroContent={heroContent} />
     </section>

@@ -10,7 +10,6 @@ import "./styles.css";
 import { Navigation } from "swiper/modules";
 // import { bestSellingProducts } from "../../constants/data";
 import { Link } from "react-router-dom";
-import useWindow from "../../lib/useWindow";
 
 interface SalesCardProps {
   title: string;
@@ -31,8 +30,6 @@ const SalesCard = () => {
     staleTime: 60000,
   });
 
-  const { dimension } = useWindow();
-
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>An error occurred: {(error as Error).message}</div>;
   console.log(products, "all-products");
@@ -48,8 +45,7 @@ const SalesCard = () => {
 
       <div className="product-card-container w-full items-center justify-between gap-4 overflow-hidden">
         <Swiper
-          spaceBetween={1}
-          slidesPerView={dimension.width > 768 ? 4 : 2}
+          spaceBetween={20}
           pagination={{ clickable: true }}
           onSlideChange={() => console.log("slide change")}
           className="mySwiper"
@@ -59,6 +55,17 @@ const SalesCard = () => {
             nextEl: ".arrow-right",
             prevEl: ".arrow-left",
           }}
+          breakpoints={{
+            640: {
+              slidesPerView: 2,
+            },
+            768: {
+              slidesPerView: 3,
+            },
+            1024: {
+              slidesPerView: 4,
+            },
+          }}
           // onNavigationNext={handleNext}
         >
           {products.map((productCard: SalesCardProps, index: number) => (
@@ -66,12 +73,6 @@ const SalesCard = () => {
               <ProductCard {...productCard} discountTag />
             </SwiperSlide>
           ))}
-
-          {/* {bestSellingProducts.map((productCard: SalesCardProps) => (
-            <SwiperSlide key={productCard.id} className="">
-              <ProductCard {...productCard} discountTag />
-            </SwiperSlide>
-          ))} */}
         </Swiper>
       </div>
 
