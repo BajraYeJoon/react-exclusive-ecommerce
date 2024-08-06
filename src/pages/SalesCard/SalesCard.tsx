@@ -10,6 +10,7 @@ import "./styles.css";
 import { Navigation } from "swiper/modules";
 // import { bestSellingProducts } from "../../constants/data";
 import { Link } from "react-router-dom";
+import { Loading } from "../../site";
 
 interface SalesCardProps {
   title: string;
@@ -30,7 +31,7 @@ const SalesCard = () => {
     staleTime: 60000,
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loading />;
   if (error) return <div>An error occurred: {(error as Error).message}</div>;
 
   return (

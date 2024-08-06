@@ -3,6 +3,7 @@ import { PagesHeader } from "../../components";
 import { fetchCategories } from "../../api/fetch";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
+import { Loading } from "../../site";
 
 interface CategoryType {
   id: number;
@@ -17,7 +18,7 @@ const Category = () => {
     select: (categories) => categories.slice(0, 6),
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loading />;
   if (error) return <div>An error occurred: {(error as Error).message}</div>;
 
   return (
