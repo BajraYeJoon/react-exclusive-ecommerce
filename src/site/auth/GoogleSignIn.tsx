@@ -23,7 +23,6 @@ export const GoogleSignInComponent = ({ text }: { text: string }) => {
       //     Cookies.set("accessToken", token, { expires: 1 });
       //     navigate("/sign-in");
     } catch (error: any) {
-      console.log(error.code, error.message, error.email, "error");
     }
   };
 

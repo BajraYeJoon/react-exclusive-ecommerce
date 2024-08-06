@@ -44,7 +44,6 @@ const SignupPage = () => {
         uid: userData.uid,
       });
 
-      console.log("SUCCESS", userData);
       navigate("/sign-in");
     } catch (err) {
       console.error(err);

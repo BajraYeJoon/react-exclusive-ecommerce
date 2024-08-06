@@ -1,5 +1,6 @@
 import { cn } from "../../lib/utils";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import "../../pages/SalesCard/styles.css";
 
 interface NavigationArrowsProps {
   direction: "prev" | "next";
@@ -24,13 +25,13 @@ const NavigationArrows = ({
     >
       {direction === "prev" ? (
         <ArrowLeft
-          className={cn("h-4 group-hover:text-white md:h-6", {
+          className={cn("arrow-left h-4 group-hover:text-white md:h-6", {
             "text-gray-400": disabled,
           })}
         />
       ) : (
         <ArrowRight
-          className={cn("h-4 group-hover:text-white md:h-6", {
+          className={cn("arrow-right h-4 group-hover:text-white md:h-6", {
             "text-gray-400": disabled,
           })}
         />

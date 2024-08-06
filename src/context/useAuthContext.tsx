@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async ({ name, password }: LoginProps) => {
     setIsLoading(true);
-    console.log("Logging in", name, password);
+   
     try {
       const response = await axios.post("https://fakestoreapi.com/auth/login", {
         username: name,
@@ -35,7 +35,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const data = response.data;
       Cookies.set("token", data.token, { expires: 7 });
       setIsLoggedIn(true);
-      console.log("Login successful", data);
     } catch (error) {
       console.error("Login failed", error);
     } finally {

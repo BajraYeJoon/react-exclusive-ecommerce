@@ -11,12 +11,11 @@ const GeneralProducts = () => {
     <section className="general-products-container flex flex-col gap-10 lg:gap-20">
       <PagesHeader subHeading="Our Products" Heading="Explore Our Products" />
 
-      <div className="general-product-card-container flex w-full items-center justify-between gap-4 overflow-x-auto">
+      <div className="general-product-card-container w-full">
         <Swiper
           spaceBetween={1}
           // slidesPerView={dimension.width > 768 ? 4 : 2}
           pagination={{ clickable: true }}
-          onSlideChange={() => console.log("slide change")}
           className="mySwiper"
           modules={[Navigation]}
           navigation={{

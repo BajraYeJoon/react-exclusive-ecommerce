@@ -1,11 +1,12 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Button, CustomBreakcrumb } from "../../components";
-import { selector, useRecoilState, useRecoilValue } from "recoil";
+import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
 import { cartState } from "../../atoms/cartState";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { checkoutState } from "../../atoms/checkoutState";
 import Cookies from "js-cookie";
+import { useState } from "react";
 
 const cartHeaderData = [
   { label: "Price" },
@@ -13,26 +14,30 @@ const cartHeaderData = [
   { label: "Total" },
 ];
 
+const discountState = atom<number>({
+  key: "discountState",
+  default: 0,
+});
+
 const Cart = () => {
-  // const cartvalues = useRecoilValue(cartState);
-
   const [, setCheckoutData] = useRecoilState(checkoutState);
-
   const [cartItems, setCartItems] = useRecoilState(cartState);
-
   const navigate = useNavigate();
+  const [couponCode, setCouponCode] = useState("");
+  const [discount, setDiscount] = useState(0);
 
   const navigateToCheckout = (cartItems: any, total: number) => {
     const checkoutData = {
       id: Math.random().toString(36).substring(2, 15),
       cartItems,
       total,
+      couponCode,
+      discount,
     };
 
     setCheckoutData(checkoutData);
     Cookies.set("checkoutData", checkoutData.id);
     navigate("/checkout");
-    // console.log(checkoutData, "checkoutData");
   };
 
   const increaseQuantity = (id: number) => {
@@ -68,25 +73,45 @@ const Cart = () => {
     setCartItems(newCartValue);
   };
 
+  const clearCart = () => {
+    setCartItems([]);
+    toast.success("All items have been removed from the cart");
+  };
+  const handleCouponChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const code = e.target.value;
+    setCouponCode(code);
+  };
+
+  const applyCoupon = () => {
+    if (couponCode === "DISCOUNT10") {
+      setDiscount(0.1);
+      toast.success("Coupon code DISCOUNT10 applied. 10% discount added.");
+    } else {
+      setDiscount(0);
+      toast.error("Invalid coupon code");
+    }
+  };
   const calculateTotal = selector({
     key: "calculateTotal",
     get: ({ get }) => {
-      const subTotal = get(cartState).reduce((acc, item) => {
+      const cartItems = get(cartState);
+      const discount = get(discountState);
+
+      const subTotal = cartItems.reduce((acc, item) => {
         return acc + item.price * item.quantity;
       }, 0);
 
       const charge = 45;
+      const discountAmount = subTotal * discount;
 
       return {
         subTotal,
-        total: subTotal + charge,
+        total: subTotal + charge - discountAmount,
       };
     },
   });
 
   const total = useRecoilValue(calculateTotal);
-
-  console.log(cartItems, "after in or de");
 
   if (cartItems.length === 0) {
     return (
@@ -103,10 +128,15 @@ const Cart = () => {
 
   return (
     <section className="relative mx-8 my-6 h-fit md:mx-12 md:my-12 lg:mx-auto lg:max-w-7xl">
-      <CustomBreakcrumb
-        breadcrumbTitle="Cart"
-        breadcrumbValue={cartItems as []}
-      />
+      <div className="flex items-center justify-between">
+        <CustomBreakcrumb
+          breadcrumbTitle="Cart"
+          breadcrumbValue={cartItems as []}
+        />
+        <Button className="w-fit" onClick={clearCart}>
+          Clear All
+        </Button>
+      </div>
 
       <div className="grid grid-cols-2 py-6 text-foreground/40">
         <div className="text-xl font-normal leading-8">Product</div>
@@ -149,10 +179,12 @@ const Cart = () => {
                 <div className="flex flex-col items-center justify-center">
                   <ChevronUp
                     size={14}
+                    className="cursor-pointer"
                     onClick={() => increaseQuantity(item.id)}
                   />
                   <ChevronDown
                     size={14}
+                    className="cursor-pointer"
                     onClick={() => decreaseQuantity(item.id)}
                   />
                 </div>
@@ -167,7 +199,16 @@ const Cart = () => {
 
       <div className="flex flex-col items-center justify-between gap-12 md:flex-row md:items-start">
         <div className="mt-8 flex flex-col items-center justify-center gap-3">
-          <Button className="w-full">Add Coupon Code</Button>
+          <input
+            type="text"
+            value={couponCode}
+            onChange={handleCouponChange}
+            placeholder="Enter Coupon Code"
+            className="w-full rounded-md border p-2"
+          />
+          <Button className="w-full" onClick={applyCoupon}>
+            Add Coupon Code
+          </Button>
         </div>
         <div className="mb-8 w-full max-w-sm rounded-md border border-foreground/50 p-6">
           <div className="mb-6 flex w-full items-center justify-between">
@@ -175,7 +216,7 @@ const Cart = () => {
               Sub Total
             </p>
             <h6 className="text-base font-semibold leading-8 text-gray-900 md:text-xl">
-              {total.subTotal}
+              {total.subTotal.toFixed(2)}
             </h6>
           </div>
 
@@ -187,12 +228,22 @@ const Cart = () => {
               $45.00
             </h6>
           </div>
+          {discount > 0 && (
+            <div className="flex w-full items-center justify-between py-6">
+              <p className="text-base font-normal leading-8 text-green-500 md:text-xl">
+                Coupon Code Applied
+              </p>
+              <h6 className="text-base font-semibold leading-8 text-green-500 md:text-xl">
+                -{(total.subTotal * discount).toFixed(2)}
+              </h6>
+            </div>
+          )}
           <div className="flex w-full items-center justify-between py-6">
             <p className="text-lg font-medium leading-9 text-gray-900 md:text-2xl">
               Total
             </p>
             <h6 className="text-lg font-medium leading-9 md:text-2xl">
-              {total.total}
+              {total.total.toFixed(2)}
             </h6>
           </div>
           <Button

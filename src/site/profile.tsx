@@ -17,7 +17,7 @@ const ProfilePage = () => {
   // };
 
   // const info = auth.currentUser;
-  // console.log(info, "info");
+  //
   return (
     <div className="mx-4 my-12 sm:mx-8 lg:mx-72">
       {/* Delete Account ? <Button onClick={deleteUserAccount}>Delete</Button> */}

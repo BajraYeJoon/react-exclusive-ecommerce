@@ -19,7 +19,6 @@ const BestProducts = () => {
         <Swiper
           spaceBetween={20}
           pagination={{ clickable: true }}
-          onSlideChange={() => console.log("slide change")}
           className="mySwiper"
           modules={[Navigation]}
           navigation={{
