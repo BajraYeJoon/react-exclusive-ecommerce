@@ -1,16 +1,14 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "../../firebase/config";
+import { useContext } from "react";
 import { Button } from "../../components";
 import { useForm } from "react-hook-form";
-// import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import FormInput from "../../components/FormInput/FormInput";
 import { SignUpFormData } from "../../schemas/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { SignUpFormSchema } from "../../schemas/zodSchema";
 import { GoogleSignInComponent } from "./GoogleSignIn";
 import { Link } from "react-router-dom";
+import { useAuthContext } from "../../context/useAuthContext";
 
 const SignupPage = () => {
   const {
@@ -22,31 +20,18 @@ const SignupPage = () => {
   });
 
   const navigate = useNavigate();
+  const { signup } = useAuthContext();
 
   const onSubmit = async (data: SignUpFormData) => {
+    console.log(data);
     const { email, password, name, phoneNumber } = data;
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password,
-      );
-      const userData = userCredential.user;
-
-      const docRef = await addDoc(collection(db, "usersData"), {
-        name,
-        email,
-        phoneNumber,
-      });
-
-      await setDoc(doc(db, "usersData", docRef.id), {
-        uid: userData.uid,
-      });
-
+      const response = signup({ name, email, password, phoneNumber });
       navigate("/sign-in");
+      console.log(response);
     } catch (err) {
-      console.error(err);
+      console.error("Signup error", err);
     }
   };
 
@@ -55,7 +40,6 @@ const SignupPage = () => {
       <h2 className="text-lg lg:text-3xl">Create an account</h2>
       <p className="text-sm lg:text-base">Enter your details below</p>
       <form onSubmit={handleSubmit(onSubmit)} className="w-full">
-        {" "}
         <div className="flex w-full flex-col gap-4">
           <FormInput
             type="text"
@@ -72,18 +56,18 @@ const SignupPage = () => {
             error={errors.email}
           />
           <FormInput
-            type="text"
-            placeholder="Phone Number"
-            name="phoneNumber"
-            register={register}
-            error={errors.phoneNumber}
-          />
-          <FormInput
-            type="passsword"
+            type="password"
             placeholder="Password"
             name="password"
             register={register}
             error={errors.password}
+          />
+          <FormInput
+            type="text"
+            placeholder="phone"
+            name="phoneNumber"
+            register={register}
+            error={errors.phoneNumber}
           />
           <Button type="submit" className="w-full">
             Create Account

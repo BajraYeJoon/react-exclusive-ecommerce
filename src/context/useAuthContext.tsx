@@ -9,11 +9,28 @@ type LoginProps = {
   password: string;
 };
 
+interface SignupProps {
+  name: string;
+  email: string;
+  password: string;
+  phoneNumber: string;
+}
+
+interface AuthResponse {
+  token: string;
+}
+
+interface SignupResponse {
+  status: number;
+  data: any;
+}
+
 type AuthContextType = {
   isLoggedIn: boolean;
   login: ({ name, password }: LoginProps) => void;
   logout: () => void;
   isLoading: boolean;
+  signup: (data: SignupProps) => void;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -26,14 +43,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async ({ name, password }: LoginProps) => {
     setIsLoading(true);
-   
+
     try {
-      const response = await axios.post("https://fakestoreapi.com/auth/login", {
-        username: name,
-        password,
-      });
+      const response = await axios.post(
+        "https://nest-ecommerce-1fqk.onrender.com/auth/signin",
+        {
+          email: name,
+          password,
+        },
+      );
       const data = response.data;
-      Cookies.set("token", data.token, { expires: 7 });
+      // Cookies.set("token", data.token, { expires: 7 });
+      console.log(data)
       setIsLoggedIn(true);
     } catch (error) {
       console.error("Login failed", error);
@@ -41,6 +62,39 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setIsLoading(false);
     }
   };
+
+  const signup = async ({
+    name,
+    email,
+    password,
+    phoneNumber,
+  }: SignupProps) => {
+    setIsLoading(true);
+    try {
+      const response = await axios.post<SignupResponse>(
+        "https://nest-ecommerce-1fqk.onrender.com/auth/signup",
+        {
+          name,
+          email,
+          password,
+          phone: phoneNumber,
+        },
+      );
+      if (response.status === 201) {
+        setIsLoggedIn(true);
+        toast.success("Signup successful");
+      } else {
+        console.error("Signup failed", response.data);
+        toast.error("Signup failed");
+      }
+    } catch (error) {
+      console.error("Signup failed", error);
+      toast.error("Signup failed");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const logout = async () => {
     setIsLoggedIn(false);
     toast.success("You are now logged out");
@@ -48,13 +102,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, isLoading, login, logout }}>
+    <AuthContext.Provider
+      value={{ isLoggedIn, isLoading, login, logout, signup }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuthContext = () => {
+export const useAuthContext = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error("Error in the AuthContextProvider");

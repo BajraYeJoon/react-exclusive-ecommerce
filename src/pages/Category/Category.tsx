@@ -14,8 +14,7 @@ const Category = () => {
     data: categories,
     error,
     isLoading,
-  } = useQuery(["categories"], fetchCategories, {
-    select: (categories) => categories.slice(0, 6),
+  } = useQuery(["categories"], fetchCategories, {    select: (categories) => categories.slice(0, 6),
   });
 
   if (isLoading) return <Loading />;
