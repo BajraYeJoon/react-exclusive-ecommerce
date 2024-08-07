@@ -22,11 +22,8 @@ const AllProducts = () => {
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>An error occurred: {(error as Error).message}</div>;
 
- 
-
   const products = allproducts.products;
-  const images = allproducts.images;
- 
+  // const images = allproducts.images;
 
   return (
     <section className="mx-72 mb-28 gap-40 max-2xl:mx-6 max-2xl:gap-28">

@@ -16,9 +16,7 @@ interface SignupProps {
   phoneNumber: string;
 }
 
-interface AuthResponse {
-  token: string;
-}
+
 
 interface SignupResponse {
   status: number;

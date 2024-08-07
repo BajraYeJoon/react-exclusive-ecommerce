@@ -47,6 +47,7 @@ const Checkout = () => {
             Authorization: "Key c41315ed137f4f29be00330b856b3cf7",
           },
         });
+        console.log(res);
       };
       sendData();
     }
