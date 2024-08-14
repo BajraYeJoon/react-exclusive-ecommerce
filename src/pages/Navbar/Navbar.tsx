@@ -1,11 +1,9 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from "react";
 import { HeartIcon, LucideShoppingCart, Search } from "lucide-react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { cn } from "../../lib/utils";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { navLinks } from "../../constants/data";
-import { Link } from "react-router-dom";
 import { RxCross2 } from "react-icons/rx";
 import { useAuthContext } from "../../context/useAuthContext";
 import { useRecoilValue } from "recoil";
@@ -15,6 +13,11 @@ import { Input } from "../../components/ui/input";
 import useWindow from "../../lib/useWindow";
 import { Dialog, DialogTrigger } from "../../components/ui/dialog";
 import { DialogContent } from "@radix-ui/react-dialog";
+
+type SearchResultProps = {
+  id: number;
+  title: string;
+};
 
 const debounce = <T extends (...args: any[]) => any>(
   fn: T,
@@ -31,9 +34,9 @@ const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
   const { isLoggedIn } = useAuthContext();
   const [searchQuery, setSearchQuery] = useState("");
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<SearchResultProps[]>([]);
   const { dimension } = useWindow();
-  const resultsRef = useRef(null);
+  const resultsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const debouncedFetchResults = debounce(async (query: string) => {
@@ -48,8 +51,6 @@ const Navbar = () => {
     debouncedFetchResults(searchQuery);
   }, [searchQuery]);
 
-  console.log(results);
-
   const handleLinkClick = () => {
     setToggleMenu(false);
   };
@@ -58,9 +59,13 @@ const Navbar = () => {
     (acc, value) => acc + value.quantity,
     0,
   );
+
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (resultsRef.current && !resultsRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        resultsRef.current &&
+        !resultsRef.current.contains(event.target as Node)
+      ) {
         setResults([]);
       }
     };
@@ -121,7 +126,6 @@ const Navbar = () => {
               onChange={(e) => {
                 setSearchQuery(e.target.value);
               }}
-              ref={resultsRef}
             />
             <Search
               size={30}
@@ -129,10 +133,13 @@ const Navbar = () => {
             />
 
             {results.length > 0 && (
-              <div className="absolute top-12 z-10 flex w-full flex-col rounded-md border border-foreground bg-white shadow-lg">
-                {results.map((product) => (
+              <div
+                ref={resultsRef}
+                className="absolute top-12 z-10 flex w-full flex-col rounded-md border border-foreground bg-white shadow-lg"
+              >
+                {results.map((product: SearchResultProps) => (
                   <Link
-                    to={"/"}
+                    to={`/product/${product.id}`}
                     key={product.id}
                     className="px-4 py-2 hover:bg-accent"
                   >
@@ -167,37 +174,6 @@ const Navbar = () => {
               </span>
             )}
           </Link>
-          {/* For mobile drawer */}
-          {/* {dimension.width > 768 ? (
-            <Link to="/cart" className="flex gap-1">
-              <LucideShoppingCart size={20} />
-              {cartquantity > 0 && (
-                <span className="cart-quantity rounded-full bg-primary px-2 py-1 text-xs font-light text-background">
-                  {cartquantity}
-                </span>
-              )}
-            </Link>
-          ) : (
-            <Drawer>
-              <DrawerTrigger className="flex gap-1">
-                <LucideShoppingCart size={20} />
-                {cartquantity > 0 && (
-                  <span className="cart-quantity rounded-full bg-primary px-2 py-1 text-xs font-light text-background">
-                    {cartquantity}
-                  </span>
-                )}
-              </DrawerTrigger>
-              <DrawerContent>
-                <Cart />
-                <DrawerFooter>
-                  <Button>Submit</Button>
-                  <DrawerClose>
-                    <Button variant="outline">Cancel</Button>
-                  </DrawerClose>
-                </DrawerFooter>
-              </DrawerContent>
-            </Drawer>
-          )} */}
 
           {isLoggedIn && (
             <Link to={`/profile`}>

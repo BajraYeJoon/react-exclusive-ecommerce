@@ -43,3 +43,10 @@ export const fetchProductsBySearch = async (search: string) => {
     .then((res) => res.data.results || []);
   return result;
 };
+
+export const fetchProductDetails = async (id: string) => {
+  const result = await axios
+    .get(`${URL}/product/productdetail/${id}`)
+    .then((res) => res.data.data);
+  return result;
+};

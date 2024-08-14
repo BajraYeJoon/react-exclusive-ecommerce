@@ -3,6 +3,9 @@ import { ShoppingBasket, StarIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { CgGlobeAlt } from "react-icons/cg";
 import { FcCancel } from "react-icons/fc";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { fetchProductDetails } from "../../api/fetch";
 
 interface RadioOption {
   value: string;
@@ -37,6 +40,20 @@ const SizesGroup = ({ name, options, defaultValue }: SizeProps) => {
 };
 
 const Singleproduct = () => {
+  const { productId } = useParams();
+  const [details, setDetails] = useState<any>([]);
+
+  console.log(productId);
+
+  useEffect(() => {
+    (async () => {
+      const productDetails = await fetchProductDetails(productId!);
+      setDetails(productDetails);
+    })();
+  }, [productId]);
+
+  console.log(details);
+
   const sizeOPtions = [
     { value: "xs", label: "XS" },
     { value: " sm", label: "SM" },
@@ -47,7 +64,7 @@ const Singleproduct = () => {
   return (
     <section className="py-12 sm:py-16">
       <div className="container mx-auto px-4">
-        <CustomBreakcrumb breadcrumbTitle="Coffee" />
+        <CustomBreakcrumb breadcrumbTitle={`${details.brand}`} />
 
         <div className="lg:col-gap-12 xl:col-gap-16 mt-8 grid grid-cols-1 gap-12 lg:mt-12 lg:grid-cols-5 lg:gap-16">
           <div className="lg:col-span-3 lg:row-end-1">
@@ -56,12 +73,12 @@ const Singleproduct = () => {
                 <div className="h-72 w-full overflow-hidden rounded-lg *:bg-black">
                   <img
                     className="h-full w-full max-w-full object-cover"
-                    src="https://plus.unsplash.com/premium_photo-1673356301514-2cad91907f74?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8dHNoaXJ0fGVufDB8fDB8fHww"
+                    src={details.image[0]}
                     alt=""
                   />
                 </div>
               </div>
-
+              {/* 
               <div className="mt-2 w-full lg:order-1 lg:w-32 lg:flex-shrink-0">
                 <div className="flex flex-row items-start lg:flex-col">
                   <button
@@ -95,12 +112,12 @@ const Singleproduct = () => {
                     />
                   </button>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
 
           <div className="flex flex-col gap-2 lg:col-span-2 lg:row-span-2 lg:row-end-2">
-            <h1 className="text-3xl font-light">Tshirt for sale</h1>
+            <h1 className="text-3xl font-light">{details.title}</h1>
             <div className="my-5 flex items-center">
               <StarIcon />
               <StarIcon />
