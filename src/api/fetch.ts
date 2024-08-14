@@ -36,3 +36,10 @@ export const fetchNewArrivals = async () => {
     .then((res) => res.data);
   return newArrivalsData;
 };
+
+export const fetchProductsBySearch = async (search: string) => {
+  const result = await axios
+    .get(`${URL}/product/searchItem?q=${search}`)
+    .then((res) => res.data.results || []);
+  return result;
+};

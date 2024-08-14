@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HeartIcon, LucideShoppingCart, SearchIcon } from "lucide-react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { cn } from "../../lib/utils";
@@ -10,39 +10,38 @@ import { RxCross2 } from "react-icons/rx";
 import { useAuthContext } from "../../context/useAuthContext";
 import { useRecoilValue } from "recoil";
 import { cartState } from "../../atoms/cartState";
-// import useWindow from "../../lib/useWindow";
-// import { Cart } from "../../site";
-// import {
-//   Drawer,
-//   DrawerClose,
-//   DrawerContent,
-//   DrawerTrigger,
-//   DrawerFooter,
-// } from "../../components/ui/drawer";
-// import { Button } from "../../components";
+import { fetchProductsBySearch } from "../../api/fetch";
 
-// import { auth } from "../../firebase/config";
-// import { onAuthStateChanged } from "firebase/auth";
+const debounce = <T extends (...args: any[]) => any>(
+  fn: T,
+  delay: number = 2000,
+): ((...args: Parameters<T>) => void) => {
+  let timerId: ReturnType<typeof setTimeout> | null = null;
+  return (...args: Parameters<T>): void => {
+    if (timerId) clearTimeout(timerId);
+    timerId = setTimeout(() => fn(...args), delay);
+  };
+};
 
-// interface User {
-//   uid: string;
-//   photoURL: string | null | undefined;
-// }
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
   const { isLoggedIn } = useAuthContext();
-  // const { dimension } = useWindow();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [results, setResults] = useState([]);
 
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-  //     if (currentUser) {
-  //       setUser(currentUser);
-  //     } else {
-  //       setUser(null);
-  //     }
-  //   });
-  //   return () => unsubscribe();
-  // }, [auth.currentUser]);
+  useEffect(() => {
+    const debouncedFetchResults = debounce(async (query: string) => {
+      if (searchQuery === "") {
+        setResults([]);
+      }
+      const res = await fetchProductsBySearch(query);
+      setResults(res);
+    }, 1000);
+
+    debouncedFetchResults(searchQuery);
+  }, [searchQuery]);
+
+  console.log(results);
 
   const handleLinkClick = () => {
     setToggleMenu(false);
@@ -92,14 +91,29 @@ const Navbar = () => {
             })}
           </ul>
         </div>
-        <div className="search-bar flex items-center gap-6">
+        <div className="flex items-center gap-6">
           <div className="search-bar w-42 group hidden h-10 rounded-md bg-card px-3 py-2 text-sm text-foreground md:flex">
             <input
               type="search"
+              value={searchQuery}
               className="search-input w-full bg-card placeholder:text-xs focus:outline-none"
               placeholder="What are you looking for?"
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
             <SearchIcon className="search-icon my-auto" size={20} />
+            {results.length > 0 && (
+              <div className="absolute z-10 mt-8 flex-col rounded-md border border-accent shadow-lg *:flex">
+                {results.map((product) => (
+                  <Link
+                    href={"/"}
+                    key={product.id}
+                    className="px-4 py-2 hover:bg-accent"
+                  >
+                    {product.title}
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
 
           <Link to="/favorites">
