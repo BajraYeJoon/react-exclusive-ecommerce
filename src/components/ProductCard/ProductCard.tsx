@@ -1,14 +1,13 @@
 import { EyeIcon, HeartIcon } from "lucide-react";
 import { FaStar } from "react-icons/fa";
 import { useRecoilState } from "recoil";
-import { cartState } from "../../atoms/cartState";
 import { toast } from "sonner";
-import { CartItem } from "../../atoms/cartState";
 import { favoriteState } from "../../atoms/favoriteState";
 import { favoriteItem } from "../../atoms/favoriteState";
 // import Cookies from "js-cookie";
 import useWindow from "../../lib/useWindow";
 import { Link } from "react-router-dom";
+import useCart from "../../hooks/useCart";
 
 interface ProductCardProps {
   title: string;
@@ -27,57 +26,27 @@ const ProductCard = ({
   discountTag,
   id,
 }: ProductCardProps) => {
-  const [, setCart] = useRecoilState(cartState);
   const [favorites, setFavorites] = useRecoilState(favoriteState);
   const { dimension } = useWindow();
+  const { handleAddToCart } = useCart();
 
   const handleFavorite = () => {
     const newFavorite: favoriteItem = { id, title, price, image };
     setFavorites((currentFavorites) => {
       const productIndex = currentFavorites.findIndex((item) => item.id === id);
       if (productIndex !== -1) {
-        // Cookies.remove(
-        //   "favorites",
-        //   currentFavorites.filter((item) => item.id !== id),
-        // );
         toast.success(`Your ${title} has been removed from favorites`);
         return currentFavorites.filter((item) => item.id !== id);
       } else {
         toast.success(`Your ${title} has been added to favorites`);
-        // Cookies.set(
-        //   "favorites",
-        //   JSON.stringify([...currentFavorites, newFavorite]),
-        // );
         return [...currentFavorites, newFavorite];
       }
     });
   };
 
-  const handleAddToCart = () => {
-    const newProduct: Omit<CartItem, "quantity"> = {
-      title,
-      price,
-      image,
-      id,
-    };
-    setCart((currentCart) => {
-      const productIndex = currentCart.findIndex((item) => item.id === id);
-      if (productIndex !== -1) {
-        toast.success(
-          `Your ${title} has been added to the cart ${
-            currentCart[productIndex].quantity + 1
-          } times`,
-        );
-        return currentCart.map((item, index) =>
-          index === productIndex
-            ? { ...item, quantity: item.quantity + 1 }
-            : item,
-        );
-      } else {
-        toast.success(`Your ${title} has been added to the cart`);
-        return [...currentCart, { ...newProduct, quantity: 1 }];
-      }
-    });
+  const addToCart = () => {
+    const newProduct = { title, price, image, id };
+    handleAddToCart(newProduct);
   };
 
   return (
@@ -117,7 +86,7 @@ const ProductCard = ({
           </Link>
         </div>
 
-        <div className="group cursor-pointer" onClick={handleAddToCart}>
+        <div className="group cursor-pointer" onClick={addToCart}>
           <div className="absolute bottom-0 left-0 w-full bg-foreground opacity-0 transition-opacity duration-500 group-hover:opacity-100">
             <p className="py-2 text-center text-sm font-normal tracking-tight text-background">
               Add to Cart

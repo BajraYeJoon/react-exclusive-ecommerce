@@ -1,5 +1,5 @@
 import CustomBreakcrumb from "../CustomBreakcrumb/CustomBreakcrumb";
-import { ShoppingBasket, StarIcon } from "lucide-react";
+import { ShoppingBasket } from "lucide-react";
 import { Button } from "../ui/button";
 import { CgGlobeAlt } from "react-icons/cg";
 import { FcCancel } from "react-icons/fc";
@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { fetchProductDetails } from "../../api/fetch";
 import { cn } from "../../lib/utils";
 import { BiStar } from "react-icons/bi";
+import useCart from "../../hooks/useCart";
 
 interface RadioOption {
   value: string;
@@ -18,6 +19,12 @@ interface SizeProps {
   name: string;
   options: RadioOption[];
   defaultValue?: string;
+}
+
+interface FeatureItemProps {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
 }
 
 const SizesGroup = ({ name, options, defaultValue }: SizeProps) => {
@@ -44,7 +51,7 @@ const SizesGroup = ({ name, options, defaultValue }: SizeProps) => {
 const Singleproduct = () => {
   const { productId } = useParams();
   const [details, setDetails] = useState<any>([]);
-
+  const { handleAddToCart } = useCart();
   console.log(productId);
 
   useEffect(() => {
@@ -63,24 +70,34 @@ const Singleproduct = () => {
     { value: "xl", label: "XL" },
   ];
 
+  const addToCart = () => {
+    const newProduct = {
+      title: details.title,
+      price: details.price,
+      image: details.image,
+      id: details.id,
+    };
+    handleAddToCart(newProduct);
+  };
+
   return (
     <section className="py-12 sm:py-16">
       <div className="container mx-auto px-4">
         <CustomBreakcrumb breadcrumbTitle={`${details.brand}`} />
 
         <div className="lg:col-gap-12 xl:col-gap-16 mt-8 grid grid-cols-1 gap-12 lg:mt-12 lg:grid-cols-5 lg:gap-16">
-          <div className="lg:col-span-3 lg:row-end-1">
+          <div className="col-auto lg:col-span-3 lg:row-end-1">
             <div className="lg:flex lg:items-start">
               <div className="lg:order-2 lg:ml-5">
-                <div className="h-72 w-full overflow-hidden rounded-lg *:bg-black">
+                <div className="h-56 w-full overflow-hidden rounded-lg md:h-[400px] lg:h-[500px]">
                   <img
-                    className="h-full w-full max-w-full object-cover"
+                    className="h-full w-full object-contain"
                     src={details.image}
                     alt=""
                   />
                 </div>
               </div>
-              {/* 
+
               <div className="mt-2 w-full lg:order-1 lg:w-32 lg:flex-shrink-0">
                 <div className="flex flex-row items-start lg:flex-col">
                   <button
@@ -114,7 +131,7 @@ const Singleproduct = () => {
                     />
                   </button>
                 </div>
-              </div> */}
+              </div>
             </div>
           </div>
 
@@ -150,36 +167,43 @@ const Singleproduct = () => {
             <h2 className="text-forerground mt-8 text-base">Sizes</h2>
             <SizesGroup name="type" options={sizeOPtions} defaultValue="xs" />
 
-            <div className="mt-10 flex flex-col items-center justify-between space-y-4 border-b border-t py-4 sm:flex-row sm:space-y-0">
-              <Button>
-                <ShoppingBasket className="mr-4" />
-                Add to cart
-              </Button>
-            </div>
+            <Button className="mt-6" onClick={addToCart}>
+              <ShoppingBasket className="mr-4" />
+              Add to cart
+            </Button>
             <ul className="mt-8 space-y-2 border p-4">
-              <li className="flex items-center text-left text-sm font-medium text-gray-600">
-                <CgGlobeAlt size={50} className="mr-4" />
-                <p className="flex flex-col gap-2">
-                  <span>Free shipping worldwide</span>
-
-                  <span>Enter you postal code for product availability</span>
-                </p>
-              </li>
+              <FeatureItem
+                icon={<CgGlobeAlt size={50} />}
+                title="Free shipping worldwide"
+                description="Enter your postal code for product availability"
+              />
               <hr className="w-full bg-foreground" />
-
-              <li className="flex items-center text-left text-sm font-medium text-gray-600">
-                <FcCancel size={50} className="mr-4" />
-                <p className="flex flex-col gap-2">
-                  <span>Cancel Anytime</span>
-
-                  <span>{details.returnpolicy}</span>
-                </p>
-              </li>
+              <FeatureItem
+                icon={<FcCancel size={50} />}
+                title="Cancel Anytime"
+                description={details.returnpolicy}
+              />
             </ul>
           </div>
         </div>
       </div>
     </section>
+  );
+};
+
+const FeatureItem: React.FC<FeatureItemProps> = ({
+  icon,
+  title,
+  description,
+}) => {
+  return (
+    <li className="flex items-center text-left text-sm font-medium text-gray-600">
+      <div className="mr-4">{icon}</div>
+      <p className="flex flex-col gap-2">
+        <span>{title}</span>
+        <span>{description}</span>
+      </p>
+    </li>
   );
 };
 
