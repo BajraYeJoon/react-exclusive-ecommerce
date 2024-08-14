@@ -3,6 +3,7 @@ import { ChevronRight } from "lucide-react";
 import { heroCategories, heroContent } from "../../constants/data";
 import { Link } from "react-router-dom";
 
+
 const Hero = () => {
   return (
     <section className="flex">

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { HeartIcon, LucideShoppingCart, Search } from "lucide-react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { cn } from "../../lib/utils";
@@ -33,11 +33,13 @@ const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [results, setResults] = useState([]);
   const { dimension } = useWindow();
+  const resultsRef = useRef(null);
 
   useEffect(() => {
     const debouncedFetchResults = debounce(async (query: string) => {
       if (searchQuery === "") {
         setResults([]);
+        return;
       }
       const res = await fetchProductsBySearch(query);
       setResults(res);
@@ -56,6 +58,18 @@ const Navbar = () => {
     (acc, value) => acc + value.quantity,
     0,
   );
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (resultsRef.current && !resultsRef.current.contains(event.target)) {
+        setResults([]);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <nav className="navbar border-b">
@@ -101,12 +115,13 @@ const Navbar = () => {
             <Input
               type="search"
               className={cn(
-                "w-full rounded-sm p-4 text-sm font-light tracking-wider placeholder:text-muted-foreground/50 focus:border-[1px] md:block",
+                "w-full rounded-sm p-4 text-sm font-light tracking-wider placeholder:text-[10px] placeholder:text-muted-foreground/50 focus:border-[1px] md:block",
               )}
-              placeholder="Search"
+              placeholder="What are you looking for?"
               onChange={(e) => {
                 setSearchQuery(e.target.value);
               }}
+              ref={resultsRef}
             />
             <Search
               size={30}
@@ -114,7 +129,7 @@ const Navbar = () => {
             />
 
             {results.length > 0 && (
-              <div className="absolute z-10 mt-36 flex w-full flex-col rounded-md border border-foreground bg-white shadow-lg">
+              <div className="absolute top-12 z-10 flex w-full flex-col rounded-md border border-foreground bg-white shadow-lg">
                 {results.map((product) => (
                   <Link
                     to={"/"}
@@ -127,7 +142,7 @@ const Navbar = () => {
               </div>
             )}
           </div>
-            
+
           {dimension.width < 768 && (
             <Dialog>
               <DialogTrigger>
@@ -203,6 +218,7 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+
       <div
         className={cn(
           "mobile-nav fixed z-40 flex w-full origin-top flex-col gap-12 overflow-hidden bg-foreground duration-700 lg:hidden",
