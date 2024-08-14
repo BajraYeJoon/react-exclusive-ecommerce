@@ -7,7 +7,7 @@ interface ProductType {
   title: string;
   price: number;
   rating: number;
-  images: string | string[];
+  image: string;
 }
 
 const AllProducts = () => {
@@ -22,7 +22,8 @@ const AllProducts = () => {
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>An error occurred: {(error as Error).message}</div>;
 
-  const products = allproducts.products;
+  const products = allproducts.data;
+  console.log(products);
   // const images = allproducts.images;
 
   return (
@@ -32,7 +33,7 @@ const AllProducts = () => {
           <ProductCard
             key={allproducts.id}
             {...allproducts}
-            image={allproducts.images[0]}
+            image={allproducts.image}
           />
         ))}
       </div>

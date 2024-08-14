@@ -21,6 +21,7 @@ interface SignupProps {
 interface SignupResponse {
   status: number;
   data: any;
+  token: string;
 }
 
 type AuthContextType = {
@@ -51,8 +52,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         },
       );
       const data = response.data;
-      // Cookies.set("token", data.token, { expires: 7 });
-      console.log(data)
+      Cookies.set("token", data.token, { expires: 7 });
+      console.log(data);
       setIsLoggedIn(true);
     } catch (error) {
       console.error("Login failed", error);
@@ -80,6 +81,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       );
       if (response.status === 201) {
         setIsLoggedIn(true);
+
         toast.success("Signup successful");
       } else {
         console.error("Signup failed", response.data);

@@ -21,7 +21,7 @@ const SignInPage = () => {
     resolver: zodResolver(LoginFormSchema),
   });
   const onSubmit = async (data: LoginFormData) => {
-    await login(data);
+     login(data);
     toast.success("You are now logged in");
     navigate("/profile");
   };

@@ -49,6 +49,7 @@ export const router = createBrowserRouter([
           {
             path: "/sign-up",
             element: <SignupPage />,
+            loader: () => (Cookies.get("token") ? redirect("/profile") : null),
           },
           {
             path: "/sign-in",

@@ -11,13 +11,13 @@ export const fetchProducts = async () => {
 export const fetchCategories = async () => {
   const data = await axios
     .get("https://dummyjson.com/products/categories")
-    .then((res) => res.data);
+    .then((res) => res.data.data);
   return data;
 };
 
 export const fetchAllProducts = async () => {
   const allproducts = await axios
-    .get("https://dummyjson.com/products")
+    .get(`${URL}/product/allproducts`)
     .then((res) => res.data);
 
   return allproducts;
