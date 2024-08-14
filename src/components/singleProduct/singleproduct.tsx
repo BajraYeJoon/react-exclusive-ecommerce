@@ -6,6 +6,8 @@ import { FcCancel } from "react-icons/fc";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { fetchProductDetails } from "../../api/fetch";
+import { cn } from "../../lib/utils";
+import { BiStar } from "react-icons/bi";
 
 interface RadioOption {
   value: string;
@@ -73,7 +75,7 @@ const Singleproduct = () => {
                 <div className="h-72 w-full overflow-hidden rounded-lg *:bg-black">
                   <img
                     className="h-full w-full max-w-full object-cover"
-                    src={details.image[0]}
+                    src={details.image}
                     alt=""
                   />
                 </div>
@@ -117,25 +119,35 @@ const Singleproduct = () => {
           </div>
 
           <div className="flex flex-col gap-2 lg:col-span-2 lg:row-span-2 lg:row-end-2">
-            <h1 className="text-3xl font-light">{details.title}</h1>
+            <h1 className="text-3xl font-light">
+              {details.title}
+              <span
+                className={cn(
+                  `ml-6 rounded-full bg-foreground/10 px-2 py-1 text-xs font-medium text-foreground/70`,
+                  details.availability === true ? "bg-green-400" : "bg-red-400",
+                )}
+              >
+                {details.availability === true ? " in stock" : " out of stock"}
+              </span>
+            </h1>
+            <p className="text-base text-gray-400">
+              {details.brand && details.brand}
+            </p>
             <div className="my-5 flex items-center">
-              <StarIcon />
-              <StarIcon />
-
-              <StarIcon />
+              {Array.from({ length: Math.ceil(details.rating) }).map(
+                (_, index) => (
+                  <BiStar key={index} size={20} className="text-yellow-500" />
+                ),
+              )}
 
               <p className="ml-2 text-sm font-medium text-gray-500">
-                1,209 Reviews
+                {details.rating} Ratings
               </p>
             </div>
-            <h1 className="text-3xl">$60.50</h1>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus
-              officiis quasi tempore est sint delectus eos voluptatum placeat
-              nihil beatae!
-            </p>
+            <h1 className="text-3xl">${details.price}</h1>
+            <p>{details.description}</p>
             <hr className="w-full bg-foreground/35" />
-            <h2 className="text-forerground mt-8 text-base">Sized</h2>
+            <h2 className="text-forerground mt-8 text-base">Sizes</h2>
             <SizesGroup name="type" options={sizeOPtions} defaultValue="xs" />
 
             <div className="mt-10 flex flex-col items-center justify-between space-y-4 border-b border-t py-4 sm:flex-row sm:space-y-0">
@@ -160,7 +172,7 @@ const Singleproduct = () => {
                 <p className="flex flex-col gap-2">
                   <span>Cancel Anytime</span>
 
-                  <span>Try for 30days</span>
+                  <span>{details.returnpolicy}</span>
                 </p>
               </li>
             </ul>
