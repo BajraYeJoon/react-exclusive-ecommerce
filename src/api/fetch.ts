@@ -10,7 +10,7 @@ export const fetchProducts = async () => {
 
 export const fetchCategories = async () => {
   const data = await axios
-    .get("https://dummyjson.com/products/categories")
+    .get(`${URL}/category/getcategories`)
     .then((res) => res.data.data);
   return data;
 };
