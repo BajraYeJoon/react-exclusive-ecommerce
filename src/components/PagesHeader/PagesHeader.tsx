@@ -5,7 +5,7 @@ interface PagesHeaderProps {
   flashTimer?: boolean;
   subHeading: string;
   Heading: string;
-  cta?: boolean;
+  cta?: string;
   handleNext?: () => void;
 }
 
@@ -38,7 +38,7 @@ const PagesHeader = ({
             <NavigationArrows direction="next" onClick={handleNext} />
           </div>
         ) : (
-          <Link to={"/products"} className="max-w-20 text-xs md:text-sm">
+          <Link to={`${cta}`} className="max-w-20 text-xs md:text-sm">
             <Button className="px-4 md:p-4">View All</Button>
           </Link>
         )}

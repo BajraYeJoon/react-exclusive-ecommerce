@@ -1,8 +1,10 @@
 import axios from "axios";
 
-const URL = "https://fakestoreapi.com";
+const URL = "https://nest-ecommerce-1fqk.onrender.com";
 export const fetchProducts = async () => {
-  const data = await axios.get(`${URL}/products`).then((res) => res.data);
+  const data = await axios
+    .get(`https://fakestoreapi.com/products`)
+    .then((res) => res.data);
   return data;
 };
 
@@ -26,4 +28,11 @@ export const fetchProductByCategory = async (category: string) => {
     .get(`https://dummyjson.com/products/category/${category}`)
     .then((res) => res.data);
   return data;
+};
+
+export const fetchNewArrivals = async () => {
+  const newArrivalsData = await axios
+    .get(`${URL}/product/newarrival`)
+    .then((res) => res.data);
+  return newArrivalsData;
 };

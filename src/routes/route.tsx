@@ -22,6 +22,7 @@ import {
 import Contact from "../site/contact/contact";
 import About from "../site/about/about";
 import Singleproduct from "../components/singleProduct/singleproduct";
+import { ArrivalsPage } from "../pages";
 
 export const router = createBrowserRouter([
   {
@@ -70,6 +71,10 @@ export const router = createBrowserRouter([
       {
         path: "products",
         element: <AllProducts />,
+      },
+      {
+        path: "new-arrivals",
+        element: <ArrivalsPage />,
       },
       {
         path: "product/:productId",

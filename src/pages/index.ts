@@ -9,6 +9,7 @@ import LimitedEditionCTA from "./CTA/LimitedEditionCTA";
 import GeneralProducts from "./GeneralProducts/GeneralProducts";
 import ServiceDetails from "./ServiceDetails/ServiceDetails";
 import Footer from "./Footer/Footer";
+import ArrivalsPage from "./ArrivalsProductsGrid/ArrivalsPage";
 
 export {
   Banner,
@@ -22,4 +23,5 @@ export {
   GeneralProducts,
   Footer,
   ServiceDetails,
+  ArrivalsPage,
 };
