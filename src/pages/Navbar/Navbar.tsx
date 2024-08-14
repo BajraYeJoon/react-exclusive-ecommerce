@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { HeartIcon, LucideShoppingCart, SearchIcon } from "lucide-react";
+import { HeartIcon, LucideShoppingCart, Search } from "lucide-react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { cn } from "../../lib/utils";
 import { NavLink } from "react-router-dom";
@@ -11,6 +11,10 @@ import { useAuthContext } from "../../context/useAuthContext";
 import { useRecoilValue } from "recoil";
 import { cartState } from "../../atoms/cartState";
 import { fetchProductsBySearch } from "../../api/fetch";
+import { Input } from "../../components/ui/input";
+import useWindow from "../../lib/useWindow";
+import { Dialog, DialogTrigger } from "../../components/ui/dialog";
+import { DialogContent } from "@radix-ui/react-dialog";
 
 const debounce = <T extends (...args: any[]) => any>(
   fn: T,
@@ -28,6 +32,7 @@ const Navbar = () => {
   const { isLoggedIn } = useAuthContext();
   const [searchQuery, setSearchQuery] = useState("");
   const [results, setResults] = useState([]);
+  const { dimension } = useWindow();
 
   useEffect(() => {
     const debouncedFetchResults = debounce(async (query: string) => {
@@ -92,20 +97,27 @@ const Navbar = () => {
           </ul>
         </div>
         <div className="flex items-center gap-6">
-          <div className="search-bar w-42 group hidden h-10 rounded-md bg-card px-3 py-2 text-sm text-foreground md:flex">
-            <input
+          <div className="group relative hidden items-center justify-center md:flex">
+            <Input
               type="search"
-              value={searchQuery}
-              className="search-input w-full bg-card placeholder:text-xs focus:outline-none"
-              placeholder="What are you looking for?"
-              onChange={(e) => setSearchQuery(e.target.value)}
+              className={cn(
+                "w-full rounded-sm p-4 text-sm font-light tracking-wider placeholder:text-muted-foreground/50 focus:border-[1px] md:block",
+              )}
+              placeholder="Search"
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+              }}
             />
-            <SearchIcon className="search-icon my-auto" size={20} />
+            <Search
+              size={30}
+              className="pointer-events-none absolute end-2 flex items-center ps-3"
+            />
+
             {results.length > 0 && (
-              <div className="absolute z-10 mt-8 flex-col rounded-md border border-accent shadow-lg *:flex">
+              <div className="absolute z-10 mt-36 flex w-full flex-col rounded-md border border-foreground bg-white shadow-lg">
                 {results.map((product) => (
                   <Link
-                    href={"/"}
+                    to={"/"}
                     key={product.id}
                     className="px-4 py-2 hover:bg-accent"
                   >
@@ -115,6 +127,18 @@ const Navbar = () => {
               </div>
             )}
           </div>
+            
+          {dimension.width < 768 && (
+            <Dialog>
+              <DialogTrigger>
+                <Search
+                  size={30}
+                  className="flex cursor-pointer items-center ps-3"
+                />
+              </DialogTrigger>
+              <DialogContent>asdfasd</DialogContent>
+            </Dialog>
+          )}
 
           <Link to="/favorites">
             <HeartIcon size={20} />
