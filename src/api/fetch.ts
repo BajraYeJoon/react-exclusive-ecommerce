@@ -2,8 +2,8 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const URL = "https://nest-ecommerce-1fqk.onrender.com";
-// const token = Cookies.get("token") ;
-const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzYsImVtYWlsIjoidGVzdGJhaGFkdXJAZ21haWwuY29tIiwiaWF0IjoxNzIzNzE3MjIzLCJleHAiOjE3MjM3MjA4MjN9.szxn1TbO12CBSNoNd2oPb-T8pz8GJoCU9P-vkHJEoBs';
+const token = Cookies.get("token");
+// const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzYsImVtYWlsIjoidGVzdGJhaGFkdXJAZ21haWwuY29tIiwiaWF0IjoxNzIzNzE3MjIzLCJleHAiOjE3MjM3MjA4MjN9.szxn1TbO12CBSNoNd2oPb-T8pz8GJoCU9P-vkHJEoBs';
 
 export const fetchProducts = async () => {
   const data = await axios

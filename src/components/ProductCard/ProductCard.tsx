@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { EyeIcon, HeartIcon } from "lucide-react";
 import { FaStar } from "react-icons/fa";
 import useWindow from "../../lib/useWindow";
-import useCart from "../../hooks/useCart";
+// import useCart from "../../hooks/useCart";
 import {
   addFavorites,
   addProductToCart,
@@ -28,7 +28,7 @@ const ProductCard = ({
   id,
 }: ProductCardProps) => {
   const { dimension } = useWindow();
-  const { handleAddToCart } = useCart();
+  // const { handleAddToCart } = useCart();
   const [favorites, setFavorites] = useState<{ id: number }[]>([]);
 
   useEffect(() => {

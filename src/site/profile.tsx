@@ -1,19 +1,33 @@
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import axios from "axios";
 import { Button } from "../components";
 import { fetchUserDetails } from "../api/fetch";
 import { useAuthContext } from "../context/useAuthContext";
 import Cookies from "js-cookie";
 
+interface FormData {
+  name: string;
+  phone: string;
+}
+
+interface UserDetail {
+  email: string;
+  phone: string;
+  name: string;
+}
 const ProfilePage = () => {
-  const [userdetail, setUserdetail] = useState({});
+  const [userdetail, setUserdetail] = useState<UserDetail>({
+    email: "",
+    phone: "",
+    name: "",
+  });
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
-  } = useForm();
+    // formState: { errors },
+  } = useForm<FormData>();
   const [message, setMessage] = useState("");
 
   const { logout } = useAuthContext();
@@ -29,7 +43,7 @@ const ProfilePage = () => {
     })();
   }, [reset]);
 
-  const onSubmit = async (data) => {
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
       const response = await axios.post(
         "https://nest-ecommerce-1fqk.onrender.com/profile/updateprofile",
