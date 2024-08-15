@@ -8,7 +8,7 @@ import { AuthProvider } from "./context/useAuthContext";
 import { Toaster } from "sonner";
 import { RecoilRoot } from "recoil";
 import { IntlProvider } from "react-intl";
-
+import { Analytics } from "@vercel/analytics/react";
 import en_msg from "./locales/en.json";
 import es_msg from "./locales/es.json";
 
@@ -35,6 +35,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <IntlProvider locale={locale} messages={messages[locale]}>
           <AuthProvider>
             <App />
+            <Analytics />
             <Toaster />
           </AuthProvider>
         </IntlProvider>
