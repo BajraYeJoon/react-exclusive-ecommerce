@@ -11,7 +11,7 @@ const Favorites = () => {
     (async () => {
       try {
         const resultfav = await fetchFavorites();
-        setFavorites(resultfav);
+        setFavorites(resultfav.data);
       } catch (error) {
         console.error("An error occurred while fetching favorites:", error);
       }
@@ -27,7 +27,7 @@ const Favorites = () => {
         breadcrumbValue={favorites as []}
       />
 
-      {favorites.data?.length === 0 ? (
+      {favorites.length === 0 ? (
         <div className="my-12 flex flex-col items-center justify-center gap-4 text-center">
           <h1 className="text-3xl font-semibold text-gray-400">
             No items in favorites
@@ -38,7 +38,7 @@ const Favorites = () => {
         </div>
       ) : (
         <div className="product-card-container flex flex-wrap items-center justify-center gap-4 overflow-hidden lg:justify-start">
-          {favorites.data?.map((favProduct: any) => (
+          {favorites.map((favProduct: any) => (
             <ProductCard
               key={favProduct.id}
               {...favProduct}
