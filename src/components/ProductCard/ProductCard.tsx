@@ -5,7 +5,12 @@ import { EyeIcon, HeartIcon } from "lucide-react";
 import { FaStar } from "react-icons/fa";
 import useWindow from "../../lib/useWindow";
 import useCart from "../../hooks/useCart";
-import { addFavorites, deleteFavorites, fetchFavorites } from "../../api/fetch";
+import {
+  addFavorites,
+  addProductToCart,
+  deleteFavorites,
+  fetchFavorites,
+} from "../../api/fetch";
 
 interface ProductCardProps {
   title: string;
@@ -68,9 +73,11 @@ const ProductCard = ({
     return Array.isArray(favorites) && favorites.some((item) => item.id === id);
   };
 
-  const addToCart = () => {
-    const newProduct = { title, price, image, id };
-    handleAddToCart(newProduct);
+  const addToCart = async () => {
+    // const newProduct = { title, price, image, id };
+    // handleAddToCart(newProduct);
+    await addProductToCart(id);
+    console.log("Added to cart");
   };
 
   return (

@@ -72,6 +72,7 @@ const ProfilePage = () => {
               id="name"
               {...register("name")}
               className="border p-2"
+              // placeholder={userdetail.name}
             />
           </div>
           <div>
@@ -81,6 +82,7 @@ const ProfilePage = () => {
               id="phone"
               {...register("phone")}
               className="border p-2"
+              // placeholder={userdetail.phone}
             />
           </div>
           <button type="submit" className="mt-4 bg-primary p-2 text-white">

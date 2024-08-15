@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { checkoutState } from "../../atoms/checkoutState";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
-import { fetchCart } from "../../api/fetch";
+import { deleteAllCartItems, fetchCart } from "../../api/fetch";
 
 const cartHeaderData = [
   { label: "Price" },
@@ -84,8 +84,9 @@ const Cart = () => {
     setCartItems(newCartValue);
   };
 
-  const clearCart = () => {
-    setCartItems([]);
+  const clearCart = async () => {
+    await deleteAllCartItems();
+    // setCartItems([]);
     toast.success("All items have been removed from the cart");
   };
   const handleCouponChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -182,11 +183,11 @@ const Cart = () => {
                 {item.price}{" "}
               </h6>
               <div className="flex items-center justify-center rounded-md border p-1">
-                <input
+                {/* <input
                   type="text"
                   className="max-w-12 px-4"
                   placeholder={item.quantity.toString()}
-                />
+                /> */}
                 <div className="flex flex-col items-center justify-center">
                   <ChevronUp
                     size={14}
