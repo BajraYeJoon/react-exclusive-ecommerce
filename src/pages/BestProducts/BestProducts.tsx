@@ -13,7 +13,7 @@ const BestProducts = () => {
       <PagesHeader
         subHeading="This Month"
         Heading="Best Selling Products"
-        cta
+        cta="/products"
       />
       <div className="product-card-container flex w-full items-center justify-between gap-4 overflow-x-auto">
         <Swiper
