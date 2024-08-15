@@ -32,7 +32,7 @@ const Category = () => {
         <Swiper
           spaceBetween={20}
           pagination={{ clickable: true }}
-          className="mySwiper flex h-24"
+          className="mySwiper flex h-16 md:h-24"
           modules={[Navigation]}
           navigation={{
             enabled: true,
@@ -59,12 +59,12 @@ const Category = () => {
             return (
               <SwiperSlide
                 key={index}
-                className="group flex h-full flex-col items-center justify-center gap-2 rounded-md border-2 border-foreground/20 p-6 hover:border-none hover:bg-primary"
+                className="group flex h-full gap-2 rounded-md border-2 border-foreground/20 py-4 hover:border-none hover:bg-primary md:p-6"
               >
                 <Link
                   to={`/category/${category.name.toLowerCase().split(" ").join("-")}`}
                 >
-                  <p className="text-center text-xs font-medium group-hover:text-background md:text-sm">
+                  <p className="text-center text-[10px] font-medium group-hover:text-background md:text-sm">
                     {category.name}
                   </p>
                 </Link>

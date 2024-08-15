@@ -56,7 +56,7 @@ export const fetchProductDetails = async (id: string) => {
 export const addFavorites = async (id: number) => {
   const addedresult = await axios
     .post(
-      `https://nest-ecommerce-1fqk.onrender.com/wishlist/add/${id}`,
+      `${URL}/wishlist/add/${id}`,
       {
         id,
       },
@@ -73,7 +73,7 @@ export const addFavorites = async (id: number) => {
 export const deleteFavorites = async (id: number) => {
   const deletedresult = await axios
     .post(
-      `https://nest-ecommerce-1fqk.onrender.com/wishlist/delete/${id}`,
+      `${URL}/wishlist/delete/${id}`,
       { id },
       {
         headers: {
@@ -86,14 +86,30 @@ export const deleteFavorites = async (id: number) => {
 };
 
 export const fetchFavorites = async () => {
-  const result = await axios.get(
-    `https://nest-ecommerce-1fqk.onrender.com/wishlist/mylist`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+  const result = await axios.get(`${URL}/wishlist/mylist`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
     },
-  );
+  });
 
   return result.data;
+};
+
+export const fetchUserDetails = async () => {
+  const profileresult = await axios.get(`${URL}/profile/myprofile`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return profileresult.data.user;
+};
+
+export const fetchCart = async () => {
+  const cartData = await axios.get(`${URL}/cart/mycart`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return cartData.data.data;
 };

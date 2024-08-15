@@ -6,7 +6,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { checkoutState } from "../../atoms/checkoutState";
 import Cookies from "js-cookie";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { fetchCart } from "../../api/fetch";
 
 const cartHeaderData = [
   { label: "Price" },
@@ -22,9 +23,19 @@ const discountState = atom<number>({
 const Cart = () => {
   const [, setCheckoutData] = useRecoilState(checkoutState);
   const [cartItems, setCartItems] = useRecoilState(cartState);
+
   const navigate = useNavigate();
   const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(0);
+
+  useEffect(() => {
+    (async () => {
+      const cart = await fetchCart();
+      setCartItems(cart);
+    })();
+  }, []);
+
+  console.log(cartItems, "caaaaaart");
 
   const navigateToCheckout = (cartItems: any, total: number) => {
     const checkoutData = {

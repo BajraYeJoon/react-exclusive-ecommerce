@@ -10,9 +10,20 @@ import { useRecoilValue } from "recoil";
 import { cartState } from "../../atoms/cartState";
 import { fetchProductsBySearch } from "../../api/fetch";
 import { Input } from "../../components/ui/input";
-import useWindow from "../../lib/useWindow";
-import { Dialog, DialogTrigger } from "../../components/ui/dialog";
-import { DialogContent } from "@radix-ui/react-dialog";
+// import useWindow from "../../lib/useWindow";
+// import { Dialog, DialogTrigger } from "../../components/ui/dialog";
+// import { DialogContent } from "@radix-ui/react-dialog";
+// import {
+//   Drawer,
+//   DrawerClose,
+//   DrawerContent,
+//   DrawerDescription,
+//   DrawerFooter,
+//   DrawerHeader,
+//   DrawerTitle,
+//   DrawerTrigger,
+// } from "../../components/ui/drawer";
+// import { Button } from "../../components";
 
 type SearchResultProps = {
   id: number;
@@ -35,7 +46,7 @@ const Navbar = () => {
   const { isLoggedIn } = useAuthContext();
   const [searchQuery, setSearchQuery] = useState("");
   const [results, setResults] = useState<SearchResultProps[]>([]);
-  const { dimension } = useWindow();
+  // const { dimension } = useWindow();
   const resultsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -149,7 +160,7 @@ const Navbar = () => {
               </div>
             )}
           </div>
-
+{/* 
           {dimension.width < 768 && (
             <Dialog>
               <DialogTrigger>
@@ -160,7 +171,25 @@ const Navbar = () => {
               </DialogTrigger>
               <DialogContent>asdfasd</DialogContent>
             </Dialog>
-          )}
+
+            // <Drawer>
+            //   <DrawerTrigger>Open</DrawerTrigger>
+            //   <DrawerContent>
+            //     <DrawerHeader>
+            //       <DrawerTitle>Are you absolutely sure?</DrawerTitle>
+            //       <DrawerDescription>
+            //         This action cannot be undone.
+            //       </DrawerDescription>
+            //     </DrawerHeader>
+            //     <DrawerFooter>
+            //       <Button>Submit</Button>
+            //       <DrawerClose>
+            //         <Button variant="outline">Cancel</Button>
+            //       </DrawerClose>
+            //     </DrawerFooter>
+            //   </DrawerContent>
+            // </Drawer>
+          )} */}
 
           <Link to="/favorites">
             <HeartIcon size={20} />
