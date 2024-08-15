@@ -1,6 +1,8 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const URL = "https://nest-ecommerce-1fqk.onrender.com";
+const token = Cookies.get("token");
 export const fetchProducts = async () => {
   const data = await axios
     .get(`https://fakestoreapi.com/products`)
@@ -49,4 +51,49 @@ export const fetchProductDetails = async (id: string) => {
     .get(`${URL}/product/productdetail/${id}`)
     .then((res) => res.data.data);
   return result;
+};
+
+export const addFavorites = async (id: number) => {
+  const addedresult = await axios
+    .post(
+      `https://nest-ecommerce-1fqk.onrender.com/wishlist/add/${id}`,
+      {
+        id,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+    .then((res) => res.data);
+  return addedresult;
+};
+
+export const deleteFavorites = async (id: number) => {
+  const deletedresult = await axios
+    .post(
+      `https://nest-ecommerce-1fqk.onrender.com/wishlist/delete/${id}`,
+      { id },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+    .then((res) => res.data);
+  return deletedresult;
+};
+
+export const fetchFavorites = async () => {
+  const result = await axios.get(
+    `https://nest-ecommerce-1fqk.onrender.com/wishlist/mylist`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  return result.data;
 };

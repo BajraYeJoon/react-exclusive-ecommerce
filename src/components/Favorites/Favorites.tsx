@@ -1,38 +1,21 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import axios from "axios";
-import Cookies from "js-cookie";
 import ProductCard from "../ProductCard/ProductCard";
 import CustomBreakcrumb from "../CustomBreakcrumb/CustomBreakcrumb";
+import { fetchFavorites } from "../../api/fetch";
 
 const Favorites = () => {
   const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
-    const fetchFavorites = async () => {
-      const token = Cookies.get("token"); // Retrieve the token from cookies
-
+    (async () => {
       try {
-        const response = await axios.get(
-          "https://nest-ecommerce-1fqk.onrender.com/wishlist/mylist",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-
-        if (response.status === 200) {
-          setFavorites(response.data);
-        } else {
-          throw new Error("Failed to fetch favorites");
-        }
+        const resultfav = await fetchFavorites();
+        setFavorites(resultfav);
       } catch (error) {
         console.error("An error occurred while fetching favorites:", error);
       }
-    };
-
-    fetchFavorites();
+    })();
   }, []);
 
   console.log(favorites);
@@ -54,8 +37,8 @@ const Favorites = () => {
           </Link>
         </div>
       ) : (
-        <div className="product-card-container flex w-full flex-wrap items-center justify-start gap-4 overflow-hidden">
-          {favorites.data?.map((favProduct) => (
+        <div className="product-card-container flex flex-wrap items-center justify-center gap-4 overflow-hidden lg:justify-start">
+          {favorites.data?.map((favProduct: any) => (
             <ProductCard
               key={favProduct.id}
               {...favProduct}

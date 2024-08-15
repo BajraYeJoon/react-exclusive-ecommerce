@@ -1,19 +1,15 @@
+import { useState, useEffect } from "react";
+import { toast } from "sonner";
+import { Link } from "react-router-dom";
 import { EyeIcon, HeartIcon } from "lucide-react";
 import { FaStar } from "react-icons/fa";
-import { useRecoilState } from "recoil";
-import { toast } from "sonner";
-import { favoriteState } from "../../atoms/favoriteState";
-// import Cookies from "js-cookie";
 import useWindow from "../../lib/useWindow";
-import { Link } from "react-router-dom";
 import useCart from "../../hooks/useCart";
-import axios from "axios";
-import Cookies from "js-cookie";
+import { addFavorites, deleteFavorites, fetchFavorites } from "../../api/fetch";
 
 interface ProductCardProps {
   title: string;
   price: number;
-  // rating?: number;
   image: string;
   discountTag?: boolean;
   id: number;
@@ -22,42 +18,55 @@ interface ProductCardProps {
 const ProductCard = ({
   title,
   price,
-  // rating,
   image,
   discountTag,
   id,
 }: ProductCardProps) => {
-  const [favorites, setFavorites] = useRecoilState(favoriteState);
   const { dimension } = useWindow();
   const { handleAddToCart } = useCart();
+  const [favorites, setFavorites] = useState<{ id: number }[]>([]);
 
-  const handleFavorite = async () => {
-    // const isFavorite = favorites.some((item) => item.id === id);
-    const token = Cookies.get("token"); // Retrieve the token from cookies
+  useEffect(() => {
+    (async () => {
+      const favoritesList = await fetchFavorites();
 
+      setFavorites(favoritesList.data);
+    })();
+  }, []);
+
+  const handleAddFavorite = async () => {
     try {
-      const response = await axios.post(
-        `https://nest-ecommerce-1fqk.onrender.com/wishlist/add/${id}`,
-        { id },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+      const response = await addFavorites(id);
+      console.log(response);
 
-      if (response.status !== 200) {
+      if (response) {
+        toast.success(`Your ${title} has been added to favorites`);
+        setFavorites([...favorites, { id }]);
+      } else {
         throw new Error("Failed to add to favorites");
       }
-
-      setFavorites((currentFavorites) => [...currentFavorites, { id }]);
-      toast.success(`Your ${title} has been added to favorites`);
     } catch (error) {
       toast.error("An error occurred while updating favorites");
     }
   };
 
-  console.log(favorites);
+  const handleRemoveFavorite = async () => {
+    try {
+      const response = await deleteFavorites(id);
+
+      if (response) {
+        setFavorites(favorites.filter((item) => item.id !== id));
+        toast.success(`Your ${title} has been removed from favorites`);
+      } else {
+        throw new Error("Failed to remove from favorites");
+      }
+    } catch (error) {
+      toast.error("An error occurred while updating favorites");
+    }
+  };
+  const isFavorite = (id: number) => {
+    return Array.isArray(favorites) && favorites.some((item) => item.id === id);
+  };
 
   const addToCart = () => {
     const newProduct = { title, price, image, id };
@@ -67,11 +76,14 @@ const ProductCard = ({
   return (
     <div className="w-full max-w-72">
       <div className="group relative h-32 w-full overflow-hidden rounded-b-md bg-card md:h-56">
-        <img
-          className="h-full w-full object-contain p-4 transition-opacity duration-300 group-hover:opacity-40 md:p-8 lg:p-12"
-          src={image}
-          alt="product image"
-        />
+        <Link to={`product/${id}`}>
+          <img
+            className="h-full w-full object-contain p-4 transition-opacity duration-300 group-hover:opacity-40 md:p-8 lg:p-12"
+            src={image}
+            alt="product image"
+          />
+        </Link>
+
         {discountTag && (
           <span className="absolute left-2 top-2 rounded-sm bg-primary px-2 py-1 text-[10px] font-light text-background">
             {Math.round(((price - 50) / price) * 100)}%
@@ -81,17 +93,13 @@ const ProductCard = ({
         <div className="absolute right-4 top-4 flex flex-col gap-2">
           <span
             className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-foreground/20 lg:h-7 lg:w-7"
-            onClick={() => handleFavorite()}
+            onClick={isFavorite(id) ? handleRemoveFavorite : handleAddFavorite}
           >
-            {favorites.some((item) => item.id === id) ? (
-              <HeartIcon
-                size={dimension.width < 768 ? 10 : 18}
-                fill="red"
-                className="text-primary"
-              />
-            ) : (
-              <HeartIcon size={dimension.width < 768 ? 10 : 18} />
-            )}
+            <HeartIcon
+              size={dimension.width < 768 ? 10 : 18}
+              fill={isFavorite(id) ? "red" : "none"}
+              className={isFavorite(id) ? "text-primary" : ""}
+            />
           </span>
           <Link
             to={`product/${id}`}
@@ -126,7 +134,6 @@ const ProductCard = ({
               <FaStar key={index} className="text-accent md:h-8" />
             ))}
           </div>
-          {/* <span className="ml-2 text-foreground/70">{rating}</span> */}
         </div>
       </div>
     </div>
