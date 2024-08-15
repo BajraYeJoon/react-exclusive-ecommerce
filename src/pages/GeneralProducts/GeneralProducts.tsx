@@ -24,6 +24,9 @@ const GeneralProducts = () => {
             prevEl: ".arrow-left",
           }}
           breakpoints={{
+            320: {
+              slidesPerView: 2,
+            },
             640: {
               slidesPerView: 2,
             },

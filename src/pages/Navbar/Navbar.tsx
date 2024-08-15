@@ -203,16 +203,21 @@ const Navbar = () => {
       >
         <div className="mobile-nav-menu flex flex-col gap-8 px-4 py-4 font-bold tracking-wider">
           <ul className="nav-menu flex flex-col font-medium md:mt-0 md:flex-row md:space-x-4">
-            {navLinks.map((link, index) => (
-              <li
-                key={index}
-                className="nav-item nav-link my-2 block font-normal text-background"
-              >
-                <Link to={link.href} onClick={handleLinkClick}>
-                  {link.label}
-                </Link>
-              </li>
-            ))}
+            {navLinks.map((link, index) => {
+              if (isLoggedIn && link.label === "Sign Up") {
+                return null;
+              }
+              return (
+                <li
+                  key={index}
+                  className="nav-item nav-link my-2 block font-normal text-background"
+                >
+                  <Link to={link.href} onClick={handleLinkClick}>
+                    {link.label}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </div>
       </div>

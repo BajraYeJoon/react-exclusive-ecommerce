@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 import { CgGlobeAlt } from "react-icons/cg";
 import { FcCancel } from "react-icons/fc";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { fetchProductDetails } from "../../api/fetch";
 import { cn } from "../../lib/utils";
 import { BiStar } from "react-icons/bi";
@@ -85,16 +85,23 @@ const Singleproduct = () => {
       <div className="container mx-auto px-4">
         <CustomBreakcrumb breadcrumbTitle={`${details.brand}`} />
 
+        <Suspense fallback={<div>Loading...</div>}>
         <div className="lg:col-gap-12 xl:col-gap-16 mt-8 grid grid-cols-1 gap-12 lg:mt-12 lg:grid-cols-5 lg:gap-16">
           <div className="col-auto lg:col-span-3 lg:row-end-1">
             <div className="lg:flex lg:items-start">
-              <div className="lg:order-2 lg:ml-5">
+              <div className="w-full lg:order-2 lg:ml-5">
                 <div className="h-56 w-full overflow-hidden rounded-lg md:h-[400px] lg:h-[500px]">
-                  <img
-                    className="h-full w-full object-contain"
-                    src={details.image}
-                    alt=""
-                  />
+                  {details.image === "" ? (
+                    <img
+                      className="h-full w-full object-contain"
+                      src={details.image}
+                      alt=""
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center bg-foreground/35">
+                      No Image
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -186,6 +193,8 @@ const Singleproduct = () => {
             </ul>
           </div>
         </div>
+        </Suspense>
+       
       </div>
     </section>
   );

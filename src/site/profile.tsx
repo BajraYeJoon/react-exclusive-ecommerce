@@ -10,17 +10,9 @@ const menuItems = [
 const ProfilePage = () => {
   const { logout } = useAuthContext();
 
-  // const deleteUserAccount = async () => {
-  //   const user = auth.currentUser;
-  //   await deleteUser(user as any);
-  //   navigate("/sign-up");
-  // };
-
-  // const info = auth.currentUser;
-  //
+ 
   return (
     <div className="mx-4 my-12 sm:mx-8 lg:mx-72">
-      {/* Delete Account ? <Button onClick={deleteUserAccount}>Delete</Button> */}
       <CustomBreakcrumb breadcrumbTitle="Profile" />
 
       <div className="grid grid-cols-8 pt-3 sm:grid-cols-10">

@@ -3,11 +3,12 @@ import { FaStar } from "react-icons/fa";
 import { useRecoilState } from "recoil";
 import { toast } from "sonner";
 import { favoriteState } from "../../atoms/favoriteState";
-import { favoriteItem } from "../../atoms/favoriteState";
 // import Cookies from "js-cookie";
 import useWindow from "../../lib/useWindow";
 import { Link } from "react-router-dom";
 import useCart from "../../hooks/useCart";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 interface ProductCardProps {
   title: string;
@@ -30,19 +31,33 @@ const ProductCard = ({
   const { dimension } = useWindow();
   const { handleAddToCart } = useCart();
 
-  const handleFavorite = () => {
-    const newFavorite: favoriteItem = { id, title, price, image };
-    setFavorites((currentFavorites) => {
-      const productIndex = currentFavorites.findIndex((item) => item.id === id);
-      if (productIndex !== -1) {
-        toast.success(`Your ${title} has been removed from favorites`);
-        return currentFavorites.filter((item) => item.id !== id);
-      } else {
-        toast.success(`Your ${title} has been added to favorites`);
-        return [...currentFavorites, newFavorite];
+  const handleFavorite = async () => {
+    // const isFavorite = favorites.some((item) => item.id === id);
+    const token = Cookies.get("token"); // Retrieve the token from cookies
+
+    try {
+      const response = await axios.post(
+        `https://nest-ecommerce-1fqk.onrender.com/wishlist/add/${id}`,
+        { id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (response.status !== 200) {
+        throw new Error("Failed to add to favorites");
       }
-    });
+
+      setFavorites((currentFavorites) => [...currentFavorites, { id }]);
+      toast.success(`Your ${title} has been added to favorites`);
+    } catch (error) {
+      toast.error("An error occurred while updating favorites");
+    }
   };
+
+  console.log(favorites);
 
   const addToCart = () => {
     const newProduct = { title, price, image, id };
