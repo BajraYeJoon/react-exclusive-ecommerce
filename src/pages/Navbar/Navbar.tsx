@@ -10,6 +10,9 @@ import { useRecoilValue } from "recoil";
 import { cartState } from "../../atoms/cartState";
 import { fetchProductsBySearch } from "../../api/fetch";
 import { Input } from "../../components/ui/input";
+import axios from "axios";
+import { useQuery } from "react-query";
+import Cookies from "js-cookie";
 // import useWindow from "../../lib/useWindow";
 // import { Dialog, DialogTrigger } from "../../components/ui/dialog";
 // import { DialogContent } from "@radix-ui/react-dialog";
@@ -20,7 +23,7 @@ import { Input } from "../../components/ui/input";
 //   DrawerDescription,
 //   DrawerFooter,
 //   DrawerHeader,
-//   DrawerTitle,
+//   DrawerTitle
 //   DrawerTrigger,
 // } from "../../components/ui/drawer";
 // import { Button } from "../../components";
@@ -49,6 +52,18 @@ const Navbar = () => {
   // const { dimension } = useWindow();
   const resultsRef = useRef<HTMLDivElement>(null);
 
+  const fetchCart = async () => {
+    const { data } = await axios.get(
+      "https://nest-ecommerce-1fqk.onrender.com/cart/mycart",
+      {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      },
+    );
+    return data;
+  };
+
   useEffect(() => {
     const debouncedFetchResults = debounce(async (query: string) => {
       if (searchQuery === "") {
@@ -66,10 +81,10 @@ const Navbar = () => {
     setToggleMenu(false);
   };
 
-  const cartquantity = useRecoilValue(cartState).reduce(
-    (acc, value) => acc + value.quantity,
-    0,
-  );
+  // const cartquantity = useRecoilValue(cartState).reduce(
+  //   (acc, value) => acc + value.quantity,
+  //   0,
+  // );
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -86,6 +101,19 @@ const Navbar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const { data: cart, isLoading, error } = useQuery("cart", fetchCart);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error</div>;
+  }
+
+  console.log(cart.data.length);
+  const cartquantity = cart.data.length;
 
   return (
     <nav className="navbar border-b">
@@ -160,7 +188,7 @@ const Navbar = () => {
               </div>
             )}
           </div>
-{/* 
+          {/* 
           {dimension.width < 768 && (
             <Dialog>
               <DialogTrigger>

@@ -2,7 +2,8 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import ProductCard from "../ProductCard/ProductCard";
 import CustomBreakcrumb from "../CustomBreakcrumb/CustomBreakcrumb";
-import { fetchFavorites } from "../../api/fetch";
+import { deleteAllFavorites, fetchFavorites } from "../../api/fetch";
+import { Button } from "../ui/button";
 
 const Favorites = () => {
   const [favorites, setFavorites] = useState([]);
@@ -20,12 +21,29 @@ const Favorites = () => {
 
   console.log(favorites);
 
+  const DeleteAllFavorites = async () => {
+    try {
+      const resultafterdelete = await deleteAllFavorites();
+      console.log(resultafterdelete);
+      if (resultafterdelete) {
+        setFavorites([]);
+      } else {
+        throw new Error("Failed to delete all favorites");
+      }
+    } catch (error) {
+      console.error("An error occurred while deleting all favorites:", error);
+    }
+  };
+
   return (
     <section className="relative mx-8 my-6 md:mx-12 md:my-12 lg:mx-auto lg:max-w-7xl">
-      <CustomBreakcrumb
-        breadcrumbTitle="Favorites"
-        breadcrumbValue={favorites as []}
-      />
+      <div className="flex items-center justify-between">
+        <CustomBreakcrumb
+          breadcrumbTitle="Favorites"
+          breadcrumbValue={favorites as []}
+        />
+        <Button onClick={DeleteAllFavorites}>Clear All</Button>
+      </div>
 
       {favorites.length === 0 ? (
         <div className="my-12 flex flex-col items-center justify-center gap-4 text-center">

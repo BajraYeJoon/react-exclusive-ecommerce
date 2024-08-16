@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { EyeIcon, HeartIcon } from "lucide-react";
 import { FaStar } from "react-icons/fa";
 import useWindow from "../../lib/useWindow";
-// import useCart from "../../hooks/useCart";
 import {
   addFavorites,
   addProductToCart,
@@ -21,6 +20,17 @@ interface ProductCardProps {
   id: number;
 }
 
+export const addToCart = async (id: number) => {
+  try {
+    await addProductToCart(id);
+    toast.success("Product added to cart");
+    console.log("Added to cart");
+  } catch (error) {
+    toast.error("Failed to add product to cart");
+    console.error("Error adding to cart:", error);
+  }
+};
+
 const ProductCard = ({
   title,
   price,
@@ -29,11 +39,9 @@ const ProductCard = ({
   id,
 }: ProductCardProps) => {
   const { dimension } = useWindow();
-  const {isLoggedIn} = useAuthContext()
-  // const { handleAddToCart } = useCart();
+  const { isLoggedIn } = useAuthContext();
   const [favorites, setFavorites] = useState<{ id: number }[]>([]);
 
- 
   useEffect(() => {
     if (isLoggedIn) {
       (async () => {
@@ -77,13 +85,6 @@ const ProductCard = ({
     return Array.isArray(favorites) && favorites.some((item) => item.id === id);
   };
 
-  const addToCart = async () => {
-    // const newProduct = { title, price, image, id };
-    // handleAddToCart(newProduct);
-    await addProductToCart(id);
-    console.log("Added to cart");
-  };
-
   return (
     <div className="w-full max-w-72">
       <div className="group relative h-32 w-full overflow-hidden rounded-b-md bg-card md:h-56">
@@ -121,7 +122,7 @@ const ProductCard = ({
           </Link>
         </div>
 
-        <div className="group cursor-pointer" onClick={addToCart}>
+        <div className="group cursor-pointer" onClick={() => addToCart(id)}>
           <div className="absolute bottom-0 left-0 w-full bg-foreground opacity-0 transition-opacity duration-500 group-hover:opacity-100">
             <p className="py-2 text-center text-sm font-normal tracking-tight text-background">
               Add to Cart

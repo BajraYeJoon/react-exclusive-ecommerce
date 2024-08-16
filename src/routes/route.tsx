@@ -45,11 +45,11 @@ export const router = createBrowserRouter([
       },
       {
         element: <AuthLayout />,
+        loader: () => (Cookies.get("token") ? redirect("/profile") : null),
         children: [
           {
             path: "/sign-up",
             element: <SignupPage />,
-            loader: () => (Cookies.get("token") ? redirect("/profile") : null),
           },
           {
             path: "/sign-in",

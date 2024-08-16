@@ -62,21 +62,22 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="">
+    <div className="profile-container mx-72 pb-4 pt-4 max-2xl:mx-8 md:pt-9">
       <p className="py-2 text-xl font-semibold">Email Address</p>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-gray-600">
+        <div>
           Your email address is <strong>{userdetail.email}</strong>
           <h1>Your phone number is {userdetail.phone}</h1>
           <h1>Your name is {userdetail.name}</h1>
-        </p>
+        </div>
+
         <div className="inline-flex text-sm font-semibold text-primary">
           Welcome, {userdetail.name}
         </div>
       </div>
       <hr className="mb-8 mt-4" />
 
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} className="mb-6">
         <div>
           <label htmlFor="name">Name:</label>
           <input
@@ -97,9 +98,7 @@ const ProfilePage = () => {
             // placeholder={userdetail.phone}
           />
         </div>
-        <button type="submit" className="mt-4 bg-primary p-2 text-white">
-          Update Profile
-        </button>
+        <Button type="submit">Update Profile</Button>
       </form>
       {message && <p>{message}</p>}
 

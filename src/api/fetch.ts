@@ -87,6 +87,7 @@ export const deleteFavorites = async (id: number) => {
   return deletedresult;
 };
 
+
 export const fetchFavorites = async () => {
   const result = await axios.get(`${URL}/wishlist/mylist`, {
     headers: {
@@ -95,6 +96,19 @@ export const fetchFavorites = async () => {
   });
 
   return result.data;
+};
+
+export const deleteAllFavorites = async () => {
+  const resultafterdelete = await axios.post(
+    `${URL}/wishlist/deleteall`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+  return resultafterdelete;
 };
 
 export const fetchUserDetails = async () => {
