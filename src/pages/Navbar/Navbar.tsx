@@ -113,7 +113,8 @@ const Navbar = () => {
   }
 
   console.log(cart.data.length);
-  const cartquantity = cart.data.length;
+  const cartquantity = cart?.data?.length || [];
+
 
   return (
     <nav className="navbar border-b">

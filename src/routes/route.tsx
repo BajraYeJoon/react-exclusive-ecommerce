@@ -78,7 +78,7 @@ export const router = createBrowserRouter([
         element: <ArrivalsPage />,
       },
       {
-        path: "product/:productId",
+        path: ":productName/:productId",
         element: <Singleproduct />,
       },
       {
@@ -98,7 +98,7 @@ export const router = createBrowserRouter([
           !Cookies.get("order-placed") ? redirect("/products") : null,
       },
       {
-        path: "category/:categoryName",
+        path: "category/:categoryName/:categoryId",
         element: <FetchSingleCategory />,
       },
     ],

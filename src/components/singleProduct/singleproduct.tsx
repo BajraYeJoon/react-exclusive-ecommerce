@@ -9,7 +9,7 @@ import { fetchProductDetails } from "../../api/fetch";
 import { cn } from "../../lib/utils";
 import { BiStar } from "react-icons/bi";
 import useCart from "../../hooks/useCart";
-import { addToCart } from "../ProductCard/ProductCard";
+import { useAddToCart } from "../ProductCard/ProductCard";
 
 interface RadioOption {
   value: string;
@@ -52,6 +52,7 @@ const SizesGroup = ({ name, options, defaultValue }: SizeProps) => {
 const Singleproduct = () => {
   const { productId } = useParams();
   const [details, setDetails] = useState<any>([]);
+  const { mutate: addToCart } = useAddToCart();
 
   console.log(productId);
 

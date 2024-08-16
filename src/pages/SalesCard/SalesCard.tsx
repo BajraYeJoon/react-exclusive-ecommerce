@@ -11,6 +11,7 @@ import { Navigation } from "swiper/modules";
 // import { bestSellingProducts } from "../../constants/data";
 import { Link } from "react-router-dom";
 import { Loading } from "../../site";
+import CountdownTimer from "../../components/FlashSaleTimer/counttimer";
 
 interface SalesCardProps {
   title: string;

@@ -11,6 +11,7 @@ import {
   fetchFavorites,
 } from "../../api/fetch";
 import { useAuthContext } from "../../context/useAuthContext";
+import { useMutation, useQueryClient } from "react-query";
 
 interface ProductCardProps {
   title: string;
@@ -20,15 +21,20 @@ interface ProductCardProps {
   id: number;
 }
 
-export const addToCart = async (id: number) => {
-  try {
-    await addProductToCart(id);
-    toast.success("Product added to cart");
-    console.log("Added to cart");
-  } catch (error) {
-    toast.error("Failed to add product to cart");
-    console.error("Error adding to cart:", error);
-  }
+export const useAddToCart = () => {
+  const queryClient = useQueryClient();
+  return useMutation((id: number) => addProductToCart(id), {
+    onSuccess: () => {
+      // Refetch the cart data after a successful add-to-cart action
+      queryClient.invalidateQueries("cart");
+      toast.success("Product added to cart");
+      console.log("Added to cart");
+    },
+    onError: (error) => {
+      toast.error("Failed to add product to cart");
+      console.error("Error adding to cart:", error);
+    },
+  });
 };
 
 const ProductCard = ({
@@ -41,6 +47,7 @@ const ProductCard = ({
   const { dimension } = useWindow();
   const { isLoggedIn } = useAuthContext();
   const [favorites, setFavorites] = useState<{ id: number }[]>([]);
+  const { mutate: addToCart } = useAddToCart();
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -88,12 +95,13 @@ const ProductCard = ({
   return (
     <div className="w-full max-w-72">
       <div className="group relative h-32 w-full overflow-hidden rounded-b-md bg-card md:h-56">
-        <Link to={`product/${id}`}>
+        <Link to={`/${title.toLowerCase().split(" ").join("-")}/${id}`}>
           <img
             className="h-full w-full object-contain p-4 transition-opacity duration-300 group-hover:opacity-40 md:p-8 lg:p-12"
             src={image}
             alt="product image"
           />
+          s
         </Link>
 
         {discountTag && (

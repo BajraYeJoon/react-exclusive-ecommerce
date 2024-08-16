@@ -1,5 +1,6 @@
 import { FlashSaleTimer, NavigationArrows, Button } from "../../components";
 import { Link } from "react-router-dom";
+import CountdownTimer from "../FlashSaleTimer/counttimer";
 
 interface PagesHeaderProps {
   flashTimer?: boolean;
@@ -16,6 +17,10 @@ const PagesHeader = ({
   handleNext = () => {},
   cta,
 }: PagesHeaderProps) => {
+  const THREE_DAYS_IN_MS = 40000000;
+  const NOW_IN_MS = new Date().getTime();
+
+  const dateTimeAfterThreeDays = NOW_IN_MS + THREE_DAYS_IN_MS;
   return (
     <div className="page-header-container flex flex-col gap-3">
       <div className="flex items-center gap-3 text-primary">
@@ -29,7 +34,7 @@ const PagesHeader = ({
           <h2 className="text-lg font-medium capitalize tracking-wide text-foreground lg:text-4xl">
             {Heading}
           </h2>
-          {flashTimer && <FlashSaleTimer />}
+          {flashTimer && <CountdownTimer targetDate={dateTimeAfterThreeDays} />}
           {/* <div className="flex items-center gap-3 text-color-text-3 mb-3"></div> */}
         </div>
         {!cta ? (

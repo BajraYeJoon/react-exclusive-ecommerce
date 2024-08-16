@@ -61,9 +61,7 @@ const Category = () => {
                 key={index}
                 className="group flex h-full gap-2 rounded-md border-2 border-foreground/20 py-4 hover:border-none hover:bg-primary md:p-6"
               >
-                <Link
-                  to={`/category/${category.name.toLowerCase().split(" ").join("-")}`}
-                >
+                <Link to={`/category/${category.name}/${category.id}`}>
                   <p className="text-center text-[10px] font-medium group-hover:text-background md:text-sm">
                     {category.name}
                   </p>
