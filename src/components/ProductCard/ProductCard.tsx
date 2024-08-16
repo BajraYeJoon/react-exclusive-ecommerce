@@ -11,6 +11,7 @@ import {
   deleteFavorites,
   fetchFavorites,
 } from "../../api/fetch";
+import { useAuthContext } from "../../context/useAuthContext";
 
 interface ProductCardProps {
   title: string;
@@ -28,16 +29,19 @@ const ProductCard = ({
   id,
 }: ProductCardProps) => {
   const { dimension } = useWindow();
+  const {isLoggedIn} = useAuthContext()
   // const { handleAddToCart } = useCart();
   const [favorites, setFavorites] = useState<{ id: number }[]>([]);
 
+ 
   useEffect(() => {
-    (async () => {
-      const favoritesList = await fetchFavorites();
-
-      setFavorites(favoritesList.data);
-    })();
-  }, []);
+    if (isLoggedIn) {
+      (async () => {
+        const favoritesList = await fetchFavorites();
+        setFavorites(favoritesList.data);
+      })();
+    }
+  }, [isLoggedIn]);
 
   const handleAddFavorite = async () => {
     try {
