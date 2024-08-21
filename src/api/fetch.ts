@@ -11,7 +11,9 @@ export const fetchCategories = async () => {
 };
 
 export const fetchAllProducts = async () => {
-  const allproducts = await Axios.get(`/product/all`).then((res) => res.data);
+  const allproducts = await Axios.get(`/product/all`).then(
+    (res) => res.data.data,
+  );
 
   return allproducts;
 };
