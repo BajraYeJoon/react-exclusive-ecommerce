@@ -29,7 +29,7 @@ const Contact = () => {
     <section className="relative mx-8 my-6 h-fit md:mx-12 md:my-12 lg:mx-auto lg:max-w-7xl">
       <CustomBreakcrumb breadcrumbTitle="Contact Us" />
 
-      <div className="my-8 flex">
+      <div className="my-8 flex flex-col items-center gap-8 md:flex-row md:items-start md:gap-12">
         <div className="flex flex-col justify-evenly gap-6 border p-5 px-8 shadow-lg">
           <div className="flex flex-col items-start gap-3 lg:gap-4">
             <h2 className="inline-flex items-center gap-3 text-xl">
@@ -62,13 +62,13 @@ const Contact = () => {
         </div>
 
         <form
-          className="flex flex-col justify-between gap-10 p-5"
+          className="flex flex-col flex-wrap justify-between gap-10 p-5"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <div className="flex items-center justify-between gap-6">
+          <div className="flex flex-wrap items-center gap-6 *:w-full md:*:w-44">
             <input
               placeholder="your name*"
-              className="bg-color-secondary outline-color-secondary rounded-sm bg-foreground/15 px-4 py-3 text-base transition-all duration-300 ease-in-out focus-within:outline-2 max-2xl:text-sm"
+              className="bg-color-secondary rounded-sm bg-foreground/15 px-4 py-3 text-base transition-all duration-300 ease-in-out focus-within:outline-2 max-2xl:text-sm"
               type="text"
               {...register("name", { required: "Name is required" })}
             />

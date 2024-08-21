@@ -10,12 +10,14 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
-import { Loading } from "../../site";
+import { Skeleton } from "../ui/skeleton";
 
 const Carousel = () => {
   const { data: bannerData, isLoading } = useQuery("banner", fetchHeroBanner);
 
-  if (isLoading) return <Loading />;
+  if (isLoading) {
+    return <Skeleton className="h-full w-full rounded-xl" />;
+  }
 
   const banner = bannerData[0].products;
   console.log(banner);

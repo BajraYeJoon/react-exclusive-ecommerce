@@ -1,10 +1,19 @@
 import { Carousel } from "../../components";
 import { ChevronRight } from "lucide-react";
-import { heroCategories, heroContent } from "../../constants/data";
+// import { heroCategories } from "../../constants/data";
 import { Link } from "react-router-dom";
-
+import { useQuery } from "react-query";
+import { fetchCategories } from "../../api/fetch";
 
 const Hero = () => {
+  const { data: heroCategoriesData } = useQuery(
+    "heroCategory",
+    fetchCategories,
+  );
+
+  const heroCategories = heroCategoriesData && heroCategoriesData.slice(0, 8) || [];
+
+
   return (
     <section className="flex">
       <aside className="z-10 mr-6 mt-14 hidden flex-col items-start gap-4 text-lg text-foreground/80 lg:flex">
@@ -32,7 +41,7 @@ const Hero = () => {
       </aside>
       <div className="hidden min-h-full w-px bg-foreground/20 lg:block"></div>
 
-      <Carousel heroContent={heroContent} />
+      <Carousel />
     </section>
   );
 };

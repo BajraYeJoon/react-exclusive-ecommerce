@@ -3,7 +3,6 @@ import { PagesHeader, Button, ProductCard } from "../../components";
 // import { generalProducts } from "../../constants/data";
 import "swiper/css";
 import "swiper/css/navigation";
-import { Navigation } from "swiper/modules";
 import { useQuery } from "react-query";
 import { fetchAllProducts } from "../../api/fetch";
 import { Loading } from "../../site";

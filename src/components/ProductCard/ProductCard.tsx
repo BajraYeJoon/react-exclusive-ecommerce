@@ -47,25 +47,11 @@ const ProductCard = ({
 }: ProductCardProps) => {
   const { dimension } = useWindow();
   const { isLoggedIn } = useAuthContext();
-  // const [favorites, setFavorites] = useState<{ id: number }[]>([]);
   const { mutate: addToCart } = useAddToCart();
 
-  // useEffect(() => {
-  //   if (isLoggedIn) {
-  //     (async () => {
-  //       const favoritesList = await fetchFavorites();
-  //       setFavorites(favoritesList.data);
-  //     })();
-  //   }
-  // }, [isLoggedIn]);
-
-  const { data: favoritesData, isLoading } = useQuery(
-    "favorites",
-    fetchFavorites,
-    {
-      enabled: isLoggedIn,
-    },
-  );
+  const { data: favoritesData } = useQuery("favorites", fetchFavorites, {
+    enabled: isLoggedIn,
+  });
   const favorites = favoritesData?.data || [];
 
   console.log(favorites);
@@ -93,49 +79,14 @@ const ProductCard = ({
     },
   });
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   const handleRemoveFavorite = async () => {
     mutation.mutate(id);
   };
-
-  // const handleAddFavorite = async () => {
-  //   try {
-  //     const response = await addFavorites(id);
-  //     console.log(response);
-
-  //     if (response) {
-  //       toast.success(`Your ${title} has been added to favorites`);
-  //       // setFavorites([...favorites, { id }]);
-  //     } else {
-  //       throw new Error("Failed to add to favorites");
-  //     }
-  //   } catch (error) {
-  //     toast.error("An error occurred while updating favorites");
-  //   }
-  // };
 
   const handleAddFavorite = async () => {
     mutationAdd.mutate(id);
   };
 
-  // const handleRemoveFavorite = async () => {
-  //   try {
-  //     const response = await deleteFavorites(id);
-
-  //     if (response) {
-  //       setFavorites(favorites.filter((item) => item.id !== id));
-  //       toast.success(`Your ${title} has been removed from favorites`);
-  //     } else {
-
-  //       throw new Error("Failed to remove from favorites");
-  //     }
-  //   } catch (error) {
-  //     toast.error("An error occurred while updating favorites");
-  //   }
-  // };
   const isFavorite = (id: number) => {
     return (
       // Array.isArray(favorites.data) &&
