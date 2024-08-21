@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+// import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { EyeIcon, HeartIcon } from "lucide-react";
@@ -11,7 +11,8 @@ import {
   fetchFavorites,
 } from "../../api/fetch";
 import { useAuthContext } from "../../context/useAuthContext";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { queryClient } from "../../lib/reactQueryClient";
 
 interface ProductCardProps {
   title: string;
@@ -23,9 +24,9 @@ interface ProductCardProps {
 
 export const useAddToCart = () => {
   const queryClient = useQueryClient();
+
   return useMutation((id: number) => addProductToCart(id), {
     onSuccess: () => {
-      // Refetch the cart data after a successful add-to-cart action
       queryClient.invalidateQueries("cart");
       toast.success("Product added to cart");
       console.log("Added to cart");
@@ -46,50 +47,108 @@ const ProductCard = ({
 }: ProductCardProps) => {
   const { dimension } = useWindow();
   const { isLoggedIn } = useAuthContext();
-  const [favorites, setFavorites] = useState<{ id: number }[]>([]);
+  // const [favorites, setFavorites] = useState<{ id: number }[]>([]);
   const { mutate: addToCart } = useAddToCart();
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      (async () => {
-        const favoritesList = await fetchFavorites();
-        setFavorites(favoritesList.data);
-      })();
-    }
-  }, [isLoggedIn]);
+  // useEffect(() => {
+  //   if (isLoggedIn) {
+  //     (async () => {
+  //       const favoritesList = await fetchFavorites();
+  //       setFavorites(favoritesList.data);
+  //     })();
+  //   }
+  // }, [isLoggedIn]);
 
-  const handleAddFavorite = async () => {
-    try {
-      const response = await addFavorites(id);
-      console.log(response);
+  const { data: favoritesData, isLoading } = useQuery(
+    "favorites",
+    fetchFavorites,
+    {
+      enabled: isLoggedIn,
+    },
+  );
+  const favorites = favoritesData?.data || [];
 
+  console.log(favorites);
+
+  const mutation = useMutation(deleteFavorites, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("favorites");
+      toast.success(`Your ${title} has been removed from favorites`);
+    },
+    onError: () => {
+      toast.error("An error occurred while updating favorites");
+    },
+  });
+  const mutationAdd = useMutation(addFavorites, {
+    onSuccess: (response) => {
       if (response) {
         toast.success(`Your ${title} has been added to favorites`);
-        setFavorites([...favorites, { id }]);
+        queryClient.invalidateQueries("favorites");
       } else {
         throw new Error("Failed to add to favorites");
       }
-    } catch (error) {
+    },
+    onError: () => {
       toast.error("An error occurred while updating favorites");
-    }
-  };
+    },
+  });
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   const handleRemoveFavorite = async () => {
-    try {
-      const response = await deleteFavorites(id);
-
-      if (response) {
-        setFavorites(favorites.filter((item) => item.id !== id));
-        toast.success(`Your ${title} has been removed from favorites`);
-      } else {
-        throw new Error("Failed to remove from favorites");
-      }
-    } catch (error) {
-      toast.error("An error occurred while updating favorites");
-    }
+    mutation.mutate(id);
   };
+
+  // const handleAddFavorite = async () => {
+  //   try {
+  //     const response = await addFavorites(id);
+  //     console.log(response);
+
+  //     if (response) {
+  //       toast.success(`Your ${title} has been added to favorites`);
+  //       // setFavorites([...favorites, { id }]);
+  //     } else {
+  //       throw new Error("Failed to add to favorites");
+  //     }
+  //   } catch (error) {
+  //     toast.error("An error occurred while updating favorites");
+  //   }
+  // };
+
+  const handleAddFavorite = async () => {
+    mutationAdd.mutate(id);
+  };
+
+  // const handleRemoveFavorite = async () => {
+  //   try {
+  //     const response = await deleteFavorites(id);
+
+  //     if (response) {
+  //       setFavorites(favorites.filter((item) => item.id !== id));
+  //       toast.success(`Your ${title} has been removed from favorites`);
+  //     } else {
+
+  //       throw new Error("Failed to remove from favorites");
+  //     }
+  //   } catch (error) {
+  //     toast.error("An error occurred while updating favorites");
+  //   }
+  // };
   const isFavorite = (id: number) => {
-    return Array.isArray(favorites) && favorites.some((item) => item.id === id);
+    return (
+      // Array.isArray(favorites.data) &&
+      favorites.some((item) => item.id === id)
+    );
+  };
+
+  const handleFavoriteClick = () => {
+    if (!isLoggedIn) {
+      toast.error("Please log in to add to favorites");
+      return;
+    }
+    isFavorite(id) ? handleRemoveFavorite() : handleAddFavorite();
   };
 
   return (
@@ -113,7 +172,7 @@ const ProductCard = ({
         <div className="absolute right-4 top-4 flex flex-col gap-2">
           <span
             className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-foreground/20 lg:h-7 lg:w-7"
-            onClick={isFavorite(id) ? handleRemoveFavorite : handleAddFavorite}
+            onClick={handleFavoriteClick}
           >
             <HeartIcon
               size={dimension.width < 768 ? 10 : 18}

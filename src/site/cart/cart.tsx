@@ -127,14 +127,14 @@ const Cart = () => {
 
   if (cartItems.length === 0) {
     return (
-      <section className="flex h-screen flex-col items-center justify-center">
+      <>
         <h1 className="flex flex-col text-3xl font-semibold text-gray-400">
           No items in cart
         </h1>
         <Link to={"/products"} className="underline">
           Add some products from here....
         </Link>
-      </section>
+      </>
     );
   }
 

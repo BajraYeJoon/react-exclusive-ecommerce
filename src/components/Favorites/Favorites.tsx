@@ -1,39 +1,36 @@
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
 import ProductCard from "../ProductCard/ProductCard";
 import CustomBreakcrumb from "../CustomBreakcrumb/CustomBreakcrumb";
 import { deleteAllFavorites, fetchFavorites } from "../../api/fetch";
 import { Button } from "../ui/button";
+import { useMutation, useQuery } from "react-query";
+import { toast } from "sonner";
+import { queryClient } from "../../lib/reactQueryClient";
 
 const Favorites = () => {
-  const [favorites, setFavorites] = useState([]);
+  const { data: favoritesData, isLoading } = useQuery(
+    "favorites",
+    fetchFavorites,
+  );
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const resultfav = await fetchFavorites();
-        setFavorites(resultfav.data);
-      } catch (error) {
-        console.error("An error occurred while fetching favorites:", error);
-      }
-    })();
-  }, []);
+  const deleteAll = useMutation(deleteAllFavorites, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("favorites");
+      toast.success("Favorites cleared");
+    },
+    onError: (error) => {
+      console.error("Error deleting favorites:", error);
+    },
+  });
 
-  console.log(favorites);
+  if (isLoading) return <div>Loading...</div>;
 
-  const DeleteAllFavorites = async () => {
-    try {
-      const resultafterdelete = await deleteAllFavorites();
-      console.log(resultafterdelete);
-      if (resultafterdelete) {
-        setFavorites([]);
-      } else {
-        throw new Error("Failed to delete all favorites");
-      }
-    } catch (error) {
-      console.error("An error occurred while deleting all favorites:", error);
-    }
+  const DeleteAllFavorites = () => {
+    deleteAll.mutate();
   };
+
+  const favorites = favoritesData?.data || [];
+  console.log(favorites);
 
   return (
     <section className="relative mx-8 my-6 md:mx-12 md:my-12 lg:mx-auto lg:max-w-7xl">

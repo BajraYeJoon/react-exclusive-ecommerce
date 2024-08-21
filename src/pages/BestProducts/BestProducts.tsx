@@ -15,40 +15,39 @@ const BestProducts = () => {
         Heading="Best Selling Products"
         cta="/products"
       />
-      <div className="product-card-container flex w-full items-center justify-between gap-4 overflow-x-auto">
-        <Swiper
-          spaceBetween={20}
-          pagination={{ clickable: true }}
-          className="mySwiper"
-          modules={[Navigation]}
-          navigation={{
-            enabled: true,
-            nextEl: ".arrow-right",
-            prevEl: ".arrow-left",
-          }}
-          // onNavigationNext={handleNext}
-          breakpoints={{
-            320: {
-              slidesPerView: 2,
-            },
-            640: {
-              slidesPerView: 2,
-            },
-            768: {
-              slidesPerView: 3,
-            },
-            1024: {
-              slidesPerView: 4,
-            },
-          }}
-        >
-          {bestSellingProducts.map((bestProductCard, index) => (
-            <SwiperSlide key={index} className="">
-              <ProductCard key={index} {...bestProductCard} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
+
+      <Swiper
+        spaceBetween={20}
+        pagination={{ clickable: true }}
+        className="mySwiper w-full"
+        modules={[Navigation]}
+        navigation={{
+          enabled: true,
+          nextEl: ".arrow-right",
+          prevEl: ".arrow-left",
+        }}
+        // onNavigationNext={handleNext}
+        breakpoints={{
+          320: {
+            slidesPerView: 2,
+          },
+          640: {
+            slidesPerView: 2,
+          },
+          768: {
+            slidesPerView: 3,
+          },
+          1024: {
+            slidesPerView: 4,
+          },
+        }}
+      >
+        {bestSellingProducts.map((bestProductCard, index) => (
+          <SwiperSlide key={index} className="">
+            <ProductCard key={index} {...bestProductCard} />
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </section>
   );
 };
