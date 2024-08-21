@@ -20,7 +20,9 @@ const Category = () => {
     data: categories,
     error,
     isLoading,
-  } = useQuery(["categories"], fetchCategories);
+  } = useQuery(["categories"], fetchCategories, {
+    staleTime: 60000,
+  });
 
   if (isLoading) return <Loading />;
   if (error) return <div>An error occurred: {(error as Error).message}</div>;

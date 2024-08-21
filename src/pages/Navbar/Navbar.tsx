@@ -100,7 +100,13 @@ const Navbar = () => {
     };
   }, []);
 
-  const { data: cart, isLoading, error } = useQuery("cart", fetchCart);
+  const {
+    data: cart,
+    isLoading,
+    error,
+  } = useQuery("cart", fetchCart, {
+    enabled: isLoggedIn,
+  });
 
   // if (isLoading) {
   //   return <div>Loading...</div>;
