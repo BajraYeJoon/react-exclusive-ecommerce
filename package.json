@@ -13,6 +13,7 @@
   "proxy": "https://a.khalti.com/api/v2/",
   "dependencies": {
     "-": "^0.0.1",
+    "@emailjs/browser": "^4.4.1",
     "@hookform/resolvers": "^3.9.0",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-popover": "^1.1.1",

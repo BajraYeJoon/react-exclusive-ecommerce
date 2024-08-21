@@ -1,7 +1,30 @@
 import { Mail, PhoneIcon } from "lucide-react";
 import { Button, CustomBreakcrumb } from "../../components";
+import { useForm } from "react-hook-form";
+import emailjs from "@emailjs/browser";
+import { toast } from "sonner";
 
 const Contact = () => {
+  const { register, handleSubmit } = useForm();
+
+  const onSubmit = (data: any, e) => {
+    console.log(data);
+    e.preventDefault();
+
+    const form = e.target;
+    emailjs.sendForm(
+      "service_bhxnafe",
+      "template_uwb60pg",
+      form,
+      "NdDh9yG_33K_69phh",
+    );
+
+    if (form) {
+      form.reset();
+      toast.success("Message sent successfully");
+    }
+  };
+
   return (
     <section className="relative mx-8 my-6 h-fit md:mx-12 md:my-12 lg:mx-auto lg:max-w-7xl">
       <CustomBreakcrumb breadcrumbTitle="Contact Us" />
@@ -38,31 +61,42 @@ const Contact = () => {
           </div>
         </div>
 
-        <form className="flex flex-col justify-between gap-10 p-5">
+        <form
+          className="flex flex-col justify-between gap-10 p-5"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <div className="flex items-center justify-between gap-6">
             <input
               placeholder="your name*"
               className="bg-color-secondary outline-color-secondary rounded-sm bg-foreground/15 px-4 py-3 text-base transition-all duration-300 ease-in-out focus-within:outline-2 max-2xl:text-sm"
               type="text"
+              {...register("name", { required: "Name is required" })}
             />
+
             <input
               placeholder="your email*"
               className="rounded-sm bg-foreground/15 px-4 py-3 text-base transition-all duration-300 ease-in-out focus-within:outline-2 max-2xl:text-sm"
               type="email"
+              {...register("email", { required: "Email is required" })}
             />
+
             <input
               placeholder="your phone*"
               className="rounded-sm bg-foreground/15 px-4 py-3 text-base transition-all duration-300 ease-in-out focus-within:outline-2 max-2xl:text-sm"
               type="tel"
+              {...register("telephone", { required: "Phone is required" })}
             />
           </div>
+
           <textarea
             rows={10}
             cols={10}
             placeholder="enter your message"
             className="placeholder:text-color-text-2 outline-color-secondary focus-within:outline-color-primary-1 resize-none rounded-sm bg-foreground/15 px-4 py-3 text-base transition-all duration-300 ease-in-out focus-within:outline-2 max-2xl:text-sm"
+            {...register("message", { required: "Message is required" })}
           ></textarea>
-          <Button>Send Message</Button>
+
+          <Button type="submit">Send Message</Button>
         </form>
       </div>
     </section>
