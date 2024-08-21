@@ -6,6 +6,7 @@ import { Button } from "../ui/button";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "sonner";
 import { queryClient } from "../../lib/reactQueryClient";
+import { FaSpinner } from "react-icons/fa";
 
 const Favorites = () => {
   const { data: favoritesData, isLoading } = useQuery(
@@ -23,7 +24,17 @@ const Favorites = () => {
     },
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return (
+      <div
+        aria-label="Loading..."
+        role="status"
+        className="flex h-screen w-full items-center justify-center space-x-2"
+      >
+        <FaSpinner className="h-20 w-20 animate-spin stroke-gray-500" />
+        <span className="text-4xl font-medium text-gray-500">Loading...</span>
+      </div>
+    );
 
   const DeleteAllFavorites = () => {
     deleteAll.mutate();
@@ -33,7 +44,7 @@ const Favorites = () => {
   console.log(favorites);
 
   return (
-    <section className="relative mx-8 my-6 md:mx-12 md:my-12 lg:mx-auto lg:max-w-7xl">
+    <section className="relative mx-8 my-6 h-[40vh] md:mx-12 md:my-12 lg:mx-auto lg:max-w-7xl">
       <div className="flex items-center justify-between">
         <CustomBreakcrumb
           breadcrumbTitle="Favorites"

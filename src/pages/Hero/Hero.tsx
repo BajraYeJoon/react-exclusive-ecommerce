@@ -4,15 +4,16 @@ import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import { fetchCategories } from "../../api/fetch";
+import { Skeleton } from "../../components/ui/skeleton";
 
 const Hero = () => {
-  const { data: heroCategoriesData } = useQuery(
+  const { data: heroCategoriesData, isLoading } = useQuery(
     "heroCategory",
     fetchCategories,
   );
 
-  const heroCategories = heroCategoriesData && heroCategoriesData.slice(0, 8) || [];
-
+  const heroCategories =
+    (heroCategoriesData && heroCategoriesData.slice(0, 8)) || [];
 
   return (
     <section className="flex">
@@ -20,10 +21,15 @@ const Hero = () => {
         <ul className="flex flex-col gap-3 font-medium tracking-tighter">
           {heroCategories.map((category) => (
             <li key={category.id} className="group relative cursor-pointer">
-              <div className="flex items-center justify-between">
-                <Link to={"/products"}>{category.name}</Link>
-                {category.subcategories && <ChevronRight />}
-              </div>
+              {isLoading ? (
+                <Skeleton className="h-6 w-full rounded-md" />
+              ) : (
+                <div className="flex items-center justify-between">
+                  <Link to={"/products"}>{category.name}</Link>
+
+                  {category.subcategories && <ChevronRight />}
+                </div>
+              )}
               {category.subcategories && (
                 <div className="subcategories absolute -right-6 top-0 z-20 mt-2 hidden border bg-white p-2 shadow-lg group-hover:block">
                   <ul>
