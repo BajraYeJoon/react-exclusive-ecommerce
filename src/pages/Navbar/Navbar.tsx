@@ -6,8 +6,6 @@ import { NavLink, Link } from "react-router-dom";
 import { navLinks } from "../../constants/data";
 import { RxCross2 } from "react-icons/rx";
 import { useAuthContext } from "../../context/useAuthContext";
-import { useRecoilValue } from "recoil";
-import { cartState } from "../../atoms/cartState";
 import { fetchProductsBySearch } from "../../api/fetch";
 import { Input } from "../../components/ui/input";
 import axios from "axios";
@@ -54,7 +52,7 @@ const Navbar = () => {
 
   const fetchCart = async () => {
     const { data } = await axios.get(
-      "https://nest-ecommerce-1fqk.onrender.com/cart/mycart",
+      "https://nest-ecommerce-1fqk.onrender.com/cart",
       {
         headers: {
           Authorization: `Bearer ${Cookies.get("token")}`,
@@ -104,17 +102,17 @@ const Navbar = () => {
 
   const { data: cart, isLoading, error } = useQuery("cart", fetchCart);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
   if (error) {
     return <div>Error</div>;
   }
 
-  console.log(cart.data.length);
-  const cartquantity = cart?.data?.length || [];
-
+  const cartquantity = cart?.data ?? [];
+  console.log(cartquantity.length);
+  // const cartquantity = cart?.data?.length || [];
 
   return (
     <nav className="navbar border-b">

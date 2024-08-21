@@ -3,33 +3,28 @@ import Cookies from "js-cookie";
 
 const URL = "https://nest-ecommerce-1fqk.onrender.com";
 const token = Cookies.get("token");
-// const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzYsImVtYWlsIjoidGVzdGJhaGFkdXJAZ21haWwuY29tIiwiaWF0IjoxNzIzNzE3MjIzLCJleHAiOjE3MjM3MjA4MjN9.szxn1TbO12CBSNoNd2oPb-T8pz8GJoCU9P-vkHJEoBs';
 
-export const fetchProducts = async () => {
-  const data = await axios
-    .get(`https://fakestoreapi.com/products`)
-    .then((res) => res.data);
+export const fetchSalesProduct = async () => {
+  const data = await axios.get(`${URL}/sale`).then((res) => res.data);
   return data;
 };
 
 export const fetchCategories = async () => {
-  const data = await axios
-    .get(`${URL}/category/getcategories`)
-    .then((res) => res.data.data);
+  const data = await axios.get(`${URL}/category`).then((res) => res.data.data);
   return data;
 };
 
 export const fetchAllProducts = async () => {
   const allproducts = await axios
-    .get(`${URL}/product/allproducts`)
+    .get(`${URL}/product/all`)
     .then((res) => res.data);
 
   return allproducts;
 };
 
-export const fetchProductByCategory = async (category: string) => {
+export const fetchProductByCategory = async (categoryId: number) => {
   const data = await axios
-    .get(`https://dummyjson.com/products/category/${category}`)
+    .get(`${URL}/product/category/${categoryId}`)
     .then((res) => res.data);
   return data;
 };
@@ -50,7 +45,7 @@ export const fetchProductsBySearch = async (search: string) => {
 
 export const fetchProductDetails = async (id: string) => {
   const result = await axios
-    .get(`${URL}/product/productdetail/${id}`)
+    .get(`${URL}/product/${id}`)
     .then((res) => res.data.data);
   return result;
 };
@@ -74,9 +69,8 @@ export const addFavorites = async (id: number) => {
 
 export const deleteFavorites = async (id: number) => {
   const deletedresult = await axios
-    .post(
-      `${URL}/wishlist/delete/${id}`,
-      { id },
+    .delete(
+      `${URL}/wishlist/${id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -87,9 +81,8 @@ export const deleteFavorites = async (id: number) => {
   return deletedresult;
 };
 
-
 export const fetchFavorites = async () => {
-  const result = await axios.get(`${URL}/wishlist/mylist`, {
+  const result = await axios.get(`${URL}/wishlist`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -99,20 +92,16 @@ export const fetchFavorites = async () => {
 };
 
 export const deleteAllFavorites = async () => {
-  const resultafterdelete = await axios.post(
-    `${URL}/wishlist/deleteall`,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+  const resultafterdelete = await axios.delete(`${URL}/wishlist/deleteall`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
     },
-  );
+  });
   return resultafterdelete;
 };
 
 export const fetchUserDetails = async () => {
-  const profileresult = await axios.get(`${URL}/profile/myprofile`, {
+  const profileresult = await axios.get(`${URL}/profile`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -121,7 +110,7 @@ export const fetchUserDetails = async () => {
 };
 
 export const fetchCart = async () => {
-  const cartData = await axios.get(`${URL}/cart/mycart`, {
+  const cartData = await axios.get(`${URL}/cart`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -131,9 +120,9 @@ export const fetchCart = async () => {
 };
 
 export const deleteAllCartItems = async () => {
-  const resultafterdelete = await axios.post(
+  const resultafterdelete = await axios.delete(
     `${URL}/cart/deleteall`,
-    {},
+
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -146,7 +135,7 @@ export const deleteAllCartItems = async () => {
 
 export const addProductToCart = async (id: number) => {
   const response = await axios.post(
-    `${URL}/cart/additem/${id}`,
+    `${URL}/cart/add/${id}`,
     { id },
     {
       headers: {
@@ -156,3 +145,5 @@ export const addProductToCart = async (id: number) => {
   );
   return response.data;
 };
+
+

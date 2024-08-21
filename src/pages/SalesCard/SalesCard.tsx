@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 import { PagesHeader, ProductCard, Button } from "../../components";
-import { fetchProducts } from "../../api/fetch";
+import { fetchSalesProduct } from "../../api/fetch";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -11,7 +11,6 @@ import { Navigation } from "swiper/modules";
 // import { bestSellingProducts } from "../../constants/data";
 import { Link } from "react-router-dom";
 import { Loading } from "../../site";
-import CountdownTimer from "../../components/FlashSaleTimer/counttimer";
 
 interface SalesCardProps {
   title: string;
@@ -27,13 +26,28 @@ const SalesCard = () => {
     data: products,
     error,
     isLoading,
-  } = useQuery(["products"], fetchProducts, {
+  } = useQuery(["products"], fetchSalesProduct, {
     select: (products) => products.slice(0, 7),
-    staleTime: 60000,
+    staleTime: 10000,
   });
 
   if (isLoading) return <Loading />;
-  if (error) return <div>An error occurred: {(error as Error).message}</div>;
+  if (error)
+    return (
+      <div className="bg-gradient-to-r from-blue-700 to-[#B06AB3] px-6 py-12 font-sans">
+        <div className="container mx-auto flex flex-col items-center justify-center text-center">
+          <h2 className="mb-4 text-3xl font-bold text-white sm:text-4xl">
+            Discover Our New Collection
+          </h2>
+          <p className="mb-8 text-center text-base text-white">
+            Elevate your style with our latest arrivals. Shop now and enjoy
+            exclusive discounts!
+          </p>
+
+          <Button>Explore More</Button>
+        </div>
+      </div>
+    );
 
   return (
     <section className="sales-card-container flex flex-col gap-5 border-b border-foreground/30 pb-8 md:gap-7 md:pb-14">

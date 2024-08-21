@@ -104,7 +104,7 @@ const Cart = () => {
     }
   };
   const calculateTotal = selector({
-    key: "calculateTotal",
+    key: "CalculateTotal",
     get: ({ get }) => {
       const cartItems = get(cartState);
       const discount = get(discountState);

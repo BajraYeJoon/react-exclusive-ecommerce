@@ -3,15 +3,15 @@ import { useParams } from "react-router-dom";
 import { fetchProductByCategory } from "../../api/fetch";
 import ProductCard from "../ProductCard/ProductCard";
 const FetchSingleCategory = () => {
-  const { categoryName } = useParams();
+  const { categoryId } = useParams();
 
   const {
     data: category,
     isLoading,
     error,
-  } = useQuery("category", () => fetchProductByCategory(categoryName ?? ""), {
-    staleTime: 50000,
-  });
+  } = useQuery("category", () =>
+    fetchProductByCategory(parseInt(categoryId ?? "20")),
+  );
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -20,14 +20,17 @@ const FetchSingleCategory = () => {
     return <div>Error: {(error as Error).message}</div>;
   }
 
+  console.log(category.data.products);
+  const productsByCategory = category?.data?.products;
+
   return (
     <section className="mx-72 mb-28 gap-40 max-2xl:mx-6 max-2xl:gap-28">
       <div className="product-card-container grid w-full grid-cols-2 items-center justify-between gap-4 overflow-hidden md:grid-cols-3 lg:grid-cols-4">
-        {category.products.map((category: any) => (
+        {productsByCategory.map((category: any) => (
           <ProductCard
             key={category.id}
             {...category}
-            images={category.images[0]}
+            images={category.image[0]}
           />
         ))}
       </div>

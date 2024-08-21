@@ -13,6 +13,7 @@ import "swiper/css/navigation";
 interface CategoryType {
   id: number;
   name: string;
+  icon: any;
 }
 const Category = () => {
   const {
@@ -32,7 +33,7 @@ const Category = () => {
         <Swiper
           spaceBetween={20}
           pagination={{ clickable: true }}
-          className="mySwiper flex h-16 md:h-24"
+          className="mySwiper flex h-fit md:h-32"
           modules={[Navigation]}
           navigation={{
             enabled: true,
@@ -41,7 +42,7 @@ const Category = () => {
           }}
           breakpoints={{
             320: {
-              slidesPerView: 3,
+              slidesPerView: 2,
             },
             640: {
               slidesPerView: 3,
@@ -55,18 +56,28 @@ const Category = () => {
           }}
         >
           {categories?.map((category: CategoryType, index: number) => {
-            // const CategoryIcon = category.icon;
             return (
               <SwiperSlide
+                className="group gap-2 rounded-md border-2 border-foreground/20 py-4 hover:border-none hover:bg-primary md:p-6"
                 key={index}
-                className="group flex h-full gap-2 rounded-md border-2 border-foreground/20 py-4 hover:border-none hover:bg-primary md:p-6"
               >
-                <Link to={`/category/${category.name}/${category.id}`}>
+                <Link
+                  to={`/category/${category.name}/${category.id}`}
+                  className="flex flex-col items-center justify-center gap-1"
+                >
+                  {!category.icon ? (
+                    <div className="text-xl font-extrabold md:text-3xl">
+                      {category.name.charAt(0).toUpperCase()}
+                    </div>
+                  ) : (
+                    <div className="h-5 w-5 md:h-10 md:w-10">
+                      {category.icon}
+                    </div>
+                  )}
                   <p className="text-center text-[10px] font-medium group-hover:text-background md:text-sm">
                     {category.name}
                   </p>
                 </Link>
-                {/* <CategoryIcon className="w-5 h-5 md:w-10 md:h-10" /> */}
               </SwiperSlide>
             );
           })}
