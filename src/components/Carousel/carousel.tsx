@@ -3,75 +3,70 @@ import { cn } from "../../lib/utils";
 import { ArrowRight } from "lucide-react";
 import { SiApple } from "react-icons/si";
 import { Link } from "react-router-dom";
+import { fetchHeroBanner } from "../../api/fetch";
+import { useQuery } from "react-query";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { Loading } from "../../site";
 
-type HeroContent = { title: string; brandName: string }[];
+const Carousel = () => {
+  const { data: bannerData, isLoading } = useQuery("banner", fetchHeroBanner);
 
-const Carousel = ({ heroContent }: { heroContent: HeroContent }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  if (isLoading) return <Loading />;
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % heroContent.length);
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [heroContent.length]);
+  const banner = bannerData[0].products;
+  console.log(banner);
 
   return (
-    <div className="carousel-container flex-1 lg:pl-14 pt-4 lg:pt-14 w-full">
-      <div className="carousel-wrapper relative ">
-        {heroContent.map((content, index) => (
-          <div
-            key={index}
-            className={cn(
-              "carousel-slide duration-700 ease-in-out h-fit w-full overflow-hidden",
-              index === currentIndex ? "block" : "hidden"
-            )}
-          >
-            <div className="carousel-content grid grid-cols-1 md:grid-cols-2 align-middle bg-foreground w-full h-56 lg:h-96 p-4 md:p-0">
-              <div className="carousel-text gap-0 md:gap-6 md:pl-10 lg:pl-14 text-background flex flex-col justify-center items-start">
+    <div className="carousel-container w-4/5 flex-1 pt-4 lg:pl-14 lg:pt-14">
+      <Swiper
+        spaceBetween={30}
+        centeredSlides={true}
+        autoplay={{
+          delay: 3000,
+          disableOnInteraction: false,
+        }}
+        pagination={{
+          clickable: true,
+        }}
+        navigation={true}
+        modules={[Navigation, Pagination, Autoplay]}
+        className="mySwiper w-full"
+      >
+        {banner?.map((content, index) => (
+          <SwiperSlide key={index} className="">
+            <div className="carousel-content grid h-56 w-full grid-cols-1 overflow-hidden bg-foreground p-4 align-middle md:grid-cols-2 md:p-0 lg:h-96">
+              <div className="carousel-text flex flex-col items-start justify-center gap-0 text-background md:gap-6 md:pl-10 lg:pl-14">
                 <span className="brand-icon inline-flex items-center gap-3 md:gap-6">
                   <SiApple className="text-md md:text-base lg:text-xl" />
-                  <span className="text-xs md:text-base lg:text-lg font-light">
-                    {content.brandName}
+                  <span className="text-xs font-light md:text-base lg:text-lg">
+                    {content.title}
                   </span>
                 </span>
-                <h1 className="carousel-title text-2xl lg:text-5xl text-balance font-medium tracking-wide leading-[4.2rem]">
+                <h1 className="carousel-title text-balance text-2xl font-medium leading-[4.2rem] tracking-wide lg:text-5xl">
                   {content.title}
                 </h1>
                 <Link
                   to="/products"
-                  className="shop-now-link inline-flex items-center gap-1 text-background text-xs md:text-base lg:text-lg border-b border-background/25"
+                  className="shop-now-link inline-flex items-center gap-1 border-b border-background/25 text-xs text-background md:text-base lg:text-lg"
                 >
                   Shop Now <ArrowRight size={20} className="ml-2" />
                 </Link>
               </div>
-              <div className="carousel-image w-full flex items-center">
+              <div className="carousel-image flex w-full items-center">
                 <img
-                  src="/iphone-hero.png"
+                  src={content.image}
                   alt="Description"
-                  className="object-cover  opacity-50 md:opacity-100"
+                  className="-mt-14 w-full object-contain opacity-50 md:mt-0 md:h-[200px] md:opacity-100 lg:h-[300px]"
                 />
               </div>
             </div>
-
-            <div className="carousel-indicators absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex space-x-2">
-              {heroContent.map((_, btnIndex) => (
-                <button
-                  key={btnIndex}
-                  type="button"
-                  className={cn(
-                    "indicator-dot w-3 h-3 rounded-full",
-                    btnIndex === currentIndex ? "bg-white" : "bg-gray-400"
-                  )}
-                  aria-label={cn("Slide", btnIndex + 1)}
-                  onClick={() => setCurrentIndex(btnIndex)}
-                ></button>
-              ))}
-            </div>
-          </div>
+          </SwiperSlide>
         ))}
-      </div>
+      </Swiper>
     </div>
   );
 };

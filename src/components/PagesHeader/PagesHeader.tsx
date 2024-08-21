@@ -1,4 +1,4 @@
-import { FlashSaleTimer, NavigationArrows, Button } from "../../components";
+import { NavigationArrows, Button } from "../../components";
 import { Link } from "react-router-dom";
 import CountdownTimer from "../FlashSaleTimer/counttimer";
 
@@ -7,14 +7,12 @@ interface PagesHeaderProps {
   subHeading: string;
   Heading: string;
   cta?: string;
-  handleNext?: () => void;
 }
 
 const PagesHeader = ({
   flashTimer,
   subHeading,
   Heading,
-  handleNext = () => {},
   cta,
 }: PagesHeaderProps) => {
   const THREE_DAYS_IN_MS = 40000000;
@@ -39,8 +37,8 @@ const PagesHeader = ({
         </div>
         {!cta ? (
           <div className="page-navigations flex items-center gap-2">
-            <NavigationArrows direction="prev" onClick={() => {}} />
-            <NavigationArrows direction="next" onClick={handleNext} />
+            <NavigationArrows direction="prev" />
+            <NavigationArrows />
           </div>
         ) : (
           <Link to={`${cta}`} className="max-w-20 text-xs md:text-sm">
