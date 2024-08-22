@@ -23,6 +23,8 @@ import Contact from "../site/contact/contact";
 import About from "../site/about/about";
 import Singleproduct from "../components/singleProduct/singleproduct";
 import { ArrivalsPage } from "../pages";
+import AdminLayout from "../admin/Layout/Layout";
+import Dashboard from "../admin/screen/Dashboard/Dashboard";
 
 export const router = createBrowserRouter([
   {
@@ -60,7 +62,7 @@ export const router = createBrowserRouter([
       {
         path: "profile",
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute role="user">
             <ProfilePage />
           </ProtectedRoute>
         ),
@@ -100,6 +102,33 @@ export const router = createBrowserRouter([
       {
         path: "category/:categoryName/:categoryId",
         element: <FetchSingleCategory />,
+      },
+    ],
+  },
+
+  {
+    path: "/admin",
+    element: (
+      <ProtectedRoute role="admin">
+        <AdminLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        index: true,
+        element: <Dashboard />,
+      },
+      {
+        path: "products",
+        element: <div>products</div>,
+      },
+      {
+        path: "orders",
+        element: <div>orders</div>,
+      },
+      {
+        path: "users",
+        element: <div>users</div>,
       },
     ],
   },

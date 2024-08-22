@@ -7,6 +7,7 @@ import { GoogleSignInComponent } from "./GoogleSignIn";
 import { useAuthContext } from "../../context/useAuthContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import Cookies from "js-cookie";
 import { CgSpinner } from "react-icons/cg";
 
 const SignInPage = () => {
@@ -23,8 +24,15 @@ const SignInPage = () => {
   const onSubmit = async (data: LoginFormData) => {
     try {
       await login(data);
-      navigate("/profile");
-      toast.success("You are now logged in");
+      const user = JSON.parse(Cookies.get("user") || "{}");
+      console.log(user);
+      if (user.user.role === "admin") {
+        navigate("/admin");
+        toast.success("Welcome to the admin panel");
+      } else {
+        navigate("/profile");
+        toast.success("You are now logged in");
+      }
     } catch (error) {
       toast.error("Login failed");
     }
