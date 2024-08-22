@@ -13,6 +13,8 @@ import {
 import { useAuthContext } from "../../context/useAuthContext";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { queryClient } from "../../lib/reactQueryClient";
+import { useRecoilState } from "recoil";
+import { CartState, cartState } from "../../atoms/cartState";
 
 interface ProductCardProps {
   title: string;
@@ -50,6 +52,7 @@ const ProductCard = ({
   const { dimension } = useWindow();
   const { isLoggedIn } = useAuthContext();
   const { mutate: addToCart } = useAddToCart();
+  const [, setCart] = useRecoilState(cartState);
 
   const { data: favoritesData } = useQuery("favorites", fetchFavorites, {
     enabled: isLoggedIn,
@@ -96,6 +99,33 @@ const ProductCard = ({
     );
   };
 
+
+  const addToCartMutation = useMutation(addProductToCart, {
+    onSuccess: (data) => {
+      setCart((currentCart) => {
+        const productIndex = currentCart.findIndex((item) => item.id === id);
+        if (productIndex !== -1) {
+          toast.success(
+            `Your ${title} has been added to the cart ${
+              currentCart[productIndex].quantity + 1
+            } times`,
+          );
+          return currentCart.map((item, index) =>
+            index === productIndex
+              ? { ...item, quantity: item.quantity + 1 }
+              : item,
+          );
+        } else {
+          toast.success(`Your ${title} has been added to the cart`);
+          return [...currentCart, { title, price, image, id, quantity: 1 }];
+        }
+      });
+    },
+    onError: () => {
+      toast.error("Failed to add product to cart");
+    },
+  });
+
   const handleFavoriteClick = () => {
     if (!isLoggedIn) {
       toast.error("Please log in to add to favorites");
@@ -104,6 +134,9 @@ const ProductCard = ({
     isFavorite(id) ? handleRemoveFavorite() : handleAddFavorite();
   };
 
+  const handleAddToCart = () => {
+    addToCartMutation.mutate(id);
+  };
   return (
     <div className="w-full max-w-72">
       <div className="group relative h-32 w-full overflow-hidden rounded-b-md bg-card md:h-56">
@@ -142,7 +175,7 @@ const ProductCard = ({
           </Link>
         </div>
 
-        <div className="group cursor-pointer" onClick={() => addToCart(id)}>
+        <div className="group cursor-pointer" onClick={handleAddToCart}>
           <div className="absolute bottom-0 left-0 w-full bg-foreground opacity-0 transition-opacity duration-500 group-hover:opacity-100">
             <p className="py-2 text-center text-sm font-normal tracking-tight text-background">
               Add to Cart

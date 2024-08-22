@@ -13,11 +13,6 @@ interface FormData {
   phone: string;
 }
 
-interface UserDetail {
-  email: string;
-  phone: string;
-  name: string;
-}
 
 const updateUserDetails = async (data: FormData): Promise<void> => {
   await axios.post(
@@ -37,7 +32,7 @@ const ProfilePage = () => {
   const { logout } = useAuthContext();
   const queryClient = useQueryClient();
 
-  const { data: userdetail, isLoading } = useQuery<UserDetail>(
+  const { data: userdetail, isLoading } = useQuery(
     ["userDetail"],
     fetchUserDetails,
     {
