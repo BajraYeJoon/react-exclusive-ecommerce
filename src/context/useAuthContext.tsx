@@ -1,4 +1,3 @@
-/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
@@ -15,8 +14,6 @@ interface SignupProps {
   password: string;
   phoneNumber: string;
 }
-
-
 
 interface SignupResponse {
   status: number;
@@ -40,6 +37,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
   const [isLoading, setIsLoading] = useState(false);
 
+  const fetchUserDetails = async (token: string) => {
+    try {
+      const response = await axios.get(
+        "https://nest-ecommerce-1fqk.onrender.com/profile",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      const userDetails = response.data;
+      Cookies.set("user", JSON.stringify(userDetails), { expires: 7 });
+    } catch (error) {
+      console.error("Failed to fetch user details", error);
+    }
+  };
+
   const login = async ({ name, password }: LoginProps) => {
     setIsLoading(true);
 
@@ -53,7 +67,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       );
       const data = response.data;
       Cookies.set("token", data.token, { expires: 7 });
-      console.log(data);
+
+      await fetchUserDetails(data.token);
       setIsLoggedIn(true);
     } catch (error) {
       console.error("Login failed", error);
@@ -80,6 +95,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         },
       );
       if (response.status === 201) {
+        Cookies.set("token", response.data.token, { expires: 7 });
+
+        await fetchUserDetails(response.data.token);
         setIsLoggedIn(true);
 
         toast.success("Signup successful");
@@ -99,6 +117,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setIsLoggedIn(false);
     toast.success("You are now logged out");
     Cookies.remove("token");
+    Cookies.remove("user");
   };
 
   return (
