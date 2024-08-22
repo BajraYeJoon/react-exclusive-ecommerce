@@ -32,7 +32,9 @@ export const useAddToCart = () => {
       console.log("Added to cart");
     },
     onError: (error) => {
-      toast.error("Failed to add product to cart");
+      toast.error("Please login to add to Cart", {
+        className: "bg-red-500",
+      });
       console.error("Error adding to cart:", error);
     },
   });

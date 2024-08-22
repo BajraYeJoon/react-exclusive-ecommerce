@@ -16,7 +16,7 @@ const Carousel = () => {
   const { data: bannerData, isLoading } = useQuery("banner", fetchHeroBanner);
 
   if (isLoading) {
-    return <Skeleton className="h-full w-full rounded-xl" />;
+    return <Skeleton className="h-full w-full rounded-xl bg-red-500" />;
   }
 
   const banner = bannerData[0].products;
@@ -60,7 +60,7 @@ const Carousel = () => {
               </div>
               <div className="carousel-image flex w-full items-center">
                 <img
-                  src={content.image}
+                  src={content.image[0]}
                   alt="Description"
                   className="-mt-14 w-full object-contain opacity-50 md:mt-0 md:h-[200px] md:opacity-100 lg:h-[300px]"
                 />

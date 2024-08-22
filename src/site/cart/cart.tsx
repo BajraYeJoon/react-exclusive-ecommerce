@@ -8,6 +8,8 @@ import { checkoutState } from "../../atoms/checkoutState";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { deleteAllCartItems, fetchCart } from "../../api/fetch";
+import { useQuery } from "react-query";
+import { queryClient } from "../../lib/reactQueryClient";
 
 const cartHeaderData = [
   { label: "Price" },
@@ -28,12 +30,17 @@ const Cart = () => {
   const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(0);
 
+  const { data } = useQuery("cart", fetchCart, {
+    onSuccess: (data) => {
+      setCartItems(data);
+    },
+  });
+
   useEffect(() => {
-    (async () => {
-      const cart = await fetchCart();
-      setCartItems(cart);
-    })();
-  }, []);
+    if (data) {
+      setCartItems(data.data);
+    }
+  }, [data]);
 
   console.log(cartItems, "caaaaaart");
 
@@ -51,9 +58,15 @@ const Cart = () => {
     navigate("/checkout");
   };
 
+  // const updateCartMutation = useMutation(updateCartItem, {
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries("cart");
+  //   },
+  // });
+
   const increaseQuantity = (id: number) => {
     const newCartvalue = cartItems.map((cart) => {
-      if (cart.id === id) {
+      if (cart.product.id === id) {
         return { ...cart, quantity: cart.quantity + 1 };
       }
       return cart;
@@ -61,15 +74,27 @@ const Cart = () => {
     setCartItems(newCartvalue);
   };
 
+  // const increaseQuantity = (id: number) => {
+  //   const newCartValue = cartItems.map((item) => {
+  //     if (item.product.product.id === id) {
+  //       return { ...item, quantity: item.product.quantity + 1 };
+  //     }
+  //     return item;
+  //   });
+  //   setCartItems(newCartValue);
+  // };
+
   const decreaseQuantity = (id: number) => {
     let itemremoved = false;
 
     const newCartValue = cartItems
       .map((cart) => {
-        if (cart.id === id) {
+        if (cart.product.id === id) {
           if (cart.quantity === 1 && !itemremoved) {
             itemremoved = true;
-            toast.error(`Your ${cart.title} has been removed from the cart`);
+            toast.error(
+              `Your ${cart.product.title} has been removed from the cart`,
+            );
           }
           return { ...cart, quantity: cart.quantity - 1 };
         }
@@ -84,9 +109,32 @@ const Cart = () => {
     setCartItems(newCartValue);
   };
 
+  // const decreaseQuantity = (id: number) => {
+  //   let itemRemoved = false;
+  //   const updatedCartItems = cartItems
+  //     .map((item) => {
+  //       if (item.product.product.id === id) {
+  //         if (item.product.quantity === 1 && !itemRemoved) {
+  //           itemRemoved = true;
+  //           toast.error(`Your ${item.product.product.title} has been removed from the cart`);
+  //         }
+  //         const updatedItem = { ...item, quantity: item.product.quantity - 1 };
+  //         updateCartMutation.mutate(updatedItem);
+  //         return updatedItem;
+  //       }
+  //       return item;
+  //     })
+  //     .filter((item) => item.product.quantity > 0);
+
+  //   if (updatedCartItems.length === 0) {
+  //     toast.error("Your cart is empty now");
+  //   }
+  // };
+
   const clearCart = async () => {
     await deleteAllCartItems();
     // setCartItems([]);
+    queryClient.invalidateQueries("cart");
     toast.success("All items have been removed from the cart");
   };
   const handleCouponChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,12 +154,14 @@ const Cart = () => {
   const calculateTotal = selector({
     key: "CalculateTotal",
     get: ({ get }) => {
-      const cartItems = get(cartState);
+      const cartItems = get(cartState) || [];
       const discount = get(discountState);
 
-      const subTotal = cartItems.reduce((acc, item) => {
-        return acc + item.price * item.quantity;
-      }, 0);
+      const subTotal = Array.isArray(cartItems)
+        ? cartItems.reduce((acc, item) => {
+            return acc + item.product.price * item.quantity;
+          }, 0)
+        : 0;
 
       const charge = 45;
       const discountAmount = subTotal * discount;
@@ -125,7 +175,7 @@ const Cart = () => {
 
   const total = useRecoilValue(calculateTotal);
 
-  if (cartItems.length === 0) {
+  if (cartItems.length && cartItems.length === 0) {
     return (
       <>
         <h1 className="flex flex-col text-3xl font-semibold text-gray-400">
@@ -167,42 +217,45 @@ const Cart = () => {
 
       <div className="border-b-2 md:my-4">
         {cartItems.map((item) => (
-          <div key={item.id} className="grid grid-cols-3 gap-6 md:grid-cols-2">
+          <div
+            key={item.product.id}
+            className="grid grid-cols-3 gap-6 md:grid-cols-2"
+          >
             <div className="col-span-2 flex w-full items-center gap-3 md:col-span-1">
               <img
-                src={item.image}
-                alt={item.title}
+                src={item.product.image[0]}
+                alt={item.product.title}
                 className="h-16 w-16 rounded-md"
               />
               <h5 className="text-sm font-medium text-black md:text-base">
-                {item.title}
+                {item.product.title}
               </h5>
             </div>
             <div className="flex w-fit flex-col items-center justify-around gap-2 sm:flex-row md:w-full">
               <h6 className="text-center text-sm font-medium leading-9 text-foreground md:text-base">
-                {item.price}{" "}
+                {item.product.price}{" "}
               </h6>
               <div className="flex items-center justify-center rounded-md border p-1">
                 {/* <input
                   type="text"
                   className="max-w-12 px-4"
-                  placeholder={item.quantity.toString()}
+                  placeholder={item.product.quantity.toString()}
                 /> */}
                 <div className="flex flex-col items-center justify-center">
                   <ChevronUp
                     size={14}
                     className="cursor-pointer"
-                    onClick={() => increaseQuantity(item.id)}
+                    onClick={() => increaseQuantity(item.product.id)}
                   />
                   <ChevronDown
                     size={14}
                     className="cursor-pointer"
-                    onClick={() => decreaseQuantity(item.id)}
+                    onClick={() => decreaseQuantity(item.product.id)}
                   />
                 </div>
               </div>
               <h6 className="text-center text-sm font-medium leading-9 md:text-lg">
-                {item.price * item.quantity}
+                {item.product.price * item.quantity}
               </h6>
             </div>
           </div>

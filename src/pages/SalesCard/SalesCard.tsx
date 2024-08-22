@@ -28,7 +28,7 @@ const SalesCard = () => {
     isLoading,
   } = useQuery(["products"], fetchSalesProduct, {
     select: (products) => products.slice(0, 7),
-    staleTime: 10000,
+    staleTime: 600000,
   });
 
   if (isLoading) return <Loading />;
@@ -48,6 +48,23 @@ const SalesCard = () => {
         </div>
       </div>
     );
+
+    if (!products || products.length === 0)
+      return (
+        <div className="bg-gradient-to-r from-blue-700 to-[#B06AB3] px-6 py-12 font-sans">
+          <div className="container mx-auto flex flex-col items-center justify-center text-center">
+            <h2 className="mb-4 text-3xl font-bold text-white sm:text-4xl">
+              Discover Our New Collection
+            </h2>
+            <p className="mb-8 text-center text-base text-white">
+              Elevate your style with our latest arrivals. Shop now and enjoy
+              exclusive discounts!
+            </p>
+
+            <Button>Explore More</Button>
+          </div>
+        </div>
+      );
 
   return (
     <section className="sales-card-container flex flex-col gap-5 border-b border-foreground/30 pb-8 md:gap-7 md:pb-14">
