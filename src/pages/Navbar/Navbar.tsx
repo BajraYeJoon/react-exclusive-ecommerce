@@ -116,7 +116,7 @@ const Navbar = () => {
     return <div>Error</div>;
   }
 
-  const cartquantity = cart?.data ?? [];
+  const cartquantity = cart?.data.length ?? [];
   console.log(cartquantity.length);
   // const cartquantity = cart?.data?.length || [];
 

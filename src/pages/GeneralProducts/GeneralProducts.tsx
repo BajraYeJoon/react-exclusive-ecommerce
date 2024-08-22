@@ -18,11 +18,6 @@ const GeneralProducts = () => {
   });
 
   if (isLoading) return <Loading />;
-  // if (error)
-  //   return <div>error from general products: {(error as Error).message}</div>;
-
-  console.log(generalProducts, "generalProducts");
-  console.log("hi thrererererererer");
 
   return (
     <section className="general-products-container flex flex-col gap-10 lg:gap-20">

@@ -25,7 +25,9 @@ const Hero = () => {
                 <Skeleton className="h-6 w-full rounded-md" />
               ) : (
                 <div className="flex items-center justify-between">
-                  <Link to={"/products"}>{category.name}</Link>
+                  <Link to={`/category/${category.name}/${category.id}`}>
+                    {category.name}
+                  </Link>
 
                   {category.subcategories && <ChevronRight />}
                 </div>

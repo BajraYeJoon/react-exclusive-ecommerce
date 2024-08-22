@@ -6,6 +6,7 @@ import { useAuthContext } from "../context/useAuthContext";
 import Cookies from "js-cookie";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { fetchUserDetails } from "../api/fetch";
+import { Loading } from "./layout/Layout";
 
 interface FormData {
   name: string;
@@ -64,7 +65,7 @@ const ProfilePage = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return (
