@@ -22,7 +22,7 @@ const AllProducts = () => {
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>An error occurred: {(error as Error).message}</div>;
 
-  const products = allproducts.data;
+  const products = allproducts;
   console.log(products);
   // const images = allproducts.images;
 
