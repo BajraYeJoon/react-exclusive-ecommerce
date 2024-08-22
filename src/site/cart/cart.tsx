@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { deleteAllCartItems, fetchCart } from "../../api/fetch";
 import { useQuery } from "react-query";
 import { queryClient } from "../../lib/reactQueryClient";
+import { cn } from "../../lib/utils";
 
 const cartHeaderData = [
   { label: "Price" },
@@ -30,11 +31,7 @@ const Cart = () => {
   const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(0);
 
-  const { data } = useQuery("cart", fetchCart, {
-    onSuccess: (data) => {
-      setCartItems(data);
-    },
-  });
+  const { data } = useQuery("cart", fetchCart);
 
   useEffect(() => {
     if (data) {
@@ -58,40 +55,27 @@ const Cart = () => {
     navigate("/checkout");
   };
 
-  // const updateCartMutation = useMutation(updateCartItem, {
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries("cart");
-  //   },
-  // });
-
   const increaseQuantity = (id: number) => {
-    const newCartvalue = cartItems.map((cart) => {
+    const newCartValue = cartItems.map((cart) => {
       if (cart.product.id === id) {
-        return { ...cart, quantity: cart.quantity + 1 };
+        if (cart.quantity < cart.product.availableQuantity) {
+          return { ...cart, quantity: cart.quantity + 1 };
+        } else {
+          toast.error("Maximum available quantity reached");
+        }
       }
       return cart;
     });
-    setCartItems(newCartvalue);
+    setCartItems(newCartValue);
   };
-
-  // const increaseQuantity = (id: number) => {
-  //   const newCartValue = cartItems.map((item) => {
-  //     if (item.product.product.id === id) {
-  //       return { ...item, quantity: item.product.quantity + 1 };
-  //     }
-  //     return item;
-  //   });
-  //   setCartItems(newCartValue);
-  // };
-
   const decreaseQuantity = (id: number) => {
-    let itemremoved = false;
+    let itemRemoved = false;
 
     const newCartValue = cartItems
       .map((cart) => {
         if (cart.product.id === id) {
-          if (cart.quantity === 1 && !itemremoved) {
-            itemremoved = true;
+          if (cart.quantity === 1 && !itemRemoved) {
+            itemRemoved = true;
             toast.error(
               `Your ${cart.product.title} has been removed from the cart`,
             );
@@ -109,34 +93,12 @@ const Cart = () => {
     setCartItems(newCartValue);
   };
 
-  // const decreaseQuantity = (id: number) => {
-  //   let itemRemoved = false;
-  //   const updatedCartItems = cartItems
-  //     .map((item) => {
-  //       if (item.product.product.id === id) {
-  //         if (item.product.quantity === 1 && !itemRemoved) {
-  //           itemRemoved = true;
-  //           toast.error(`Your ${item.product.product.title} has been removed from the cart`);
-  //         }
-  //         const updatedItem = { ...item, quantity: item.product.quantity - 1 };
-  //         updateCartMutation.mutate(updatedItem);
-  //         return updatedItem;
-  //       }
-  //       return item;
-  //     })
-  //     .filter((item) => item.product.quantity > 0);
-
-  //   if (updatedCartItems.length === 0) {
-  //     toast.error("Your cart is empty now");
-  //   }
-  // };
-
   const clearCart = async () => {
     await deleteAllCartItems();
-    // setCartItems([]);
     queryClient.invalidateQueries("cart");
     toast.success("All items have been removed from the cart");
   };
+
   const handleCouponChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const code = e.target.value;
     setCouponCode(code);
@@ -151,6 +113,7 @@ const Cart = () => {
       toast.error("Invalid coupon code");
     }
   };
+
   const calculateTotal = selector({
     key: "CalculateTotal",
     get: ({ get }) => {
@@ -159,7 +122,14 @@ const Cart = () => {
 
       const subTotal = Array.isArray(cartItems)
         ? cartItems.reduce((acc, item) => {
-            return acc + item.product.price * item.quantity;
+            if (
+              item &&
+              item.product &&
+              typeof item.product.price === "number"
+            ) {
+              return acc + item.product.price * item.quantity;
+            }
+            return acc;
           }, 0)
         : 0;
 
@@ -175,16 +145,16 @@ const Cart = () => {
 
   const total = useRecoilValue(calculateTotal);
 
-  if (cartItems.length && cartItems.length === 0) {
+  if (!cartItems || cartItems.length === 0) {
     return (
-      <>
+      <div className="flex h-[50vh] flex-col items-center justify-center gap-4 lg:h-[90vh]">
         <h1 className="flex flex-col text-3xl font-semibold text-gray-400">
           No items in cart
         </h1>
-        <Link to={"/products"} className="underline">
-          Add some products from here....
+        <Link to="/products" className="underline">
+          Add some products from here...
         </Link>
-      </>
+      </div>
     );
   }
 
@@ -236,17 +206,22 @@ const Cart = () => {
                 {item.product.price}{" "}
               </h6>
               <div className="flex items-center justify-center rounded-md border p-1">
-                {/* <input
+                <input
                   type="text"
                   className="max-w-12 px-4"
-                  placeholder={item.product.quantity.toString()}
-                /> */}
+                  placeholder={item.quantity.toString()}
+                />
                 <div className="flex flex-col items-center justify-center">
                   <ChevronUp
                     size={14}
-                    className="cursor-pointer"
+                    className={cn(
+                      "cursor-pointer",
+                      item.quantity === item.product.availableQuantity &&
+                        "cursor-not-allowed",
+                    )}
                     onClick={() => increaseQuantity(item.product.id)}
                   />
+
                   <ChevronDown
                     size={14}
                     className="cursor-pointer"
@@ -255,7 +230,7 @@ const Cart = () => {
                 </div>
               </div>
               <h6 className="text-center text-sm font-medium leading-9 md:text-lg">
-                {item.product.price * item.quantity}
+                {(item.product.price * item.quantity).toFixed(2)}
               </h6>
             </div>
           </div>
