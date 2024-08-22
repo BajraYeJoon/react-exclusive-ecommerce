@@ -1,42 +1,32 @@
 import { Link, useParams } from "react-router-dom";
 import { userRows } from "../../lib/data";
-import { Button, Label, TextInput } from "flowbite-react";
 const UserDetail = () => {
   const { id } = useParams();
 
   const user = userRows.find((user) => user.id === Number(id));
 
   return (
-    <div className="bg-white rounded-lg p-4 max-h-md flex flex-col flex-[4] space-y-5">
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-normal">Edit User</h2>
-        <Link to="/newUser">
-          <button className="px-4 py-2 bg-green-400 rounded-lg text-white hover:bg-green-500">
-            Create
-          </button>
-        </Link>
-      </div>
-
+    <div className="max-h-md flex flex-col space-y-5 rounded-lg bg-white p-4">
       <div className="flex flex-1 items-start gap-8">
-        <div className="max-w-2xl  sm:max-w-sm md:max-w-sm lg:max-w-sm xl:max-w-sm sm:mx-auto md:mx-auto lg:mx-auto xl:mx-auto  bg-white shadow-xl rounded-lg text-gray-900">
-          <div className="rounded-t-lg h-32 overflow-hidden">
+        <div className="max-w-2xl rounded-lg bg-white text-gray-900 shadow-xl sm:mx-auto sm:max-w-sm md:mx-auto md:max-w-sm lg:mx-auto lg:max-w-sm xl:mx-auto xl:max-w-sm">
+          <div className="h-32 overflow-hidden rounded-t-lg">
             <img
-              className="object-cover object-top w-full"
+              className="w-full object-cover object-top"
               src="https://images.unsplash.com/photo-1549880338-65ddcdfd017b?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NTg5fQ"
               alt="Mountain"
             />
           </div>
-          <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white rounded-full overflow-hidden">
+          <div className="relative mx-auto -mt-16 h-32 w-32 overflow-hidden rounded-full border-4 border-white">
             <img
-              className="object-cover object-center h-32"
+              className="h-32 object-cover object-center"
               src={user?.avatar}
             />
           </div>
-          <div className="text-center mt-2">
+          <div className="mt-2 text-center">
             <h2 className="font-semibold">{user?.username}</h2>
             <p className="text-gray-500">{user?.email}</p>
           </div>
-          <ul className="py-4 mt-2 text-gray-700 flex items-center justify-around">
+          <ul className="mt-2 flex items-center justify-around py-4 text-gray-700">
             <li className="flex flex-col items-center justify-between">
               <svg
                 className="w-4 fill-current text-blue-900"
@@ -58,57 +48,11 @@ const UserDetail = () => {
               <div>{user?.transaction}</div>
             </li>
           </ul>
-          <div className="p-4 border-t mx-8 mt-2">
-            <button className="w-1/2 block mx-auto rounded-full bg-gray-900 hover:shadow-lg font-semibold text-white px-6 py-2">
+          <div className="mx-8 mt-2 border-t p-4">
+            <button className="mx-auto block w-1/2 rounded-full bg-gray-900 px-6 py-2 font-semibold text-white hover:shadow-lg">
               Message
             </button>
           </div>
-        </div>
-
-        <div className="flex flex-col flex-[4] ">
-          <h3 className="text-base font-light mb-4">Edit</h3>
-          <form className="flex max-w-md flex-col gap-4">
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="email1" value="email" />
-              </div>
-              <TextInput
-                id="email1"
-                type="email"
-                placeholder="name@flowbite.com"
-                required
-              />
-            </div>
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="name" value="Name" />
-              </div>
-              <TextInput
-                id="name"
-                type="text"
-                placeholder="John Doe"
-                required
-              />
-            </div>
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="email1" value="Address" />
-              </div>
-              <TextInput id="email1" type="text" placeholder="Nepal" required />
-            </div>
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="email1" value="Phone Number" />
-              </div>
-              <TextInput
-                id="email1"
-                type="number"
-                placeholder="+977 9860756619"
-                required
-              />
-            </div>
-            <Button type="submit">Update</Button>
-          </form>
         </div>
       </div>
     </div>

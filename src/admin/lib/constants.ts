@@ -1,20 +1,25 @@
+import { Users2 } from "lucide-react";
+import { CiMoneyBill } from "react-icons/ci";
+import { GrBasket } from "react-icons/gr";
+
 export const ANALYTIC_CARD_INFO = [
   {
-    icon: "/revenue.svg",
+    icon: Users2,
+    label: "Users",
+    value: "1500",
+    generatedValue: "1500",
+  },
+  {
+    icon: GrBasket,
+    label: "Products",
+    value: "300",
+    generatedValue: "300",
+  },
+
+  {
+    icon: CiMoneyBill,
     label: "Revenue",
-    value: "1.1",
-    generatedValue: "100",
-  },
-  {
-    icon: "/sales.svg",
-    label: "Sales",
-    value: "1.4",
-    generatedValue: "1088",
-  },
-  {
-    icon: "/cost.svg",
-    label: "Cost",
-    value: "4.2",
-    generatedValue: "4020",
+    value: "1.1M",
+    generatedValue: "1100000",
   },
 ];
