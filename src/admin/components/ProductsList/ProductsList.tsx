@@ -21,6 +21,13 @@ import {
 } from "../../../components/ui/table";
 import { fetchAllProducts } from "../../../api/productApi";
 import { Loading } from "../../../site";
+import { Button } from "../../../components";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTrigger,
+} from "../../../components/ui/dialog";
 
 export default function ProductsList() {
   const { data: products, isLoading } = useQuery("products", fetchAllProducts);
@@ -86,6 +93,14 @@ export default function ProductsList() {
 
   return (
     <div className="flex flex-col gap-2">
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button>Add new Product</Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>hi there</DialogHeader>
+        </DialogContent>
+      </Dialog>
       <Table>
         <TableCaption>A list of your recent invoices.</TableCaption>
         <TableHeader>
