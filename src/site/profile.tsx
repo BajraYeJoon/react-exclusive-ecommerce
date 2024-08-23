@@ -5,7 +5,7 @@ import { Button } from "../components";
 import { useAuthContext } from "../context/useAuthContext";
 import Cookies from "js-cookie";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { fetchUserDetails } from "../api/fetch";
+import { fetchUserDetails } from "../api/userApi";
 import { Loading } from "./layout/Layout";
 
 interface FormData {

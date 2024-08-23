@@ -5,7 +5,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import { useQuery } from "react-query";
-import { fetchAllProducts } from "../../api/fetch";
+import { fetchAllProducts } from "../../api/productApi";
 import { Loading } from "../../site";
 const GeneralProducts = () => {
   const {

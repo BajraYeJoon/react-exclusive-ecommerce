@@ -6,7 +6,7 @@ import { NavLink, Link } from "react-router-dom";
 import { navLinks } from "../../constants/data";
 import { RxCross2 } from "react-icons/rx";
 import { useAuthContext } from "../../context/useAuthContext";
-import { fetchProductsBySearch } from "../../api/fetch";
+import { fetchProductsBySearch } from "../../api/productApi";
 import { Input } from "../../components/ui/input";
 import axios from "axios";
 import { useQuery } from "react-query";

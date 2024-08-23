@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import ProductCard from "../ProductCard/ProductCard";
 import CustomBreakcrumb from "../CustomBreakcrumb/CustomBreakcrumb";
-import { deleteAllFavorites, fetchFavorites } from "../../api/fetch";
+import { deleteAllFavorites, fetchFavorites } from "../../api/wishlistApi";
 import { Button } from "../ui/button";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "sonner";

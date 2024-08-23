@@ -1,7 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import { SiApple } from "react-icons/si";
 import { Link } from "react-router-dom";
-import { fetchHeroBanner } from "../../api/fetch";
+import { fetchHeroBanner } from "../../api/bannerApi";
 import { useQuery } from "react-query";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";

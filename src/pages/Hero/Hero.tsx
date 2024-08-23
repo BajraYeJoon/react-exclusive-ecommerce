@@ -3,8 +3,8 @@ import { ChevronRight } from "lucide-react";
 // import { heroCategories } from "../../constants/data";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
-import { fetchCategories } from "../../api/fetch";
 import { Skeleton } from "../../components/ui/skeleton";
+import { fetchCategories } from "../../api/categoryApi";
 
 const Hero = () => {
   const { data: heroCategoriesData, isLoading } = useQuery(

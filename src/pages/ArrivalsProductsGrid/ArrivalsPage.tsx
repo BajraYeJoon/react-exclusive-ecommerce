@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { fetchNewArrivals } from "../../api/fetch";
+import { fetchNewArrivals } from "../../api/productApi";
 import { ProductCard } from "../../components";
 import { useQuery } from "react-query";
 import { Loading } from "../../site";
@@ -36,7 +35,7 @@ const ArrivalsPage = () => {
   return (
     <section className="mx-72 mb-28 gap-40 max-2xl:mx-6 max-2xl:gap-28">
       <div className="product-card-container flex w-full flex-wrap items-center justify-between gap-4 overflow-hidden">
-        {newArrivals ? (
+        {!newArrivals ? (
           <div>No products Found</div>
         ) : (
           <>

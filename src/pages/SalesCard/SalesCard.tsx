@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 import { PagesHeader, ProductCard, Button } from "../../components";
-import { fetchSalesProduct } from "../../api/fetch";
+import { fetchSalesProduct } from "../../api/productApi";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";

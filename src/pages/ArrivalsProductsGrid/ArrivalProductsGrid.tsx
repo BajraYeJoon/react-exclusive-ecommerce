@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { fetchNewArrivals } from "../../api/fetch";
+import { fetchNewArrivals } from "../../api/productApi";
 import { Button, PagesHeader } from "../../components";
 import { NewArrivalsProductProps } from "./ArrivalsPage";
 import { useQuery } from "react-query";
@@ -49,24 +48,21 @@ const ArrivalProductsGrid = () => {
         Heading="New Arrivals"
         cta="/new-arrivals"
       />
-
-      <div className="grid h-[500px] grid-cols-2 grid-rows-2 gap-4 md:h-[400px] md:grid-cols-4 lg:h-[600px]">
-        {products ? (
-          <div>No products Found</div>
-        ) : (
-          <>
-            {products &&
-              products.map((product, index) => (
-                <GridItem
-                  key={product.id}
-                  product={product}
-                  index={index}
-                  additionalClasses={additionalClasses[index] || ""}
-                />
-              ))}
-          </>
-        )}
-      </div>
+      {!products ? (
+        <div>No products Found</div>
+      ) : (
+        <div className="grid h-[500px] grid-cols-2 grid-rows-2 gap-4 md:h-[400px] md:grid-cols-4 lg:h-[600px]">
+          {products &&
+            products.map((product, index) => (
+              <GridItem
+                key={product.id}
+                product={product}
+                index={index}
+                additionalClasses={additionalClasses[index] || ""}
+              />
+            ))}
+        </div>
+      )}
     </section>
   );
 };

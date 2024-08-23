@@ -6,10 +6,10 @@ import { FaStar } from "react-icons/fa";
 import useWindow from "../../lib/useWindow";
 import {
   addFavorites,
-  addProductToCart,
   deleteFavorites,
   fetchFavorites,
-} from "../../api/fetch";
+} from "../../api/wishlistApi";
+import { addProductToCart } from "../../api/cartApi";
 import { useAuthContext } from "../../context/useAuthContext";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { queryClient } from "../../lib/reactQueryClient";

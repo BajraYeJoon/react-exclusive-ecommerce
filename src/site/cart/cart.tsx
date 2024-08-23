@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { checkoutState } from "../../atoms/checkoutState";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
-import { deleteAllCartItems, fetchCart } from "../../api/fetch";
+import { deleteAllCartItems, fetchCart } from "../../api/cartApi";
 import { useQuery } from "react-query";
 import { queryClient } from "../../lib/reactQueryClient";
 import { cn } from "../../lib/utils";

@@ -5,7 +5,7 @@ import { CgGlobeAlt } from "react-icons/cg";
 import { FcCancel } from "react-icons/fc";
 import { useParams } from "react-router-dom";
 import { Suspense, useEffect, useState } from "react";
-import { fetchProductDetails } from "../../api/fetch";
+import { fetchProductDetails } from "../../api/productApi";
 import { cn } from "../../lib/utils";
 import { BiStar } from "react-icons/bi";
 import useCart from "../../hooks/useCart";

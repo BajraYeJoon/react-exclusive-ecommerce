@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import { fetchAllProducts } from "../../api/fetch";
+import { fetchAllProducts } from "../../api/productApi";
 import ProductCard from "../ProductCard/ProductCard";
 
 interface ProductType {

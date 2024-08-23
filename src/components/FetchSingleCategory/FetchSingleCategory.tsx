@@ -1,7 +1,8 @@
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
-import { fetchProductByCategory } from "../../api/fetch";
+import { fetchProductByCategory } from "../../api/categoryApi";
 import ProductCard from "../ProductCard/ProductCard";
+import { Loading } from "../../site";
 const FetchSingleCategory = () => {
   const { categoryId } = useParams();
 
@@ -14,7 +15,7 @@ const FetchSingleCategory = () => {
   );
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
   if (error) {
     return <div>Error: {(error as Error).message}</div>;

@@ -7,14 +7,16 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import { useQuery } from "react-query";
-import { fetchBestSellingProducts } from "../../api/fetch";
+import { fetchBestSellingProducts } from "../../api/productApi";
 import { Loading } from "../../site";
 
 const BestProducts = () => {
-  
-  const { data: bestSellingProducts, isLoading } = useQuery("bestSellingProducts", fetchBestSellingProducts)
+  const { data: bestSellingProducts, isLoading } = useQuery(
+    "bestSellingProducts",
+    fetchBestSellingProducts,
+  );
 
-  if(isLoading) return <Loading />
+  if (isLoading) return <Loading />;
 
   return (
     <section className="flex flex-col gap-20 max-2xl:gap-10">
@@ -50,11 +52,12 @@ const BestProducts = () => {
           },
         }}
       >
-        {bestSellingProducts.map((bestProductCard, index) => (
-          <SwiperSlide key={index} className="">
-            <ProductCard key={index} {...bestProductCard} />
-          </SwiperSlide>
-        ))}
+        {bestSellingProducts &&
+          bestSellingProducts.map((bestProductCard, index) => (
+            <SwiperSlide key={index} className="">
+              <ProductCard key={index} {...bestProductCard} />
+            </SwiperSlide>
+          ))}
       </Swiper>
     </section>
   );
