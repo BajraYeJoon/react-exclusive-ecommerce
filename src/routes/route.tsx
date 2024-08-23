@@ -26,6 +26,7 @@ import { ArrivalsPage } from "../pages";
 import AdminLayout from "../admin/Layout/Layout";
 import Dashboard from "../admin/screen/Dashboard/Dashboard";
 import UserList from "../admin/components/UserList/UserList";
+import ProductsList from "../admin/components/ProductsList/ProductsList";
 
 export const router = createBrowserRouter([
   {
@@ -121,7 +122,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "products",
-        element: <div>products</div>,
+        element: <ProductsList />,
       },
       {
         path: "orders",
