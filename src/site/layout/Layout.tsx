@@ -5,7 +5,7 @@ import { LoaderCircle } from "lucide-react";
 
 export const Loading = () => {
   return (
-    <div role="status" className="flex h-screen items-center justify-center">
+    <div role="status" className="flex h-fit items-center justify-center">
       <LoaderCircle className="h-12 w-12 animate-spin text-primary" />
       <span className="sr-only">Loading...</span>
     </div>

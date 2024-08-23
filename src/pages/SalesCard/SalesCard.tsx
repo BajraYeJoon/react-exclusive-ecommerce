@@ -24,47 +24,30 @@ interface SalesCardProps {
 const SalesCard = () => {
   const {
     data: products,
-    error,
+
     isLoading,
-  } = useQuery(["products"], fetchSalesProduct, {
+  } = useQuery(["sale"], fetchSalesProduct, {
     select: (products) => products.slice(0, 7),
-    staleTime: 600000,
+    refetchOnWindowFocus: false,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    cacheTime: 10 * 60 * 1000, // 10 minutes
   });
 
   if (isLoading) return <Loading />;
-  if (error)
+
+  if (!products || products.length === 0)
     return (
-      <div className="bg-gradient-to-r from-blue-700 to-[#B06AB3] px-6 py-12 font-sans">
+      <div className="px-6 py-12 font-sans">
         <div className="container mx-auto flex flex-col items-center justify-center text-center">
-          <h2 className="mb-4 text-3xl font-bold text-white sm:text-4xl">
-            Discover Our New Collection
-          </h2>
-          <p className="mb-8 text-center text-base text-white">
-            Elevate your style with our latest arrivals. Shop now and enjoy
-            exclusive discounts!
+          <h2 className="mb-4 text-3xl font-bold sm:text-4xl">Stay tuned</h2>
+          <p className="mb-8 text-center text-base">
+            We're working on adding more SALE to our store. Stay tuned!
           </p>
 
           <Button>Explore More</Button>
         </div>
       </div>
     );
-
-    if (!products || products.length === 0)
-      return (
-        <div className="bg-gradient-to-r from-blue-700 to-[#B06AB3] px-6 py-12 font-sans">
-          <div className="container mx-auto flex flex-col items-center justify-center text-center">
-            <h2 className="mb-4 text-3xl font-bold text-white sm:text-4xl">
-              Discover Our New Collection
-            </h2>
-            <p className="mb-8 text-center text-base text-white">
-              Elevate your style with our latest arrivals. Shop now and enjoy
-              exclusive discounts!
-            </p>
-
-            <Button>Explore More</Button>
-          </div>
-        </div>
-      );
 
   return (
     <section className="sales-card-container flex flex-col gap-5 border-b border-foreground/30 pb-8 md:gap-7 md:pb-14">
@@ -82,7 +65,6 @@ const SalesCard = () => {
           className="mySwiper"
           modules={[Navigation]}
           navigation={{
-            enabled: true,
             nextEl: ".arrow-right",
             prevEl: ".arrow-left",
           }}
@@ -102,11 +84,12 @@ const SalesCard = () => {
           }}
           // onNavigationNext={handleNext}
         >
-          {products.map((productCard: SalesCardProps, index: number) => (
-            <SwiperSlide key={index} className="">
-              <ProductCard {...productCard} discountTag />
-            </SwiperSlide>
-          ))}
+          {products &&
+            products.map((productCard: SalesCardProps, index: number) => (
+              <SwiperSlide key={index} className="">
+                <ProductCard {...productCard} discountTag />
+              </SwiperSlide>
+            ))}
         </Swiper>
       </div>
 

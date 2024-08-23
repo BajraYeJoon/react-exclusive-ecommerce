@@ -14,7 +14,9 @@ const GeneralProducts = () => {
     isLoading,
   } = useQuery(["generalProducts"], fetchAllProducts, {
     select: (generalProducts) => generalProducts.slice(0, 8),
-    staleTime: 10000,
+    refetchOnWindowFocus: false,
+    staleTime: 5 * 60 * 1000,
+    cacheTime: 5 * 60 * 1000,
   });
 
   if (isLoading) return <Loading />;
@@ -52,11 +54,17 @@ const GeneralProducts = () => {
 
           // onNavigationNext={handleNext}
         >
-          {generalProducts.map((gproduct, index) => (
-            <SwiperSlide key={index} className="">
-              <ProductCard key={index} {...gproduct} />
-            </SwiperSlide>
-          ))}
+          {generalProducts ? (
+            <>
+              {generalProducts.map((gproduct, index) => (
+                <SwiperSlide key={index} className="">
+                  <ProductCard key={index} {...gproduct} />
+                </SwiperSlide>
+              ))}
+            </>
+          ) : (
+            <div>No Products Found</div>
+          )}
         </Swiper>
       </div>
 

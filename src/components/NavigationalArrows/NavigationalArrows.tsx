@@ -15,11 +15,17 @@ const NavigationArrows = ({ direction }: NavigationArrowsProps) => {
     >
       {direction === "prev" ? (
         <ArrowLeft
-          className={cn("arrow-left h-4 group-hover:text-white md:h-6", {})}
+          className={cn(
+            "arrow-left left-arrow-button h-4 group-hover:text-white md:h-6",
+            {},
+          )}
         />
       ) : (
         <ArrowRight
-          className={cn("arrow-right h-4 group-hover:text-white md:h-6", {})}
+          className={cn(
+            "arrow-right right-arrow-button h-4 group-hover:text-white md:h-6",
+            {},
+          )}
         />
       )}
     </div>

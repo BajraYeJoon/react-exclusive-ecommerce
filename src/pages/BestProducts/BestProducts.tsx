@@ -1,13 +1,21 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import PagesHeader from "../../components/PagesHeader/PagesHeader";
 import ProductCard from "../../components/ProductCard/ProductCard";
-import { bestSellingProducts } from "../../constants/data";
+// import { bestSellingProducts } from "../../constants/data";
 import { Navigation } from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/navigation";
+import { useQuery } from "react-query";
+import { fetchBestSellingProducts } from "../../api/fetch";
+import { Loading } from "../../site";
 
 const BestProducts = () => {
+  
+  const { data: bestSellingProducts, isLoading } = useQuery("bestSellingProducts", fetchBestSellingProducts)
+
+  if(isLoading) return <Loading />
+
   return (
     <section className="flex flex-col gap-20 max-2xl:gap-10">
       <PagesHeader

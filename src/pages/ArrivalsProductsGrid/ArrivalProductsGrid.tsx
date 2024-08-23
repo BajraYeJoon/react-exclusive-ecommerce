@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { fetchNewArrivals } from "../../api/fetch";
 import { Button, PagesHeader } from "../../components";
 import { NewArrivalsProductProps } from "./ArrivalsPage";
+import { useQuery } from "react-query";
+import { Loading } from "../../site";
 
 type GridItemProps = {
   product: NewArrivalsProductProps;
@@ -10,7 +12,7 @@ type GridItemProps = {
 };
 
 const ArrivalProductsGrid = () => {
-  const [products, setProducts] = useState<NewArrivalsProductProps[]>([]);
+  // const [products, setProducts] = useState<NewArrivalsProductProps[]>([]);
 
   const additionalClasses = [
     "col-span-2 md:row-span-2 lg:bg-auto",
@@ -19,12 +21,26 @@ const ArrivalProductsGrid = () => {
     "relative bg-center p-14 md:p-10 lg:bg-auto ",
   ];
 
-  useEffect(() => {
-    (async () => {
-      const data = await fetchNewArrivals();
-      setProducts(data.slice(0, 4));
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     const data = await fetchNewArrivals();
+  //     setProducts(data.slice(0, 4));
+  //   })();
+  // }, []);
+
+  const { data: products, isLoading } = useQuery(
+    "newarrivals",
+    fetchNewArrivals,
+    {
+      refetchOnWindowFocus: false,
+      staleTime: 5 * 60 * 1000,
+      cacheTime: 5 * 60 * 1000,
+    },
+  );
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <section className="arrival-products-container flex flex-col gap-10 lg:gap-20">
@@ -35,14 +51,21 @@ const ArrivalProductsGrid = () => {
       />
 
       <div className="grid h-[500px] grid-cols-2 grid-rows-2 gap-4 md:h-[400px] md:grid-cols-4 lg:h-[600px]">
-        {products.map((product, index) => (
-          <GridItem
-            key={product.id}
-            product={product}
-            index={index}
-            additionalClasses={additionalClasses[index] || ""}
-          />
-        ))}
+        {products ? (
+          <div>No products Found</div>
+        ) : (
+          <>
+            {products &&
+              products.map((product, index) => (
+                <GridItem
+                  key={product.id}
+                  product={product}
+                  index={index}
+                  additionalClasses={additionalClasses[index] || ""}
+                />
+              ))}
+          </>
+        )}
       </div>
     </section>
   );

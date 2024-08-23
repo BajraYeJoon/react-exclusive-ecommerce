@@ -39,6 +39,13 @@ export const fetchProductsBySearch = async (search: string) => {
   return result;
 };
 
+export const fetchBestSellingProducts = async () => {
+  const result = await Axios.get(`/product/bestselling`).then(
+    (res) => res.data.data,
+  );
+  return result;
+};
+
 export const fetchProductDetails = async (id: string) => {
   const result = await Axios.get(`/product/${id}`).then((res) => res.data.data);
   return result;
