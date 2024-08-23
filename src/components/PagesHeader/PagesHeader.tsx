@@ -18,7 +18,7 @@ const PagesHeader = ({
   const THREE_DAYS_IN_MS = 40000000;
   const NOW_IN_MS = new Date().getTime();
 
-  const dateTimeAfterThreeDays = NOW_IN_MS + THREE_DAYS_IN_MS;
+  const dateTimeAfterThreeDays = new Date(NOW_IN_MS + THREE_DAYS_IN_MS);
   return (
     <div className="page-header-container flex flex-col gap-3">
       <div className="flex items-center gap-3 text-primary">

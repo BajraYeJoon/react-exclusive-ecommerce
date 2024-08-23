@@ -8,7 +8,7 @@ import { Suspense, useEffect, useState } from "react";
 import { fetchProductDetails } from "../../api/productApi";
 import { cn } from "../../lib/utils";
 import { BiStar } from "react-icons/bi";
-import useCart from "../../hooks/useCart";
+// import useCart from "../../hooks/useCart";
 import { useAddToCart } from "../ProductCard/ProductCard";
 
 interface RadioOption {

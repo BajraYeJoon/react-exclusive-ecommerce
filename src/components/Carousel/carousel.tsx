@@ -11,6 +11,13 @@ import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import { Skeleton } from "../ui/skeleton";
 import { Button } from "../ui/button";
 
+interface Content {
+  id: number;
+  title: string;
+  description: string;
+  image: string[];
+}
+
 const Carousel = () => {
   const { data: bannerData, isLoading } = useQuery("banner", fetchHeroBanner, {
     refetchOnWindowFocus: false,
@@ -56,7 +63,7 @@ const Carousel = () => {
             </div>
           </div>
         ) : (
-          banner.map((content, index) => (
+          banner.map((content: Content, index: number) => (
             <SwiperSlide key={index} className="">
               <div className="carousel-content grid h-56 w-full grid-cols-1 overflow-hidden bg-foreground p-4 align-middle md:grid-cols-2 md:p-0 lg:h-96">
                 <div className="carousel-text flex flex-col items-start justify-center gap-0 text-background md:gap-6 md:pl-10 lg:pl-14">

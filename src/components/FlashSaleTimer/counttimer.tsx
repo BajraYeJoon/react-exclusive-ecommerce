@@ -9,7 +9,13 @@ const ExpiredNotice = () => {
   );
 };
 
-const DateTimeDisplay = ({ value, type }) => {
+const DateTimeDisplay = ({
+  value,
+  type,
+}: {
+  value: number | string;
+  type: string;
+}) => {
   return (
     <div className="flex items-center gap-2">
       <span className="text-xs font-medium text-foreground md:text-base">
@@ -22,10 +28,21 @@ const DateTimeDisplay = ({ value, type }) => {
   );
 };
 
-const ShowCounter = ({ days, hours, minutes, seconds }) => {
+const ShowCounter = ({
+  days,
+  hours,
+  minutes,
+  seconds,
+}: {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}) => {
+  const daysString = days.toString(); // Convert days to a string
   return (
     <div className="flex items-center gap-2">
-      <DateTimeDisplay value={days} type={"Days"} />
+      <DateTimeDisplay value={daysString} type={"Days"} />
       <span className="text-base text-primary md:text-4xl">:</span>
       <DateTimeDisplay value={hours} type={"Hours"} />
       <span className="text-base text-primary md:text-4xl">:</span>
@@ -36,8 +53,8 @@ const ShowCounter = ({ days, hours, minutes, seconds }) => {
   );
 };
 
-const CountdownTimer = ({ targetDate }) => {
-  const [days, hours, minutes, seconds] = useCountdown(targetDate);
+const CountdownTimer = ({ targetDate }: { targetDate: Date }) => {
+  const { days, hours, minutes, seconds } = useCountdown(targetDate.toString());
 
   if (days + hours + minutes + seconds <= 0) {
     return <ExpiredNotice />;

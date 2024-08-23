@@ -1,11 +1,11 @@
 import { toast } from "sonner";
-import { CartItem, cartState } from "../atoms/cartState";
+import { CartState, cartState } from "../atoms/cartState";
 import { useRecoilState } from "recoil";
 
 const useCart = () => {
   const [cart, setCart] = useRecoilState(cartState);
 
-  const handleAddToCart = (product: Omit<CartItem, "quantity">) => {
+  const handleAddToCart = (product: Omit<CartState, "quantity">) => {
     setCart((currentCart) => {
       const productIndex = currentCart.findIndex(
         (item) => item.id === product.id,

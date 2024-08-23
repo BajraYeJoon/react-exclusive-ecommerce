@@ -56,7 +56,7 @@ const GeneralProducts = () => {
         >
           {generalProducts ? (
             <>
-              {generalProducts.map((gproduct, index) => (
+              {generalProducts.map((gproduct: any, index: number) => (
                 <SwiperSlide key={index} className="">
                   <ProductCard key={index} {...gproduct} />
                 </SwiperSlide>

@@ -6,6 +6,12 @@ import { useQuery } from "react-query";
 import { Skeleton } from "../../components/ui/skeleton";
 import { fetchCategories } from "../../api/categoryApi";
 
+interface Category {
+  id: number;
+  name: string;
+  subcategories: string[];
+}
+
 const Hero = () => {
   const { data: heroCategoriesData, isLoading } = useQuery(
     "heroCategory",
@@ -25,7 +31,7 @@ const Hero = () => {
       <aside className="z-10 mr-6 mt-14 hidden flex-col items-start gap-4 text-lg text-foreground/80 lg:flex">
         <ul className="flex flex-col gap-3 font-medium tracking-tighter">
           {heroCategories &&
-            heroCategories.map((category) => (
+            heroCategories.map((category: Category) => (
               <li key={category.id} className="group relative cursor-pointer">
                 {isLoading ? (
                   <Skeleton className="h-6 w-full rounded-md bg-red-500" />
@@ -40,11 +46,13 @@ const Hero = () => {
                 {category.subcategories && (
                   <div className="subcategories absolute -right-6 top-0 z-20 mt-2 hidden border bg-white p-2 shadow-lg group-hover:block">
                     <ul>
-                      {category.subcategories.map((subcategory, index) => (
-                        <li key={index}>
-                          <Link to={"/products"}>{subcategory}</Link>
-                        </li>
-                      ))}
+                      {category.subcategories.map(
+                        (subcategory: string, index: number) => (
+                          <li key={index}>
+                            <Link to={"/products"}>{subcategory}</Link>
+                          </li>
+                        ),
+                      )}
                     </ul>
                   </div>
                 )}

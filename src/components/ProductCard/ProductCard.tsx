@@ -14,7 +14,7 @@ import { useAuthContext } from "../../context/useAuthContext";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { queryClient } from "../../lib/reactQueryClient";
 import { useRecoilState } from "recoil";
-import { CartState, cartState } from "../../atoms/cartState";
+import { cartState } from "../../atoms/cartState";
 
 interface ProductCardProps {
   title: string;
@@ -51,7 +51,7 @@ const ProductCard = ({
 }: ProductCardProps) => {
   const { dimension } = useWindow();
   const { isLoggedIn } = useAuthContext();
-  const { mutate: addToCart } = useAddToCart();
+  // const { mutate: addToCart } = useAddToCart();
   const [, setCart] = useRecoilState(cartState);
 
   const { data: favoritesData } = useQuery("favorites", fetchFavorites, {
@@ -95,13 +95,12 @@ const ProductCard = ({
   const isFavorite = (id: number) => {
     return (
       // Array.isArray(favorites.data) &&
-      favorites.some((item) => item.id === id)
+      favorites.some((item: { id: number }) => item.id === id)
     );
   };
 
-
   const addToCartMutation = useMutation(addProductToCart, {
-    onSuccess: (data) => {
+    onSuccess: () => {
       setCart((currentCart) => {
         const productIndex = currentCart.findIndex((item) => item.id === id);
         if (productIndex !== -1) {
@@ -117,7 +116,10 @@ const ProductCard = ({
           );
         } else {
           toast.success(`Your ${title} has been added to the cart`);
-          return [...currentCart, { title, price, image, id, quantity: 1 }];
+          return [
+            ...currentCart,
+            { product: {}, title, price, image, id, quantity: 1 },
+          ];
         }
       });
     },

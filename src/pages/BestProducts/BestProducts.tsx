@@ -53,7 +53,8 @@ const BestProducts = () => {
         }}
       >
         {bestSellingProducts &&
-          bestSellingProducts.map((bestProductCard, index) => (
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          bestSellingProducts.map((bestProductCard: any, index: number) => (
             <SwiperSlide key={index} className="">
               <ProductCard key={index} {...bestProductCard} />
             </SwiperSlide>

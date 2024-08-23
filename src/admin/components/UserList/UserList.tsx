@@ -62,7 +62,7 @@ const users = [
 ];
 
 function UserList() {
-  const handleDelete = (userId) => {
+  const handleDelete = (userId: number) => {
     // Implement delete functionality here
     console.log(`User with ID ${userId} removed`);
   };
@@ -98,7 +98,7 @@ function UserList() {
             <TableCell>
               <Button
                 variant={"destructive"}
-                onClick={() => handleDelete(user.userId)}
+                onClick={() => handleDelete(Number(user.userId))}
               >
                 Remove
               </Button>

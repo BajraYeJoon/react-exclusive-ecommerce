@@ -53,7 +53,7 @@ const ArrivalProductsGrid = () => {
       ) : (
         <div className="grid h-[500px] grid-cols-2 grid-rows-2 gap-4 md:h-[400px] md:grid-cols-4 lg:h-[600px]">
           {products &&
-            products.map((product, index) => (
+            products.map((product: NewArrivalsProductProps, index: number) => (
               <GridItem
                 key={product.id}
                 product={product}

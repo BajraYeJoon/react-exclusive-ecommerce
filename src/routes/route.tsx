@@ -25,7 +25,6 @@ import Singleproduct from "../components/singleProduct/singleproduct";
 import { ArrivalsPage } from "../pages";
 import AdminLayout from "../admin/Layout/Layout";
 import Dashboard from "../admin/screen/Dashboard/Dashboard";
-import UserDetail from "../admin/components/UserDetail/UserDetail";
 import UserList from "../admin/components/UserList/UserList";
 
 export const router = createBrowserRouter([
