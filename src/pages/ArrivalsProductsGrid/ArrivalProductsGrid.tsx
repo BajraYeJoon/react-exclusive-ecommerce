@@ -34,6 +34,7 @@ const ArrivalProductsGrid = () => {
       refetchOnWindowFocus: false,
       staleTime: 5 * 60 * 1000,
       cacheTime: 5 * 60 * 1000,
+      select: (products) => products.slice(0, 4),
     },
   );
 

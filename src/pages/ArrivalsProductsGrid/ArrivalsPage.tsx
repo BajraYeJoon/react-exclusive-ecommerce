@@ -33,8 +33,8 @@ const ArrivalsPage = () => {
   console.log(newArrivals);
 
   return (
-    <section className="mx-72 mb-28 gap-40 max-2xl:mx-6 max-2xl:gap-28">
-      <div className="product-card-container flex w-full flex-wrap items-center justify-between gap-4 overflow-hidden">
+    <section className="mx-72 mt-10 gap-40 max-2xl:mx-6 max-2xl:gap-28 md:mt-16">
+      <div className="product-card-container flex w-full flex-wrap items-center justify-center gap-4 overflow-hidden lg:justify-evenly">
         {!newArrivals ? (
           <div>No products Found</div>
         ) : (

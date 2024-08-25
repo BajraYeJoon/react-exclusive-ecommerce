@@ -140,7 +140,7 @@ const ProductCard = ({
     addToCartMutation.mutate(id);
   };
   return (
-    <div className="w-full max-w-72">
+    <section className="mt-10 w-full max-w-72 md:mt-16">
       <div className="group relative h-32 w-full overflow-hidden rounded-b-md bg-card md:h-56">
         <Link to={`/${title.toLowerCase().split(" ").join("-")}/${id}`}>
           <img
@@ -203,7 +203,7 @@ const ProductCard = ({
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
