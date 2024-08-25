@@ -28,6 +28,7 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "../../../components/ui/dialog";
+import AddNewProductDialog from "./AddNewProductDialog";
 
 export default function ProductsList() {
   const { data: products, isLoading } = useQuery("products", fetchAllProducts);
@@ -98,7 +99,7 @@ export default function ProductsList() {
           <Button>Add new Product</Button>
         </DialogTrigger>
         <DialogContent>
-          <DialogHeader>hi there</DialogHeader>
+          <AddNewProductDialog />
         </DialogContent>
       </Dialog>
       <Table>

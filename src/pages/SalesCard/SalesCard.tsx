@@ -33,7 +33,7 @@ const SalesCard = () => {
     cacheTime: 10 * 60 * 1000, // 10 minutes
   });
 
-  if (isLoading) return <Loading />;
+  // if (isLoading) return <Loading />;
 
   if (!products || products.length === 0)
     return (
@@ -58,44 +58,50 @@ const SalesCard = () => {
         // handleNext={handleNext}
       />
 
-      <div className="product-card-container w-full items-center justify-between gap-4 overflow-hidden">
-        <Swiper
-          spaceBetween={20}
-          pagination={{ clickable: true }}
-          className="mySwiper"
-          modules={[Navigation]}
-          navigation={{
-            nextEl: ".arrow-right",
-            prevEl: ".arrow-left",
-          }}
-          breakpoints={{
-            320: {
-              slidesPerView: 2,
-            },
-            640: {
-              slidesPerView: 2,
-            },
-            768: {
-              slidesPerView: 3,
-            },
-            1024: {
-              slidesPerView: 4,
-            },
-          }}
-          // onNavigationNext={handleNext}
-        >
-          {products &&
-            products.map((productCard: SalesCardProps, index: number) => (
-              <SwiperSlide key={index} className="">
-                <ProductCard {...productCard} discountTag />
-              </SwiperSlide>
-            ))}
-        </Swiper>
-      </div>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <div className="product-card-container w-full items-center justify-between gap-4 overflow-hidden">
+            <Swiper
+              spaceBetween={20}
+              pagination={{ clickable: true }}
+              className="mySwiper"
+              modules={[Navigation]}
+              navigation={{
+                nextEl: ".arrow-right",
+                prevEl: ".arrow-left",
+              }}
+              breakpoints={{
+                320: {
+                  slidesPerView: 2,
+                },
+                640: {
+                  slidesPerView: 2,
+                },
+                768: {
+                  slidesPerView: 3,
+                },
+                1024: {
+                  slidesPerView: 4,
+                },
+              }}
+              // onNavigationNext={handleNext}
+            >
+              {products &&
+                products.map((productCard: SalesCardProps, index: number) => (
+                  <SwiperSlide key={index} className="">
+                    <ProductCard {...productCard} discountTag />
+                  </SwiperSlide>
+                ))}
+            </Swiper>
+          </div>
 
-      <Button className="mx-auto w-full md:w-fit">
-        <Link to={"/products"}>View All Products</Link>
-      </Button>
+          <Button className="mx-auto w-full md:w-fit">
+            <Link to={"/products"}>View All Products</Link>
+          </Button>
+        </>
+      )}
     </section>
   );
 };
