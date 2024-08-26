@@ -32,22 +32,19 @@ const ProfilePage = () => {
   const { logout } = useAuthContext();
   const queryClient = useQueryClient();
 
-  const { data: userdetail, isLoading } = useQuery(
-    ["userDetail"],
-    fetchUserDetails,
-    {
-      onSuccess: (data) => {
-        reset({
-          name: data.name,
-          phone: data.phone,
-        });
-      },
-    },
-  );
+  const { data: userdetail, isLoading } = useQuery({
+    queryKey: ["userDetail"],
+    queryFn: fetchUserDetails,
+  });
 
-  const mutation = useMutation(updateUserDetails, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(["userDetail"]);
+  const mutation = useMutation({
+    mutationFn: updateUserDetails,
+    onSuccess: (data) => {
+      reset({
+        name: data.name,
+        phone: data.phone,
+      });
+      queryClient.invalidateQueries({ queryKey: ["userDetail"] });
       setMessage("Profile updated successfully");
     },
     onError: () => {
