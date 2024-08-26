@@ -96,7 +96,7 @@ const AddCategoryForm = () => {
     mutation.mutate({ name: data.categoryName });
   };
 
-  const updateNameonSubmit = (data) => {
+  const updateNameonSubmit = (data: any) => {
     console.log(data);
     if (editCategoryId !== null) {
       handleCategoryEdit.mutate({

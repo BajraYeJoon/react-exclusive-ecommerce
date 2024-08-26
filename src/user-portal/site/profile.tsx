@@ -27,7 +27,7 @@ const updateUserDetails = async (data: FormData): Promise<void> => {
 };
 
 const ProfilePage = () => {
-  const { register, handleSubmit, reset } = useForm<FormData>();
+  const { register, handleSubmit } = useForm<FormData>();
   const [message, setMessage] = useState("");
   const { logout } = useAuthContext();
   const queryClient = useQueryClient();
@@ -39,11 +39,11 @@ const ProfilePage = () => {
 
   const mutation = useMutation({
     mutationFn: updateUserDetails,
-    onSuccess: (data) => {
-      reset({
-        name: data.name,
-        phone: data.phone,
-      });
+    onSuccess: () => {
+      // reset({
+      //   name: data.name,
+      //   phone: data.phone,
+      // });
       queryClient.invalidateQueries({ queryKey: ["userDetail"] });
       setMessage("Profile updated successfully");
     },
