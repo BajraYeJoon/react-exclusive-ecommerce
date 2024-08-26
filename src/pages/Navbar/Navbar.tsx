@@ -9,7 +9,7 @@ import { useAuthContext } from "../../context/useAuthContext";
 import { fetchProductsBySearch } from "../../api/productApi";
 import { Input } from "../../components/ui/input";
 import axios from "axios";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import Cookies from "js-cookie";
 // import useWindow from "../../lib/useWindow";
 // import { Dialog, DialogTrigger } from "../../components/ui/dialog";

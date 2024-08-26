@@ -2,7 +2,7 @@ import { Carousel } from "../../components";
 import { ChevronRight } from "lucide-react";
 // import { heroCategories } from "../../constants/data";
 import { Link } from "react-router-dom";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "../../components/ui/skeleton";
 import { fetchCategories } from "../../api/categoryApi";
 

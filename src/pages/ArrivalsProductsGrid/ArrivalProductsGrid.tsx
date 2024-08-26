@@ -1,7 +1,7 @@
 import { fetchNewArrivals } from "../../api/productApi";
 import { Button, PagesHeader } from "../../components";
 import { NewArrivalsProductProps } from "./ArrivalsPage";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Loading } from "../../site";
 
 type GridItemProps = {

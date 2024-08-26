@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { fetchProductByCategory } from "../../api/categoryApi";
 import ProductCard from "../ProductCard/ProductCard";

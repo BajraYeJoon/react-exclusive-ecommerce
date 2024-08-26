@@ -4,7 +4,7 @@ import { PagesHeader, Button, ProductCard } from "../../components";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { fetchAllProducts } from "../../api/productApi";
 import { Loading } from "../../site";
 const GeneralProducts = () => {

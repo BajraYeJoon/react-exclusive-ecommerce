@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Axios } from "../../../lib/axiosInstance";
 import { Button } from "../../../components";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { fetchCategories } from "../../../api/categoryApi";
 import { toast } from "sonner";
 import { z } from "zod";

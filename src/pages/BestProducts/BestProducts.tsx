@@ -6,7 +6,7 @@ import { Navigation } from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/navigation";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { fetchBestSellingProducts } from "../../api/productApi";
 import { Loading } from "../../site";
 

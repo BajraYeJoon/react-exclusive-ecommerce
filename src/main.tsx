@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 // import { PostHogProvider } from "posthog-js/react";
 import App from "./App";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "./context/useAuthContext";
 import { Toaster } from "sonner";
 import { RecoilRoot } from "recoil";
@@ -36,6 +36,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <AuthProvider>
             <App />
             <Analytics />
+
             <Toaster />
           </AuthProvider>
         </IntlProvider>

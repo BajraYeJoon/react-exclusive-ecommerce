@@ -11,7 +11,7 @@ import {
 } from "../../api/wishlistApi";
 import { addProductToCart } from "../../api/cartApi";
 import { useAuthContext } from "../../context/useAuthContext";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { queryClient } from "../../lib/reactQueryClient";
 import { useRecoilState } from "recoil";
 import { cartState } from "../../atoms/cartState";

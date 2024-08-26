@@ -1,7 +1,7 @@
 import { PagesHeader } from "../../components";
 // import { categories } from "../../constants/data";
 import { fetchCategories } from "../../api/categoryApi";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { Loading } from "../../site";
 import { Swiper, SwiperSlide } from "swiper/react";

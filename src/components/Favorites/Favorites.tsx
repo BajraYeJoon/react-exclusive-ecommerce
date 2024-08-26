@@ -3,7 +3,7 @@ import ProductCard from "../ProductCard/ProductCard";
 import CustomBreakcrumb from "../CustomBreakcrumb/CustomBreakcrumb";
 import { deleteAllFavorites, fetchFavorites } from "../../api/wishlistApi";
 import { Button } from "../ui/button";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { queryClient } from "../../lib/reactQueryClient";
 import { FaSpinner } from "react-icons/fa";

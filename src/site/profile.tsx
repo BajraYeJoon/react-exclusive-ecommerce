@@ -4,7 +4,7 @@ import axios from "axios";
 import { Button } from "../components";
 import { useAuthContext } from "../context/useAuthContext";
 import Cookies from "js-cookie";
-import { useQuery, useMutation, useQueryClient } from "react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchUserDetails } from "../api/userApi";
 import { Loading } from "./layout/Layout";
 

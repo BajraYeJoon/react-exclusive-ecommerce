@@ -8,7 +8,7 @@ import { checkoutState } from "../../atoms/checkoutState";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { deleteAllCartItems, fetchCart } from "../../api/cartApi";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { queryClient } from "../../lib/reactQueryClient";
 import { cn } from "../../lib/utils";
 
