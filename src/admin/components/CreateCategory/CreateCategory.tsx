@@ -1,18 +1,15 @@
 import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Axios } from "../../../lib/axiosInstance";
-import { Input } from "../../../components/ui/input";
-import { Button } from "../../../components";
+
 import { toast } from "sonner";
-import { fetchCategories } from "../../../api/categoryApi";
-import { queryClient } from "../../../lib/reactQueryClient";
+
 import { MdCancel, MdEdit } from "react-icons/md";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTrigger,
-} from "../../../components/ui/dialog";
+} from "../../../common/ui/dialog";
 import {
   Form,
   FormControl,
@@ -21,10 +18,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../../components/ui/form";
+} from "../../../common/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useState } from "react";
+import { fetchCategories } from "../../../common/api/categoryApi";
+import { Axios } from "../../../common/lib/axiosInstance";
+import { queryClient } from "../../../common/lib/reactQueryClient";
+import { Input } from "../../../common/ui/input";
+import { Button } from "../../../user-portal/components";
 interface FormValues {
   categoryName: string;
 }

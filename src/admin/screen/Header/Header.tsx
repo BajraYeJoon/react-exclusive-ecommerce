@@ -7,8 +7,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../../../components/ui/dropdown-menu";
-import { useAuthContext } from "../../../context/useAuthContext";
+} from "../../../common/ui/dropdown-menu";
+import { useAuthContext } from "../../../user-portal/context/useAuthContext";
 
 const Header = () => {
   const { logout } = useAuthContext();

@@ -7,13 +7,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../../../components/ui/table";
-import { Button } from "../../../components";
+} from "../../../common/ui/table";
+import { Button } from "../../../user-portal/components";
 import {
   Dialog,
   DialogContent,
   DialogTrigger,
-} from "../../../components/ui/dialog";
+} from "../../../common/ui/dialog";
 import UserDetail from "../UserDetail/UserDetail";
 
 const users = [

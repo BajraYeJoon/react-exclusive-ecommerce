@@ -4,13 +4,13 @@ import "./index.css";
 // import { PostHogProvider } from "posthog-js/react";
 import App from "./App";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AuthProvider } from "./context/useAuthContext";
+import { AuthProvider } from "./user-portal/context/useAuthContext";
 import { Toaster } from "sonner";
 import { RecoilRoot } from "recoil";
 import { IntlProvider } from "react-intl";
 import { Analytics } from "@vercel/analytics/react";
-import en_msg from "./locales/en.json";
-import es_msg from "./locales/es.json";
+import en_msg from "./user-portal/locales/en.json";
+import es_msg from "./user-portal/locales/es.json";
 
 const messages = {
   en: en_msg,

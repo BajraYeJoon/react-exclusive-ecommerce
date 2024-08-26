@@ -7,7 +7,7 @@ import {
   ProfilePage,
   SignInPage,
   Cart,
-} from "../site";
+} from "../user-portal/site";
 import Cookies from "js-cookie";
 
 import ErrorPage from "../error-page";
@@ -18,11 +18,11 @@ import {
   Checkout,
   OrderPlaced,
   FetchSingleCategory,
-} from "../components";
-import Contact from "../site/contact/contact";
-import About from "../site/about/about";
-import Singleproduct from "../components/singleProduct/singleproduct";
-import { ArrivalsPage } from "../pages";
+} from "../user-portal/components";
+import Contact from "../user-portal/site/contact/contact";
+import About from "../user-portal/site/about/about";
+import Singleproduct from "../user-portal/components/singleProduct/singleproduct";
+import { ArrivalsPage } from "../user-portal/pages";
 import AdminLayout from "../admin/Layout/Layout";
 import Dashboard from "../admin/screen/Dashboard/Dashboard";
 import UserList from "../admin/components/UserList/UserList";

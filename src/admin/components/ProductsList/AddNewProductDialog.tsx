@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Axios } from "../../../lib/axiosInstance";
-import { Button } from "../../../components";
+import { Button } from "../../../user-portal/components";
+import { Axios } from "../../../common/lib/axiosInstance";
 import { useQuery } from "@tanstack/react-query";
-import { fetchCategories } from "../../../api/categoryApi";
 import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { fetchCategories } from "../../../common/api/categoryApi";
 
 const createProductSchema = z.object({
   title: z.string().min(1, "Title is required"),

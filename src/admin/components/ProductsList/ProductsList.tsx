@@ -13,25 +13,25 @@ import {
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableFooter,
   TableHead,
   TableHeader,
   TableRow,
-} from "../../../components/ui/table";
-import { fetchAllProducts } from "../../../api/productApi";
-import { Loading } from "../../../site";
-import { Button } from "../../../components";
+} from "../../../common/ui/table";
+
 import {
   Dialog,
   DialogContent,
   DialogTrigger,
-} from "../../../components/ui/dialog";
+} from "../../../common/ui/dialog";
 import AddNewProductDialog from "./AddNewProductDialog";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import { Axios } from "../../../lib/axiosInstance";
 import { toast } from "sonner";
+import { fetchAllProducts } from "../../../common/api/productApi";
+import { Axios } from "../../../common/lib/axiosInstance";
+import { Loading } from "../../../user-portal/site";
+import { Button } from "../../../user-portal/components";
 
 export default function ProductsList() {
   const queryClient = useQueryClient();
