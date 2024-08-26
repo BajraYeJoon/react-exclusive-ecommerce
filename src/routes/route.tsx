@@ -134,7 +134,7 @@ export const router = createBrowserRouter([
         element: <UserList />,
       },
       {
-        path: "/add-category",
+        path: "add-category",
         element: <AddCategoryForm />,
       },
     ],

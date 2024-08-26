@@ -18,7 +18,7 @@ const AddNewProductDialog = () => {
     select: (categories) => categories.slice(0, 4),
   });
 
-  console.log(categories);
+  // console.log(categories);
   const handleCategorySelect = (categoryId) => {
     setSelectedCategories((prevSelected) => {
       if (prevSelected.includes(categoryId)) {
@@ -28,28 +28,42 @@ const AddNewProductDialog = () => {
       }
     });
   };
-
   const onSubmit = (data) => {
     console.log("form data", data);
     const formData = new FormData();
-    // Object.keys(data).forEach((key) => {
-    //   if (key === "image") {
-    //     formData.append(key, data[key][0]);
-    //   } else {
-    //     formData.append(key, data[key]);
-    //   }
-    // });
-    Object.keys(data).forEach((key) => {
-      formData.append(key, data[key]);
-    });
-    console.log(formData);
 
-    Axios.post("/product/create", formData)
+    Object.keys(data).forEach((key) => {
+      if (key === "image" && data[key] instanceof FileList) {
+        formData.append(key, data[key][0]); // Append the first file from the FileList
+      } else {
+        formData.append(key, data[key]);
+      }
+    });
+
+    // Log FormData content for debugging
+    for (const pair of formData.entries()) {
+      console.log(pair[0] + ": " + pair[1]);
+    }
+
+    Axios.post("/product/create", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
       .then((response) => {
         console.log("Success:", response.data);
       })
       .catch((error) => {
-        console.error("Error:", error);
+        if (error.response) {
+          // Server responded with a status other than 200 range
+          console.error("Error response:", error.response.data);
+        } else if (error.request) {
+          // Request was made but no response received
+          console.error("Error request:", error.request);
+        } else {
+          // Something else caused the error
+          console.error("Error message:", error.message);
+        }
       });
   };
 
