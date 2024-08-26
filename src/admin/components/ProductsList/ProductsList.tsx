@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useMemo, useState } from "react";
-import { useQuery } from "react-query";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import {
   useReactTable,
   ColumnDef,
@@ -25,17 +26,38 @@ import { Button } from "../../../components";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTrigger,
 } from "../../../components/ui/dialog";
 import AddNewProductDialog from "./AddNewProductDialog";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import { Axios } from "../../../lib/axiosInstance";
+import { toast } from "sonner";
 
 export default function ProductsList() {
+  const queryClient = useQueryClient();
   const { data: products, isLoading } = useQuery("products", fetchAllProducts);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
   });
+
+  const deleteProduct = async (productId: number) => {
+    try {
+      await Axios.delete(`/product/${productId}`);
+      toast.success("Product deleted successfully");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const deleteMutation = useMutation(
+    (productId: number) => deleteProduct(productId),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("products");
+      },
+    },
+  );
 
   const columns = useMemo<ColumnDef<any>[]>(
     () => [
@@ -70,6 +92,24 @@ export default function ProductsList() {
           </span>
         ),
       },
+      {
+        id: "edit",
+        header: "Edit",
+        cell: ({ row }) => (
+          <button onClick={() => handleEdit(row.original)}>
+            <FaEdit />
+          </button>
+        ),
+      },
+      {
+        id: "delete",
+        header: "Delete",
+        cell: ({ row }) => (
+          <button onClick={() => handleDelete(row.original.id)}>
+            <FaTrash />
+          </button>
+        ),
+      },
     ],
     [],
   );
@@ -87,6 +127,15 @@ export default function ProductsList() {
     getPaginationRowModel: getPaginationRowModel(),
     onPaginationChange: setPagination,
   });
+
+  const handleEdit = (product) => {
+    // Implement edit functionality here
+    console.log("Edit product", product);
+  };
+
+  const handleDelete = (productId) => {
+    deleteMutation.mutate(productId);
+  };
 
   if (isLoading) {
     return <Loading />;

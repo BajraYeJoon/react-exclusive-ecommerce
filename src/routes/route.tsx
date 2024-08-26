@@ -27,6 +27,7 @@ import AdminLayout from "../admin/Layout/Layout";
 import Dashboard from "../admin/screen/Dashboard/Dashboard";
 import UserList from "../admin/components/UserList/UserList";
 import ProductsList from "../admin/components/ProductsList/ProductsList";
+import AddCategoryForm from "../admin/components/CreateCategory/CreateCategory";
 
 export const router = createBrowserRouter([
   {
@@ -131,6 +132,10 @@ export const router = createBrowserRouter([
       {
         path: "users",
         element: <UserList />,
+      },
+      {
+        path: "/add-category",
+        element: <AddCategoryForm />,
       },
     ],
   },

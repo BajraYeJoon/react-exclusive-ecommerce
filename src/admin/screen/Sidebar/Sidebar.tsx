@@ -1,5 +1,6 @@
 import { Mail, User2 } from "lucide-react";
 import { BsMenuButton } from "react-icons/bs";
+import { CgAdd } from "react-icons/cg";
 import { FaProductHunt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
@@ -24,6 +25,11 @@ const sidebarItems = [
     href: "products",
     icon: FaProductHunt,
     label: "Products",
+  },
+  {
+    href: "add-category",
+    icon: CgAdd,
+    label: "Add Category",
   },
 ];
 
