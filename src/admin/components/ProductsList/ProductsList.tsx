@@ -36,7 +36,10 @@ import { toast } from "sonner";
 export default function ProductsList() {
   const queryClient = useQueryClient();
   const [isOpen, setOpen] = useState(true);
-  const { data: products, isLoading } = useQuery("products", fetchAllProducts);
+  const { data: products, isLoading } = useQuery({
+    queryKey: ["products"],
+    queryFn: fetchAllProducts,
+  });
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
@@ -52,14 +55,13 @@ export default function ProductsList() {
     }
   };
 
-  const deleteMutation = useMutation(
-    (productId: number) => deleteProduct(productId),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries("products");
-      },
+  const deleteMutation = useMutation({
+    mutationFn: (productId: number) => deleteProduct(productId),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["products"] });
     },
-  );
+  });
 
   const columns = useMemo<ColumnDef<any>[]>(
     () => [

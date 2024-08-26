@@ -11,10 +11,10 @@ import { fetchBestSellingProducts } from "../../api/productApi";
 import { Loading } from "../../site";
 
 const BestProducts = () => {
-  const { data: bestSellingProducts, isLoading } = useQuery(
-    "bestSellingProducts",
-    fetchBestSellingProducts,
-  );
+  const { data: bestSellingProducts, isLoading } = useQuery({
+    queryKey: ["bestSellingProducts"],
+    queryFn: fetchBestSellingProducts,
+  });
 
   if (isLoading) return <Loading />;
 

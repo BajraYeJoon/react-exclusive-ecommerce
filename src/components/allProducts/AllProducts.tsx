@@ -15,7 +15,9 @@ const AllProducts = () => {
     data: allproducts,
     isLoading,
     error,
-  } = useQuery(["allproducts"], fetchAllProducts, {
+  } = useQuery({
+    queryKey: ["allproducts"],
+    queryFn: fetchAllProducts,
     staleTime: 60000,
   });
 

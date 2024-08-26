@@ -27,9 +27,10 @@ interface ProductCardProps {
 export const useAddToCart = () => {
   const queryClient = useQueryClient();
 
-  return useMutation((id: number) => addProductToCart(id), {
+  return useMutation({
+    mutationFn: (id: number) => addProductToCart(id),
     onSuccess: () => {
-      queryClient.invalidateQueries("cart");
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
       toast.success("Product added to cart");
       console.log("Added to cart");
     },
@@ -54,27 +55,31 @@ const ProductCard = ({
   // const { mutate: addToCart } = useAddToCart();
   const [, setCart] = useRecoilState(cartState);
 
-  const { data: favoritesData } = useQuery("favorites", fetchFavorites, {
+  const { data: favoritesData } = useQuery({
+    queryKey: ["favorites"],
+    queryFn: fetchFavorites,
     enabled: isLoggedIn,
   });
   const favorites = favoritesData?.data || [];
 
   console.log(favorites);
 
-  const mutation = useMutation(deleteFavorites, {
+  const mutation = useMutation({
+    mutationFn: deleteFavorites,
     onSuccess: () => {
-      queryClient.invalidateQueries("favorites");
+      queryClient.invalidateQueries({ queryKey: ["favorites"] });
       toast.success(`Your ${title} has been removed from favorites`);
     },
     onError: () => {
       toast.error("An error occurred while updating favorites");
     },
   });
-  const mutationAdd = useMutation(addFavorites, {
+  const mutationAdd = useMutation({
+    mutationFn: addFavorites,
     onSuccess: (response) => {
       if (response) {
         toast.success(`Your ${title} has been added to favorites`);
-        queryClient.invalidateQueries("favorites");
+        queryClient.invalidateQueries({ queryKey: ["favorites"] });
       } else {
         throw new Error("Failed to add to favorites");
       }
@@ -99,7 +104,8 @@ const ProductCard = ({
     );
   };
 
-  const addToCartMutation = useMutation(addProductToCart, {
+  const addToCartMutation = useMutation({
+    mutationFn: addProductToCart,
     onSuccess: () => {
       setCart((currentCart) => {
         const productIndex = currentCart.findIndex((item) => item.id === id);

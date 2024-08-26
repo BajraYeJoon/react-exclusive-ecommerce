@@ -26,11 +26,12 @@ const SalesCard = () => {
     data: products,
 
     isLoading,
-  } = useQuery(["sale"], fetchSalesProduct, {
+  } = useQuery({
+    queryKey: ["sale"],
+    queryFn: fetchSalesProduct,
     select: (products) => products.slice(0, 7),
     refetchOnWindowFocus: false,
     staleTime: 5 * 60 * 1000, // 5 minutes
-    cacheTime: 10 * 60 * 1000, // 10 minutes
   });
 
   // if (isLoading) return <Loading />;

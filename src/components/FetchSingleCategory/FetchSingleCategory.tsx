@@ -10,9 +10,10 @@ const FetchSingleCategory = () => {
     data: category,
     isLoading,
     error,
-  } = useQuery("category", () =>
-    fetchProductByCategory(parseInt(categoryId ?? "20")),
-  );
+  } = useQuery({
+    queryKey: ["category"],
+    queryFn: () => fetchProductByCategory(parseInt(categoryId ?? "20")),
+  });
 
   if (isLoading) {
     return <Loading />;

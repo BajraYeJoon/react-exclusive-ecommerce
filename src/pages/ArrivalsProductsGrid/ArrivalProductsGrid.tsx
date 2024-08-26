@@ -27,16 +27,14 @@ const ArrivalProductsGrid = () => {
   //   })();
   // }, []);
 
-  const { data: products, isLoading } = useQuery(
-    "newarrivals",
-    fetchNewArrivals,
-    {
-      refetchOnWindowFocus: false,
-      staleTime: 5 * 60 * 1000,
-      cacheTime: 5 * 60 * 1000,
-      select: (products) => products.slice(0, 4),
-    },
-  );
+  const { data: products, isLoading } = useQuery({
+    queryKey: ["newarrivals"],
+    queryFn: fetchNewArrivals,
+
+    refetchOnWindowFocus: false,
+    staleTime: 5 * 60 * 1000,
+    select: (products) => products.slice(0, 4),
+  });
 
   if (isLoading) {
     return <Loading />;

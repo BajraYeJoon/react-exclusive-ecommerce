@@ -100,7 +100,9 @@ const Navbar = () => {
     };
   }, []);
 
-  const { data: cart } = useQuery("cart", fetchCart, {
+  const { data: cart } = useQuery({
+    queryKey: ["cart"],
+    queryFn: fetchCart,
     enabled: isLoggedIn,
   });
 

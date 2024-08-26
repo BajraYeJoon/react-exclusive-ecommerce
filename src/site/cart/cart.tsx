@@ -31,7 +31,7 @@ const Cart = () => {
   const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(0);
 
-  const { data } = useQuery("cart", fetchCart);
+  const { data } = useQuery({ queryKey: ["cart"], queryFn: fetchCart });
 
   useEffect(() => {
     if (data) {
@@ -95,7 +95,7 @@ const Cart = () => {
 
   const clearCart = async () => {
     await deleteAllCartItems();
-    queryClient.invalidateQueries("cart");
+    queryClient.invalidateQueries({ queryKey: ["cart"] });
     toast.success("All items have been removed from the cart");
   };
 

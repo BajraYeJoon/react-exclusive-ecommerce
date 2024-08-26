@@ -43,7 +43,9 @@ const AddNewProductDialog = () => {
     data: categories,
     isLoading,
     error,
-  } = useQuery("categories", fetchCategories, {
+  } = useQuery({
+    queryKey: ["categories"],
+    queryFn: fetchCategories,
     select: (categories) => categories.slice(0, 4),
   });
 

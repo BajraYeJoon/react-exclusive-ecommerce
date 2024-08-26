@@ -13,10 +13,10 @@ interface Category {
 }
 
 const Hero = () => {
-  const { data: heroCategoriesData, isLoading } = useQuery(
-    "heroCategory",
-    fetchCategories,
-  );
+  const { data: heroCategoriesData, isLoading } = useQuery({
+    queryKey: ["heroCategory"],
+    queryFn: fetchCategories,
+  });
 
   if (isLoading) {
     console.log("hero banner loading .....");

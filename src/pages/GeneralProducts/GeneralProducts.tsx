@@ -12,11 +12,12 @@ const GeneralProducts = () => {
     data: generalProducts,
 
     isLoading,
-  } = useQuery(["generalProducts"], fetchAllProducts, {
+  } = useQuery({
+    queryKey: ["generalProducts"],
+    queryFn: fetchAllProducts,
     select: (generalProducts) => generalProducts.slice(0, 8),
     refetchOnWindowFocus: false,
     staleTime: 5 * 60 * 1000,
-    cacheTime: 5 * 60 * 1000,
   });
 
   if (isLoading) return <Loading />;

@@ -20,8 +20,10 @@ const Category = () => {
     data: categories,
     error,
     isLoading,
-  } = useQuery(["categories"], fetchCategories, {
-    staleTime: 60000,
+  } = useQuery({
+    queryKey: ["categories"],
+    queryFn: fetchCategories,
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
   if (isLoading) return <Loading />;

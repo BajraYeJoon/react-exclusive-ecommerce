@@ -12,19 +12,10 @@ export interface NewArrivalsProductProps {
 }
 
 const ArrivalsPage = () => {
-  // const [newArrivals, setNewArrivals] = useState<NewArrivalsProductProps[]>([]);
-
-  // useEffect(() => {
-  //   (async () => {
-  //     const newarrivalsData = await fetchNewArrivals();
-  //     setNewArrivals(newarrivalsData);
-  //   })();
-  // }, []);
-
-  const { data: newArrivals, isLoading } = useQuery(
-    "newarrivals",
-    fetchNewArrivals,
-  );
+  const { data: newArrivals, isLoading } = useQuery({
+    queryKey: ["newarrivals"],
+    queryFn: fetchNewArrivals,
+  });
 
   if (isLoading) {
     return <Loading />;

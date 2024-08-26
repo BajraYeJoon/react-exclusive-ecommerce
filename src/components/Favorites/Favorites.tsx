@@ -9,14 +9,15 @@ import { queryClient } from "../../lib/reactQueryClient";
 import { FaSpinner } from "react-icons/fa";
 
 const Favorites = () => {
-  const { data: favoritesData, isLoading } = useQuery(
-    "favorites",
-    fetchFavorites,
-  );
+  const { data: favoritesData, isLoading } = useQuery({
+    queryKey: ["favorites"],
+    queryFn: fetchFavorites,
+  });
 
-  const deleteAll = useMutation(deleteAllFavorites, {
+  const deleteAll = useMutation({
+    mutationFn: deleteAllFavorites,
     onSuccess: () => {
-      queryClient.invalidateQueries("favorites");
+      queryClient.invalidateQueries({ queryKey: ["favorites"] });
       toast.success("Favorites cleared");
     },
     onError: (error) => {
