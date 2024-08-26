@@ -35,7 +35,7 @@ import { toast } from "sonner";
 
 export default function ProductsList() {
   const queryClient = useQueryClient();
-  const [isOpen, setOpen] = useState(true);
+  // const [isOpen, setOpen] = useState(true);
   const { data: products, isLoading } = useQuery({
     queryKey: ["products"],
     queryFn: fetchAllProducts,
@@ -50,7 +50,6 @@ export default function ProductsList() {
       await Axios.delete(`/product/${productId}`);
       toast.success("Product deleted successfully");
     } catch (error) {
-      `  `;
       console.error(error);
     }
   };
@@ -147,7 +146,7 @@ export default function ProductsList() {
 
   return (
     <div className="flex flex-col gap-2">
-      <Dialog open={isOpen} onOpenChange={() => setOpen(!isOpen)}>
+      <Dialog>
         <DialogTrigger asChild>
           <Button>Add new Product</Button>
         </DialogTrigger>

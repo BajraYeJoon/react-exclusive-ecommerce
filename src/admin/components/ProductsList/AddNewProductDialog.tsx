@@ -111,7 +111,7 @@ const AddNewProductDialog = () => {
       </h1>
 
       {step === 1 && (
-        <div className="grid gap-3 md:grid-cols-2">
+        <div className="grid items-center gap-3 md:grid-cols-2">
           <div>
             <label>Title</label>
             <input
@@ -152,12 +152,12 @@ const AddNewProductDialog = () => {
               </p>
             )}
           </div>
-          <div>
+          <div className="flex items-center gap-2">
             <label>Discount Tag</label>
             <input
               type="checkbox"
               {...register("discounttag")}
-              className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3"
+              className="h-6 w-fit rounded-md bg-gray-100 px-3"
             />
             {errors.discounttag && (
               <p className="text-sm font-medium text-destructive">
@@ -253,12 +253,12 @@ const AddNewProductDialog = () => {
               </p>
             )}
           </div>
-          <div>
+          <div className="mt-3 flex items-start gap-2">
             <label>Availability</label>
             <input
               type="checkbox"
               {...register("availability")}
-              className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3"
+              className="h-6 w-full rounded-md bg-gray-100 px-3"
             />
             {errors.availability && (
               <p className="text-sm font-medium text-destructive">

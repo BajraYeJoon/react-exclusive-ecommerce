@@ -24,6 +24,7 @@ import {
 } from "../../../components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useState } from "react";
 interface FormValues {
   categoryName: string;
 }
@@ -34,6 +35,8 @@ const updateCategoryNameSchema = z.object({
 
 const AddCategoryForm = () => {
   const { register, handleSubmit, reset } = useForm<FormValues>();
+  const [editCategoryId, setEditCategoryId] = useState<number | null>(null);
+
   const { data: categories } = useQuery({
     queryKey: ["add"],
     queryFn: fetchCategories,
@@ -71,7 +74,7 @@ const AddCategoryForm = () => {
 
   const handleCategoryEdit = useMutation({
     mutationFn: ({ id, name }: { id: number; name: string }) =>
-      Axios.put(`/category/update/${id}`, { name }),
+      Axios.patch(`/category/update/${id}`, { name }),
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["add"] });
@@ -92,7 +95,14 @@ const AddCategoryForm = () => {
   };
 
   const updateNameonSubmit = (data) => {
-    handleCategoryEdit.mutate({ id: data.id, name: data.categoryName });
+    console.log(data);
+    if (editCategoryId !== null) {
+      handleCategoryEdit.mutate({
+        id: editCategoryId,
+        name: data.categoryName,
+      });
+      queryClient.invalidateQueries({ queryKey: ["add"] });
+    }
   };
 
   return (
@@ -130,7 +140,7 @@ const AddCategoryForm = () => {
                   onClick={() => handleCategoryDelete(category.id)}
                 />
                 <Dialog>
-                  <DialogTrigger>
+                  <DialogTrigger onClick={() => setEditCategoryId(category.id)}>
                     <MdEdit className="group-hover:text-red-600" />
                   </DialogTrigger>
                   <DialogContent>
@@ -147,7 +157,7 @@ const AddCategoryForm = () => {
                             <FormItem>
                               <FormLabel>Username</FormLabel>
                               <FormControl>
-                                <Input placeholder="shadcn" {...field} />
+                                <Input placeholder={category.name} {...field} />
                               </FormControl>
                               <FormDescription>
                                 This is your public display name.
