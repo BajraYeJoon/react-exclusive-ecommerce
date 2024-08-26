@@ -16,7 +16,7 @@ const AddCategoryForm = () => {
   const mutation = useMutation(
     (newCategory: { name: string }) => Axios.post("/category/add", newCategory),
     {
-      onSuccess: (data) => {
+      onSuccess: () => {
         reset();
         toast.success(`Category with name added successfully`);
       },

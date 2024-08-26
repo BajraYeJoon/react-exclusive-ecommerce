@@ -19,7 +19,7 @@ const AddNewProductDialog = () => {
   });
 
   // console.log(categories);
-  const handleCategorySelect = (categoryId) => {
+  const handleCategorySelect = (categoryId: any) => {
     setSelectedCategories((prevSelected) => {
       if (prevSelected.includes(categoryId)) {
         return prevSelected.filter((id) => id !== categoryId);
@@ -28,7 +28,7 @@ const AddNewProductDialog = () => {
       }
     });
   };
-  const onSubmit = (data) => {
+  const onSubmit = (data: any) => {
     console.log("form data", data);
     const formData = new FormData();
 
@@ -187,7 +187,7 @@ const AddNewProductDialog = () => {
           <div>
             <label>Categories</label>
             <div className="mt-2 h-fit w-full rounded-md bg-gray-100 px-3">
-              {categories.map((category) => (
+              {categories.map((category: any) => (
                 <button
                   key={category.id}
                   type="button"

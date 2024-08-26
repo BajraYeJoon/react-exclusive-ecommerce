@@ -128,12 +128,12 @@ export default function ProductsList() {
     onPaginationChange: setPagination,
   });
 
-  const handleEdit = (product) => {
+  const handleEdit = (product: any) => {
     // Implement edit functionality here
     console.log("Edit product", product);
   };
 
-  const handleDelete = (productId) => {
+  const handleDelete = (productId: any) => {
     deleteMutation.mutate(productId);
   };
 
