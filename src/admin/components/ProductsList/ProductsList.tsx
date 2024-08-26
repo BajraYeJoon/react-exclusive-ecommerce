@@ -100,7 +100,14 @@ export default function ProductsList() {
         header: "Edit",
         cell: ({ row }) => (
           <button onClick={() => handleEdit(row.original)}>
-            <FaEdit />
+            <Dialog>
+              <DialogTrigger asChild>
+                <FaEdit />
+              </DialogTrigger>
+              <DialogContent>
+                <AddNewProductDialog />
+              </DialogContent>
+            </Dialog>
           </button>
         ),
       },
@@ -155,7 +162,6 @@ export default function ProductsList() {
         </DialogContent>
       </Dialog>
       <Table>
-        <TableCaption>A list of your recent invoices.</TableCaption>
         <TableHeader>
           <TableRow>
             {table.getHeaderGroups().map((headerGroup) => (
