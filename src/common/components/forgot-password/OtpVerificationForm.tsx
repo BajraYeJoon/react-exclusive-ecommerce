@@ -19,7 +19,7 @@ const OtpVerificationForm = () => {
   const email = useRecoilValue(emailState);
   console.log(email, " emailllllllllllllllllll");
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: any) => {
     console.log(data);
 
     const otpbyUser = data.code1 + data.code2 + data.code3 + data.code4;

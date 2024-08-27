@@ -16,7 +16,7 @@ const ForgotPassword = () => {
   const navigate = useNavigate();
   const [, setEmail] = useRecoilState(emailState);
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: any) => {
     try {
       const response = await sendOtp(data.email);
       setEmail(data.email);

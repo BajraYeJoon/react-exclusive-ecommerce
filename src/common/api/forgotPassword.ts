@@ -8,7 +8,7 @@ export const sendOtp = async (email: string) => {
   );
 };
 
-export const verifyOtp = async (data) => {
+export const verifyOtp = async (data: any) => {
   try {
     const response = await handleRequest(
       () => Axios.post("/profile/resetpassword", data),
