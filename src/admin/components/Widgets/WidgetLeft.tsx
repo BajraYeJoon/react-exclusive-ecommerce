@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 // import { newUsers } from "../../lib/data";
-import NewUsers from "../NewUsers/NewUsers";
+// import NewUsers from "../NewUsers/NewUsers";
 import { fetchAllUsers } from "../../api/fetchUser";
 
 export default function WidgetLeft() {
@@ -9,7 +9,7 @@ export default function WidgetLeft() {
     queryFn: fetchAllUsers,
     select: (data) => {
       return data.data
-        .map((user) => user)
+        .map(({user}: any) => user)
         .sort(({a, b}: {a: any, b: any  }) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     },
   });
