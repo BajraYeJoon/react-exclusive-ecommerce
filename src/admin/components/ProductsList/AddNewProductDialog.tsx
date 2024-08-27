@@ -71,8 +71,10 @@ const AddNewProductDialog = ({
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
 
+  console.log(selectedCategories);
+
   const {
-    data: categories,
+    data: categories = [],
     isLoading,
     error,
   } = useQuery({
@@ -83,7 +85,10 @@ const AddNewProductDialog = ({
 
   useEffect(() => {
     if (initialData?.categories) {
-      setSelectedCategories(initialData.categories.split(",").map(Number));
+      const categoriesArray = Array.isArray(initialData.categories)
+        ? initialData.categories
+        : [initialData.categories];
+      setSelectedCategories(categoriesArray.map((data) => data.id));
     }
     if (initialData?.image) {
       setImageUrls(initialData.image);
@@ -92,14 +97,22 @@ const AddNewProductDialog = ({
 
   console.log("initial datasssssss", initialData);
 
-  const handleCategorySelect = (categoryId: any) => {
-    setSelectedCategories((prevSelected) => {
-      if (prevSelected.includes(categoryId)) {
-        return prevSelected.filter((id) => id !== categoryId);
-      } else {
-        return [...prevSelected, categoryId];
-      }
-    });
+  // const handleCategorySelect = (categoryId: any) => {
+  //   setSelectedCategories((prevSelected) => {
+  //     if (prevSelected.includes(categoryId)) {
+  //       return prevSelected.filter((id) => id !== categoryId);
+  //     } else {
+  //       return [...prevSelected, categoryId];
+  //     }
+  //   });
+  // };
+
+  const handleCategorySelect = (categoryId) => {
+    setSelectedCategories((prevSelected) =>
+      prevSelected.includes(categoryId)
+        ? prevSelected.filter((id) => id !== categoryId)
+        : [...prevSelected, categoryId],
+    );
   };
 
   const onSubmit = (data: any) => {
@@ -119,7 +132,7 @@ const AddNewProductDialog = ({
     const request =
       mode === "create"
         ? Axios.post("/product/create", formData)
-        : Axios.put(`/product/update/${initialData?.id}`, formData);
+        : Axios.patch(`/product/update/${initialData?.id}`, formData);
 
     request
       .then((response) => {
