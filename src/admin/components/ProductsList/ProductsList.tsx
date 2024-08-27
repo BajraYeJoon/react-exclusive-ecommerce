@@ -96,6 +96,14 @@ export default function ProductsList() {
         ),
       },
       {
+        accessorKey: "categories",
+        header: "Categories",
+        cell: ({ row }) => {
+          console.log(row, "categories");
+          return <div>hi</div>;
+        },
+      },
+      {
         id: "edit",
         header: "Edit",
         cell: ({ row }) => (
@@ -158,7 +166,7 @@ export default function ProductsList() {
           <Button>Add new Product</Button>
         </DialogTrigger>
         <DialogContent>
-          <AddNewProductDialog />
+          <AddNewProductDialog mode="create" />
         </DialogContent>
       </Dialog>
       <Table>

@@ -7,6 +7,8 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { fetchCategories } from "../../../common/api/categoryApi";
+import { FileUpIcon } from "lucide-react";
+import Previews from "./imageupload";
 
 const createProductSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -15,10 +17,13 @@ const createProductSchema = z.object({
   discounttag: z.boolean().optional(),
   rating: z.number().positive("Rating must be a positive number"),
   discountprice: z
-    .number()
-    .positive("Discount price must be a positive number")
+    .union([
+      z.number().positive("Discount price must be a positive number"),
+      z.undefined(),
+    ])
     .optional(),
-  sizes: z.enum(["s", "m", "l", "xl", "xxl"]).optional(),
+  sizes: z.union([z.string(), z.null()]).optional(),
+
   returnpolicy: z.string().min(1, "Return policy is required"),
   description: z.string().min(1, "Description is required"),
   brand: z.string().min(1, "Brand is required"),
@@ -33,8 +38,8 @@ interface InitialData {
   image?: any;
   discounttag?: boolean;
   rating?: number;
-  discountprice?: number;
-  sizes?: "s" | "m" | "l" | "xl" | "xxl";
+  discountprice?: number | null;
+  sizes?: string | null;
   returnpolicy?: string;
   description?: string;
   brand?: string;
@@ -56,6 +61,7 @@ const AddNewProductDialog = ({
     handleSubmit,
     setValue,
     reset,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(createProductSchema),
@@ -63,6 +69,7 @@ const AddNewProductDialog = ({
   });
   const [step, setStep] = useState(1);
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   const {
     data: categories,
@@ -78,7 +85,12 @@ const AddNewProductDialog = ({
     if (initialData?.categories) {
       setSelectedCategories(initialData.categories.split(",").map(Number));
     }
+    if (initialData?.image) {
+      setImageUrls(initialData.image);
+    }
   }, [initialData]);
+
+  console.log("initial datasssssss", initialData);
 
   const handleCategorySelect = (categoryId: any) => {
     setSelectedCategories((prevSelected) => {
@@ -107,7 +119,7 @@ const AddNewProductDialog = ({
     const request =
       mode === "create"
         ? Axios.post("/product/create", formData)
-        : Axios.put(`/product/update/${initialData.id}`, formData);
+        : Axios.put(`/product/update/${initialData?.id}`, formData);
 
     request
       .then((response) => {
@@ -180,6 +192,7 @@ const AddNewProductDialog = ({
               </p>
             )}
           </div>
+
           <div>
             <label>Image</label>
             <input
@@ -187,12 +200,23 @@ const AddNewProductDialog = ({
               {...register("image")}
               className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3"
             />
+            {imageUrls.length === 0 ? (
+              <img
+                src="https://via.placeholder.com/300"
+                alt="Placeholder Image"
+              />
+            ) : (
+              imageUrls.map((url, index) => (
+                <img key={index} src={url} alt={`Product Image ${index + 1}`} />
+              ))
+            )}
             {errors.image && (
               <p className="text-sm font-medium text-destructive">
                 {errors.image.message?.toString()}
               </p>
             )}
           </div>
+
           <div className="flex items-center gap-2">
             <label>Discount Tag</label>
             <input
@@ -244,6 +268,7 @@ const AddNewProductDialog = ({
               type="text"
               {...register("sizes")}
               placeholder="l"
+              defaultValue={watch("sizes") || "default-size"} // Set your default value here
               className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3"
             />
             {errors.sizes && (
