@@ -3,8 +3,6 @@ import Chart from "../../components/Chart/Chart";
 import { userData } from "../../lib/data";
 import WidgetLeft from "../../components/Widgets/WidgetLeft";
 import WidgetRight from "../../components/Widgets/WidgetRight";
-import { useQuery } from "@tanstack/react-query";
-import { fetchAllUsers } from "../../api/fetchUser";
 
 const Analytics = () => {
   // const { data: userData } = useQuery({

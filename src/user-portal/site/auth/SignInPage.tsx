@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, FormInput } from "../../components";
 import { GoogleSignInComponent } from "./GoogleSignIn";
 import { useAuthContext } from "../../context/useAuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
 import { CgSpinner } from "react-icons/cg";
@@ -69,6 +69,9 @@ const SignInPage = () => {
             )}
           </Button>
           <GoogleSignInComponent text="Sign in with Google" />
+          <Link to={"/"}>
+            <p className="text-red-400 underline">Forgot your password</p>
+          </Link>
         </div>
       </form>
     </div>

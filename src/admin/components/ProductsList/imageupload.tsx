@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
-function Previews({ register }) {
+function Previews({ register }: any) {
   const [files, setFiles] = useState<File[]>([]);
   const { getRootProps, getInputProps } = useDropzone({
     accept: {

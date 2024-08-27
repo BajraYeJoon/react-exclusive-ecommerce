@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { newUsers } from "../../lib/data";
+// import { newUsers } from "../../lib/data";
 import NewUsers from "../NewUsers/NewUsers";
 import { fetchAllUsers } from "../../api/fetchUser";
 
@@ -10,7 +10,7 @@ export default function WidgetLeft() {
     select: (data) => {
       return data.data
         .map((user) => user)
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        .sort(({a, b}: {a: any, b: any  }) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     },
   });
 
@@ -31,9 +31,9 @@ export default function WidgetLeft() {
       </div>
       <div className="flow-root">
         <ul role="list" className="divide-gray-20 divide-y">
-          {newUsers.map(({ name, email }) => (
+          {/* {newUsers.map(({ name, email }: { name: string; email: string }) => (
             <NewUsers name={name} email={email} />
-          ))}
+          ))} */}
         </ul>
       </div>
     </div>

@@ -7,8 +7,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { fetchCategories } from "../../../common/api/categoryApi";
-import { FileUpIcon } from "lucide-react";
-import Previews from "./imageupload";
+
 
 const createProductSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -107,7 +106,7 @@ const AddNewProductDialog = ({
   //   });
   // };
 
-  const handleCategorySelect = (categoryId) => {
+  const handleCategorySelect = ({ categoryId }: any) => {
     setSelectedCategories((prevSelected) =>
       prevSelected.includes(categoryId)
         ? prevSelected.filter((id) => id !== categoryId)
