@@ -105,7 +105,7 @@ export default function ProductsList() {
                 <FaEdit />
               </DialogTrigger>
               <DialogContent>
-                <AddNewProductDialog />
+                <AddNewProductDialog mode="update" initialData={row.original} />
               </DialogContent>
             </Dialog>
           </button>

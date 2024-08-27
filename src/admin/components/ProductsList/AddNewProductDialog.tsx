@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "../../../user-portal/components";
 import { Axios } from "../../../common/lib/axiosInstance";
@@ -26,7 +26,31 @@ const createProductSchema = z.object({
   categories: z.string().optional(),
 });
 
-const AddNewProductDialog = () => {
+interface InitialData {
+  id: string;
+  title?: string;
+  price?: number;
+  image?: any;
+  discounttag?: boolean;
+  rating?: number;
+  discountprice?: number;
+  sizes?: "s" | "m" | "l" | "xl" | "xxl";
+  returnpolicy?: string;
+  description?: string;
+  brand?: string;
+  availability?: boolean;
+  categories?: string;
+}
+
+interface AddNewProductDialogProps {
+  mode?: "create" | "update";
+  initialData?: InitialData;
+}
+
+const AddNewProductDialog = ({
+  mode,
+  initialData,
+}: AddNewProductDialogProps) => {
   const {
     register,
     handleSubmit,
@@ -35,6 +59,7 @@ const AddNewProductDialog = () => {
     formState: { errors },
   } = useForm({
     resolver: zodResolver(createProductSchema),
+    defaultValues: initialData,
   });
   const [step, setStep] = useState(1);
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
@@ -49,7 +74,12 @@ const AddNewProductDialog = () => {
     select: (categories) => categories.slice(0, 4),
   });
 
-  // console.log(categories);
+  useEffect(() => {
+    if (initialData?.categories) {
+      setSelectedCategories(initialData.categories.split(",").map(Number));
+    }
+  }, [initialData]);
+
   const handleCategorySelect = (categoryId: any) => {
     setSelectedCategories((prevSelected) => {
       if (prevSelected.includes(categoryId)) {
@@ -59,6 +89,7 @@ const AddNewProductDialog = () => {
       }
     });
   };
+
   const onSubmit = (data: any) => {
     console.log("form data", data);
     const formData = new FormData();
@@ -73,25 +104,35 @@ const AddNewProductDialog = () => {
 
     console.log("form data", formData);
 
-    Axios.post("/product/create", formData)
+    const request =
+      mode === "create"
+        ? Axios.post("/product/create", formData)
+        : Axios.put(`/product/update/${initialData.id}`, formData);
+
+    request
       .then((response) => {
         console.log("Success:", response.data);
         reset();
-        toast.success("Product created successfully");
+        toast.success(
+          `Product ${mode === "create" ? "created" : "updated"} successfully`,
+        );
       })
       .catch((error) => {
         if (error.response) {
-          // Server responded with a status other than 200 range
           console.error("Error response:", error.response.data);
-          toast.error("Failed to create product");
+          toast.error(
+            `Failed to ${mode === "create" ? "create" : "update"} product`,
+          );
         } else if (error.request) {
-          // Request was made but no response received
           console.error("Error request:", error.request);
-          toast.error("Failed to create product");
+          toast.error(
+            `Failed to ${mode === "create" ? "create" : "update"} product`,
+          );
         } else {
-          // Something else caused the error
           console.error("Error message:", error.message);
-          toast.error("Failed to create product");
+          toast.error(
+            `Failed to ${mode === "create" ? "create" : "update"} product`,
+          );
         }
       });
   };
@@ -107,7 +148,7 @@ const AddNewProductDialog = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <h1 className="mb-6 text-xl font-semibold lg:text-2xl">
-        Add New Product
+        {mode === "create" ? "Add New Product" : "Edit Product"}
       </h1>
 
       {step === 1 && (
@@ -290,20 +331,19 @@ const AddNewProductDialog = () => {
         </div>
       )}
 
-      <div className="mt-5 flex justify-between">
+      <div className="mt-6 flex justify-between">
         {step > 1 && (
-          <Button variant="outline" onClick={prevStep}>
+          <Button type="button" onClick={prevStep}>
             Previous
           </Button>
         )}
-        {step < 2 && (
-          <Button variant="secondary" onClick={nextStep}>
+        {step < 2 ? (
+          <Button type="button" onClick={nextStep}>
             Next
           </Button>
-        )}
-        {step === 2 && (
-          <Button variant="default" type="submit">
-            Create
+        ) : (
+          <Button type="submit">
+            {mode === "create" ? "Create Product" : "Update Product"}
           </Button>
         )}
       </div>
