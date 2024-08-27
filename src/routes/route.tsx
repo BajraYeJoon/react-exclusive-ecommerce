@@ -28,6 +28,8 @@ import Dashboard from "../admin/screen/Dashboard/Dashboard";
 import UserList from "../admin/components/UserList/UserList";
 import ProductsList from "../admin/components/ProductsList/ProductsList";
 import AddCategoryForm from "../admin/components/CreateCategory/CreateCategory";
+import ForgotPassword from "../common/components/forgot-password/ForgotPassword";
+import OtpVerificationForm from "../common/components/forgot-password/OtpVerificationForm";
 
 export const router = createBrowserRouter([
   {
@@ -59,6 +61,14 @@ export const router = createBrowserRouter([
           {
             path: "/sign-in",
             element: <SignInPage />,
+          },
+          {
+            path: "/forgot-password",
+            element: <ForgotPassword />,
+          },
+          {
+            path: "/verify-otp",
+            element: <OtpVerificationForm />,
           },
         ],
       },

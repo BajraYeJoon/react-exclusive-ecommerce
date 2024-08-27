@@ -8,7 +8,7 @@ function AuthLayout() {
         alt=""
         className="hidden md:block md:h-[300px] md:w-[300px] lg:h-[500px] lg:w-[500px] xl:h-auto xl:w-auto"
       />
-      <section className="auth-container m-8 flex w-full flex-col items-center justify-center md:m-12 lg:m-44 lg:gap-10">
+      <section className="auth-container m-8 flex w-full flex-col items-center justify-center md:m-12 lg:m-32 lg:gap-10">
         <div className="sign-up-content space-y-8">
           <Outlet />
         </div>

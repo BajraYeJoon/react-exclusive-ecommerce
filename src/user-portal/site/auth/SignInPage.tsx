@@ -69,7 +69,7 @@ const SignInPage = () => {
             )}
           </Button>
           <GoogleSignInComponent text="Sign in with Google" />
-          <Link to={"/"}>
+          <Link to={"/forgot-password"}>
             <p className="text-red-400 underline">Forgot your password</p>
           </Link>
         </div>
