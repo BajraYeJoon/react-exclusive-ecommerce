@@ -3,17 +3,17 @@ import { EyeIcon } from "lucide-react";
 interface NewUsersProps {
   name: string;
   email: string;
-  avatarlink: string;
+  // avatarlink: string;
 }
 
-const NewUsers = ({ name, email, avatarlink }: NewUsersProps) => {
+const NewUsers = ({ name, email }: NewUsersProps) => {
   return (
     <li className="py-3 sm:py-4">
       <div className="flex items-center">
         <div className="flex-shrink-0">
           <img
             className="h-8 w-8 rounded-full"
-            src={avatarlink}
+            src="https://i.pravatar.cc/300"
             alt="Neil image"
           />
         </div>
