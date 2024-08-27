@@ -1,119 +1,281 @@
+import { useQuery } from "@tanstack/react-query";
+import { fetchAllUsers } from "../../api/fetchUser";
+import { Fragment, useMemo, useState } from "react";
+import {
+  ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { Button } from "../../../user-portal/components";
+import { Loading } from "../../../user-portal/site";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "../../../common/ui/table";
-import { Button } from "../../../user-portal/components";
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from "../../../common/ui/dialog";
-import UserDetail from "../UserDetail/UserDetail";
 
-const users = [
-  {
-    userId: "USR001",
-    name: "John Doe",
-    email: "john.doe@example.com",
-    transaction: "$250.00",
-  },
-  {
-    userId: "USR002",
-    name: "Jane Smith",
-    email: "jane.smith@example.com",
-    transaction: "$150.00",
-  },
-  {
-    userId: "USR003",
-    name: "Alice Johnson",
-    email: "alice.johnson@example.com",
-    transaction: "$350.00",
-  },
-  {
-    userId: "USR004",
-    name: "Bob Brown",
-    email: "bob.brown@example.com",
-    transaction: "$450.00",
-  },
-  {
-    userId: "USR005",
-    name: "Charlie Davis",
-    email: "charlie.davis@example.com",
-    transaction: "$550.00",
-  },
-  {
-    userId: "USR006",
-    name: "Diana Evans",
-    email: "diana.evans@example.com",
-    transaction: "$200.00",
-  },
-  {
-    userId: "USR007",
-    name: "Eve Foster",
-    email: "eve.foster@example.com",
-    transaction: "$300.00",
-  },
-];
+export default function UserList() {
+  const { data: usersData, isLoading } = useQuery({
+    queryKey: ["users"],
+    queryFn: fetchAllUsers,
+  });
 
-function UserList() {
-  const handleDelete = (userId: number) => {
-    // Implement delete functionality here
-    console.log(`User with ID ${userId} removed`);
+  const users = usersData?.data;
+  console.log(users);
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+
+  const removeUser = async (userId: number) => {
+    console.log(userId, "removal");
   };
 
+  const columns = useMemo<ColumnDef<any>[]>(
+    () => [
+      {
+        accessorKey: "id",
+        header: "User ID",
+        cell: (info) => (
+          <span className="font-medium">
+            {info.getValue() as React.ReactNode}
+          </span>
+        ),
+      },
+      {
+        accessorKey: "name",
+        header: "Name",
+      },
+      {
+        accessorKey: "email",
+        header: "Email",
+      },
+      {
+        accessorKey: "phone",
+        header: "Phone",
+      },
+      {
+        accessorKey: "createdAt",
+        header: "Joined At",
+        cell: (info) => (
+          <span>
+            {new Date(info.getValue() as string).toLocaleDateString()}
+          </span>
+        ),
+      },
+      {
+        id: "remove",
+        header: "Remove",
+        cell: ({ row }) => {
+          console.log(row.original.role);
+          return (
+            <>
+              {row.original.role !== "admin" && (
+                <Button onClick={() => removeUser(row.original.id)}>
+                  Remove
+                </Button>
+              )}
+            </>
+          );
+        },
+      },
+    ],
+    [],
+  );
+
+  const table = useReactTable({
+    data: users || [],
+    columns,
+    pageCount: Math.ceil((users?.length || 0) / pagination.pageSize),
+    state: {
+      pagination,
+    },
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    onPaginationChange: setPagination,
+  });
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
-    <Table>
-      <TableCaption>A list of your users.</TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">User ID</TableHead>
-          <TableHead>Name</TableHead>
-          <TableHead>Email</TableHead>
-          <TableHead>Transaction</TableHead>
-          <TableHead>Action</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {users.map((user) => (
-          <TableRow key={user.userId}>
-            <TableCell className="font-medium">{user.userId}</TableCell>
-            <Dialog>
-              <DialogTrigger>
-                <TableCell>{user.name}</TableCell>
-              </DialogTrigger>
-
-              <DialogContent>
-                <UserDetail />
-              </DialogContent>
-            </Dialog>
-
-            <TableCell>{user.email}</TableCell>
-            <TableCell>{user.transaction}</TableCell>
-            <TableCell>
-              <Button
-                variant={"destructive"}
-                onClick={() => handleDelete(Number(user.userId))}
-              >
-                Remove
-              </Button>
-            </TableCell>
+    <div className="flex flex-col gap-4">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <Fragment key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id} className="w-[100px]">
+                    <div
+                      {...{
+                        className: header.column.getCanSort()
+                          ? "cursor-pointer select-none"
+                          : "",
+                        onClick: header.column.getToggleSortingHandler(),
+                      }}
+                    >
+                      {flexRender(
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )}
+                      {{
+                        asc: " 🔼",
+                        desc: " 🔽",
+                      }[header.column.getIsSorted() as string] || ""}
+                      {header.column.getCanFilter() && header.id !== "id" ? (
+                        <div>
+                          <Filter column={header.column} table={table} />
+                        </div>
+                      ) : null}
+                    </div>
+                  </TableHead>
+                ))}
+              </Fragment>
+            ))}
           </TableRow>
-        ))}
-      </TableBody>
-      <TableFooter>
-        <TableRow>
-          <TableCell colSpan={4}>Total Users</TableCell>
-          <TableCell className="text-right">{users.length}</TableCell>
-        </TableRow>
-      </TableFooter>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {table.getRowModel().rows.map((row) => (
+            <TableRow key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <TableCell key={cell.id}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TableCell colSpan={2}>Total Users</TableCell>
+            <TableCell className="text-right">{users?.length}</TableCell>
+          </TableRow>
+        </TableFooter>
+      </Table>
+      <div className="pagination">
+        <button
+          className="rounded border p-1"
+          onClick={() => table.setPageIndex(0)}
+          disabled={!table.getCanPreviousPage()}
+        >
+          {"<<"}
+        </button>
+        <button
+          className="rounded border p-1"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          {"<"}
+        </button>
+        <button
+          className="rounded border p-1"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          {">"}
+        </button>
+        <button
+          className="rounded border p-1"
+          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+          disabled={!table.getCanNextPage()}
+        >
+          {">>"}
+        </button>
+        <span className="flex items-center gap-1">
+          <div>Page</div>
+          <strong>
+            {table.getState().pagination.pageIndex + 1} of{" "}
+            {table.getPageCount()}
+          </strong>
+        </span>
+        <span className="flex items-center gap-1">
+          | Go to page:
+          <input
+            type="number"
+            min="1"
+            max={table.getPageCount()}
+            defaultValue={table.getState().pagination.pageIndex + 1}
+            onChange={(e) => {
+              const page = e.target.value ? Number(e.target.value) - 1 : 0;
+              table.setPageIndex(page);
+            }}
+            className="w-16 rounded border p-1"
+          />
+        </span>
+        <select
+          value={table.getState().pagination.pageSize}
+          onChange={(e) => {
+            table.setPageSize(Number(e.target.value));
+          }}
+        >
+          {[10, 20, 30, 40, 50].map((pageSize) => (
+            <option key={pageSize} value={pageSize}>
+              Show {pageSize}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div>
+        Showing {table.getRowModel().rows.length} of {table.getRowCount()} Rows
+      </div>
+    </div>
   );
 }
 
-export default UserList;
+function Filter({ column, table }: { column: any; table: any }) {
+  const firstValue = table
+    .getPreFilteredRowModel()
+    .flatRows[0]?.getValue(column.id);
+
+  const columnFilterValue = column.getFilterValue();
+
+  return typeof firstValue === "number" ? (
+    <div className="flex space-x-2" onClick={(e) => e.stopPropagation()}>
+      <input
+        type="number"
+        value={(columnFilterValue as [number, number])?.[0] ?? ""}
+        onChange={(e) =>
+          column.setFilterValue((old: [number, number]) => [
+            e.target.value,
+            old?.[1],
+          ])
+        }
+        placeholder={`Min`}
+        className="w-24 rounded border shadow"
+      />
+      <input
+        type="number"
+        value={(columnFilterValue as [number, number])?.[1] ?? ""}
+        onChange={(e) =>
+          column.setFilterValue((old: [number, number]) => [
+            old?.[0],
+            e.target.value,
+          ])
+        }
+        placeholder={`Max`}
+        className="w-24 rounded border shadow"
+      />
+    </div>
+  ) : (
+    <input
+      className="w-36 rounded border shadow"
+      onChange={(e) => column.setFilterValue(e.target.value)}
+      onClick={(e) => e.stopPropagation()}
+      placeholder={`Search...`}
+      type="text"
+      value={(columnFilterValue ?? "") as string}
+    />
+  );
+}

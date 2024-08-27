@@ -32,9 +32,9 @@ import { fetchAllProducts } from "../../../common/api/productApi";
 import { Axios } from "../../../common/lib/axiosInstance";
 import { Loading } from "../../../user-portal/site";
 import { Button } from "../../../user-portal/components";
+import { queryClient } from "../../../common/lib/reactQueryClient";
 
 export default function ProductsList() {
-  const queryClient = useQueryClient();
   // const [isOpen, setOpen] = useState(true);
   const { data: products, isLoading } = useQuery({
     queryKey: ["products"],
