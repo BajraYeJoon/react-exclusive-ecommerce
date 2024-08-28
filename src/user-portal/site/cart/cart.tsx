@@ -7,8 +7,13 @@ import { toast } from "sonner";
 import { checkoutState } from "../../atoms/checkoutState";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
-import { deleteAllCartItems, fetchCart } from "../../api/cartApi";
-import { useQuery } from "@tanstack/react-query";
+import {
+  addProductToCart,
+  deleteAllCartItems,
+  deleteProductFromCart,
+  fetchCart,
+} from "../../api/cartApi";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryClient } from "../../../common/lib/reactQueryClient";
 import { cn } from "../../../common/lib/utils";
 
@@ -26,6 +31,7 @@ const discountState = atom<number>({
 const Cart = () => {
   const [, setCheckoutData] = useRecoilState(checkoutState);
   const [cartItems, setCartItems] = useRecoilState(cartState);
+  const [quantity, setQuantity] = useState(quantity);
 
   const navigate = useNavigate();
   const [couponCode, setCouponCode] = useState("");
@@ -55,43 +61,71 @@ const Cart = () => {
     navigate("/checkout");
   };
 
-  const increaseQuantity = (id: number) => {
-    const newCartValue = cartItems.map((cart) => {
-      if (cart.product.id === id) {
-        if (cart.quantity < cart.product.availableQuantity) {
-          return { ...cart, quantity: cart.quantity + 1 };
-        } else {
-          toast.error("Maximum available quantity reached");
-        }
-      }
-      return cart;
-    });
-    setCartItems(newCartValue);
-  };
-  const decreaseQuantity = (id: number) => {
-    let itemRemoved = false;
+  // const increaseQuantity = (id: number) => {
+  //   const newCartValue = cartItems.map((cart) => {
+  //     if (cart.product.id === id) {
+  //       if (cart.quantity < cart.product.availableQuantity) {
+  //         return { ...cart, quantity: cart.quantity + 1 };
+  //       } else {
+  //         toast.error("Maximum available quantity reached");
+  //       }
+  //     }
+  //     return cart;
+  //   });
+  //   setCartItems(newCartValue);
+  // };
+  // const decreaseQuantity = (id: number) => {
+  //   let itemRemoved = false;
 
-    const newCartValue = cartItems
-      .map((cart) => {
-        if (cart.product.id === id) {
-          if (cart.quantity === 1 && !itemRemoved) {
-            itemRemoved = true;
-            toast.error(
-              `Your ${cart.product.title} has been removed from the cart`,
-            );
-          }
-          return { ...cart, quantity: cart.quantity - 1 };
-        }
-        return cart;
-      })
-      .filter((cart) => cart.quantity > 0);
+  //   const newCartValue = cartItems
+  //     .map((cart) => {
+  //       if (cart.product.id === id) {
+  //         if (cart.quantity === 1 && !itemRemoved) {
+  //           itemRemoved = true;
+  //           toast.error(
+  //             `Your ${cart.product.title} has been removed from the cart`,
+  //           );
+  //         }
+  //         return { ...cart, quantity: cart.quantity - 1 };
+  //       }
+  //       return cart;
+  //     })
+  //     .filter((cart) => cart.quantity > 0);
 
-    if (newCartValue.length === 0) {
-      toast.error("Your cart is empty now");
-    }
+  //   if (newCartValue.length === 0) {
+  //     toast.error("Your cart is empty now");
+  //   }
 
-    setCartItems(newCartValue);
-  };
+  //   setCartItems(newCartValue);
+  // };
+
+  const { mutate: increaseQuantity } = useMutation({
+    mutationFn: addProductToCart,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+      setQuantity((prev) => prev + 1);
+
+      toast.success("Product quantity increased");
+    },
+    onError: (error) => {
+      toast.error("Error increasing product quantity");
+      console.error("Error increasing product quantity:", error);
+    },
+  });
+
+  const { mutate: decreaseQuantity } = useMutation({
+    mutationFn: deleteProductFromCart,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+      setQuantity((prev) => prev - 1);
+
+      toast.success("Product quantity decreased");
+    },
+    onError: (error) => {
+      toast.error("Error decreasing product quantity");
+      console.error("Error decreasing product quantity:", error);
+    },
+  });
 
   const clearCart = async () => {
     await deleteAllCartItems();
@@ -209,7 +243,7 @@ const Cart = () => {
                 <input
                   type="text"
                   className="max-w-12 px-4"
-                  placeholder={item.quantity.toString()}
+                  placeholder={quantity}
                 />
                 <div className="flex flex-col items-center justify-center">
                   <ChevronUp

@@ -17,7 +17,14 @@ export const deleteAllCartItems = async () => {
 
 export const addProductToCart = async (id: number) => {
   return handleRequest(
-    () => Axios.post(`/cart/add/${id}`).then((res) => res.data),
+    () => Axios.post(`/cart/${id}/?type=add`, { id }).then((res) => res.data),
     `Error adding product ${id} to cart`,
+  );
+};
+
+export const deleteProductFromCart = async (id: number) => {
+  return handleRequest(
+    () => Axios.delete(`/cart/delete/${id}/`).then((res) => res.data),
+    `Error deleting product ${id} from cart`,
   );
 };

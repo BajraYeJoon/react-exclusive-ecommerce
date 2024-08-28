@@ -8,7 +8,7 @@ import { Suspense, useEffect, useState } from "react";
 import { cn } from "../../../common/lib/utils";
 import { BiStar } from "react-icons/bi";
 // import useCart from "../../hooks/useCart";
-import { useAddToCart } from "../ProductCard/ProductCard";
+// import { useAddToCart } from "../ProductCard/ProductCard";
 import { fetchProductDetails } from "../../../common/api/productApi";
 
 interface RadioOption {
@@ -52,7 +52,7 @@ const SizesGroup = ({ name, options, defaultValue }: SizeProps) => {
 const Singleproduct = () => {
   const { productId } = useParams();
   const [details, setDetails] = useState<any>([]);
-  const { mutate: addToCart } = useAddToCart();
+  // const { mutate: addToCart } = useAddToCart();
 
   console.log(productId);
 
@@ -170,10 +170,10 @@ const Singleproduct = () => {
               <h2 className="text-forerground mt-8 text-base">Sizes</h2>
               <SizesGroup name="type" options={sizeOPtions} defaultValue="xs" />
 
-              <Button className="mt-6" onClick={() => addToCart(details.id)}>
+              {/* <Button className="mt-6" onClick={() => addToCart(details.id)}>
                 <ShoppingBasket className="mr-4" />
                 Add to cart
-              </Button>
+              </Button> */}
               <ul className="mt-8 space-y-2 border p-4">
                 <FeatureItem
                   icon={<CgGlobeAlt size={50} />}

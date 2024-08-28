@@ -11,9 +11,9 @@ import {
 } from "../../api/wishlistApi";
 import { addProductToCart } from "../../api/cartApi";
 import { useAuthContext } from "../../context/useAuthContext";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useRecoilState } from "recoil";
-import { cartState } from "../../atoms/cartState";
+import { useMutation, useQuery } from "@tanstack/react-query";
+// import { useRecoilState } from "recoil";
+// import { cartState } from "../../atoms/cartState";
 import { queryClient } from "../../../common/lib/reactQueryClient";
 
 interface ProductCardProps {
@@ -24,24 +24,24 @@ interface ProductCardProps {
   id: number;
 }
 
-export const useAddToCart = () => {
-  const queryClient = useQueryClient();
+// export const useAddToCart = () => {
+//   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: (id: number) => addProductToCart(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cart"] });
-      toast.success("Product added to cart");
-      console.log("Added to cart");
-    },
-    onError: (error) => {
-      toast.error("Please login to add to Cart", {
-        className: "bg-red-500",
-      });
-      console.error("Error adding to cart:", error);
-    },
-  });
-};
+//   return useMutation({
+//     mutationFn: (id: number) => addProductToCart(id),
+//     onSuccess: () => {
+//       queryClient.invalidateQueries({ queryKey: ["cart"] });
+//       toast.success("Product added to cart");
+//       console.log("Added to cart");
+//     },
+//     onError: (error) => {
+//       toast.error("Please login to add to Cart", {
+//         className: "bg-red-500",
+//       });
+//       console.error("Error adding to cart:", error);
+//     },
+//   });
+// };
 
 const ProductCard = ({
   title,
@@ -53,7 +53,7 @@ const ProductCard = ({
   const { dimension } = useWindow();
   const { isLoggedIn } = useAuthContext();
   // const { mutate: addToCart } = useAddToCart();
-  const [, setCart] = useRecoilState(cartState);
+  // const [, setCart] = useRecoilState(cartState);
 
   const { data: favoritesData } = useQuery({
     queryKey: ["favorites"],
@@ -104,36 +104,47 @@ const ProductCard = ({
     );
   };
 
+  // const addToCartMutation = useMutation({
+  //   mutationFn: addProductToCart,
+  //   onSuccess: () => {
+  //     setCart((currentCart) => {
+  //       const productIndex = currentCart.findIndex((item) => item.id === id);
+  //       if (productIndex !== -1) {
+  //         toast.success(
+  //           `Your ${title} has been added to the cart ${
+  //             currentCart[productIndex].quantity + 1
+  //           } times`,
+  //         );
+  //         return currentCart.map((item, index) =>
+  //           index === productIndex
+  //             ? { ...item, quantity: item.quantity + 1 }
+  //             : item,
+  //         );
+  //       } else {
+  //         toast.success(`Your ${title} has been added to the cart`);
+  //         return [
+  //           ...currentCart,
+  //           { product: {}, title, price, image, id, quantity: 1 },
+  //         ];
+  //       }
+  //     });
+  //   },
+  //   onError: () => {
+  //     toast.error("Failed to add product to cart");
+  //   },
+  // });
+
   const addToCartMutation = useMutation({
     mutationFn: addProductToCart,
     onSuccess: () => {
-      setCart((currentCart) => {
-        const productIndex = currentCart.findIndex((item) => item.id === id);
-        if (productIndex !== -1) {
-          toast.success(
-            `Your ${title} has been added to the cart ${
-              currentCart[productIndex].quantity + 1
-            } times`,
-          );
-          return currentCart.map((item, index) =>
-            index === productIndex
-              ? { ...item, quantity: item.quantity + 1 }
-              : item,
-          );
-        } else {
-          toast.success(`Your ${title} has been added to the cart`);
-          return [
-            ...currentCart,
-            { product: {}, title, price, image, id, quantity: 1 },
-          ];
-        }
-      });
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+      toast.success("yay!!!");
     },
-    onError: () => {
-      toast.error("Failed to add product to cart");
+    onError: (error) => {
+      toast.error("errrr");
+      console.log("Error adding product to cart:", error);
     },
   });
-
   const handleFavoriteClick = () => {
     if (!isLoggedIn) {
       toast.error("Please log in to add to favorites");
@@ -142,7 +153,7 @@ const ProductCard = ({
     isFavorite(id) ? handleRemoveFavorite() : handleAddFavorite();
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     addToCartMutation.mutate(id);
   };
   return (
