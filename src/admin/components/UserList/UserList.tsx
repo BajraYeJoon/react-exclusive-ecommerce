@@ -21,6 +21,13 @@ import {
   TableHeader,
   TableRow,
 } from "../../../common/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from "../../../common/ui/dialog";
+import { EyeIcon } from "lucide-react";
+import UserDialogContent from "../UserDetail/UserDialogContent";
 
 export default function UserList() {
   const { data: usersData, isLoading } = useQuery({
@@ -70,6 +77,23 @@ export default function UserList() {
             {new Date(info.getValue() as string).toLocaleDateString()}
           </span>
         ),
+      },
+      {
+        accessorKey: "view",
+        header: "View",
+        id: "view",
+        cell: ({ row }) => {
+          return (
+            <Dialog>
+              <DialogTrigger>
+                <EyeIcon />
+              </DialogTrigger>
+              <DialogContent>
+                <UserDialogContent info={row.original} />
+              </DialogContent>
+            </Dialog>
+          );
+        },
       },
       {
         id: "remove",
