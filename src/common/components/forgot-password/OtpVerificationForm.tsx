@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../ui/button";
-import { useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { Input } from "../../ui/input";
 import { sendOtp, verifyOtp } from "../../api/forgotPassword";
 import { useRecoilValue } from "recoil";
@@ -19,7 +19,7 @@ const OtpVerificationForm = () => {
   const email = useRecoilValue(emailState);
   console.log(email, " emailllllllllllllllllll");
 
-  const onSubmit = async (data: any) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data: any) => {
     console.log(data);
 
     const otpbyUser = data.code1 + data.code2 + data.code3 + data.code4;
@@ -65,7 +65,7 @@ const OtpVerificationForm = () => {
         </div>
 
         <div>
-          <form onSubmit={handleSubmit(onSubmit)} method="post">
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col space-y-16">
               <div className="mx-auto flex w-full max-w-xs flex-row items-center justify-between">
                 <div className="h-16 w-16">

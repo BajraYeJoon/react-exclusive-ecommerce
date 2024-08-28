@@ -7,3 +7,10 @@ export const fetchUserDetails = async () => {
     "Error fetching user details",
   );
 };
+
+export const updateUserDetails = async (data) => {
+  return handleRequest(
+    () => Axios.patch(`/profile/updateprofile`, data).then((res) => res.data),
+    "Error updating user details",
+  );
+};

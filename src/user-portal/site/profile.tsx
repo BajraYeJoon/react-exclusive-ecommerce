@@ -1,33 +1,18 @@
 import { useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import axios from "axios";
-import { Button } from "../components";
-import { useAuthContext } from "../context/useAuthContext";
-import Cookies from "js-cookie";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchUserDetails } from "../api/userApi";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loading } from "./layout/Layout";
-
+import { useAuthContext } from "../context/useAuthContext";
+import { fetchUserDetails, updateUserDetails } from "../api/userApi";
+import { Button } from "../components";
+import { Input } from "../../common/ui/input";
 interface FormData {
-  name: string;
-  phone: string;
+  name?: string;
+  phone?: string;
 }
 
-
-const updateUserDetails = async (data: FormData): Promise<void> => {
-  await axios.post(
-    "https://nest-ecommerce-1fqk.onrender.com/profile/updateprofile",
-    data,
-    {
-      headers: {
-        Authorization: `Bearer ${Cookies.get("token")}`,
-      },
-    },
-  );
-};
-
 const ProfilePage = () => {
-  const { register, handleSubmit } = useForm<FormData>();
+  const { register, handleSubmit, reset } = useForm<FormData>();
   const [message, setMessage] = useState("");
   const { logout } = useAuthContext();
   const queryClient = useQueryClient();
@@ -39,11 +24,11 @@ const ProfilePage = () => {
 
   const mutation = useMutation({
     mutationFn: updateUserDetails,
-    onSuccess: () => {
-      // reset({
-      //   name: data.name,
-      //   phone: data.phone,
-      // });
+    onSuccess: (data) => {
+      const resetData: Partial<FormData> = {};
+      if (data.name) resetData.name = data.name;
+      if (data.phone) resetData.phone = data.phone;
+      reset(resetData);
       queryClient.invalidateQueries({ queryKey: ["userDetail"] });
       setMessage("Profile updated successfully");
     },
@@ -74,32 +59,47 @@ const ProfilePage = () => {
           Welcome, {userdetail?.name}
         </div>
       </div>
-      <hr className="mb-8 mt-4" />
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="mb-4 w-fit">
+          <label
+            className="mb-2 block text-sm font-bold text-gray-700"
+            htmlFor="name"
+          >
+            Name
+          </label>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="mb-6">
-        <div>
-          <label htmlFor="name">Name:</label>
-          <input
-            type="text"
+          <Input
             id="name"
-            {...register("name")}
-            className="border p-2"
-          />
-        </div>
-        <div>
-          <label htmlFor="phone">Phone:</label>
-          <input
             type="text"
-            id="phone"
-            {...register("phone")}
-            className="border p-2"
+            {...register("name")}
+            defaultValue={userdetail?.name || ""}
+            // placeholder={userdetail?.name || ""}
           />
         </div>
-        <Button type="submit">Update Profile</Button>
+        <div className="mb-4 w-fit">
+          <label
+            className="mb-2 block text-sm font-bold text-gray-700"
+            htmlFor="phone"
+          >
+            Phone
+          </label>
+          <Input
+          id="phone"
+            type="text"
+            {...register("phone")}
+            defaultValue={userdetail?.phone || ""}
+            // placeholder={userdetail?.phone || ""}
+          />
+        </div>
+        <div className="flex items-center justify-between">
+          <Button>Update Profile</Button>
+        </div>
       </form>
-      {message && <p>{message}</p>}
+      {message && <p className="mt-4 text-green-500">{message}</p>}
 
-      <Button onClick={logout}>Log Out</Button>
+      <Button onClick={logout} className="mt-4">
+        Log Out
+      </Button>
     </div>
   );
 };

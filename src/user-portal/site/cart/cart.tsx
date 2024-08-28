@@ -15,6 +15,7 @@ import {
   useIncreaseQuantity,
 } from "../../utils/cartutils";
 import { useQuery } from "@tanstack/react-query";
+import { v4 as uuid } from "uuid";
 
 const cartHeaderData = [
   { label: "Price" },
@@ -53,7 +54,7 @@ const Cart = () => {
 
   const navigateToCheckout = (cartItems: any, total: number) => {
     const checkoutData = {
-      id: Math.random().toString(36).substring(2, 15),
+      id: uuid().toString(36).substring(2, 15),
       cartItems,
       total,
       couponCode,

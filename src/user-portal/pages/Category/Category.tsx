@@ -1,11 +1,10 @@
 import { PagesHeader } from "../../components";
-// import { categories } from "../../constants/data";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { Loading } from "../../site";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
-
+import { v4 as uuid } from "uuid";
 import "swiper/css";
 import "swiper/css/navigation";
 import { fetchCategories } from "../../../common/api/categoryApi";
@@ -13,7 +12,7 @@ import { fetchCategories } from "../../../common/api/categoryApi";
 interface CategoryType {
   id: number;
   name: string;
-  icon: any;
+  icon: string;
 }
 const Category = () => {
   const {
@@ -27,13 +26,12 @@ const Category = () => {
   });
 
   if (isLoading) return <Loading />;
-  if (error) return <div>An error occurred: {(error as Error).message}</div>;
+  if (error) return <div>An error occurred: {error.message}</div>;
 
   return (
     <section className="category-container flex flex-col gap-2 border-b border-foreground/30 pb-5 md:gap-7 md:pb-14">
       <PagesHeader subHeading="Categories" Heading="Browse by Category" />
       <div className="category-grid my-10">
-        {/* <div className="grid w-full grid-cols-3 gap-6 md:grid-cols-6"> */}
         <Swiper
           spaceBetween={20}
           pagination={{ clickable: true }}
@@ -59,11 +57,11 @@ const Category = () => {
             },
           }}
         >
-          {categories?.map((category: CategoryType, index: number) => {
+          {categories?.map((category: CategoryType) => {
             return (
               <SwiperSlide
                 className="group gap-2 rounded-md border-2 border-foreground/20 py-4 hover:border-none hover:bg-primary md:p-6"
-                key={index}
+                key={`category-${uuid()}`}
               >
                 <Link
                   to={`/category/${category.name}/${category.id}`}
@@ -86,7 +84,6 @@ const Category = () => {
             );
           })}
         </Swiper>
-        {/* </div> */}
       </div>
     </section>
   );

@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { cartState } from "../../atoms/cartState";
 import Cookies from "js-cookie";
 import axios from "axios";
+import { v4 as uuid } from "uuid";
 
 const Checkout = () => {
   const {
@@ -32,7 +33,7 @@ const Checkout = () => {
         return_url: "http://localhost:5173/order-placed",
         website_url: "http://localhost:5173",
         amount: checkoutValues.total,
-        purchase_order_id: Math.random().toString(36).substring(2, 15),
+        purchase_order_id: uuid().toString().substring(2, 15),
         purchase_order_name: "Order",
         customer_info: {
           name: data.fullName,
@@ -53,7 +54,7 @@ const Checkout = () => {
     }
 
     const orderData = {
-      id: Math.random().toString(36).substring(2, 15),
+      id: uuid().toString(36).substring(2, 15),
       billingInfo: data,
       products: checkoutValues.cartItems,
       shipping: 45,
