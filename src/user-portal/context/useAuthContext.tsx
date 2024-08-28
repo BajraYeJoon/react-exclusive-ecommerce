@@ -94,13 +94,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           phone: phoneNumber,
         },
       );
-      if (response.status === 201) {
-        Cookies.set("token", response.data.token, { expires: 7 });
-
-        await fetchUserDetails(response.data.token);
-        setIsLoggedIn(true);
-
-        toast.success("Signup successful");
+      if (response.status === 200) {
+        toast.success(
+          "Signup successful. Please check your email to verify your account.",
+        );
+      } else if (response.status === 400) {
+        toast.error("You are already registerd. Please Login");
       } else {
         console.error("Signup failed", response.data);
         toast.error("Signup failed");

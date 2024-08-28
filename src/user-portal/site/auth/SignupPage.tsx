@@ -1,24 +1,27 @@
 import { Button } from "../../components";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import FormInput from "../../components/FormInput/FormInput";
 import { SignUpFormData } from "../../schemas/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SignUpFormSchema } from "../../schemas/zodSchema";
 import { GoogleSignInComponent } from "./GoogleSignIn";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../context/useAuthContext";
+import { Input } from "../../../common/ui/input";
+import { toast } from "sonner";
+import { reset } from "canvas-confetti";
 
 const SignupPage = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<SignUpFormData>({
+    mode: "onChange",
     resolver: zodResolver(SignUpFormSchema),
   });
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { signup } = useAuthContext();
 
   const onSubmit = async (data: SignUpFormData) => {
@@ -27,7 +30,7 @@ const SignupPage = () => {
 
     try {
       const response = signup({ name, email, password, phoneNumber });
-      navigate("/sign-in");
+      reset();
       console.log(response);
     } catch (err) {
       console.error("Signup error", err);
@@ -40,34 +43,65 @@ const SignupPage = () => {
       <p className="text-sm lg:text-base">Enter your details below</p>
       <form onSubmit={handleSubmit(onSubmit)} className="w-full">
         <div className="flex w-full flex-col gap-4">
-          <FormInput
-            type="text"
-            placeholder="Name"
-            name="name"
-            register={register}
-            error={errors.name}
-          />
-          <FormInput
-            type="email"
-            placeholder="Email"
-            name="email"
-            register={register}
-            error={errors.email}
-          />
-          <FormInput
-            type="password"
-            placeholder="Password"
-            name="password"
-            register={register}
-            error={errors.password}
-          />
-          <FormInput
-            type="text"
-            placeholder="phone"
-            name="phoneNumber"
-            register={register}
-            error={errors.phoneNumber}
-          />
+          <div>
+            <Input
+              type="text"
+              placeholder="Name"
+              {...register("name", {
+                pattern: /^[a-zA-Z0-9_.-]*$/,
+                required: "Name is required",
+              })}
+            />
+            {errors && (
+              <span className="error text-xs text-primary">
+                {errors.name?.message}
+              </span>
+            )}
+          </div>
+          <div>
+            <Input
+              id="email"
+              type="email"
+              placeholder="Email"
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^[a-zA-Z0-9._%+-]+@gmail\.com$/,
+                  message: "Please enter a valid Gmail address",
+                },
+              })}
+            />
+            {errors && (
+              <span className="error text-xs text-primary">
+                {errors.email?.message}
+              </span>
+            )}
+          </div>
+          <div>
+            <Input
+              type="password"
+              placeholder="Password"
+              {...register("password")}
+            />
+            {errors && (
+              <span className="error text-xs text-primary">
+                {errors.password?.message}
+              </span>
+            )}
+          </div>
+          <div>
+            <Input
+              type="text"
+              placeholder="phone"
+              {...register("phoneNumber")}
+            />
+            {errors && (
+              <span className="error text-xs text-primary">
+                {errors.phoneNumber?.message}
+              </span>
+            )}
+          </div>
+
           <Button type="submit" className="w-full">
             Create Account
           </Button>
