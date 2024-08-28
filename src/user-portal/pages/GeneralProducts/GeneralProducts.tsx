@@ -7,6 +7,8 @@ import { Navigation } from "swiper/modules";
 import { useQuery } from "@tanstack/react-query";
 import { fetchAllProducts } from "../../../common/api/productApi";
 import { Loading } from "../../site";
+import ProductCardSkeleton from "../../../common/components/productCardSkeleton/ProductCardSkeleton";
+import uuidv4 from "../../../common/lib/utils/uuid";
 const GeneralProducts = () => {
   const {
     data: generalProducts,
@@ -19,8 +21,6 @@ const GeneralProducts = () => {
     refetchOnWindowFocus: false,
     staleTime: 5 * 60 * 1000,
   });
-
-  if (isLoading) return <Loading />;
 
   return (
     <section className="general-products-container flex flex-col gap-10 lg:gap-20">
@@ -55,16 +55,16 @@ const GeneralProducts = () => {
 
           // onNavigationNext={handleNext}
         >
-          {generalProducts ? (
+          {isLoading ? (
+            <ProductCardSkeleton />
+          ) : (
             <>
-              {generalProducts.map((gproduct: any, index: number) => (
-                <SwiperSlide key={index} className="">
-                  <ProductCard key={index} {...gproduct} />
+              {generalProducts.map((gproduct: any) => (
+                <SwiperSlide key={`generalproduct-${uuidv4()}`} className="">
+                  <ProductCard {...gproduct} />
                 </SwiperSlide>
               ))}
             </>
-          ) : (
-            <div>No Products Found</div>
           )}
         </Swiper>
       </div>

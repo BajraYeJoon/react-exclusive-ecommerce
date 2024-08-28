@@ -2,22 +2,19 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import PagesHeader from "../../components/PagesHeader/PagesHeader";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import { Navigation } from "swiper/modules";
-
 import "swiper/css";
 import "swiper/css/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { Loading } from "../../site";
 import { fetchBestSellingProducts } from "../../../common/api/productApi";
+import uuidv4 from "../../../common/lib/utils/uuid";
+import ProductCardSkeleton from "../../../common/components/productCardSkeleton/ProductCardSkeleton";
 
 const BestProducts = () => {
   const { data: bestSellingProducts, isLoading } = useQuery({
     queryKey: ["bestSellingProducts"],
     queryFn: fetchBestSellingProducts,
   });
-
-  if (isLoading) return <Loading />;
-
-  console.log(bestSellingProducts, "here maybe the id");
 
   return (
     <section className="flex flex-col gap-20 max-2xl:gap-10">
@@ -53,13 +50,17 @@ const BestProducts = () => {
           },
         }}
       >
-        {bestSellingProducts &&
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          bestSellingProducts.map((bestProductCard: any, index: number) => (
-            <SwiperSlide key={index} className="">
-              <ProductCard key={index} {...bestProductCard} />
-            </SwiperSlide>
-          ))}
+        {isLoading ? (
+          <ProductCardSkeleton />
+        ) : (
+          <>
+            {bestSellingProducts.map((bestProductCard: any) => (
+              <SwiperSlide key={`bestproduct-${uuidv4()}`} className="">
+                <ProductCard {...bestProductCard} />
+              </SwiperSlide>
+            ))}
+          </>
+        )}
       </Swiper>
     </section>
   );

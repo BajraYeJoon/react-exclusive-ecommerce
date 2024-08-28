@@ -11,6 +11,8 @@ import { Navigation } from "swiper/modules";
 import { Link } from "react-router-dom";
 import { Loading } from "../../site";
 import { fetchSalesProduct } from "../../../common/api/productApi";
+import ProductCardSkeleton from "../../../common/components/productCardSkeleton/ProductCardSkeleton";
+import uuidv4 from "../../../common/lib/utils/uuid";
 
 interface SalesCardProps {
   title: string;
@@ -33,8 +35,6 @@ const SalesCard = () => {
     refetchOnWindowFocus: false,
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
-
-  // if (isLoading) return <Loading />;
 
   if (!products || products.length === 0)
     return (
@@ -60,7 +60,7 @@ const SalesCard = () => {
       />
 
       {isLoading ? (
-        <Loading />
+        <ProductCardSkeleton />
       ) : (
         <>
           <div className="product-card-container w-full items-center justify-between gap-4 overflow-hidden">
@@ -89,12 +89,11 @@ const SalesCard = () => {
               }}
               // onNavigationNext={handleNext}
             >
-              {products &&
-                products.map((productCard: SalesCardProps, index: number) => (
-                  <SwiperSlide key={index} className="">
-                    <ProductCard {...productCard} discountTag />
-                  </SwiperSlide>
-                ))}
+              {products.map((productCard: SalesCardProps) => (
+                <SwiperSlide key={`salesPRODUCT-${uuidv4()}`} className="">
+                  <ProductCard {...productCard} discountTag />
+                </SwiperSlide>
+              ))}
             </Swiper>
           </div>
 
