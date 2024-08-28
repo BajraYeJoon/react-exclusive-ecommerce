@@ -1,12 +1,10 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { PagesHeader, Button, ProductCard } from "../../components";
-// import { generalProducts } from "../../constants/data";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import { useQuery } from "@tanstack/react-query";
 import { fetchAllProducts } from "../../../common/api/productApi";
-import { Loading } from "../../site";
 import ProductCardSkeleton from "../../../common/components/productCardSkeleton/ProductCardSkeleton";
 import uuidv4 from "../../../common/lib/utils/uuid";
 const GeneralProducts = () => {

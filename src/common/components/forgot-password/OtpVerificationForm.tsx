@@ -6,7 +6,7 @@ import { sendOtp, verifyOtp } from "../../api/forgotPassword";
 import { useRecoilValue } from "recoil";
 import { emailState } from "../../../user-portal/atoms/emailstate";
 import { toast } from "sonner";
-
+import Cookies from "js-cookie";
 const OtpVerificationForm = () => {
   const {
     register,
@@ -33,6 +33,7 @@ const OtpVerificationForm = () => {
     const result = await verifyOtp(payload);
     if (result) {
       navigate("/login");
+      Cookies.remove("key");
     }
   };
 

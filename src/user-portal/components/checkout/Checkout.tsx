@@ -54,7 +54,7 @@ const Checkout = () => {
     }
 
     const orderData = {
-      id: uuid().toString(36).substring(2, 15),
+      id: uuid().toString().substring(2, 15),
       billingInfo: data,
       products: checkoutValues.cartItems,
       shipping: 45,

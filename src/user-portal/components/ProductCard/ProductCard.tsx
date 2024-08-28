@@ -1,4 +1,3 @@
-// import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { EyeIcon, HeartIcon } from "lucide-react";
@@ -12,10 +11,9 @@ import {
 import { addProductToCart } from "../../api/cartApi";
 import { useAuthContext } from "../../context/useAuthContext";
 import { useMutation, useQuery } from "@tanstack/react-query";
-// import { useRecoilState } from "recoil";
-// import { cartState } from "../../atoms/cartState";
 import { queryClient } from "../../../common/lib/reactQueryClient";
 import { Button } from "../../../common/ui/button";
+import uuidv4 from "../../../common/lib/utils/uuid";
 
 interface ProductCardProps {
   title: string;
@@ -191,8 +189,8 @@ const ProductCard = ({
         </div>
         <div className="flex items-center text-xs">
           <div className="flex items-center space-x-1">
-            {Array.from({ length: 5 }).map((_, index) => (
-              <FaStar key={`star-${index}`} className="text-accent md:h-8" />
+            {Array.from({ length: 5 }).map(() => (
+              <FaStar key={`star-${uuidv4()}`} className="text-accent md:h-8" />
             ))}
           </div>
         </div>

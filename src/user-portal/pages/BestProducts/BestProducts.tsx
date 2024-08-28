@@ -5,7 +5,6 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { Loading } from "../../site";
 import { fetchBestSellingProducts } from "../../../common/api/productApi";
 import uuidv4 from "../../../common/lib/utils/uuid";
 import ProductCardSkeleton from "../../../common/components/productCardSkeleton/ProductCardSkeleton";

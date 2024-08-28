@@ -69,6 +69,8 @@ export const router = createBrowserRouter([
           {
             path: "/verify-otp",
             element: <OtpVerificationForm />,
+            loader: () =>
+              !Cookies.get("key") ? redirect("/forgot-password") : null,
           },
         ],
       },

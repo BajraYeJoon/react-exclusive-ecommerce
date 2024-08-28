@@ -8,7 +8,7 @@ export const fetchUserDetails = async () => {
   );
 };
 
-export const updateUserDetails = async (data) => {
+export const updateUserDetails = async (data: any) => {
   return handleRequest(
     () => Axios.patch(`/profile/updateprofile`, data).then((res) => res.data),
     "Error updating user details",

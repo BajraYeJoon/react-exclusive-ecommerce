@@ -5,7 +5,7 @@ import { Button } from "../../ui/button";
 import { sendOtp } from "../../api/forgotPassword";
 import { useRecoilState } from "recoil";
 import { emailState } from "../../../user-portal/atoms/emailstate";
-
+import Cookies from "js-cookie";
 const ForgotPassword = () => {
   const {
     register,
@@ -22,8 +22,9 @@ const ForgotPassword = () => {
       setEmail(data.email);
       console.log("Response:", response.data);
       toast.success("otp has been sent to your email");
+      Cookies.set("key", response.data.message);
 
-      if (response.data.message.includes("successfully")) {
+      if (response.status === 200) {
         navigate("/verify-otp");
       }
     } catch (error) {

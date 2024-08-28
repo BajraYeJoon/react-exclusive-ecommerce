@@ -54,7 +54,7 @@ const Cart = () => {
 
   const navigateToCheckout = (cartItems: any, total: number) => {
     const checkoutData = {
-      id: uuid().toString(36).substring(2, 15),
+      id: uuid().toString().substring(2, 15),
       cartItems,
       total,
       couponCode,

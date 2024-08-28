@@ -7,12 +7,18 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import { queryClient } from "../../common/lib/reactQueryClient";
 
-export const handleCouponChange = (e, setCouponCode) => {
-  const code = e.target.value;
+export const handleCouponChange = (
+  e: React.ChangeEvent<HTMLInputElement>,
+  setCouponCode: React.Dispatch<React.SetStateAction<string>>,
+) => {
+  const code: string = e.target.value;
   setCouponCode(code);
 };
 
-export const applyCoupon = (couponCode, setDiscount) => {
+export const applyCoupon = (
+  couponCode: string,
+  setDiscount: React.Dispatch<React.SetStateAction<number>>,
+) => {
   if (couponCode === "DISCOUNT10") {
     setDiscount(0.1);
     toast.success("Coupon code DISCOUNT10 applied. 10% discount added.");
