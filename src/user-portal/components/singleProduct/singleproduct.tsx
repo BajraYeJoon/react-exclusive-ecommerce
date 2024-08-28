@@ -7,20 +7,20 @@ import { useParams } from "react-router-dom";
 import { Suspense, useEffect, useState } from "react";
 import { cn } from "../../../common/lib/utils";
 import { BiStar } from "react-icons/bi";
-// import useCart from "../../hooks/useCart";
-// import { useAddToCart } from "../ProductCard/ProductCard";
+import { v4 as uuidv4 } from "uuid";
 import { fetchProductDetails } from "../../../common/api/productApi";
+import { useIncreaseQuantity } from "../../utils/cartutils";
 
-interface RadioOption {
-  value: string;
-  label: string;
-}
+// interface RadioOption {
+//   value: string;
+//   label: string;
+// }
 
-interface SizeProps {
-  name: string;
-  options: RadioOption[];
-  defaultValue?: string;
-}
+// interface SizeProps {
+//   name: string;
+//   options: RadioOption[];
+//   defaultValue?: string;
+// }
 
 interface FeatureItemProps {
   icon: React.ReactNode;
@@ -28,31 +28,31 @@ interface FeatureItemProps {
   description: string;
 }
 
-const SizesGroup = ({ name, options, defaultValue }: SizeProps) => {
-  return (
-    <div className="mt-3 flex select-none flex-wrap items-center gap-1">
-      {options.map((option, index) => (
-        <label key={index} className="">
-          <input
-            type="radio"
-            name={name}
-            value={option.value}
-            className="peer sr-only"
-            defaultChecked={defaultValue === option.value}
-          />
-          <p className="rounded-lg border px-6 py-2 font-bold peer-checked:bg-primary peer-checked:text-background">
-            {option.label}
-          </p>
-        </label>
-      ))}
-    </div>
-  );
-};
+// const SizesGroup = ({ name, options, defaultValue }: SizeProps) => {
+//   return (
+//     <div className="mt-3 flex select-none flex-wrap items-center gap-1">
+//       {options.map((option, index) => (
+//         <label key={index} className="">
+//           <input
+//             type="radio"
+//             name={name}
+//             value={option.value}
+//             className="peer sr-only"
+//             defaultChecked={defaultValue === option.value}
+//           />
+//           <p className="rounded-lg border px-6 py-2 font-bold peer-checked:bg-primary peer-checked:text-background">
+//             {option.label}
+//           </p>
+//         </label>
+//       ))}
+//     </div>
+//   );
+// };
 
 const Singleproduct = () => {
   const { productId } = useParams();
   const [details, setDetails] = useState<any>([]);
-  // const { mutate: addToCart } = useAddToCart();
+  const { mutate: addToCart } = useIncreaseQuantity();
 
   console.log(productId);
 
@@ -65,12 +65,12 @@ const Singleproduct = () => {
 
   console.log(details);
 
-  const sizeOPtions = [
-    { value: "xs", label: "XS" },
-    { value: " sm", label: "SM" },
-    { value: "l", label: "L" },
-    { value: "xl", label: "XL" },
-  ];
+  // const sizeOPtions = [
+  //   { value: "xs", label: "XS" },
+  //   { value: " sm", label: "SM" },
+  //   { value: "l", label: "L" },
+  //   { value: "xl", label: "XL" },
+  // ];
 
   return (
     <section className="py-12 sm:py-16">
@@ -150,15 +150,15 @@ const Singleproduct = () => {
                     : " out of stock"}
                 </span>
               </h1>
-              <p className="text-base text-gray-400">
-                {details.brand && details.brand}
-              </p>
+              <p className="text-base text-gray-400">{details.brand}</p>
               <div className="my-5 flex items-center">
-                {Array.from({ length: Math.ceil(details.rating) }).map(
-                  (_, index) => (
-                    <BiStar key={index} size={20} className="text-yellow-500" />
-                  ),
-                )}
+                {Array.from({ length: Math.ceil(details.rating) }).map(() => (
+                  <BiStar
+                    key={`star-${uuidv4()}`}
+                    size={20}
+                    className="text-yellow-500"
+                  />
+                ))}
 
                 <p className="ml-2 text-sm font-medium text-gray-500">
                   {details.rating} Ratings
@@ -168,12 +168,12 @@ const Singleproduct = () => {
               <p>{details.description}</p>
               <hr className="w-full bg-foreground/35" />
               <h2 className="text-forerground mt-8 text-base">Sizes</h2>
-              <SizesGroup name="type" options={sizeOPtions} defaultValue="xs" />
+              <Button>{details.sizes}</Button>
 
-              {/* <Button className="mt-6" onClick={() => addToCart(details.id)}>
+              <Button className="mt-6" onClick={() => addToCart(details.id)}>
                 <ShoppingBasket className="mr-4" />
                 Add to cart
-              </Button> */}
+              </Button>
               <ul className="mt-8 space-y-2 border p-4">
                 <FeatureItem
                   icon={<CgGlobeAlt size={50} />}

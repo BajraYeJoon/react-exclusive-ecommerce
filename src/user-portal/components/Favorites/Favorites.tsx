@@ -5,8 +5,8 @@ import { deleteAllFavorites, fetchFavorites } from "../../api/wishlistApi";
 import { Button } from "../../../common/ui/button";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { FaSpinner } from "react-icons/fa";
 import { queryClient } from "../../../common/lib/reactQueryClient";
+import { Loading } from "../../site";
 
 const Favorites = () => {
   const { data: favoritesData, isLoading } = useQuery({
@@ -25,17 +25,7 @@ const Favorites = () => {
     },
   });
 
-  if (isLoading)
-    return (
-      <div
-        aria-label="Loading..."
-        role="status"
-        className="flex h-screen w-full items-center justify-center space-x-2"
-      >
-        <FaSpinner className="h-20 w-20 animate-spin stroke-gray-500" />
-        <span className="text-4xl font-medium text-gray-500">Loading...</span>
-      </div>
-    );
+  if (isLoading) return <Loading />;
 
   const DeleteAllFavorites = () => {
     deleteAll.mutate();

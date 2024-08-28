@@ -15,6 +15,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 // import { useRecoilState } from "recoil";
 // import { cartState } from "../../atoms/cartState";
 import { queryClient } from "../../../common/lib/reactQueryClient";
+import { Button } from "../../../common/ui/button";
 
 interface ProductCardProps {
   title: string;
@@ -23,25 +24,6 @@ interface ProductCardProps {
   discountTag?: boolean;
   id: number;
 }
-
-// export const useAddToCart = () => {
-//   const queryClient = useQueryClient();
-
-//   return useMutation({
-//     mutationFn: (id: number) => addProductToCart(id),
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: ["cart"] });
-//       toast.success("Product added to cart");
-//       console.log("Added to cart");
-//     },
-//     onError: (error) => {
-//       toast.error("Please login to add to Cart", {
-//         className: "bg-red-500",
-//       });
-//       console.error("Error adding to cart:", error);
-//     },
-//   });
-// };
 
 const ProductCard = ({
   title,
@@ -52,8 +34,6 @@ const ProductCard = ({
 }: ProductCardProps) => {
   const { dimension } = useWindow();
   const { isLoggedIn } = useAuthContext();
-  // const { mutate: addToCart } = useAddToCart();
-  // const [, setCart] = useRecoilState(cartState);
 
   const { data: favoritesData } = useQuery({
     queryKey: ["favorites"],
@@ -61,8 +41,6 @@ const ProductCard = ({
     enabled: isLoggedIn,
   });
   const favorites = favoritesData?.data || [];
-
-  console.log(favorites);
 
   const mutation = useMutation({
     mutationFn: deleteFavorites,
@@ -165,7 +143,6 @@ const ProductCard = ({
             src={image}
             alt="product image"
           />
-          s
         </Link>
 
         {discountTag && (
@@ -175,7 +152,7 @@ const ProductCard = ({
         )}
 
         <div className="absolute right-4 top-4 flex flex-col gap-2">
-          <span
+          <button
             className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-foreground/20 lg:h-7 lg:w-7"
             onClick={handleFavoriteClick}
           >
@@ -184,7 +161,7 @@ const ProductCard = ({
               fill={isFavorite(id) ? "red" : "none"}
               className={isFavorite(id) ? "text-primary" : ""}
             />
-          </span>
+          </button>
           <Link
             to={`product/${id}`}
             replace={true}
@@ -194,13 +171,13 @@ const ProductCard = ({
           </Link>
         </div>
 
-        <div className="group cursor-pointer" onClick={handleAddToCart}>
+        <Button className="group cursor-pointer" onClick={handleAddToCart}>
           <div className="absolute bottom-0 left-0 w-full bg-foreground opacity-0 transition-opacity duration-500 group-hover:opacity-100">
             <p className="py-2 text-center text-sm font-normal tracking-tight text-background">
               Add to Cart
             </p>
           </div>
-        </div>
+        </Button>
       </div>
 
       <div className="my-4 space-y-3 pb-5">
@@ -215,7 +192,7 @@ const ProductCard = ({
         <div className="flex items-center text-xs">
           <div className="flex items-center space-x-1">
             {Array.from({ length: 5 }).map((_, index) => (
-              <FaStar key={index} className="text-accent md:h-8" />
+              <FaStar key={`star-${index}`} className="text-accent md:h-8" />
             ))}
           </div>
         </div>

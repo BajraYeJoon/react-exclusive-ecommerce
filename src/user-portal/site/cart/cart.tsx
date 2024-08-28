@@ -3,19 +3,18 @@ import { Button, CustomBreakcrumb } from "../../components";
 import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
 import { cartState } from "../../atoms/cartState";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 import { checkoutState } from "../../atoms/checkoutState";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
-import {
-  addProductToCart,
-  deleteAllCartItems,
-  deleteProductFromCart,
-  fetchCart,
-} from "../../api/cartApi";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { queryClient } from "../../../common/lib/reactQueryClient";
+import { fetchCart } from "../../api/cartApi";
 import { cn } from "../../../common/lib/utils";
+import {
+  applyCoupon,
+  clearCart,
+  useDecreaseQuantity,
+  useIncreaseQuantity,
+} from "../../utils/cartutils";
+import { useQuery } from "@tanstack/react-query";
 
 const cartHeaderData = [
   { label: "Price" },
@@ -31,21 +30,26 @@ const discountState = atom<number>({
 const Cart = () => {
   const [, setCheckoutData] = useRecoilState(checkoutState);
   const [cartItems, setCartItems] = useRecoilState(cartState);
-  const [quantity, setQuantity] = useState(quantity);
 
   const navigate = useNavigate();
   const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(0);
 
-  const { data } = useQuery({ queryKey: ["cart"], queryFn: fetchCart });
+  const { data } = useQuery({
+    queryKey: ["cart"],
+    queryFn: fetchCart,
+  });
 
   useEffect(() => {
     if (data) {
       setCartItems(data.data);
     }
-  }, [data]);
+  }, [setCartItems, data]);
 
   console.log(cartItems, "caaaaaart");
+
+  const quantityofProducts = cartItems.map((value) => value.quantity);
+  console.log(quantityofProducts, "quantityofProducts");
 
   const navigateToCheckout = (cartItems: any, total: number) => {
     const checkoutData = {
@@ -58,6 +62,7 @@ const Cart = () => {
 
     setCheckoutData(checkoutData);
     Cookies.set("checkoutData", checkoutData.id);
+    console.log(checkoutData, "checkoutData");
     navigate("/checkout");
   };
 
@@ -99,53 +104,12 @@ const Cart = () => {
   //   setCartItems(newCartValue);
   // };
 
-  const { mutate: increaseQuantity } = useMutation({
-    mutationFn: addProductToCart,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cart"] });
-      setQuantity((prev) => prev + 1);
-
-      toast.success("Product quantity increased");
-    },
-    onError: (error) => {
-      toast.error("Error increasing product quantity");
-      console.error("Error increasing product quantity:", error);
-    },
-  });
-
-  const { mutate: decreaseQuantity } = useMutation({
-    mutationFn: deleteProductFromCart,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cart"] });
-      setQuantity((prev) => prev - 1);
-
-      toast.success("Product quantity decreased");
-    },
-    onError: (error) => {
-      toast.error("Error decreasing product quantity");
-      console.error("Error decreasing product quantity:", error);
-    },
-  });
-
-  const clearCart = async () => {
-    await deleteAllCartItems();
-    queryClient.invalidateQueries({ queryKey: ["cart"] });
-    toast.success("All items have been removed from the cart");
-  };
+  const { mutate: increaseQuantity } = useIncreaseQuantity();
+  const { mutate: decreaseQuantity } = useDecreaseQuantity();
 
   const handleCouponChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const code = e.target.value;
     setCouponCode(code);
-  };
-
-  const applyCoupon = () => {
-    if (couponCode === "DISCOUNT10") {
-      setDiscount(0.1);
-      toast.success("Coupon code DISCOUNT10 applied. 10% discount added.");
-    } else {
-      setDiscount(0);
-      toast.error("Invalid coupon code");
-    }
   };
 
   const calculateTotal = selector({
@@ -156,14 +120,7 @@ const Cart = () => {
 
       const subTotal = Array.isArray(cartItems)
         ? cartItems.reduce((acc, item) => {
-            if (
-              item &&
-              item.product &&
-              typeof item.product.price === "number"
-            ) {
-              return acc + item.product.price * item.quantity;
-            }
-            return acc;
+            return acc + item.product.price * item.quantity;
           }, 0)
         : 0;
 
@@ -243,7 +200,8 @@ const Cart = () => {
                 <input
                   type="text"
                   className="max-w-12 px-4"
-                  placeholder={quantity}
+                  placeholder={item.quantity.toString()}
+                  readOnly
                 />
                 <div className="flex flex-col items-center justify-center">
                   <ChevronUp
@@ -280,7 +238,10 @@ const Cart = () => {
             placeholder="Enter Coupon Code"
             className="w-full rounded-md border p-2"
           />
-          <Button className="w-full" onClick={applyCoupon}>
+          <Button
+            className="w-full"
+            onClick={() => applyCoupon(couponCode, setDiscount)}
+          >
             Add Coupon Code
           </Button>
         </div>

@@ -1,7 +1,6 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import PagesHeader from "../../components/PagesHeader/PagesHeader";
 import ProductCard from "../../components/ProductCard/ProductCard";
-// import { bestSellingProducts } from "../../constants/data";
 import { Navigation } from "swiper/modules";
 
 import "swiper/css";
@@ -17,6 +16,8 @@ const BestProducts = () => {
   });
 
   if (isLoading) return <Loading />;
+
+  console.log(bestSellingProducts, "here maybe the id");
 
   return (
     <section className="flex flex-col gap-20 max-2xl:gap-10">
