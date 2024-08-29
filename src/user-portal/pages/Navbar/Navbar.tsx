@@ -7,24 +7,10 @@ import { navLinks } from "../../constants/data";
 import { RxCross2 } from "react-icons/rx";
 import { useAuthContext } from "../../context/useAuthContext";
 import { Input } from "../../../common/ui/input";
-import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import Cookies from "js-cookie";
 import { fetchProductsBySearch } from "../../../common/api/productApi";
-// import useWindow from "../../lib/useWindow";
-// import { Dialog, DialogTrigger } from "../../components/ui/dialog";
-// import { DialogContent } from "@radix-ui/react-dialog";
-// import {
-//   Drawer,
-//   DrawerClose,
-//   DrawerContent,
-//   DrawerDescription,
-//   DrawerFooter,
-//   DrawerHeader,
-//   DrawerTitle
-//   DrawerTrigger,
-// } from "../../components/ui/drawer";
-// import { Button } from "../../components";
+import { fetchCart } from "../../api/cartApi";
+import { fetchFavorites } from "../../api/wishlistApi";
 
 type SearchResultProps = {
   id: number;
@@ -47,20 +33,7 @@ const Navbar = () => {
   const { isLoggedIn } = useAuthContext();
   const [searchQuery, setSearchQuery] = useState("");
   const [results, setResults] = useState<SearchResultProps[]>([]);
-  // const { dimension } = useWindow();
   const resultsRef = useRef<HTMLDivElement>(null);
-
-  const fetchCart = async () => {
-    const { data } = await axios.get(
-      "https://nest-ecommerce-1fqk.onrender.com/cart",
-      {
-        headers: {
-          Authorization: `Bearer ${Cookies.get("token")}`,
-        },
-      },
-    );
-    return data;
-  };
 
   useEffect(() => {
     const debouncedFetchResults = debounce(async (query: string) => {
@@ -78,11 +51,6 @@ const Navbar = () => {
   const handleLinkClick = () => {
     setToggleMenu(false);
   };
-
-  // const cartquantity = useRecoilValue(cartState).reduce(
-  //   (acc, value) => acc + value.quantity,
-  //   0,
-  // );
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -106,7 +74,12 @@ const Navbar = () => {
     enabled: isLoggedIn,
   });
 
-
+  const { data: favorites } = useQuery({
+    queryKey: ["favorites"],
+    queryFn: fetchFavorites,
+    enabled: isLoggedIn,
+  });
+  const favoritesquantity = favorites?.data.length || 0;
   const cartquantity = cart?.data?.length || 0;
 
   return (
@@ -182,39 +155,13 @@ const Navbar = () => {
               </div>
             )}
           </div>
-          {/* 
-          {dimension.width < 768 && (
-            <Dialog>
-              <DialogTrigger>
-                <Search
-                  size={30}
-                  className="flex cursor-pointer items-center ps-3"
-                />
-              </DialogTrigger>
-              <DialogContent>asdfasd</DialogContent>
-            </Dialog>
-
-            // <Drawer>
-            //   <DrawerTrigger>Open</DrawerTrigger>
-            //   <DrawerContent>
-            //     <DrawerHeader>
-            //       <DrawerTitle>Are you absolutely sure?</DrawerTitle>
-            //       <DrawerDescription>
-            //         This action cannot be undone.
-            //       </DrawerDescription>
-            //     </DrawerHeader>
-            //     <DrawerFooter>
-            //       <Button>Submit</Button>
-            //       <DrawerClose>
-            //         <Button variant="outline">Cancel</Button>
-            //       </DrawerClose>
-            //     </DrawerFooter>
-            //   </DrawerContent>
-            // </Drawer>
-          )} */}
 
           <Link to="/favorites">
-            <HeartIcon size={20} />
+            {favoritesquantity > 0 ? (
+              <HeartIcon size={20} fill="red" />
+            ) : (
+              <HeartIcon size={20} fill="none" />
+            )}
           </Link>
 
           <Link to="/cart" className="flex gap-1">

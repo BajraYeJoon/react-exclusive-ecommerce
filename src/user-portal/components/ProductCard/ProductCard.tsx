@@ -13,7 +13,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "../../../common/ui/button";
 import uuidv4 from "../../../common/lib/utils/uuid";
 import { useIncreaseQuantity } from "../../utils/cartutils";
-import { MdOutlineImageNotSupported } from "react-icons/md";
 
 interface ProductCardProps {
   title: string;
