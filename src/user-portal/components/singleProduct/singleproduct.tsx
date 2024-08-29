@@ -1,8 +1,8 @@
 import CustomBreakcrumb from "../CustomBreakcrumb/CustomBreakcrumb";
-import { ShoppingBasket } from "lucide-react";
+import { ShoppingBasket, StarIcon } from "lucide-react";
 import { Button } from "../../../common/ui/button";
 import { CgGlobeAlt } from "react-icons/cg";
-import { FcCancel } from "react-icons/fc";
+import { FcCancel, FcRating } from "react-icons/fc";
 import { useParams } from "react-router-dom";
 import { Suspense, useEffect, useState } from "react";
 import { cn } from "../../../common/lib/utils";
@@ -174,6 +174,10 @@ const Singleproduct = () => {
                 <ShoppingBasket className="mr-4" />
                 Add to cart
               </Button>
+
+              {details.ratings?.map((rating: any) => {
+                return <Reviews values={rating} />;
+              })}
               <ul className="mt-8 space-y-2 border p-4">
                 <FeatureItem
                   icon={<CgGlobeAlt size={50} />}
@@ -212,3 +216,45 @@ const FeatureItem: React.FC<FeatureItemProps> = ({
 };
 
 export default Singleproduct;
+
+const Reviews = ({ values }) => {
+  return (
+    <div className="flex flex-col gap-2">
+      <h1 className="py-5 text-lg">Reviews</h1>
+
+      {/* <div className="flex flex-wrap gap-2 w-full py-2">
+            <span className="px-2 p-1 hover:bg-blue-400 bg-gray-950 bg-opacity-30">Experience</span>
+            <span className="px-2 p-1 hover:bg-blue-400 bg-gray-950 bg-opacity-30">Quality</span>
+            <span className="px-2 p-1 hover:bg-blue-400 bg-gray-950 bg-opacity-30">Design</span>
+            <span className="px-2 p-1 hover:bg-blue-400 bg-gray-950 bg-opacity-30">Size</span>
+            <span className="px-2 p-1 hover:bg-blue-400 bg-gray-950 bg-opacity-30">Features</span>
+            <span className="px-2 p-1 hover:bg-blue-400 bg-gray-950 bg-opacity-30">Value</span>
+            <span className="px-2 p-1 hover:bg-blue-400 bg-gray-950 bg-opacity-30">Relplacement</span>
+        </div> */}
+
+      <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-4 p-4">
+          <div className="justify flex justify-between">
+            <div className="flex gap-2">
+              <div className="h-7 w-7 rounded-full bg-red-500 text-center">
+                J
+              </div>
+              <span>Jess Hopkins</span>
+            </div>
+            <div className="flex gap-1 p-1 text-orange-300">
+              {Array.from({ length: values.rating }).map(() => (
+                <StarIcon />
+              ))}
+            </div>
+          </div>
+
+          <div>{values.comment}</div>
+
+          <div className="flex justify-between">
+            <span>Feb 13, 2021</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
