@@ -14,7 +14,7 @@ import UserDialogContent from "../UserDetail/UserDialogContent";
 //   // avatarlink: string;
 // }
 
-const NewUsers = ({ values }) => {
+const NewUsers = ({ values }: any) => {
   return (
     <li className="py-3 sm:py-4">
       <div className="flex items-center">

@@ -5,7 +5,7 @@ import { cartState } from "../../atoms/cartState";
 import { Link, useNavigate } from "react-router-dom";
 import { checkoutState } from "../../atoms/checkoutState";
 import Cookies from "js-cookie";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { fetchCart } from "../../api/cartApi";
 import { cn } from "../../../common/lib/utils";
 import {
@@ -181,7 +181,7 @@ const Cart = () => {
           <div>it is isLoading</div>
         ) : (
           <>
-            {cartItems.map((item) => (
+            {cartItems.map((item: any) => (
               <div
                 key={item.product.id}
                 className="grid grid-cols-3 gap-6 md:grid-cols-2"

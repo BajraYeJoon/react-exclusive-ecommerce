@@ -4,11 +4,9 @@ import { SignUpFormData } from "../../schemas/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SignUpFormSchema } from "../../schemas/zodSchema";
 import { GoogleSignInComponent } from "./GoogleSignIn";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuthContext } from "../../context/useAuthContext";
 import { Input } from "../../../common/ui/input";
-import { toast } from "sonner";
-import { reset } from "canvas-confetti";
 
 const SignupPage = () => {
   const {

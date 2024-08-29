@@ -1,4 +1,4 @@
-const UserDialogContent = ({ info }) => {
+const UserDialogContent = ({ info }: any) => {
   return (
     <div className="m-10 max-w-sm">
       <div className="rounded-lg border bg-white px-4 pb-10 pt-8 shadow-lg">

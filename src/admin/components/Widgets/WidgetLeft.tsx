@@ -14,7 +14,7 @@ export default function WidgetLeft() {
           ?.map((user: any) => user)
           .slice(0, 5)
           .sort((a: any, b: any) => {
-            return new Date(b.createdAt) - new Date(a.createdAt);
+            return +new Date(b.createdAt) - +new Date(a.createdAt);
           })
       );
     },
@@ -37,7 +37,8 @@ export default function WidgetLeft() {
       </div>
       <div className="flow-root">
         <ul className="divide-gray-20 divide-y">
-          {newUsers && newUsers.map((values) => <NewUsers values={values} />)}
+          {newUsers &&
+            newUsers.map((values: any) => <NewUsers values={values} />)}
         </ul>
       </div>
     </div>

@@ -23,12 +23,12 @@ export const applyCoupon = (
   }
 };
 
-export const clearCart = async (queryClient) => {
+export const clearCart = async (queryClient: any) => {
   try {
     await deleteAllCartItems();
     queryClient.invalidateQueries({ queryKey: ["cart"] });
     toast.success("All items have been removed from the cart");
-  } catch (error) {
+  } catch (error: any) {
     toast.error(error.response?.data?.message);
   }
 };
