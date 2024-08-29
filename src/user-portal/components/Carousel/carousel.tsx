@@ -31,6 +31,8 @@ const Carousel = () => {
     return <Skeleton className="skeleton loading mt-4 h-96 w-full" />;
   }
 
+  console.log(bannerData, "bannerrrrrrrrr");
+
   // Handle case where there is no data
   const banner = bannerData?.[0]?.products || [];
 

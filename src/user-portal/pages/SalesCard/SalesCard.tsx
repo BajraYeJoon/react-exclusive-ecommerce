@@ -22,30 +22,30 @@ interface SalesCardProps {
 
 const SalesCard = () => {
   const {
-    data: products,
+    data: salesData,
 
     isLoading,
   } = useQuery({
     queryKey: ["sale"],
     queryFn: fetchSalesProduct,
-    select: (products) => products.slice(0, 7),
-    refetchOnWindowFocus: false,
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    select: (salesData) => salesData.slice(0, 7),
   });
 
-  if (!products || products.length === 0)
-    return (
-      <div className="px-6 py-12 font-sans">
-        <div className="container mx-auto flex flex-col items-center justify-center text-center">
-          <h2 className="mb-4 text-3xl font-bold sm:text-4xl">Stay tuned</h2>
-          <p className="mb-8 text-center text-base">
-            We're working on adding more SALE to our store. Stay tuned!
-          </p>
+  console.log(salesData, "salesdATA");
 
-          <Button>Explore More</Button>
-        </div>
-      </div>
-    );
+  // if (!products || products.length === 0)
+  //   return (
+  //     <div className="px-6 py-12 font-sans">
+  //       <div className="container mx-auto flex flex-col items-center justify-center text-center">
+  //         <h2 className="mb-4 text-3xl font-bold sm:text-4xl">Stay tuned</h2>
+  //         <p className="mb-8 text-center text-base">
+  //           We're working on adding more SALE to our store. Stay tuned!
+  //         </p>
+
+  //         <Button>Explore More</Button>
+  //       </div>
+  //     </div>
+  //   );
 
   return (
     <section className="sales-card-container flex flex-col gap-5 border-b border-foreground/30 pb-8 md:gap-7 md:pb-14">
@@ -86,7 +86,7 @@ const SalesCard = () => {
               }}
               // onNavigationNext={handleNext}
             >
-              {products.map((productCard: SalesCardProps) => (
+              {salesData.map((productCard: SalesCardProps) => (
                 <SwiperSlide key={`salesPRODUCT-${uuidv4()}`} className="">
                   <ProductCard {...productCard} discountTag />
                 </SwiperSlide>
