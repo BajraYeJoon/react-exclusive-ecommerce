@@ -23,6 +23,8 @@ import {
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogHeader,
   DialogTrigger,
 } from "../../../common/ui/dialog";
 import AddNewProductDialog from "./AddNewProductDialog";
@@ -76,7 +78,23 @@ export default function ProductsList() {
       },
       {
         accessorKey: "title",
-        header: "Status",
+        header: "Title",
+        cell: ({ row }) => {
+          return (
+            <Dialog>
+              <DialogTrigger>{row.original.title}</DialogTrigger>
+              <DialogContent>
+                <DialogHeader>{row.original.title}</DialogHeader>
+                <DialogDescription>
+                  {row.original.description}
+                </DialogDescription>
+                <DialogDescription>
+                  <Button>Add this to Flash</Button>
+                </DialogDescription>
+              </DialogContent>
+            </Dialog>
+          );
+        },
       },
       {
         accessorKey: "onSale",
