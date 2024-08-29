@@ -7,7 +7,7 @@ import {
   ProfilePage,
   SignInPage,
   Cart,
-} from "../site";
+} from "../user-portal/site";
 import Cookies from "js-cookie";
 
 import ErrorPage from "../error-page";
@@ -18,11 +18,18 @@ import {
   Checkout,
   OrderPlaced,
   FetchSingleCategory,
-} from "../components";
-import Contact from "../site/contact/contact";
-import About from "../site/about/about";
-import Singleproduct from "../components/singleProduct/singleproduct";
-import { ArrivalsPage } from "../pages";
+} from "../user-portal/components";
+import Contact from "../user-portal/site/contact/contact";
+import About from "../user-portal/site/about/about";
+import Singleproduct from "../user-portal/components/singleProduct/singleproduct";
+import { ArrivalsPage } from "../user-portal/pages";
+import AdminLayout from "../admin/Layout/Layout";
+import Dashboard from "../admin/screen/Dashboard/Dashboard";
+import UserList from "../admin/components/UserList/UserList";
+import ProductsList from "../admin/components/ProductsList/ProductsList";
+import AddCategoryForm from "../admin/components/CreateCategory/CreateCategory";
+import ForgotPassword from "../common/components/forgot-password/ForgotPassword";
+import OtpVerificationForm from "../common/components/forgot-password/OtpVerificationForm";
 
 export const router = createBrowserRouter([
   {
@@ -55,12 +62,22 @@ export const router = createBrowserRouter([
             path: "/sign-in",
             element: <SignInPage />,
           },
+          {
+            path: "/forgot-password",
+            element: <ForgotPassword />,
+          },
+          {
+            path: "/verify-otp",
+            element: <OtpVerificationForm />,
+            loader: () =>
+              !Cookies.get("key") ? redirect("/forgot-password") : null,
+          },
         ],
       },
       {
         path: "profile",
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute role="user">
             <ProfilePage />
           </ProtectedRoute>
         ),
@@ -100,6 +117,37 @@ export const router = createBrowserRouter([
       {
         path: "category/:categoryName/:categoryId",
         element: <FetchSingleCategory />,
+      },
+    ],
+  },
+
+  {
+    path: "/admin",
+    element: (
+      <ProtectedRoute role="admin">
+        <AdminLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        index: true,
+        element: <Dashboard />,
+      },
+      {
+        path: "products",
+        element: <ProductsList />,
+      },
+      {
+        path: "orders",
+        element: <div>orders</div>,
+      },
+      {
+        path: "users",
+        element: <UserList />,
+      },
+      {
+        path: "add-category",
+        element: <AddCategoryForm />,
       },
     ],
   },

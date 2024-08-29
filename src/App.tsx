@@ -1,6 +1,7 @@
 import { RouterProvider } from "react-router-dom";
 import { router } from "./routes/route";
 
+
 function App() {
   const seoData = {
     "@context": "https://schema.org",
