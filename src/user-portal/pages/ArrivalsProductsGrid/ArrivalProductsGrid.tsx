@@ -11,8 +11,6 @@ type GridItemProps = {
 };
 
 const ArrivalProductsGrid = () => {
-  // const [products, setProducts] = useState<NewArrivalsProductProps[]>([]);
-
   const additionalClasses = [
     "col-span-2 md:row-span-2 lg:bg-auto",
     "col-span-2 bg-right shadow-[inset_-100px_0_100px_10px_rgba(255,255,255,0.2)] lg:bg-contain",
@@ -20,24 +18,39 @@ const ArrivalProductsGrid = () => {
     "relative bg-center p-14 md:p-10 lg:bg-auto ",
   ];
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const data = await fetchNewArrivals();
-  //     setProducts(data.slice(0, 4));
-  //   })();
-  // }, []);
+  const SkeletonGridItem = ({
+    additionalClasses,
+  }: {
+    additionalClasses: string;
+  }) => (
+    <div
+      className={`flex items-end rounded-sm bg-foreground p-4 md:p-6 lg:p-10 ${additionalClasses}`}
+    >
+      <div className="w-full space-y-2 md:space-y-4">
+        <div className="space-y-2 text-background">
+          <div className="h-6 w-3/4 rounded-md bg-gray-300"></div>
+          <div className="h-4 w-1/2 rounded-md bg-gray-300"></div>
+          <div className="h-8 w-1/4 rounded-md bg-gray-300"></div>
+        </div>
+      </div>
+    </div>
+  );
 
   const { data: products, isLoading } = useQuery({
     queryKey: ["newarrivals"],
     queryFn: fetchNewArrivals,
 
-    refetchOnWindowFocus: false,
-    staleTime: 5 * 60 * 1000,
     select: (products) => products.slice(0, 4),
   });
 
   if (isLoading) {
-    return <Loading />;
+    return (
+      <div className="grid h-[500px] grid-cols-2 grid-rows-2 gap-4 md:h-[400px] md:grid-cols-4 lg:h-[600px]">
+        {additionalClasses.map((classes, index) => (
+          <SkeletonGridItem key={index} additionalClasses={classes} />
+        ))}
+      </div>
+    );
   }
 
   return (
