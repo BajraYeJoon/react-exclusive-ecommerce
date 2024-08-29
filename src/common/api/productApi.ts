@@ -3,7 +3,7 @@ import { handleRequest } from "./handleRequest";
 
 export const fetchSalesProduct = async () => {
   return handleRequest(
-    () => Axios.get(`/sale`).then((res) => res.data),
+    () => Axios.get(`/sale`).then((res) => res.data.data),
     "Error fetching sales product",
   );
 };
