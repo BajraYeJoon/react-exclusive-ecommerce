@@ -8,12 +8,11 @@ import {
   deleteFavorites,
   fetchFavorites,
 } from "../../api/wishlistApi";
-import { addProductToCart } from "../../api/cartApi";
 import { useAuthContext } from "../../context/useAuthContext";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { queryClient } from "../../../common/lib/reactQueryClient";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "../../../common/ui/button";
 import uuidv4 from "../../../common/lib/utils/uuid";
+import { useIncreaseQuantity } from "../../utils/cartutils";
 
 interface ProductCardProps {
   title: string;
@@ -32,6 +31,7 @@ const ProductCard = ({
 }: ProductCardProps) => {
   const { dimension } = useWindow();
   const { isLoggedIn } = useAuthContext();
+  const queryClient = useQueryClient();
 
   const { data: favoritesData } = useQuery({
     queryKey: ["favorites"],
@@ -110,17 +110,8 @@ const ProductCard = ({
   //   },
   // });
 
-  const addToCartMutation = useMutation({
-    mutationFn: addProductToCart,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cart"] });
-      toast.success("yay!!!");
-    },
-    onError: (error) => {
-      toast.error("errrr");
-      console.log("Error adding product to cart:", error);
-    },
-  });
+  const { mutate: addToCart } = useIncreaseQuantity();
+
   const handleFavoriteClick = () => {
     if (!isLoggedIn) {
       toast.error("Please log in to add to favorites");
@@ -129,9 +120,6 @@ const ProductCard = ({
     isFavorite(id) ? handleRemoveFavorite() : handleAddFavorite();
   };
 
-  const handleAddToCart = async () => {
-    addToCartMutation.mutate(id);
-  };
   return (
     <section className="mt-10 w-full max-w-72 md:mt-16">
       <div className="group relative h-32 w-full overflow-hidden rounded-b-md bg-card md:h-56">
@@ -169,7 +157,10 @@ const ProductCard = ({
           </Link>
         </div>
 
-        <Button className="group cursor-pointer" onClick={handleAddToCart}>
+        <Button
+          className="group cursor-pointer"
+          onClick={() => addToCart({ id: id, type: "add" })}
+        >
           <div className="absolute bottom-0 left-0 w-full bg-foreground opacity-0 transition-opacity duration-500 group-hover:opacity-100">
             <p className="py-2 text-center text-sm font-normal tracking-tight text-background">
               Add to Cart

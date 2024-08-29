@@ -11,6 +11,7 @@ import { IntlProvider } from "react-intl";
 import { Analytics } from "@vercel/analytics/react";
 import en_msg from "./user-portal/locales/en.json";
 import es_msg from "./user-portal/locales/es.json";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const messages = {
   en: en_msg,
@@ -21,7 +22,14 @@ const messages = {
 //   api_host: "https://us.i.posthog.com",
 // };
 
-const query = new QueryClient();
+const query = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 0,
+      refetchOnWindowFocus: true,
+    },
+  },
+});
 const locale = "es";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -36,7 +44,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <AuthProvider>
             <App />
             <Analytics />
-
+            <ReactQueryDevtools initialIsOpen={false} />
             <Toaster />
           </AuthProvider>
         </IntlProvider>

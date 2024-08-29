@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useMemo, useState } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   useReactTable,
   ColumnDef,
@@ -32,7 +32,6 @@ import { fetchAllProducts } from "../../../common/api/productApi";
 import { Axios } from "../../../common/lib/axiosInstance";
 import { Loading } from "../../../user-portal/site";
 import { Button } from "../../../user-portal/components";
-import { queryClient } from "../../../common/lib/reactQueryClient";
 
 export default function ProductsList() {
   // const [isOpen, setOpen] = useState(true);
@@ -44,6 +43,8 @@ export default function ProductsList() {
     pageIndex: 0,
     pageSize: 10,
   });
+
+  const queryClient = useQueryClient();
 
   const deleteProduct = async (productId: number) => {
     try {

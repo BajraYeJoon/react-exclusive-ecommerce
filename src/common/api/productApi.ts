@@ -25,9 +25,7 @@ export const fetchNewArrivals = async () => {
 export const fetchProductsBySearch = async (search: string) => {
   return handleRequest(
     () =>
-      Axios.get(`/product/searchItem?q=${search}`).then(
-        (res) => res.data.results || [],
-      ),
+      Axios.get(`/product?q=${search}`).then((res) => res.data.results || []),
     `Error fetching products by search "${search}"`,
   );
 };

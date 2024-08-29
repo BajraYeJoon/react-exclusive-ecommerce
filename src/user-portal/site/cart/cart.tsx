@@ -14,7 +14,7 @@ import {
   useDecreaseQuantity,
   useIncreaseQuantity,
 } from "../../utils/cartutils";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { v4 as uuid } from "uuid";
 
 const cartHeaderData = [
@@ -30,27 +30,26 @@ const discountState = atom<number>({
 
 const Cart = () => {
   const [, setCheckoutData] = useRecoilState(checkoutState);
-  const [cartItems, setCartItems] = useRecoilState(cartState);
+  // const [cartItems, setCartItems] = useRecoilState(cartState);
 
   const navigate = useNavigate();
   const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(0);
 
-  const { data } = useQuery({
+  const queryClient = useQueryClient();
+
+  const { data: cartData, isLoading } = useQuery({
     queryKey: ["cart"],
     queryFn: fetchCart,
   });
 
-  useEffect(() => {
-    if (data) {
-      setCartItems(data.data);
-    }
-  }, [setCartItems, data]);
-
+  // useEffect(() => {
+  //   if (data) {
+  //     setCartItems(data.data);
+  //   }
+  // }, [setCartItems, data]);
+  const cartItems = cartData?.data || [];
   console.log(cartItems, "caaaaaart");
-
-  const quantityofProducts = cartItems.map((value) => value.quantity);
-  console.log(quantityofProducts, "quantityofProducts");
 
   const navigateToCheckout = (cartItems: any, total: number) => {
     const checkoutData = {
@@ -137,7 +136,7 @@ const Cart = () => {
 
   const total = useRecoilValue(calculateTotal);
 
-  if (!cartItems || cartItems.length === 0) {
+  if (cartItems && !cartItems) {
     return (
       <div className="flex h-[50vh] flex-col items-center justify-center gap-4 lg:h-[90vh]">
         <h1 className="flex flex-col text-3xl font-semibold text-gray-400">
@@ -157,7 +156,7 @@ const Cart = () => {
           breadcrumbTitle="Cart"
           breadcrumbValue={cartItems as []}
         />
-        <Button className="w-fit" onClick={clearCart}>
+        <Button className="w-fit" onClick={() => clearCart(queryClient)}>
           Clear All
         </Button>
       </div>
@@ -178,56 +177,72 @@ const Cart = () => {
       </div>
 
       <div className="border-b-2 md:my-4">
-        {cartItems.map((item) => (
-          <div
-            key={item.product.id}
-            className="grid grid-cols-3 gap-6 md:grid-cols-2"
-          >
-            <div className="col-span-2 flex w-full items-center gap-3 md:col-span-1">
-              <img
-                src={item.product.image[0]}
-                alt={item.product.title}
-                className="h-16 w-16 rounded-md"
-              />
-              <h5 className="text-sm font-medium text-black md:text-base">
-                {item.product.title}
-              </h5>
-            </div>
-            <div className="flex w-fit flex-col items-center justify-around gap-2 sm:flex-row md:w-full">
-              <h6 className="text-center text-sm font-medium leading-9 text-foreground md:text-base">
-                {item.product.price}{" "}
-              </h6>
-              <div className="flex items-center justify-center rounded-md border p-1">
-                <input
-                  type="text"
-                  className="max-w-12 px-4"
-                  placeholder={item.quantity.toString()}
-                  readOnly
-                />
-                <div className="flex flex-col items-center justify-center">
-                  <ChevronUp
-                    size={14}
-                    className={cn(
-                      "cursor-pointer",
-                      item.quantity === item.product.availableQuantity &&
-                        "cursor-not-allowed",
-                    )}
-                    onClick={() => increaseQuantity(item.product.id)}
+        {isLoading ? (
+          <div>it is isLoading</div>
+        ) : (
+          <>
+            {cartItems.map((item) => (
+              <div
+                key={item.product.id}
+                className="grid grid-cols-3 gap-6 md:grid-cols-2"
+              >
+                <div className="col-span-2 flex w-full items-center gap-3 md:col-span-1">
+                  <img
+                    src={item.product.image[0]}
+                    alt={item.product.title}
+                    className="h-16 w-16 rounded-md"
                   />
+                  <h5 className="text-sm font-medium text-black md:text-base">
+                    {item.product.title}
+                  </h5>
+                </div>
+                <div className="flex w-fit flex-col items-center justify-around gap-2 sm:flex-row md:w-full">
+                  <h6 className="text-center text-sm font-medium leading-9 text-foreground md:text-base">
+                    {item.product.price}{" "}
+                  </h6>
+                  <div className="flex items-center justify-center rounded-md border p-1">
+                    <input
+                      type="text"
+                      className="max-w-12 px-4"
+                      placeholder={item.quantity.toString()}
+                      readOnly
+                    />
+                    <div className="flex flex-col items-center justify-center">
+                      <ChevronUp
+                        size={14}
+                        className={cn(
+                          "cursor-pointer",
+                          item.quantity === item.product.stock &&
+                            "cursor-not-allowed",
+                        )}
+                        onClick={() =>
+                          increaseQuantity({
+                            id: item.product.id,
+                            type: "add",
+                          })
+                        }
+                      />
 
-                  <ChevronDown
-                    size={14}
-                    className="cursor-pointer"
-                    onClick={() => decreaseQuantity(item.product.id)}
-                  />
+                      <ChevronDown
+                        size={14}
+                        className="cursor-pointer"
+                        onClick={() =>
+                          decreaseQuantity({
+                            id: item.product.id,
+                            type: "sub",
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+                  <h6 className="text-center text-sm font-medium leading-9 md:text-lg">
+                    {(item.product.price * item.quantity).toFixed(2)}
+                  </h6>
                 </div>
               </div>
-              <h6 className="text-center text-sm font-medium leading-9 md:text-lg">
-                {(item.product.price * item.quantity).toFixed(2)}
-              </h6>
-            </div>
-          </div>
-        ))}
+            ))}
+          </>
+        )}
       </div>
 
       <div className="flex flex-col items-center justify-between gap-12 md:flex-row md:items-start">

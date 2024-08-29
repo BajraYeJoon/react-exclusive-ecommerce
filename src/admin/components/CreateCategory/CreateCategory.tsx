@@ -1,5 +1,5 @@
 import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { toast } from "sonner";
 
@@ -24,7 +24,6 @@ import { z } from "zod";
 import { useState } from "react";
 import { fetchCategories } from "../../../common/api/categoryApi";
 import { Axios } from "../../../common/lib/axiosInstance";
-import { queryClient } from "../../../common/lib/reactQueryClient";
 import { Input } from "../../../common/ui/input";
 import { Button } from "../../../user-portal/components";
 interface FormValues {
@@ -38,7 +37,7 @@ const updateCategoryNameSchema = z.object({
 const AddCategoryForm = () => {
   const { register, handleSubmit, reset } = useForm<FormValues>();
   const [editCategoryId, setEditCategoryId] = useState<number | null>(null);
-
+  const queryClient = useQueryClient();
   const { data: categories } = useQuery({
     queryKey: ["add"],
     queryFn: fetchCategories,

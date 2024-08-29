@@ -3,9 +3,8 @@ import ProductCard from "../ProductCard/ProductCard";
 import CustomBreakcrumb from "../CustomBreakcrumb/CustomBreakcrumb";
 import { deleteAllFavorites, fetchFavorites } from "../../api/wishlistApi";
 import { Button } from "../../../common/ui/button";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { queryClient } from "../../../common/lib/reactQueryClient";
 import { Loading } from "../../site";
 
 const Favorites = () => {
@@ -13,7 +12,7 @@ const Favorites = () => {
     queryKey: ["favorites"],
     queryFn: fetchFavorites,
   });
-
+  const queryClient = useQueryClient();
   const deleteAll = useMutation({
     mutationFn: deleteAllFavorites,
     onSuccess: () => {

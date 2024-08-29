@@ -15,10 +15,11 @@ export const deleteAllCartItems = async () => {
   );
 };
 
-export const addProductToCart = async (id: number) => {
+export const modifyQuantityInCart = async (id: number, type: string) => {
   return handleRequest(
-    () => Axios.post(`/cart/${id}/?type=add`, { id }).then((res) => res.data),
-    `Error adding product ${id} to cart`,
+    () =>
+      Axios.post(`/cart/${id}/?type=${type}`, { id }).then((res) => res.data),
+    `Error ${type} product ${id} to cart`,
   );
 };
 

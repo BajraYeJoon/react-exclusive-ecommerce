@@ -1,11 +1,6 @@
 import { toast } from "sonner";
-import {
-  addProductToCart,
-  deleteAllCartItems,
-  deleteProductFromCart,
-} from "../api/cartApi";
+import { deleteAllCartItems, modifyQuantityInCart } from "../api/cartApi";
 import { useMutation } from "@tanstack/react-query";
-import { queryClient } from "../../common/lib/reactQueryClient";
 
 export const handleCouponChange = (
   e: React.ChangeEvent<HTMLInputElement>,
@@ -28,17 +23,24 @@ export const applyCoupon = (
   }
 };
 
-export const clearCart = async () => {
-  await deleteAllCartItems();
-  queryClient.invalidateQueries({ queryKey: ["cart"] });
-  toast.success("All items have been removed from the cart");
+export const clearCart = async (queryClient) => {
+  try {
+    await deleteAllCartItems();
+    queryClient.invalidateQueries({ queryKey: ["cart"] });
+    toast.success("All items have been removed from the cart");
+  } catch (error) {
+    toast.error(error.response?.data?.message);
+  }
 };
 
 export const useIncreaseQuantity = () => {
+  // const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: addProductToCart,
+    mutationFn: ({ id, type }: { id: number; type: string }) =>
+      modifyQuantityInCart(id, type),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cart"] });
+      // queryClient.invalidateQueries({ queryKey: ["cart"] });
       toast.success("Product quantity increased");
     },
     onError: (error) => {
@@ -49,15 +51,18 @@ export const useIncreaseQuantity = () => {
 };
 
 export const useDecreaseQuantity = () => {
+  // const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: deleteProductFromCart,
+    mutationFn: ({ id, type }: { id: number; type: string }) =>
+      modifyQuantityInCart(id, type),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cart"] });
-      toast.success("Product quantity decreased");
+      // queryClient.invalidateQueries({ queryKey: ["cart"] });
+      toast.success("Product quantity increased");
     },
     onError: (error) => {
-      toast.error("Error decreasing product quantity");
-      console.error("Error decreasing product quantity:", error);
+      toast.error("Error increasing product quantity");
+      console.error("Error increasing product quantity:", error);
     },
   });
 };
