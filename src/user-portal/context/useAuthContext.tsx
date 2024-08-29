@@ -2,6 +2,7 @@ import { createContext, useContext, useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { toast } from "sonner";
+import { Axios } from "../../common/lib/axiosInstance";
 
 type LoginProps = {
   name: string;
@@ -58,18 +59,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post(
-        "https://nest-ecommerce-1fqk.onrender.com/auth/signin",
-        {
-          email: name,
-          password,
-        },
-      );
+      const response = await Axios.post("auth/signin", {
+        email: name,
+        password,
+      });
       const data = response.data;
-      Cookies.set("token", data.token, { expires: 7 });
-
       await fetchUserDetails(data.token);
       setIsLoggedIn(true);
+      Cookies.set("token", data.token, { expires: 7 });
     } catch (error) {
       console.error("Login failed", error);
     } finally {

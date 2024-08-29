@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchAllProducts } from "../../../common/api/productApi";
 import ProductCardSkeleton from "../../../common/components/productCardSkeleton/ProductCardSkeleton";
 import uuidv4 from "../../../common/lib/utils/uuid";
+import { Link } from "react-router-dom";
 const GeneralProducts = () => {
   const {
     data: generalProducts,
@@ -67,7 +68,9 @@ const GeneralProducts = () => {
         </Swiper>
       </div>
 
-      <Button className="mx-auto w-full md:w-fit">View All Products</Button>
+      <Button className="mx-auto w-full md:w-fit">
+        <Link to={"/products"}>View All Products</Link>
+      </Button>
     </section>
   );
 };

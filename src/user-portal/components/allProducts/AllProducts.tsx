@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import ProductCard from "../ProductCard/ProductCard";
 import { fetchAllProducts } from "../../../common/api/productApi";
+import ProductCardSkeleton from "../../../common/components/productCardSkeleton/ProductCardSkeleton";
 interface ProductType {
   id: number;
   title: string;
@@ -20,7 +21,7 @@ const AllProducts = () => {
     staleTime: 60000,
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <ProductCardSkeleton />;
   if (error) return <div>An error occurred: {(error as Error).message}</div>;
 
   const products = allproducts;

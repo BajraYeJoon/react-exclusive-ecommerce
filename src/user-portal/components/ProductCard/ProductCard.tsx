@@ -13,6 +13,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "../../../common/ui/button";
 import uuidv4 from "../../../common/lib/utils/uuid";
 import { useIncreaseQuantity } from "../../utils/cartutils";
+import { MdOutlineImageNotSupported } from "react-icons/md";
 
 interface ProductCardProps {
   title: string;
@@ -128,7 +129,19 @@ const ProductCard = ({
             className="h-full w-full object-contain p-4 transition-opacity duration-300 group-hover:opacity-40 md:p-8 lg:p-12"
             src={image}
             alt="product image"
+            onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) =>
+              ((e.target as HTMLImageElement).src =
+                "https://via.placeholder.com/300")
+            }
           />
+
+          {/* <object
+            data={image}
+            className="flex h-full w-full items-center justify-center object-contain p-4 transition-opacity duration-300 group-hover:opacity-40 md:p-8 lg:p-12"
+            aria-label="This image should exist, but alas it does not"
+          >
+            <MdOutlineImageNotSupported size={100} />
+          </object> */}
         </Link>
 
         {discountTag && (
