@@ -41,10 +41,10 @@ export const useIncreaseQuantity = () => {
       modifyQuantityInCart(id, type),
     onSuccess: () => {
       // queryClient.invalidateQueries({ queryKey: ["cart"] });
-      toast.success("Product quantity increased");
+      toast.success("Product quantity increased by 1");
     },
-    onError: (error) => {
-      toast.error("Error increasing product quantity");
+    onError: (error: any) => {
+      toast.error(`Something went wrong: ${error.response?.data?.message}`);
       console.error("Error increasing product quantity:", error);
     },
   });
@@ -58,10 +58,11 @@ export const useDecreaseQuantity = () => {
       modifyQuantityInCart(id, type),
     onSuccess: () => {
       // queryClient.invalidateQueries({ queryKey: ["cart"] });
-      toast.success("Product quantity increased");
+      toast.success("Product quantity decreased by 1");
     },
-    onError: (error) => {
-      toast.error("Error increasing product quantity");
+    onError: (error: any) => {
+      toast.error(`Something went wrong: ${error.response?.data?.message}`);
+
       console.error("Error increasing product quantity:", error);
     },
   });

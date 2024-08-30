@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loading } from "./layout/Layout";
@@ -6,6 +5,7 @@ import { useAuthContext } from "../context/useAuthContext";
 import { fetchUserDetails, updateUserDetails } from "../api/userApi";
 import { Input } from "../../common/ui/input";
 import { Button } from "../../common/ui/button";
+import { toast } from "sonner";
 interface FormData {
   name?: string;
   phone?: string;
@@ -13,14 +13,21 @@ interface FormData {
 
 const ProfilePage = () => {
   const { register, handleSubmit, reset } = useForm<FormData>();
-  const [message, setMessage] = useState("");
   const { logout } = useAuthContext();
   const queryClient = useQueryClient();
 
-  const { data: userdetail, isLoading } = useQuery({
+  const {
+    data: userdetail,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["userDetail"],
     queryFn: fetchUserDetails,
   });
+
+  if (error) {
+    toast.error(`${error}`);
+  }
 
   const mutation = useMutation({
     mutationFn: updateUserDetails,
@@ -30,11 +37,10 @@ const ProfilePage = () => {
       if (data.phone) resetData.phone = data.phone;
       reset(resetData);
       queryClient.invalidateQueries({ queryKey: ["userDetail"] });
-      setMessage("Profile updated successfully");
+      toast.success(`${data.message}`);
+      console.log(data);
     },
-    onError: () => {
-      setMessage("Failed to update profile");
-    },
+    onError: () => {},
   });
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
@@ -84,7 +90,7 @@ const ProfilePage = () => {
             Phone
           </label>
           <Input
-          id="phone"
+            id="phone"
             type="text"
             {...register("phone")}
             defaultValue={userdetail?.phone || ""}
@@ -95,7 +101,6 @@ const ProfilePage = () => {
           <Button>Update Profile</Button>
         </div>
       </form>
-      {message && <p className="mt-4 text-green-500">{message}</p>}
 
       <Button onClick={logout} className="mt-4">
         Log Out

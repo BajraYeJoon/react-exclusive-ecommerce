@@ -70,6 +70,7 @@ const AddCategoryForm = () => {
       toast.success(`Category deleted successfully`);
     },
     onError: (error) => {
+      toast.error("Failed to delete category, Please try again later");
       console.error("Failed to delete category", error);
     },
   });
@@ -84,7 +85,7 @@ const AddCategoryForm = () => {
     },
     onError: (error) => {
       console.error("Failed to update category", error);
-      toast.error("Failed to update category");
+      toast.error("Failed to update category, Please try again later");
     },
   });
 
@@ -138,12 +139,12 @@ const AddCategoryForm = () => {
               {category.name}
               <div className="absolute right-0 top-0 hidden flex-col text-lg group-hover:flex">
                 <MdCancel
-                  className="group-hover:text-red-600"
+                  className="group-hover:text-primary"
                   onClick={() => handleCategoryDelete(category.id)}
                 />
                 <Dialog>
                   <DialogTrigger onClick={() => setEditCategoryId(category.id)}>
-                    <MdEdit className="group-hover:text-red-600" />
+                    <MdEdit className="group-hover:text-primary" />
                   </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>Edit Category</DialogHeader>
@@ -162,7 +163,7 @@ const AddCategoryForm = () => {
                                 <Input placeholder={category.name} {...field} />
                               </FormControl>
                               <FormDescription>
-                                This is your public display name.
+                                This will be the new category name
                               </FormDescription>
                               <FormMessage />
                             </FormItem>
