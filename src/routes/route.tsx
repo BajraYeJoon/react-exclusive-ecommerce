@@ -23,14 +23,13 @@ import Contact from "../user-portal/site/contact/contact";
 import About from "../user-portal/site/about/about";
 import Singleproduct from "../user-portal/components/singleProduct/singleproduct";
 import { ArrivalsPage } from "../user-portal/pages";
-import AdminLayout from "../admin/layout/Layout";
-import Dashboard from "../admin/screen/dashboard/Dashboard";
-import UserList from "../admin/components/user-component/userList/UserList";
-import ProductsList from "../admin/components/ProductsList/ProductsList";
-import AddCategoryForm from "../admin/components/CreateCategory/CreateCategory";
-import ForgotPassword from "../common/components/forgot-password/ForgotPassword";
-import OtpVerificationForm from "../common/components/forgot-password/OtpVerificationForm";
-import { NotFoundPage } from "../common/components/404/notfound";
+import { Dashboard, AdminLayout } from "../admin/screen";
+import { AddCategoryForm, ProductsList, UserList } from "../admin/components";
+import {
+  NotFoundPage,
+  ForgotPassword,
+  OtpVerificationForm,
+} from "../common/components";
 
 export const router = createBrowserRouter([
   {
