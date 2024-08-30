@@ -30,6 +30,7 @@ import ProductsList from "../admin/components/ProductsList/ProductsList";
 import AddCategoryForm from "../admin/components/CreateCategory/CreateCategory";
 import ForgotPassword from "../common/components/forgot-password/ForgotPassword";
 import OtpVerificationForm from "../common/components/forgot-password/OtpVerificationForm";
+import { NotFoundPage } from "../common/components/404/notfound";
 
 export const router = createBrowserRouter([
   {
@@ -73,6 +74,10 @@ export const router = createBrowserRouter([
               !Cookies.get("key") ? redirect("/forgot-password") : null,
           },
         ],
+      },
+      {
+        path: "*",
+        element: <NotFoundPage />,
       },
       {
         path: "profile",
