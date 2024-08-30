@@ -2,8 +2,8 @@ import { useQueries } from "@tanstack/react-query";
 import { Users2 } from "lucide-react";
 import { CiMoneyBill } from "react-icons/ci";
 import { GrBasket } from "react-icons/gr";
-import { fetchAllUsers } from "../../api/fetchUser";
-import { fetchAllProducts } from "../../../common/api/productApi";
+import { fetchAllUsers } from "../../../api/fetchUser";
+import { fetchAllProducts } from "../../../../common/api/productApi";
 const FeaturedInfo = () => {
   const results = useQueries({
     queries: [

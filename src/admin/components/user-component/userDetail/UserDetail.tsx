@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { userRows } from "../../lib/data";
+import { userRows } from "../../../lib/data";
 const UserDetail = () => {
   const { id } = useParams();
 

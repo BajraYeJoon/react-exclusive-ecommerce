@@ -1,11 +1,11 @@
 import { EyeIcon } from "lucide-react";
-import { Button } from "../../../user-portal/components";
+import { Button } from "../../../../user-portal/components";
 import {
   Dialog,
   DialogContent,
   DialogTrigger,
-} from "../../../common/ui/dialog";
-import UserDialogContent from "../UserDetail/UserDialogContent";
+} from "../../../../common/ui/dialog";
+import UserDialogContent from "../userDetail/UserDialogContent";
 
 // interface NewUsersProps {
 //   name: string;

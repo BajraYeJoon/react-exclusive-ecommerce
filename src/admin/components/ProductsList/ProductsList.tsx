@@ -27,13 +27,13 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "../../../common/ui/dialog";
-import AddNewProductDialog from "./AddNewProductDialog";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { toast } from "sonner";
 import { fetchAllProducts } from "../../../common/api/productApi";
 import { Axios } from "../../../common/lib/axiosInstance";
 import { Loading } from "../../../user-portal/site";
 import { Button } from "../../../user-portal/components";
+import AddNewProductDialog from "./AddNewProductDialog";
 
 export default function ProductsList() {
   // const [isOpen, setOpen] = useState(true);

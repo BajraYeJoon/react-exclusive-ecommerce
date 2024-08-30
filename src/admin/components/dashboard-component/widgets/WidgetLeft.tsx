@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchAllUsers } from "../../api/fetchUser";
-import NewUsers from "../NewUsers/NewUsers";
+import { fetchAllUsers } from "../../../api/fetchUser";
+import NewUsers from "../../user-component/newUsers/NewUsers";
 import { Link } from "react-router-dom";
 
 export default function WidgetLeft() {
