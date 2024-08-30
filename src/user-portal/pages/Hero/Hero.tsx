@@ -17,11 +17,6 @@ const Hero = () => {
     queryFn: fetchCategories,
   });
 
-  if (isLoading) {
-    console.log("hero banner loading .....");
-    return <div>Loading...</div>;
-  }
-
   const heroCategories =
     (heroCategoriesData && heroCategoriesData.slice(0, 8)) || [];
 
@@ -29,34 +24,36 @@ const Hero = () => {
     <section className="flex">
       <aside className="z-10 mr-6 mt-14 hidden flex-col items-start gap-4 text-lg text-foreground/80 lg:flex">
         <ul className="flex flex-col gap-3 font-medium tracking-tighter">
-          {heroCategories &&
-            heroCategories.map((category: Category) => (
-              <li key={category.id} className="group relative cursor-pointer">
-                {isLoading ? (
-                  <Skeleton className="h-6 w-full rounded-md bg-red-500" />
-                ) : (
+          {isLoading ? (
+            <Skeleton className="skeleton loading mt-4 h-96 w-full" />
+          ) : (
+            <>
+              {heroCategories.map((category: Category) => (
+                <li key={category.id} className="group relative cursor-pointer">
                   <div className="flex items-center justify-between">
                     <Link to={`/category/${category.name}/${category.id}`}>
                       {category.name}
                     </Link>
                     {category.subcategories && <ChevronRight />}
                   </div>
-                )}
-                {category.subcategories && (
-                  <div className="subcategories absolute -right-6 top-0 z-20 mt-2 hidden border bg-white p-2 shadow-lg group-hover:block">
-                    <ul>
-                      {category.subcategories.map(
-                        (subcategory: string, index: number) => (
-                          <li key={index}>
-                            <Link to={"/products"}>{subcategory}</Link>
-                          </li>
-                        ),
-                      )}
-                    </ul>
-                  </div>
-                )}
-              </li>
-            ))}
+
+                  {category.subcategories && (
+                    <div className="subcategories absolute -right-6 top-0 z-20 mt-2 hidden border bg-white p-2 shadow-lg group-hover:block">
+                      <ul>
+                        {category.subcategories.map(
+                          (subcategory: string, index: number) => (
+                            <li key={index}>
+                              <Link to={"/products"}>{subcategory}</Link>
+                            </li>
+                          ),
+                        )}
+                      </ul>
+                    </div>
+                  )}
+                </li>
+              ))}
+            </>
+          )}
         </ul>
       </aside>
       <div className="hidden min-h-full w-px bg-foreground/20 lg:block"></div>

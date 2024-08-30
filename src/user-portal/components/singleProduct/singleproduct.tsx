@@ -176,7 +176,7 @@ const Singleproduct = () => {
               </Button>
 
               {details.ratings?.map((rating: any) => {
-                return <Reviews values={rating} />;
+                return <Reviews values={rating} key={rating.id} />;
               })}
               <ul className="mt-8 space-y-2 border p-4">
                 <FeatureItem
