@@ -1,5 +1,5 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { Button, CustomBreakcrumb } from "../../components";
+import { CustomBreakcrumb } from "../../components";
 import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
 import { cartState } from "../../atoms/cartState";
 import { Link, useNavigate } from "react-router-dom";

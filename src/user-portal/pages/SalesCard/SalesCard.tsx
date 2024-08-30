@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { PagesHeader, ProductCard, Button } from "../../components";
+import { PagesHeader, ProductCard } from "../../components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import { fetchSalesProduct } from "../../../common/api/productApi";
 import ProductCardSkeleton from "../../../common/components/productCardSkeleton/ProductCardSkeleton";
 import uuidv4 from "../../../common/lib/utils/uuid";
+import { Button } from "../../../common/ui/button";
 
 interface SalesCardProps {
   title: string;

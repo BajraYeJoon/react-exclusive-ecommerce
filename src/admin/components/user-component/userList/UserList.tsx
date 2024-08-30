@@ -10,8 +10,8 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Button } from "../../../../user-portal/components";
 import { Loading } from "../../../../user-portal/site";
+import { Button } from "../../../../common/ui/button";
 import {
   Table,
   TableBody,

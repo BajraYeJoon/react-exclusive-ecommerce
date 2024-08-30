@@ -7,6 +7,8 @@ import {
   ProfilePage,
   SignInPage,
   Cart,
+  About,
+  Contact,
 } from "../user-portal/site";
 import Cookies from "js-cookie";
 
@@ -17,11 +19,10 @@ import {
   Favorites,
   Checkout,
   OrderPlaced,
+  Singleproduct,
   FetchSingleCategory,
 } from "../user-portal/components";
-import Contact from "../user-portal/site/contact/contact";
-import About from "../user-portal/site/about/about";
-import Singleproduct from "../user-portal/components/singleProduct/singleproduct";
+
 import { ArrivalsPage } from "../user-portal/pages";
 import { Dashboard, AdminLayout } from "../admin/screen";
 import { AddCategoryForm, ProductsList, UserList } from "../admin/components";

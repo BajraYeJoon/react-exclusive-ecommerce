@@ -1,4 +1,4 @@
-import CustomBreakcrumb from "../CustomBreakcrumb/CustomBreakcrumb";
+import CustomBreakcrumb from "../customBreakcrumb/CustomBreakcrumb";
 import { ShoppingBasket, StarIcon } from "lucide-react";
 import { Button } from "../../../common/ui/button";
 import { CgGlobeAlt } from "react-icons/cg";

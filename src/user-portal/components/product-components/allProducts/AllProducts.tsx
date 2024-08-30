@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import ProductCard from "../ProductCard/ProductCard";
-import { fetchAllProducts } from "../../../common/api/productApi";
-import ProductCardSkeleton from "../../../common/components/productCardSkeleton/ProductCardSkeleton";
+import ProductCard from "../productCard/ProductCard";
+import { fetchAllProducts } from "../../../../common/api/productApi";
+import ProductCardSkeleton from "../../../../common/components/productCardSkeleton/ProductCardSkeleton";
 interface ProductType {
   id: number;
   title: string;

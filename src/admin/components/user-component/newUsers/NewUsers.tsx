@@ -1,5 +1,5 @@
 import { EyeIcon } from "lucide-react";
-import { Button } from "../../../../user-portal/components";
+import { Button } from "../../../../common/ui/button";
 import {
   Dialog,
   DialogContent,

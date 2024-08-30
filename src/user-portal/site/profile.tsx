@@ -4,8 +4,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loading } from "./layout/Layout";
 import { useAuthContext } from "../context/useAuthContext";
 import { fetchUserDetails, updateUserDetails } from "../api/userApi";
-import { Button } from "../components";
 import { Input } from "../../common/ui/input";
+import { Button } from "../../common/ui/button";
 interface FormData {
   name?: string;
   phone?: string;

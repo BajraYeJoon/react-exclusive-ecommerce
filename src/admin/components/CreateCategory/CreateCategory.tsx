@@ -25,7 +25,8 @@ import { useState } from "react";
 import { fetchCategories } from "../../../common/api/categoryApi";
 import { Axios } from "../../../common/lib/axiosInstance";
 import { Input } from "../../../common/ui/input";
-import { Button } from "../../../user-portal/components";
+import { Button } from "../../../common/ui/button";
+
 interface FormValues {
   categoryName: string;
 }

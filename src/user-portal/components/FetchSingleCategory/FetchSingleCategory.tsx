@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { fetchProductByCategory } from "../../../common/api/categoryApi";
-import ProductCard from "../ProductCard/ProductCard";
+import ProductCard from "../product-components/productCard/ProductCard";
 import { Loading } from "../../site";
 const FetchSingleCategory = () => {
   const { categoryId } = useParams();
