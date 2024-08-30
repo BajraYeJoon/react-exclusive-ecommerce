@@ -22,11 +22,10 @@ const AllProducts = () => {
   });
 
   if (isLoading) return <ProductCardSkeleton />;
-  if (error) return <div>An error occurred: {(error as Error).message}</div>;
+  if (error) return <div>An error occurred: {error.message}</div>;
 
   const products = allproducts;
   console.log(products);
-  // const images = allproducts.images;
 
   return (
     <section className="mx-72 mb-28 gap-40 max-2xl:mx-6 max-2xl:gap-28">

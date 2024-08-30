@@ -19,7 +19,7 @@ const FetchSingleCategory = () => {
     return <Loading />;
   }
   if (error) {
-    return <div>Error: {(error as Error).message}</div>;
+    return <div>Error: {error.message}</div>;
   }
 
   console.log(category.data.products);
