@@ -1,35 +1,41 @@
 import { Mail, User2 } from "lucide-react";
 import { BsMenuButton } from "react-icons/bs";
 import { CgAdd } from "react-icons/cg";
-import { FaProductHunt } from "react-icons/fa";
+import { FaProductHunt, FaSellsy } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { Routes } from "../../lib/links";
 
 const sidebarItems = [
   {
-    href: "",
+    href: Routes.Dashboard,
     icon: BsMenuButton,
     label: "Dashboard",
   },
   {
-    href: "orders",
+    href: Routes.Orders,
     icon: Mail,
     label: "Orders",
     badge: "3",
   },
   {
-    href: "users",
+    href: Routes.Users,
     icon: User2,
     label: "Users",
   },
   {
-    href: "products",
+    href: Routes.Products,
     icon: FaProductHunt,
     label: "Products",
   },
   {
-    href: "add-category",
+    href: Routes.AddCategory,
     icon: CgAdd,
     label: "Add Category",
+  },
+  {
+    href: Routes.FlashSales,
+    icon: FaSellsy,
+    label: "Flash Sales",
   },
 ];
 

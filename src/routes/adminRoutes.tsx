@@ -1,4 +1,10 @@
-import { AddCategoryForm, ProductsList, UserList } from "../admin/components";
+import {
+  AddCategoryForm,
+  FlashSaleAdmin,
+  ProductsList,
+  UserList,
+} from "../admin/components";
+import { Routes } from "../admin/lib/links";
 import { Dashboard } from "../admin/screen";
 
 export const adminRoutes = [
@@ -7,19 +13,23 @@ export const adminRoutes = [
     element: <Dashboard />,
   },
   {
-    path: "products",
+    path: Routes.Products,
     element: <ProductsList />,
   },
   {
-    path: "orders",
+    path: Routes.Orders,
     element: <div>orders</div>,
   },
   {
-    path: "users",
+    path: Routes.Users,
     element: <UserList />,
   },
   {
-    path: "add-category",
+    path: Routes.AddCategory,
     element: <AddCategoryForm />,
+  },
+  {
+    path: Routes.FlashSales,
+    element: <FlashSaleAdmin />,
   },
 ];
