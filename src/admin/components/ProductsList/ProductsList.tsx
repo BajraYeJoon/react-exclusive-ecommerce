@@ -22,6 +22,7 @@ import {
 
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -38,6 +39,7 @@ import { useRecoilState } from "recoil";
 import { flashSaleState } from "../../../user-portal/atoms/flashSaleState";
 import { DatePickerWithRange } from "../flashSaleCards/FlashSalePicker";
 import ProductDetails from "./ProductDetails";
+import uuidv4 from "../../../common/lib/utils/uuid";
 
 export default function ProductsList() {
   const [flashItem, setFlashItem] = useRecoilState(flashSaleState);
@@ -101,7 +103,7 @@ export default function ProductsList() {
             <Dialog>
               <DialogTrigger>{row.original.title}</DialogTrigger>
               <DialogContent>
-                 <ProductDetails data={row.original}/>
+                <ProductDetails data={row.original} />
               </DialogContent>
             </Dialog>
           );
@@ -152,20 +154,39 @@ export default function ProductsList() {
         id: "delete",
         header: "Delete",
         cell: ({ row }) => (
-          <button onClick={() => handleDelete(row.original.id)}>
-            <FaTrash />
-          </button>
+          <Dialog>
+            <DialogTrigger>
+              <FaTrash />
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                Are you sure you want to delete this product?
+              </DialogHeader>
+              <DialogDescription>
+                <Button onClick={() => handleDelete(row.original.id)}>
+                  Yes
+                </Button>
+                <Button variant={"secondary"}>
+                  <DialogClose>No</DialogClose>
+                </Button>
+              </DialogDescription>
+            </DialogContent>
+          </Dialog>
         ),
       },
       {
         id: "addtoFlash",
         header: "Add to Flash Sale",
-        cell: ({ row }) => (
-          <input
-            type="checkbox"
-            onChange={() => handleCheckboxChange(row.original.id)}
-          />
-        ),
+        cell: ({ row }) => {
+          return (
+            <input
+              type="checkbox"
+              // checked={row.original.onSale}
+              disabled={row.original.onSale}
+              onChange={() => handleCheckboxChange(row.original.id)}
+            />
+          );
+        },
       },
     ],
     [],
@@ -331,11 +352,26 @@ export default function ProductsList() {
       {flashItem.length > 0 && (
         <div className="fixed bottom-4 right-4">
           <Dialog>
-            <DialogTrigger>
-              <Button>Add All to Flash Sale</Button>
-            </DialogTrigger>
+            <div className="flex flex-col items-center justify-center gap-2 rounded-md border bg-slate-200 p-2">
+              <span className="flex flex-wrap justify-between gap-2">
+                {flashItem.map((item) => (
+                  <Button
+                    variant={"outline"}
+                    className="h-fit max-w-12 rounded-md border border-foreground p-1"
+                    key={`checked-sale-${uuidv4()}`}
+                    onClick={() => handleCheckboxChange(item)}
+                  >
+                    {item}
+                  </Button>
+                ))}
+              </span>
+
+              <DialogTrigger>
+                <Button>Add All to Flash Sale</Button>
+              </DialogTrigger>
+            </div>
             <DialogContent>
-              <DatePickerWithRange />
+              <DatePickerWithRange data={flashItem} />
             </DialogContent>
           </Dialog>
         </div>

@@ -1,4 +1,5 @@
 export enum Routes {
+  Admin = "admin",
   Dashboard = "",
   Orders = "orders",
   Users = "users",

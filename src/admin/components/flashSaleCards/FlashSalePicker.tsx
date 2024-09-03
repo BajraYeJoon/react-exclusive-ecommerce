@@ -1,27 +1,40 @@
 import * as React from "react";
-
 import { addDays, format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { DateRange } from "react-day-picker";
 import { cn } from "../../../common/lib/utils";
 import { Button } from "../../../common/ui/button";
-import { Calendar } from "../../../common/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "../../../common/ui/popover";
+import { Calendar } from "../../../common/ui/calendar";
 
 export function DatePickerWithRange({
   className,
-}: React.HTMLAttributes<HTMLDivElement>) {
+  data
+}) {
   const [date, setDate] = React.useState<DateRange | undefined>({
-    from: new Date(),
-    to: addDays(new Date(), 20),
+    from: new Date(2022, 0, 20),
+    to: addDays(new Date(2022, 0, 20), 20),
   });
 
   return (
-    <div className={cn("grid gap-2", className)}>
+    <section>
+         <div>
+    {data.map((item) => (
+      <Button
+        key={item}
+        variant={"default"}
+        className="h-fit max-w-12 rounded-md border border-foreground p-1"
+        disabled
+      >
+        {item}
+      </Button>
+    ))}
+  </div>
+ <div className={cn("grid gap-2", className)}>
       <Popover>
         <PopoverTrigger asChild>
           <Button
@@ -59,5 +72,8 @@ export function DatePickerWithRange({
         </PopoverContent>
       </Popover>
     </div>
+    </section>
+ 
+   
   );
 }

@@ -5,6 +5,7 @@ import { userRoutes } from "./userRoutes";
 import { Layout } from "../user-portal/site";
 import { ProtectedRoute } from "../user-portal/components";
 import { adminRoutes } from "./adminRoutes";
+import { Routes } from "../admin/lib/links";
 
 export const router = createBrowserRouter([
   {
@@ -15,7 +16,7 @@ export const router = createBrowserRouter([
   },
 
   {
-    path: "/admin",
+    path: `/${Routes.Admin}`,
     element: (
       <ProtectedRoute role="admin">
         <AdminLayout />
