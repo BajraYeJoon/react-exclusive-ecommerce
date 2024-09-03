@@ -7,9 +7,23 @@ interface FlashSalePayload {
   products: number[];
 }
 
+export const getFlashSale = async () => {
+  return handleRequest(
+    () => Axios.get("/sale/").then((res) => res.data.data),
+    "Error getting flash sales",
+  );
+};
+
 export const addProductToFlashSale = async (payload: FlashSalePayload) => {
   return handleRequest(
-    () => Axios.post("/sale/additem", payload).then((res) => res.data),
+    () => Axios.post("/sale/additem", payload).then((res) => res.data.data),
     `Error adding products ${payload.products} to flash sales`,
+  );
+};
+
+export const deleteFlashSale = async (id: number) => {
+  return handleRequest(
+    () => Axios.delete(`/sale/${id}`).then((res) => res.data),
+    `Error deleting flash sale ${id}`,
   );
 };

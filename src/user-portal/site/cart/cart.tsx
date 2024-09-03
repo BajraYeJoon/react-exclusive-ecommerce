@@ -11,17 +11,24 @@ import { cn } from "../../../common/lib/utils";
 import {
   applyCoupon,
   clearCart,
+  useClearCart,
   useDecreaseQuantity,
   useIncreaseQuantity,
+  useRemoveItem,
 } from "../../utils/cartutils";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { v4 as uuid } from "uuid";
 import { Button } from "../../../common/ui/button";
+import uuidv4 from "../../../common/lib/utils/uuid";
+import { ProductCardSkeleton } from "../../../common/components";
 
 const cartHeaderData = [
   { label: "Price" },
   { label: "Quantity" },
   { label: "Total" },
+  {
+    label: "",
+  },
 ];
 
 const discountState = atom<number>({
@@ -31,25 +38,16 @@ const discountState = atom<number>({
 
 const Cart = () => {
   const [, setCheckoutData] = useRecoilState(checkoutState);
-  // const [cartItems, setCartItems] = useRecoilState(cartState);
 
   const navigate = useNavigate();
   const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(0);
 
-  const queryClient = useQueryClient();
-
-  const { data: cartData, isLoading } = useQuery({
+  const { data: cartItems, isLoading } = useQuery({
     queryKey: ["cart"],
     queryFn: fetchCart,
   });
 
-  // useEffect(() => {
-  //   if (data) {
-  //     setCartItems(data.data);
-  //   }
-  // }, [setCartItems, data]);
-  const cartItems = cartData?.data || [];
   console.log(cartItems, "caaaaaart");
 
   const navigateToCheckout = (cartItems: any, total: number) => {
@@ -107,6 +105,8 @@ const Cart = () => {
 
   const { mutate: increaseQuantity } = useIncreaseQuantity();
   const { mutate: decreaseQuantity } = useDecreaseQuantity();
+  const { mutate: removeItem } = useRemoveItem();
+  const { mutate: clearCart } = useClearCart();
 
   const handleCouponChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const code = e.target.value;
@@ -137,7 +137,7 @@ const Cart = () => {
 
   const total = useRecoilValue(calculateTotal);
 
-  if (cartItems && !cartItems) {
+  if (cartItems === undefined && !cartItems) {
     return (
       <div className="flex h-[50vh] flex-col items-center justify-center gap-4 lg:h-[90vh]">
         <h1 className="flex flex-col text-3xl font-semibold text-gray-400">
@@ -150,6 +150,10 @@ const Cart = () => {
     );
   }
 
+  if (isLoading) {
+    return <ProductCardSkeleton />;
+  }
+
   return (
     <section className="relative mx-8 my-6 h-fit md:mx-12 md:my-12 lg:mx-auto lg:max-w-7xl">
       <div className="flex items-center justify-between">
@@ -157,7 +161,7 @@ const Cart = () => {
           breadcrumbTitle="Cart"
           breadcrumbValue={cartItems as []}
         />
-        <Button className="w-fit" onClick={() => clearCart(queryClient)}>
+        <Button className="w-fit" onClick={() => clearCart()}>
           Clear All
         </Button>
       </div>
@@ -165,15 +169,14 @@ const Cart = () => {
       <div className="grid grid-cols-2 py-6 text-foreground/40">
         <div className="text-xl font-normal leading-8">Product</div>
         <p className="hidden items-center justify-between text-xl font-normal leading-8 sm:flex">
-          <span className={`w-full text-center`}>
-            {cartHeaderData[0].label}
-          </span>
-          <span className={`w-full text-center`}>
-            {cartHeaderData[1].label}
-          </span>
-          <span className={`w-full text-center`}>
-            {cartHeaderData[2].label}
-          </span>
+          {cartHeaderData.map((header) => (
+            <span
+              key={`cart-header-${uuidv4()}`}
+              className="w-full text-center"
+            >
+              {header.label}
+            </span>
+          ))}
         </p>
       </div>
 
@@ -204,7 +207,7 @@ const Cart = () => {
                   <div className="flex items-center justify-center rounded-md border p-1">
                     <input
                       type="text"
-                      className="max-w-12 px-4"
+                      className="max-w-16 px-4"
                       placeholder={item.quantity.toString()}
                       readOnly
                     />
@@ -239,6 +242,9 @@ const Cart = () => {
                   <h6 className="text-center text-sm font-medium leading-9 md:text-lg">
                     {(item.product.price * item.quantity).toFixed(2)}
                   </h6>
+                  <Button onClick={() => removeItem(item.product.id)}>
+                    Remove
+                  </Button>
                 </div>
               </div>
             ))}

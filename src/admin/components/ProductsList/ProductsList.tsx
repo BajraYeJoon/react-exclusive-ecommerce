@@ -34,9 +34,16 @@ import { Axios } from "../../../common/lib/axiosInstance";
 import { Loading } from "../../../user-portal/site";
 import AddNewProductDialog from "./AddNewProductDialog";
 import { Button } from "../../../common/ui/button";
+import { useRecoilState } from "recoil";
+import { flashSaleState } from "../../../user-portal/atoms/flashSaleState";
+import { DatePickerWithRange } from "../flashSaleCards/FlashSalePicker";
+import ProductDetails from "./ProductDetails";
 
 export default function ProductsList() {
-  // const [isOpen, setOpen] = useState(true);
+  const [flashItem, setFlashItem] = useRecoilState(flashSaleState);
+
+  console.log(flashItem, "flash item");
+
   const { data: products, isLoading } = useQuery({
     queryKey: ["products"],
     queryFn: fetchAllProducts,
@@ -65,6 +72,16 @@ export default function ProductsList() {
     },
   });
 
+  const handleCheckboxChange = (productId: number) => {
+    setFlashItem((prev) => {
+      if (prev.includes(productId)) {
+        return prev.filter((id) => id !== productId);
+      } else {
+        return [...prev, productId];
+      }
+    });
+  };
+
   const columns = useMemo<ColumnDef<any>[]>(
     () => [
       {
@@ -84,13 +101,7 @@ export default function ProductsList() {
             <Dialog>
               <DialogTrigger>{row.original.title}</DialogTrigger>
               <DialogContent>
-                <DialogHeader>{row.original.title}</DialogHeader>
-                <DialogDescription>
-                  {row.original.description}
-                </DialogDescription>
-                <DialogDescription>
-                  <Button>Add this to Flash</Button>
-                </DialogDescription>
+                 <ProductDetails data={row.original}/>
               </DialogContent>
             </Dialog>
           );
@@ -118,7 +129,6 @@ export default function ProductsList() {
         accessorKey: "categories",
         header: "Categories",
         cell: ({ row }) => {
-          console.log(row, "categories");
           return <div>hi</div>;
         },
       },
@@ -145,6 +155,16 @@ export default function ProductsList() {
           <button onClick={() => handleDelete(row.original.id)}>
             <FaTrash />
           </button>
+        ),
+      },
+      {
+        id: "addtoFlash",
+        header: "Add to Flash Sale",
+        cell: ({ row }) => (
+          <input
+            type="checkbox"
+            onChange={() => handleCheckboxChange(row.original.id)}
+          />
         ),
       },
     ],
@@ -307,6 +327,19 @@ export default function ProductsList() {
       <div>
         Showing {table.getRowModel().rows.length} of {table.getRowCount()} Rows
       </div>
+
+      {flashItem.length > 0 && (
+        <div className="fixed bottom-4 right-4">
+          <Dialog>
+            <DialogTrigger>
+              <Button>Add All to Flash Sale</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DatePickerWithRange />
+            </DialogContent>
+          </Dialog>
+        </div>
+      )}
     </div>
   );
 }

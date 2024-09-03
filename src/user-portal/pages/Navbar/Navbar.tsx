@@ -70,7 +70,7 @@ const Navbar = () => {
     enabled: isLoggedIn,
   });
   const favoritesquantity = favorites?.data.length || 0;
-  const cartquantity = cart?.data?.length || 0;
+  const cartquantity = cart?.length || 0;
 
   return (
     <nav className="navbar border-b">
