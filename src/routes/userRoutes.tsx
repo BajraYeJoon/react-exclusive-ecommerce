@@ -1,5 +1,6 @@
 import Cookies from "js-cookie";
 import { redirect } from "react-router-dom";
+import { UserRoutes } from "../user-portal/utils/userLinks";
 
 import {
   ForgotPassword,
@@ -29,49 +30,51 @@ import { ArrivalsPage } from "../user-portal/pages";
 
 export const userRoutes = [
   { index: true, element: <Home /> },
-  { path: "about", element: <About /> },
-  { path: "contact", element: <Contact /> },
+  { path: UserRoutes.About, element: <About /> },
+  { path: UserRoutes.Contact, element: <Contact /> },
   {
     element: <AuthLayout />,
-    loader: () => (Cookies.get("token") ? redirect("/profile") : null),
+    loader: () => (Cookies.get("token") ? redirect(UserRoutes.Profile) : null),
     children: [
-      { path: "sign-up", element: <SignupPage /> },
-      { path: "sign-in", element: <SignInPage /> },
-      { path: "forgot-password", element: <ForgotPassword /> },
+      { path: UserRoutes.SignUp, element: <SignupPage /> },
+      { path: UserRoutes.SignIn, element: <SignInPage /> },
+      { path: UserRoutes.ForgotPassword, element: <ForgotPassword /> },
       {
-        path: "verify-otp",
+        path: UserRoutes.VerifyOtp,
         element: <OtpVerificationForm />,
         loader: () =>
-          !Cookies.get("key") ? redirect("/forgot-password") : null,
+          !Cookies.get("key") ? redirect(UserRoutes.ForgotPassword) : null,
       },
     ],
   },
   {
-    path: "profile",
+    path: UserRoutes.Profile,
     element: (
       <ProtectedRoute role="user">
         <ProfilePage />
       </ProtectedRoute>
     ),
   },
-  { path: "cart", element: <Cart /> },
-  { path: "products", element: <AllProducts /> },
-  { path: "new-arrivals", element: <ArrivalsPage /> },
-  { path: "favorites", element: <Favorites /> },
+  { path: UserRoutes.Cart, element: <Cart /> },
+  { path: UserRoutes.Products, element: <AllProducts /> },
+  { path: UserRoutes.NewArrivals, element: <ArrivalsPage /> },
+  { path: UserRoutes.Favorites, element: <Favorites /> },
   {
-    path: "checkout",
+    path: UserRoutes.Checkout,
     element: <Checkout />,
-    loader: () => (!Cookies.get("checkoutData") ? redirect("/products") : null),
+    loader: () =>
+      !Cookies.get("checkoutData") ? redirect(UserRoutes.Products) : null,
   },
   {
-    path: "order-placed",
+    path: UserRoutes.OrderPlaced,
     element: <OrderPlaced />,
-    loader: () => (!Cookies.get("order-placed") ? redirect("/products") : null),
+    loader: () =>
+      !Cookies.get("order-placed") ? redirect(UserRoutes.Products) : null,
   },
-  { path: ":productName/:productId", element: <Singleproduct /> },
+  { path: UserRoutes.SingleProduct, element: <Singleproduct /> },
   {
-    path: "category/:categoryName/:categoryId",
+    path: UserRoutes.SingleCategory,
     element: <FetchSingleCategory />,
   },
-  { path: "*", element: <NotFoundPage /> },
+  { path: UserRoutes.NotFound, element: <NotFoundPage /> },
 ];
