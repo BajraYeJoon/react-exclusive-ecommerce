@@ -10,70 +10,84 @@ import {
   PopoverTrigger,
 } from "../../../common/ui/popover";
 import { Calendar } from "../../../common/ui/calendar";
+import { addProductToFlashSale } from "../../api/flashSale";
+import { toast } from "sonner";
 
-export function DatePickerWithRange({
-  className,
-  data
-}) {
+export function DatePickerWithRange({ className, data }) {
   const [date, setDate] = React.useState<DateRange | undefined>({
     from: new Date(2022, 0, 20),
     to: addDays(new Date(2022, 0, 20), 20),
   });
 
+  console.log(new Date(date?.from).toISOString());
+  console.log(new Date(date?.to).toISOString());
+
   return (
     <section>
-         <div>
-    {data.map((item) => (
-      <Button
-        key={item}
-        variant={"default"}
-        className="h-fit max-w-12 rounded-md border border-foreground p-1"
-        disabled
-      >
-        {item}
-      </Button>
-    ))}
-  </div>
- <div className={cn("grid gap-2", className)}>
-      <Popover>
-        <PopoverTrigger asChild>
+      <div>
+        {data.map((item) => (
           <Button
-            id="date"
-            variant={"outline"}
-            className={cn(
-              "w-[300px] justify-start text-left font-normal",
-              !date && "text-muted-foreground",
-            )}
+            key={item}
+            variant={"default"}
+            className="h-fit max-w-12 rounded-md border border-foreground p-1"
+            disabled
           >
-            <CalendarIcon className="mr-2 h-4 w-4" />
-            {date?.from ? (
-              date.to ? (
-                <>
-                  {format(date.from, "LLL dd, y")} -{" "}
-                  {format(date.to, "LLL dd, y")}
-                </>
-              ) : (
-                format(date.from, "LLL dd, y")
-              )
-            ) : (
-              <span>Pick a date</span>
-            )}
+            {item}
           </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
-          <Calendar
-            initialFocus
-            mode="range"
-            defaultMonth={date?.from}
-            selected={date}
-            onSelect={setDate}
-            numberOfMonths={2}
-          />
-        </PopoverContent>
-      </Popover>
-    </div>
+        ))}
+      </div>
+      <div className={cn("grid gap-2", className)}>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              id="date"
+              variant={"outline"}
+              className={cn(
+                "w-[300px] justify-start text-left font-normal",
+                !date && "text-muted-foreground",
+              )}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {date?.from ? (
+                date.to ? (
+                  <>
+                    {format(date.from, "LLL dd, y")} -{" "}
+                    {format(date.to, "LLL dd, y")}
+                  </>
+                ) : (
+                  format(date.from, "LLL dd, y")
+                )
+              ) : (
+                <span>Pick a date</span>
+              )}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar
+              initialFocus
+              mode="range"
+              defaultMonth={date?.from}
+              selected={date}
+              onSelect={setDate}
+              numberOfMonths={2}
+            />
+          </PopoverContent>
+        </Popover>
+      </div>
+      <Button
+        onClick={() =>
+          addProductToFlashSale({
+            saleStart: new Date(date?.from).toISOString(),
+            saleEnd: new Date(date?.to).toISOString(),
+            products: data,
+          }).then((res) => {
+            console.log(res);
+            toast.success("Product added to flash sale");
+          })
+        }
+      >
+        Add to Flash Sale
+      </Button>
     </section>
- 
-   
   );
 }
