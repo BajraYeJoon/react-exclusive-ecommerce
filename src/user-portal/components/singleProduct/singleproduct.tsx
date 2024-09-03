@@ -1,5 +1,5 @@
 import CustomBreakcrumb from "../customBreakcrumb/CustomBreakcrumb";
-import { ShoppingBasket, StarIcon } from "lucide-react";
+import { ShoppingBasket } from "lucide-react";
 import { Button } from "../../../common/ui/button";
 import { CgGlobeAlt } from "react-icons/cg";
 import { FcCancel } from "react-icons/fc";

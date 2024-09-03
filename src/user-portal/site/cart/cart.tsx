@@ -16,6 +16,7 @@ import {
 } from "../../utils/cartutils";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { v4 as uuid } from "uuid";
+import { Button } from "../../../common/ui/button";
 
 const cartHeaderData = [
   { label: "Price" },
