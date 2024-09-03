@@ -3,7 +3,7 @@ import { checkoutState } from "../../atoms/checkoutState";
 import { Button } from "../../../common/ui/button";
 import { Fragment } from "react/jsx-runtime";
 import { FieldValues, useForm } from "react-hook-form";
-import FormInput from "../FormInput/FormInput";
+import FormInput from "../formInput/FormInput";
 import { orderplaceState } from "../../atoms/orderplaceState";
 import { useRecoilState } from "recoil";
 import { toast } from "sonner";

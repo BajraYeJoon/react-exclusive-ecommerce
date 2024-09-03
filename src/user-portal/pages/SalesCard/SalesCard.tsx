@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { PagesHeader, ProductCard, Button } from "../../components";
+import { PagesHeader, ProductCard } from "../../components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import { fetchSalesProduct } from "../../../common/api/productApi";
 import ProductCardSkeleton from "../../../common/components/productCardSkeleton/ProductCardSkeleton";
 import uuidv4 from "../../../common/lib/utils/uuid";
+import { Button } from "../../../common/ui/button";
 
 interface SalesCardProps {
   title: string;
@@ -53,52 +54,51 @@ const SalesCard = () => {
         subHeading="Today's Sales"
         Heading="Flash Sales"
         flashTimer
-        // handleNext={handleNext}
       />
 
-      {isLoading ? (
-        <ProductCardSkeleton />
-      ) : (
-        <>
-          <div className="product-card-container w-full items-center justify-between gap-4 overflow-hidden">
-            <Swiper
-              spaceBetween={20}
-              pagination={{ clickable: true }}
-              className="mySwiper"
-              modules={[Navigation]}
-              navigation={{
-                nextEl: ".arrow-right",
-                prevEl: ".arrow-left",
-              }}
-              breakpoints={{
-                320: {
-                  slidesPerView: 2,
-                },
-                640: {
-                  slidesPerView: 2,
-                },
-                768: {
-                  slidesPerView: 3,
-                },
-                1024: {
-                  slidesPerView: 4,
-                },
-              }}
-              // onNavigationNext={handleNext}
-            >
-              {salesData.map((productCard: SalesCardProps) => (
-                <SwiperSlide key={`salesPRODUCT-${uuidv4()}`} className="">
-                  <ProductCard {...productCard} discountTag />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
+      <div className="product-card-container w-full items-center justify-between gap-4 overflow-hidden">
+        <Swiper
+          spaceBetween={20}
+          pagination={{ clickable: true }}
+          className="mySwiper"
+          modules={[Navigation]}
+          navigation={{
+            nextEl: ".arrow-right",
+            prevEl: ".arrow-left",
+          }}
+          breakpoints={{
+            320: {
+              slidesPerView: 2,
+            },
+            640: {
+              slidesPerView: 2,
+            },
+            768: {
+              slidesPerView: 3,
+            },
+            1024: {
+              slidesPerView: 4,
+            },
+          }}
+        >
+          {isLoading ? (
+            <ProductCardSkeleton />
+          ) : (
+            <>
+              {salesData &&
+                salesData.map((productCard: SalesCardProps) => (
+                  <SwiperSlide key={`salesPRODUCT-${uuidv4()}`} className="">
+                    <ProductCard {...productCard} discountTag />
+                  </SwiperSlide>
+                ))}
+            </>
+          )}
+        </Swiper>
+      </div>
 
-          <Button className="mx-auto w-full md:w-fit">
-            <Link to={"/products"}>View All Products</Link>
-          </Button>
-        </>
-      )}
+      <Button className="mx-auto w-full md:w-fit">
+        <Link to={"/products"}>View All Products</Link>
+      </Button>
     </section>
   );
 };

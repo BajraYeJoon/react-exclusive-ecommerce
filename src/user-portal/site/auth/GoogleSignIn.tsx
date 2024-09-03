@@ -1,8 +1,8 @@
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../firebase/config";
 import { useNavigate } from "react-router-dom";
-import { Button } from "../../components";
 import { FcGoogle } from "react-icons/fc";
+import { Button } from "../../../common/ui/button";
 
 export const GoogleSignInComponent = ({ text }: { text: string }) => {
   const navigate = useNavigate();

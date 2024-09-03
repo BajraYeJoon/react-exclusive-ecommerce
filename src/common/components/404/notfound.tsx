@@ -4,7 +4,7 @@ import { HomeIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Player } from "@lottiefiles/react-lottie-player";
 
-export function NotFoundPage() {
+export default function NotFoundPage() {
   const router = useNavigate();
 
   const FADE_DOWN_ANIMATION_VARIANTS = {

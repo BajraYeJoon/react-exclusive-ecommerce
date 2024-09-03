@@ -6,7 +6,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../../../common/ui/table";
+} from "../../../../common/ui/table";
 
 const products = [
   {

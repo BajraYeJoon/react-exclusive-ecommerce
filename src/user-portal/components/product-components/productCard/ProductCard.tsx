@@ -2,17 +2,17 @@ import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { EyeIcon, HeartIcon } from "lucide-react";
 import { FaStar } from "react-icons/fa";
-import useWindow from "../../../common/lib/useWindow";
+import useWindow from "../../../../common/lib/useWindow";
 import {
   addFavorites,
   deleteFavorites,
   fetchFavorites,
-} from "../../api/wishlistApi";
-import { useAuthContext } from "../../context/useAuthContext";
+} from "../../../api/wishlistApi";
+import { useAuthContext } from "../../../context/useAuthContext";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button } from "../../../common/ui/button";
-import uuidv4 from "../../../common/lib/utils/uuid";
-import { useIncreaseQuantity } from "../../utils/cartutils";
+import { Button } from "../../../../common/ui/button";
+import uuidv4 from "../../../../common/lib/utils/uuid";
+import { useIncreaseQuantity } from "../../../utils/cartutils";
 
 interface ProductCardProps {
   title: string;

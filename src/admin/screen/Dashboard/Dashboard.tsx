@@ -1,4 +1,4 @@
-import Analytics from "../Analytics/Analytics";
+import Analytics from "../analytics/Analytics";
 
 const Dashboard = () => {
   return <Analytics />;
