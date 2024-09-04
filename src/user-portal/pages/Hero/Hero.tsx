@@ -1,6 +1,5 @@
 import { Carousel } from "../../components";
 import { ChevronRight } from "lucide-react";
-// import { heroCategories } from "../../constants/data";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "../../../common/ui/skeleton";
@@ -27,7 +26,10 @@ const Hero = () => {
         {isLoading ? (
           <div className="mx-auto flex flex-col gap-3">
             {[...Array(7)].map(() => (
-              <Skeleton className="h-8 md:w-20 lg:w-44" />
+              <Skeleton
+                className="h-8 md:w-20 lg:w-44"
+                key={`skeleton-${uuidv4()}`}
+              />
             ))}
           </div>
         ) : (
