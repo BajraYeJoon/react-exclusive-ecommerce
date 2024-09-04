@@ -43,13 +43,13 @@ export const useClearCart = () => {
 };
 
 export const useIncreaseQuantity = () => {
-  // const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({ id, type }: { id: number; type: string }) =>
       modifyQuantityInCart(id, type),
     onSuccess: () => {
-      // queryClient.invalidateQueries({ queryKey: ["cart"] });
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
       toast.success("Product quantity increased by 1");
     },
     onError: (error: any) => {
@@ -60,13 +60,13 @@ export const useIncreaseQuantity = () => {
 };
 
 export const useDecreaseQuantity = () => {
-  // const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({ id, type }: { id: number; type: string }) =>
       modifyQuantityInCart(id, type),
     onSuccess: () => {
-      // queryClient.invalidateQueries({ queryKey: ["cart"] });
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
       toast.success("Product quantity decreased by 1");
     },
     onError: (error: any) => {
