@@ -75,7 +75,7 @@ export default function ProductsList() {
   });
 
   const handleCheckboxChange = (productId: number) => {
-    setFlashItem((prev) => {
+    setFlashItem((prev: number[]) => {
       if (prev.includes(productId)) {
         return prev.filter((id) => id !== productId);
       } else {
@@ -371,7 +371,10 @@ export default function ProductsList() {
               </DialogTrigger>
             </div>
             <DialogContent>
-              <DatePickerWithRange data={flashItem} />
+              <DatePickerWithRange
+                data={flashItem}
+                setFlashItem={setFlashItem}
+              />
             </DialogContent>
           </Dialog>
         </div>
