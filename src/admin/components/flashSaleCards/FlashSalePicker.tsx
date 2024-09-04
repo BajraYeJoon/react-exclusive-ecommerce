@@ -13,7 +13,15 @@ import { Calendar } from "../../../common/ui/calendar";
 import { addProductToFlashSale } from "../../api/flashSale";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
-import { query } from "firebase/firestore";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../../../common/ui/dialog";
 
 export function DatePickerWithRange({
   className,
@@ -86,23 +94,85 @@ export function DatePickerWithRange({
           />
         </PopoverContent>
       </div>
-      <Button
-        onClick={() =>
-          addProductToFlashSale({
-            saleStart: new Date(date?.from).toISOString(),
-            saleEnd: new Date(date?.to).toISOString(),
-            products: data,
-          }).then((res) => {
-            console.log(res);
-            queryClient.invalidateQueries({ queryKey: ["products"] });
-            toast.success("Product added to flash sale");
-            setFlashItem([]);
-          })
-        }
-        onSelect={() => setOpen(false)}
-      >
-        Add to Flash Sale
-      </Button>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button>Add to Flash Sale</Button>
+        </DialogTrigger>
+        <DialogContent className="flex flex-col items-center justify-center gap-4">
+          <DialogHeader className="text-center">
+            Are you sure you want to add this all products to Flash Sale?
+          </DialogHeader>
+          <DialogTitle className="text-sm font-medium">
+            Sale Start: {format(date?.from, "LLL dd, y")} -
+            Sale End: {format(date?.to, "LLL dd, y")}
+            <span className="text-primary">*</span>
+          </DialogTitle>
+          <DialogDescription className="space-x-2">
+            <Button
+              onClick={() =>
+                addProductToFlashSale({
+                  saleStart: new Date(date?.from).toISOString(),
+                  saleEnd: new Date(date?.to).toISOString(),
+                  products: data,
+                }).then((res) => {
+                  console.log(res);
+                  queryClient.invalidateQueries({ queryKey: ["products"] });
+                  toast.success("Product added to flash sale");
+                  setFlashItem([]);
+                })
+              }
+              onSelect={() => setOpen(false)}
+            >
+              Yes
+            </Button>
+            <Button variant={"secondary"}>
+              <DialogClose>No</DialogClose>
+            </Button>
+          </DialogDescription>
+        </DialogContent>
+      </Dialog>
     </Popover>
   );
 }
+
+// import * as React from "react";
+// import { format } from "date-fns";
+// import { Calendar as CalendarIcon } from "lucide-react";
+
+// import { cn } from "../../../common/lib/utils";
+// import { Button } from "../../../common/ui/button";
+// import { Calendar } from "../../../common/ui/calendar";
+// import {
+//   Popover,
+//   PopoverContent,
+//   PopoverTrigger,
+// } from "../../../common/ui/popover";
+
+// export function DatePickerWithRange({ data, setFlashItem }) {
+//   const [date, setDate] = React.useState<Date>();
+
+//   return (
+//     <Popover>
+//       <PopoverTrigger asChild>
+//         <Button
+//           variant={"outline"}
+//           className={cn(
+//             "w-[280px] justify-start text-left font-normal",
+//             !date && "text-muted-foreground",
+//           )}
+//         >
+//           <CalendarIcon className="mr-2 h-4 w-4" />
+//           {date ? format(date, "PPP") : <span>Pick a date</span>}
+//         </Button>
+//       </PopoverTrigger>
+//       <PopoverContent className="w-auto p-0">
+//         <Calendar
+//           mode="single"
+//           selected={date}
+//           onSelect={setDate}
+//           initialFocus
+//         />
+//       </PopoverContent>
+//     </Popover>
+//   );
+// }

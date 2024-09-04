@@ -6,8 +6,11 @@ import { toast } from "sonner";
 import { MdCancel, MdEdit } from "react-icons/md";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
+  DialogDescription,
   DialogHeader,
+  DialogTitle,
   DialogTrigger,
 } from "../../../common/ui/dialog";
 import {
@@ -138,10 +141,32 @@ const AddCategoryForm = () => {
             >
               {category.name}
               <div className="absolute right-0 top-0 hidden flex-col text-lg group-hover:flex">
-                <MdCancel
-                  className="group-hover:text-primary"
-                  onClick={() => handleCategoryDelete(category.id)}
-                />
+                <Dialog>
+                  <DialogTrigger>
+                    <MdCancel className="group-hover:text-primary" />
+                  </DialogTrigger>
+                  <DialogContent className="flex flex-col items-center justify-center gap-4">
+                    <DialogHeader>
+                      Are you sure you want to remove this Category?
+                    </DialogHeader>
+                    <DialogTitle className="text-sm font-medium">
+                      It will remove all the products as well.{" "}
+                      <span className="text-primary">*</span>
+                    </DialogTitle>
+                    <DialogDescription className="space-x-2">
+                      <Button
+                        variant={"destructive"}
+                        onClick={() => handleCategoryDelete(category.id)}
+                      >
+                        Yes
+                      </Button>
+                      <Button variant={"secondary"}>
+                        <DialogClose>No</DialogClose>
+                      </Button>
+                    </DialogDescription>
+                  </DialogContent>
+                </Dialog>
+
                 <Dialog>
                   <DialogTrigger onClick={() => setEditCategoryId(category.id)}>
                     <MdEdit className="group-hover:text-primary" />

@@ -13,7 +13,11 @@ import { deleteFlashSale, getFlashSale } from "../../api/flashSale";
 import { Loading } from "../../../user-portal/site";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
   DialogTrigger,
 } from "../../../common/ui/dialog";
 import ProductDetails from "../productsList/ProductDetails";
@@ -91,16 +95,16 @@ export default function FlashSaleAdmin() {
         ) : (
           <>
             {flashSaleProducts.map((product: Product) => (
-              <Dialog key={product.id}>
-                <DialogTrigger>
-                  <Card className="relative">
-                    <Badge className="absolute right-2 top-2">Sale</Badge>
-                    <CardHeader>
-                      <CardTitle className="mt-2 text-lg font-normal">
-                        {product.title}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
+              <Card className="relative" key={product.id}>
+                <Badge className="absolute right-2 top-2">Sale</Badge>
+                <CardHeader>
+                  <CardTitle className="mt-2 text-lg font-normal">
+                    {product.title}
+                  </CardTitle>
+                </CardHeader>
+                <Dialog>
+                  <DialogTrigger className="w-full">
+                    <CardContent className="">
                       {!product.image ? (
                         <Loading />
                       ) : (
@@ -113,21 +117,41 @@ export default function FlashSaleAdmin() {
 
                       <p className="font-medium">${product.price.toFixed(2)}</p>
                     </CardContent>
-                    <CardFooter>
-                      <Button
-                        variant="destructive"
-                        className="w-full"
-                        onClick={() => removeFromSale.mutate(product.id)}
-                      >
+                  </DialogTrigger>
+                  <DialogContent>
+                    <ProductDetails data={product} />
+                  </DialogContent>
+                </Dialog>
+                <CardFooter>
+                  <Dialog>
+                    <DialogTrigger>
+                      <Button variant={"outline"}>
                         <X className="mr-2 h-4 w-4" /> Remove from Sale
                       </Button>
-                    </CardFooter>
-                  </Card>
-                </DialogTrigger>
-                <DialogContent>
-                  <ProductDetails data={product} />
-                </DialogContent>
-              </Dialog>
+                    </DialogTrigger>
+                    <DialogContent className="flex flex-col items-center justify-center gap-4">
+                      <DialogHeader>
+                        Are you sure you want to remove this from Sale?
+                      </DialogHeader>
+                      <DialogTitle className="text-sm font-medium">
+                        This action cannot be undone.{" "}
+                        <span className="text-primary">*</span>
+                      </DialogTitle>
+                      <DialogDescription className="space-x-2">
+                        <Button
+                          variant={"destructive"}
+                          onClick={() => removeFromSale.mutate(product.id)}
+                        >
+                          Yes
+                        </Button>
+                        <Button variant={"secondary"}>
+                          <DialogClose>No</DialogClose>
+                        </Button>
+                      </DialogDescription>
+                    </DialogContent>
+                  </Dialog>
+                </CardFooter>
+              </Card>
             ))}
           </>
         )}
