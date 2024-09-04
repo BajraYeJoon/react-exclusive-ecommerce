@@ -22,8 +22,6 @@ const Carousel = () => {
   const { data: bannerData, isLoading } = useQuery({
     queryKey: ["banner"],
     queryFn: fetchHeroBanner,
-    refetchOnWindowFocus: false,
-    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
   // Handle case where data is still loading
