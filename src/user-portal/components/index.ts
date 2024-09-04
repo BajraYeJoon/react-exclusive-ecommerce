@@ -13,3 +13,9 @@ export { default as CustomBreakcrumb } from "./customBreakcrumb/CustomBreakcrumb
 export { default as Singleproduct } from "./singleProduct/singleproduct";
 export { default as ProductSkeleton } from "./product-components/productSkeleton/ProductSkeleton";
 export { default as FetchSingleCategory } from "./fetchSingleCategory/FetchSingleCategory";
+export { default as TabNavigation } from "./profile/tabsNavigation";
+export { default as GeneralInfo } from "./profile/generalInfo";
+export { default as Orders } from "./profile/orderInfo";
+export { default as PaymentInfo } from "./profile/paymentInfo";
+
+
