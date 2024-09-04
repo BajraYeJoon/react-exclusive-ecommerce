@@ -65,43 +65,6 @@ const Cart = () => {
     navigate("/checkout");
   };
 
-  // const increaseQuantity = (id: number) => {
-  //   const newCartValue = cartItems.map((cart) => {
-  //     if (cart.product.id === id) {
-  //       if (cart.quantity < cart.product.availableQuantity) {
-  //         return { ...cart, quantity: cart.quantity + 1 };
-  //       } else {
-  //         toast.error("Maximum available quantity reached");
-  //       }
-  //     }
-  //     return cart;
-  //   });
-  //   setCartItems(newCartValue);
-  // };
-  // const decreaseQuantity = (id: number) => {
-  //   let itemRemoved = false;
-
-  //   const newCartValue = cartItems
-  //     .map((cart) => {
-  //       if (cart.product.id === id) {
-  //         if (cart.quantity === 1 && !itemRemoved) {
-  //           itemRemoved = true;
-  //           toast.error(
-  //             `Your ${cart.product.title} has been removed from the cart`,
-  //           );
-  //         }
-  //         return { ...cart, quantity: cart.quantity - 1 };
-  //       }
-  //       return cart;
-  //     })
-  //     .filter((cart) => cart.quantity > 0);
-
-  //   if (newCartValue.length === 0) {
-  //     toast.error("Your cart is empty now");
-  //   }
-
-  //   setCartItems(newCartValue);
-  // };
 
   const { mutate: increaseQuantity } = useIncreaseQuantity();
   const { mutate: decreaseQuantity } = useDecreaseQuantity();
@@ -116,17 +79,23 @@ const Cart = () => {
   const calculateTotal = selector({
     key: "CalculateTotal",
     get: ({ get }) => {
-      const cartItems = get(cartState) || [];
       const discount = get(discountState);
+
+      console.log("Discount:", discount);
 
       const subTotal = Array.isArray(cartItems)
         ? cartItems.reduce((acc, item) => {
+            console.log("Item:", item);
             return acc + item.product.price * item.quantity;
           }, 0)
         : 0;
 
+      console.log("SubTotal:", subTotal);
+
       const charge = 45;
       const discountAmount = subTotal * discount;
+
+      console.log("Discount Amount:", discountAmount);
 
       return {
         subTotal,
@@ -229,7 +198,10 @@ const Cart = () => {
 
                       <ChevronDown
                         size={14}
-                        className="cursor-pointer"
+                        className={cn(
+                          "cursor-pointer",
+                          item.quantity <= 1 && "cursor-not-allowed",
+                        )}
                         onClick={() =>
                           decreaseQuantity({
                             id: item.product.id,
