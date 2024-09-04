@@ -32,7 +32,7 @@ const Carousel = () => {
   console.log(bannerData, "bannerrrrrrrrr");
 
   // Handle case where there is no data
-  const banner = bannerData?.[0]?.products || [];
+  const banner = (bannerData && bannerData?.[0]?.products) || [];
 
   return (
     <div className="carousel-container w-4/5 flex-1 pt-4 lg:pl-14 lg:pt-14">
