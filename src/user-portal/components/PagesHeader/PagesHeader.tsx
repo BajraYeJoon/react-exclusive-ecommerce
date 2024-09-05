@@ -1,6 +1,7 @@
-import { NavigationArrows, Button } from "../../components";
+import NavigationArrows from "../navigationalArrows/NavigationalArrows";
 import { Link } from "react-router-dom";
-import CountdownTimer from "../FlashSaleTimer/counttimer";
+import CountdownTimer from "../flashSaleTimer/counttimer";
+import { Button } from "../../../common/ui/button";
 
 interface PagesHeaderProps {
   flashTimer?: boolean;

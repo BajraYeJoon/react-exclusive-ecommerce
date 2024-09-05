@@ -22,19 +22,30 @@ import {
 
 import {
   Dialog,
+  DialogClose,
   DialogContent,
+  DialogDescription,
+  DialogHeader,
   DialogTrigger,
 } from "../../../common/ui/dialog";
-import AddNewProductDialog from "./AddNewProductDialog";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { toast } from "sonner";
 import { fetchAllProducts } from "../../../common/api/productApi";
 import { Axios } from "../../../common/lib/axiosInstance";
 import { Loading } from "../../../user-portal/site";
-import { Button } from "../../../user-portal/components";
+import AddNewProductDialog from "./AddNewProductDialog";
+import { Button } from "../../../common/ui/button";
+import { useRecoilState } from "recoil";
+import { flashSaleState } from "../../../user-portal/atoms/flashSaleState";
+import { DatePickerWithRange } from "../flashSaleCards/FlashSalePicker";
+import ProductDetails from "./ProductDetails";
+import uuidv4 from "../../../common/lib/utils/uuid";
 
 export default function ProductsList() {
-  // const [isOpen, setOpen] = useState(true);
+  const [flashItem, setFlashItem] = useRecoilState(flashSaleState);
+
+  console.log(flashItem, "flash item");
+
   const { data: products, isLoading } = useQuery({
     queryKey: ["products"],
     queryFn: fetchAllProducts,
@@ -63,6 +74,16 @@ export default function ProductsList() {
     },
   });
 
+  const handleCheckboxChange = (productId: number) => {
+    setFlashItem((prev: number[]) => {
+      if (prev.includes(productId)) {
+        return prev.filter((id) => id !== productId);
+      } else {
+        return [...prev, productId];
+      }
+    });
+  };
+
   const columns = useMemo<ColumnDef<any>[]>(
     () => [
       {
@@ -76,7 +97,17 @@ export default function ProductsList() {
       },
       {
         accessorKey: "title",
-        header: "Status",
+        header: "Title",
+        cell: ({ row }) => {
+          return (
+            <Dialog>
+              <DialogTrigger>{row.original.title}</DialogTrigger>
+              <DialogContent>
+                <ProductDetails data={row.original} />
+              </DialogContent>
+            </Dialog>
+          );
+        },
       },
       {
         accessorKey: "onSale",
@@ -100,7 +131,6 @@ export default function ProductsList() {
         accessorKey: "categories",
         header: "Categories",
         cell: ({ row }) => {
-          console.log(row, "categories");
           return <div>hi</div>;
         },
       },
@@ -124,10 +154,39 @@ export default function ProductsList() {
         id: "delete",
         header: "Delete",
         cell: ({ row }) => (
-          <button onClick={() => handleDelete(row.original.id)}>
-            <FaTrash />
-          </button>
+          <Dialog>
+            <DialogTrigger>
+              <FaTrash />
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                Are you sure you want to delete this product?
+              </DialogHeader>
+              <DialogDescription>
+                <Button onClick={() => handleDelete(row.original.id)}>
+                  Yes
+                </Button>
+                <Button variant={"secondary"}>
+                  <DialogClose>No</DialogClose>
+                </Button>
+              </DialogDescription>
+            </DialogContent>
+          </Dialog>
         ),
+      },
+      {
+        id: "addtoFlash",
+        header: "Add to Flash Sale",
+        cell: ({ row }) => {
+          return (
+            <input
+              type="checkbox"
+              // checked={row.original.onSale}
+              disabled={row.original.onSale}
+              onChange={() => handleCheckboxChange(row.original.id)}
+            />
+          );
+        },
       },
     ],
     [],
@@ -289,6 +348,37 @@ export default function ProductsList() {
       <div>
         Showing {table.getRowModel().rows.length} of {table.getRowCount()} Rows
       </div>
+
+      {flashItem.length > 0 && (
+        <div className="fixed bottom-4 right-4">
+          <Dialog>
+            <div className="flex flex-col items-center justify-center gap-2 rounded-md border bg-slate-200 p-2">
+              <span className="flex flex-wrap justify-between gap-2">
+                {flashItem.map((item) => (
+                  <Button
+                    variant={"outline"}
+                    className="h-fit max-w-12 rounded-md border border-foreground p-1"
+                    key={`checked-sale-${uuidv4()}`}
+                    onClick={() => handleCheckboxChange(item)}
+                  >
+                    {item}
+                  </Button>
+                ))}
+              </span>
+
+              <DialogTrigger>
+                <Button>Add All to Flash Sale</Button>
+              </DialogTrigger>
+            </div>
+            <DialogContent>
+              <DatePickerWithRange
+                data={flashItem}
+                setFlashItem={setFlashItem}
+              />
+            </DialogContent>
+          </Dialog>
+        </div>
+      )}
     </div>
   );
 }

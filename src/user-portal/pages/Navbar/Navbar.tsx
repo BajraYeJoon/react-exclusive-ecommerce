@@ -1,31 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import { HeartIcon, LucideShoppingCart, Search } from "lucide-react";
-import { RxHamburgerMenu } from "react-icons/rx";
+import { RxHamburgerMenu, RxCross2 } from "react-icons/rx";
 import { NavLink, Link } from "react-router-dom";
 import { cn } from "../../../common/lib/utils";
 import { navLinks } from "../../constants/data";
-import { RxCross2 } from "react-icons/rx";
 import { useAuthContext } from "../../context/useAuthContext";
 import { Input } from "../../../common/ui/input";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProductsBySearch } from "../../../common/api/productApi";
 import { fetchCart } from "../../api/cartApi";
 import { fetchFavorites } from "../../api/wishlistApi";
+import uuidv4 from "../../../common/lib/utils/uuid";
+import { debounce } from "../../utils/debounce";
 
 type SearchResultProps = {
   id: number;
   title: string;
-};
-
-const debounce = <T extends (...args: any[]) => any>(
-  fn: T,
-  delay: number = 2000,
-): ((...args: Parameters<T>) => void) => {
-  let timerId: ReturnType<typeof setTimeout> | null = null;
-  return (...args: Parameters<T>): void => {
-    if (timerId) clearTimeout(timerId);
-    timerId = setTimeout(() => fn(...args), delay);
-  };
 };
 
 const Navbar = () => {
@@ -80,7 +70,7 @@ const Navbar = () => {
     enabled: isLoggedIn,
   });
   const favoritesquantity = favorites?.data.length || 0;
-  const cartquantity = cart?.data?.length || 0;
+  const cartquantity = cart?.length || 0;
 
   return (
     <nav className="navbar border-b">
@@ -95,13 +85,16 @@ const Navbar = () => {
 
         <div className="nav-links hidden gap-8 lg:flex">
           <ul className="flex flex-col font-medium md:mt-0 md:flex-row md:space-x-4">
-            {navLinks.map((link, index) => {
+            {navLinks.map((link) => {
               if (isLoggedIn && link.label === "Sign Up") {
                 return null;
               }
 
               return (
-                <li key={index} className="nav-item cursor-pointer">
+                <li
+                  key={`nav-link-${uuidv4()}`}
+                  className="nav-item cursor-pointer"
+                >
                   <NavLink
                     to={link.href}
                     className={({ isActive, isPending }) =>
@@ -201,13 +194,13 @@ const Navbar = () => {
       >
         <div className="mobile-nav-menu flex flex-col gap-8 px-4 py-4 font-bold tracking-wider">
           <ul className="nav-menu flex flex-col font-medium md:mt-0 md:flex-row md:space-x-4">
-            {navLinks.map((link, index) => {
+            {navLinks.map((link) => {
               if (isLoggedIn && link.label === "Sign Up") {
                 return null;
               }
               return (
                 <li
-                  key={index}
+                  key={`mobile-nav-link-${uuidv4()}`}
                   className="nav-item nav-link my-2 block font-normal text-background"
                 >
                   <Link to={link.href} onClick={handleLinkClick}>

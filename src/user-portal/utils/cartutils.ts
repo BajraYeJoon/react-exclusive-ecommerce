@@ -1,6 +1,10 @@
 import { toast } from "sonner";
-import { deleteAllCartItems, modifyQuantityInCart } from "../api/cartApi";
-import { useMutation } from "@tanstack/react-query";
+import {
+  deleteAllCartItems,
+  modifyQuantityInCart,
+  removeItem,
+} from "../api/cartApi";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const handleCouponChange = (
   e: React.ChangeEvent<HTMLInputElement>,
@@ -23,46 +27,68 @@ export const applyCoupon = (
   }
 };
 
-export const clearCart = async (queryClient: any) => {
-  try {
-    await deleteAllCartItems();
-    queryClient.invalidateQueries({ queryKey: ["cart"] });
-    toast.success("All items have been removed from the cart");
-  } catch (error: any) {
-    toast.error(error.response?.data?.message);
-  }
+export const useClearCart = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: () => deleteAllCartItems(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+      toast.success("Your cart has been cleared 😊");
+    },
+    onError: (error: any) => {
+      toast.error(`Something went wrong: ${error.response?.data?.message}`);
+      console.error("Error clearing cart:", error);
+    },
+  });
 };
 
 export const useIncreaseQuantity = () => {
-  // const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({ id, type }: { id: number; type: string }) =>
       modifyQuantityInCart(id, type),
     onSuccess: () => {
-      // queryClient.invalidateQueries({ queryKey: ["cart"] });
-      toast.success("Product quantity increased");
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+      toast.success("Product quantity increased by 1");
     },
-    onError: (error) => {
-      toast.error("Error increasing product quantity");
+    onError: (error: any) => {
+      toast.error(`Something went wrong: ${error.response?.data?.message}`);
       console.error("Error increasing product quantity:", error);
     },
   });
 };
 
 export const useDecreaseQuantity = () => {
-  // const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({ id, type }: { id: number; type: string }) =>
       modifyQuantityInCart(id, type),
     onSuccess: () => {
-      // queryClient.invalidateQueries({ queryKey: ["cart"] });
-      toast.success("Product quantity increased");
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+      toast.success("Product quantity decreased by 1");
     },
-    onError: (error) => {
-      toast.error("Error increasing product quantity");
+    onError: (error: any) => {
+      toast.error(`Something went wrong: ${error.response?.data?.message}`);
+
       console.error("Error increasing product quantity:", error);
+    },
+  });
+};
+
+export const useRemoveItem = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => removeItem(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+      toast.success("Product removed from cart");
+    },
+
+    onError: (error: any) => {
+      toast.error(`Something went wrong: ${error.response?.data?.message}`);
+      console.error("Error removing product from cart:", error);
     },
   });
 };

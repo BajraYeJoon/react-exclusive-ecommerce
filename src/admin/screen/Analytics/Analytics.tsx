@@ -1,8 +1,8 @@
-import FeaturedInfo from "../../components/FeaturedInfo/FeaturedInfo";
-import Chart from "../../components/Chart/Chart";
+import FeaturedInfo from "../../components/dashboard-component/featuredInfo/FeaturedInfo";
+import Chart from "../../components/dashboard-component/chart/Chart";
 import { userData } from "../../lib/data";
-import WidgetLeft from "../../components/Widgets/WidgetLeft";
-import WidgetRight from "../../components/Widgets/WidgetRight";
+import WidgetLeft from "../../components/dashboard-component/widgets/WidgetLeft";
+import WidgetRight from "../../components/dashboard-component/widgets/WidgetRight";
 
 const Analytics = () => {
   // const { data: userData } = useQuery({

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import ProductCard from "../ProductCard/ProductCard";
-import CustomBreakcrumb from "../CustomBreakcrumb/CustomBreakcrumb";
+import ProductCard from "../product-components/productCard/ProductCard";
+import CustomBreakcrumb from "../customBreakcrumb/CustomBreakcrumb";
 import { deleteAllFavorites, fetchFavorites } from "../../api/wishlistApi";
 import { Button } from "../../../common/ui/button";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";

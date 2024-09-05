@@ -2,8 +2,9 @@ import { useQueries } from "@tanstack/react-query";
 import { Users2 } from "lucide-react";
 import { CiMoneyBill } from "react-icons/ci";
 import { GrBasket } from "react-icons/gr";
-import { fetchAllUsers } from "../../api/fetchUser";
-import { fetchAllProducts } from "../../../common/api/productApi";
+import { fetchAllUsers } from "../../../api/fetchUser";
+import { fetchAllProducts } from "../../../../common/api/productApi";
+import uuidv4 from "../../../../common/lib/utils/uuid";
 const FeaturedInfo = () => {
   const results = useQueries({
     queries: [
@@ -16,8 +17,6 @@ const FeaturedInfo = () => {
   const usersData = results[0].data;
   const productsData = results[1].data;
   // const revenueData = results[2].data;
-
-  console.log(usersData?.data, productsData);
 
   const ANALYTIC_CARD_INFO = [
     {
@@ -45,7 +44,10 @@ const FeaturedInfo = () => {
       {ANALYTIC_CARD_INFO.map(({ icon, label, generatedValue, value }) => {
         const Icon = icon;
         return (
-          <div className="flex h-fit w-full flex-col gap-2 rounded-lg border border-gray-200 bg-white p-6 shadow">
+          <div
+            className="flex h-fit w-full flex-col gap-2 rounded-lg border border-gray-200 bg-white p-6 shadow"
+            key={`${label}-${uuidv4()}`}
+          >
             <Icon className="h-5 w-5" />
             <h1 className="text-base font-medium">{label}</h1>
             <div className="flex items-start gap-2">

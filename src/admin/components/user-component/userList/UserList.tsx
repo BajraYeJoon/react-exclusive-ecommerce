@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchAllUsers } from "../../api/fetchUser";
+import { fetchAllUsers } from "../../../api/fetchUser";
 import { Fragment, useMemo, useState } from "react";
 import {
   ColumnDef,
@@ -10,8 +10,8 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Button } from "../../../user-portal/components";
-import { Loading } from "../../../user-portal/site";
+import { Loading } from "../../../../user-portal/site";
+import { Button } from "../../../../common/ui/button";
 import {
   Table,
   TableBody,
@@ -20,14 +20,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../../../common/ui/table";
+} from "../../../../common/ui/table";
 import {
   Dialog,
   DialogContent,
   DialogTrigger,
-} from "../../../common/ui/dialog";
+} from "../../../../common/ui/dialog";
 import { EyeIcon } from "lucide-react";
-import UserDialogContent from "../UserDetail/UserDialogContent";
+import UserDialogContent from "../userDetail/UserDialogContent";
 
 export default function UserList() {
   const { data: usersData, isLoading } = useQuery({

@@ -1,5 +1,6 @@
 import { Swiper, SwiperSlide } from "swiper/react";
-import { PagesHeader, Button, ProductCard } from "../../components";
+import { PagesHeader, ProductCard } from "../../components";
+import { Button } from "../../../common/ui/button";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
