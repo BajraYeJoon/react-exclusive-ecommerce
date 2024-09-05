@@ -121,6 +121,7 @@ export default function ProductsList() {
       {
         accessorKey: "price",
         header: "Amount",
+
         cell: (info) => (
           <span className="text-right">
             ${info.getValue() as React.ReactNode}
@@ -130,6 +131,7 @@ export default function ProductsList() {
       {
         accessorKey: "categories",
         header: "Categories",
+        maxSize: 10,
         cell: ({ row }) => {
           return (
             <div>
@@ -183,6 +185,7 @@ export default function ProductsList() {
       {
         id: "addtoFlash",
         header: "Add to Flash Sale",
+        minSize: 100,
         cell: ({ row }) => {
           return (
             <input
@@ -391,7 +394,10 @@ function Filter({ column, table }: { column: any; table: any }) {
   const columnFilterValue = column.getFilterValue();
 
   return typeof firstValue === "number" ? (
-    <div className="flex space-x-2" onClick={(e) => e.stopPropagation()}>
+    <div
+      className="flex flex-col items-center"
+      onClick={(e) => e.stopPropagation()}
+    >
       <input
         type="number"
         value={(columnFilterValue as [number, number])?.[0] ?? ""}
@@ -419,7 +425,7 @@ function Filter({ column, table }: { column: any; table: any }) {
     </div>
   ) : (
     <input
-      className="w-36 rounded border shadow"
+      className="max-w-12 rounded border shadow lg:max-w-32"
       onChange={(e) => column.setFilterValue(e.target.value)}
       onClick={(e) => e.stopPropagation()}
       placeholder={`Search...`}
