@@ -70,7 +70,7 @@ export default function FlashSaleAdmin() {
     return <Loading />;
   }
 
-  const flashSaleProducts = flashSaleProductsData ?? [];
+  const flashSaleProducts = flashSaleProductsData.pro ?? [];
 
   return (
     <div className="container mx-auto p-4">

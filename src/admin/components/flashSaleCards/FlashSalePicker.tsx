@@ -1,6 +1,6 @@
 import * as React from "react";
 import { addDays, format, setHours, setMinutes } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
+import { CalendarArrowUp, Calendar as CalendarIcon } from "lucide-react";
 import { DateRange, DayPicker } from "react-day-picker";
 import { cn } from "../../../common/lib/utils";
 import { Button } from "../../../common/ui/button";
@@ -22,6 +22,8 @@ import {
   DialogTrigger,
 } from "../../../common/ui/dialog";
 import "react-day-picker/style.css";
+import { Navigate, useNavigate } from "react-router-dom";
+import { Routes } from "../../lib/links";
 
 export function DatePickerWithRange({
   className,
@@ -33,13 +35,13 @@ export function DatePickerWithRange({
   setFlashItem: React.Dispatch<React.SetStateAction<any>>;
 }>) {
   const [date, setDate] = React.useState<DateRange | undefined>({
-    from: new Date(2022, 0, 20),
-    to: addDays(new Date(2022, 0, 20), 20),
+    from: addDays(new Date(), 1),
+    to: addDays(new Date(), 20),
   });
-
+ 
   const [startTime, setStartTime] = React.useState<string>("00:00");
   const [endTime, setEndTime] = React.useState<string>("23:59");
-
+  const navigate =  useNavigate()
   const queryClient = useQueryClient();
   const [open, setOpen] = React.useState(false);
 
@@ -71,7 +73,8 @@ export function DatePickerWithRange({
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <div>
+      <div className="text-sm font-medium text-primary">Selected Products</div>
+      <div className="flex flex-wrap gap-2">
         {data.map((item) => (
           <Button
             key={item}
@@ -84,25 +87,23 @@ export function DatePickerWithRange({
         ))}
       </div>
       <div className={cn("grid gap-2", className)}>
+        <span>
+          Please Select the Date for Sales. (
+          <i className="text-xs">Click below</i>)
+        </span>
         <PopoverTrigger asChild>
           <Button
             id="date"
             variant={"outline"}
-            className={cn(
-              "w-[300px] justify-start text-left font-normal",
-              !date && "text-muted-foreground",
-            )}
+            className={cn("w-fit", !date && "text-muted-foreground")}
           >
-            <CalendarIcon className="mr-2 h-4 w-4" />
-            {date?.from ? (
-              date.to ? (
-                <>
-                  {format(date.from, "LLL dd, y HH:mm")} -{" "}
-                  {format(date.to, "LLL dd, y HH:mm")}
-                </>
-              ) : (
-                format(date.from, "LLL dd, y HH:mm")
-              )
+            <CalendarIcon className="mr-2 h-4 w-4 text-primary" />
+
+            {date ? (
+              <>
+                {format(date?.from, "LLL dd, y HH:mm")} -{" "}
+                {format(date?.to, "LLL dd, y HH:mm")}
+              </>
             ) : (
               <span>Pick a date</span>
             )}
@@ -161,6 +162,7 @@ export function DatePickerWithRange({
                   queryClient.invalidateQueries({ queryKey: ["products"] });
                   toast.success("Product added to flash sale");
                   setFlashItem([]);
+                  navigate(`${Routes.Admin}/${Routes.FlashSales}`)
                 })
               }
               onSelect={() => setOpen(false)}
