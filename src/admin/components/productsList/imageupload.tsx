@@ -1,61 +1,164 @@
-import { useEffect, useState } from "react";
-import { useDropzone } from "react-dropzone";
+import { AnimatePresence, motion } from "framer-motion";
+import { File, Trash2, Upload } from "lucide-react";
+import type React from "react";
+import { type DragEvent, useRef, useState } from "react";
 
-function Previews({ register }: any) {
-  const [files, setFiles] = useState<File[]>([]);
-  const { getRootProps, getInputProps } = useDropzone({
-    accept: {
-      "image/*": [],
-    },
-    onDrop: (acceptedFiles) => {
-      setFiles(
-        acceptedFiles.map((file) =>
-          Object.assign(file, {
-            preview: URL.createObjectURL(file),
-          }),
-        ),
-      );
-    },
-  });
+interface FileWithPreview extends File {
+  preview: string;
+}
 
-  const thumbs = files.map((file) => (
-    <div
-      className="mb-2 mr-2 box-border inline-flex h-24 w-24 rounded border border-gray-300 p-1"
-      key={file.name}
-    >
-      <div className="flex min-w-0 overflow-hidden">
-        <img
-          src={(file as any).preview}
-          className="block h-full w-auto"
-          // Revoke data uri after image is loaded
-          onLoad={() => {
-            URL.revokeObjectURL((file as any).preview);
-          }}
-        />
-      </div>
-    </div>
-  ));
+export function FileDropzone({ register }) {
+  const [files, setFiles] = useState<FileWithPreview[]>([]);
+  const [isDragActive, setIsDragActive] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
-    return () =>
-      files.forEach((file) => URL.revokeObjectURL((file as any).preview));
-  }, [files]);
+  const handleDragEnter = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragActive(true);
+  };
+
+  const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragActive(false);
+  };
+
+  const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragActive(false);
+
+    const droppedFiles = Array.from(e.dataTransfer.files);
+    handleFiles(droppedFiles);
+  };
+
+  const handleFiles = (fileList: File[]) => {
+    const newFiles = fileList.map((file) =>
+      Object.assign(file, {
+        preview: URL.createObjectURL(file),
+      }),
+    );
+    setFiles((prevFiles) => [...prevFiles, ...newFiles]);
+  };
+
+  const handleButtonClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      handleFiles(Array.from(e.target.files));
+    }
+  };
+
+  const handleDeleteFile = (fileToDelete: FileWithPreview) => {
+    setFiles((prevFiles) => prevFiles.filter((file) => file !== fileToDelete));
+    URL.revokeObjectURL(fileToDelete.preview);
+  };
 
   return (
-    <section className="container">
-      <div {...getRootProps({ className: "dropzone" })}>
+    <div className="h-60 w-96 p-8">
+      <motion.div
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+        onClick={handleButtonClick}
+        className={`relative size-full cursor-pointer rounded-xl border-2 border-dashed p-12 text-center transition-colors ${
+          isDragActive
+            ? "border-blue-500 bg-blue-500/5"
+            : "border-neutral-300 hover:border-neutral-400 dark:border-neutral-700 dark:hover:border-neutral-500"
+        }`}
+        whileHover={{ scale: 1.01 }}
+        whileTap={{ scale: 0.98 }}
+      >
         <input
+          ref={fileInputRef}
           type="file"
-          {...getInputProps()}
           {...register("image")}
-          className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3"
+          multiple
+          onChange={handleFileInputChange}
+          className="hidden"
+          accept="image/*,application/pdf"
         />
-        <p>Drag 'n' drop some files here, or click to select files</p>
-      </div>
-      <aside className="mt-4 flex flex-row flex-wrap">{thumbs}</aside>
-    </section>
+        <AnimatePresence>
+          {isDragActive ? (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+              className="pointer-events-none select-none"
+            >
+              <Upload className="pointer-events-none mx-auto size-8 select-none text-blue-500" />
+              <p className="pointer-events-none mt-2 select-none text-sm text-blue-500">
+                Drop files here...
+              </p>
+            </motion.div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Upload className="mx-auto size-8 text-neutral-400 dark:text-neutral-500" />
+              <p className="mt-2 text-balance text-sm font-medium tracking-tighter text-neutral-400 dark:text-neutral-500">
+                Drag and drop files here, or click to select
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+
+      <AnimatePresence>
+        {files.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="mt-4 space-y-2"
+          >
+            {files.map((file) => (
+              <motion.div
+                key={file.name}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                className="flex items-center rounded-lg bg-neutral-400/10 p-1"
+              >
+                {file.type.startsWith("image/") ? (
+                  <img
+                    src={file.preview}
+                    alt={file.name}
+                    className="mr-2 size-10 rounded object-cover"
+                  />
+                ) : (
+                  <File className="mr-2 size-10 text-neutral-500" />
+                )}
+                <span className="flex-1 truncate text-xs tracking-tighter text-neutral-600 dark:text-neutral-400">
+                  {file.name}
+                </span>
+                <Trash2
+                  className="mr-2 size-5 cursor-pointer text-red-500 transition-colors hover:text-red-600"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteFile(file);
+                  }}
+                />
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
 
-export default Previews;
+export default FileDropzone;
