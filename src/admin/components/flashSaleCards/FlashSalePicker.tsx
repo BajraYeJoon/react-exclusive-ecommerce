@@ -1,7 +1,7 @@
 import * as React from "react";
-import { addDays, format } from "date-fns";
+import { addDays, format, setHours, setMinutes } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
-import { DateRange } from "react-day-picker";
+import { DateRange, DayPicker } from "react-day-picker";
 import { cn } from "../../../common/lib/utils";
 import { Button } from "../../../common/ui/button";
 import {
@@ -9,7 +9,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "../../../common/ui/popover";
-import { Calendar } from "../../../common/ui/calendar";
 import { addProductToFlashSale } from "../../api/flashSale";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
@@ -22,27 +21,53 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../../../common/ui/dialog";
+import "react-day-picker/style.css";
 
 export function DatePickerWithRange({
   className,
   data,
   setFlashItem,
-}: {
+}: Readonly<{
   className?: string;
   data: number[];
   setFlashItem: React.Dispatch<React.SetStateAction<any>>;
-}) {
+}>) {
   const [date, setDate] = React.useState<DateRange | undefined>({
     from: new Date(2022, 0, 20),
     to: addDays(new Date(2022, 0, 20), 20),
   });
 
-  const queryClient = useQueryClient();
+  const [startTime, setStartTime] = React.useState<string>("00:00");
+  const [endTime, setEndTime] = React.useState<string>("23:59");
 
+  const queryClient = useQueryClient();
   const [open, setOpen] = React.useState(false);
 
-  console.log(new Date(date?.from).toISOString());
-  console.log(new Date(date?.to).toISOString());
+  const handleTimeChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    type: "start" | "end",
+  ) => {
+    const time = e.target.value;
+    if (type === "start") {
+      setStartTime(time);
+      if (date?.from) {
+        const [hours, minutes] = time
+          .split(":")
+          .map((str) => parseInt(str, 10));
+        const newFrom = setHours(setMinutes(date.from, minutes), hours);
+        setDate({ ...date, from: newFrom });
+      }
+    } else {
+      setEndTime(time);
+      if (date?.to) {
+        const [hours, minutes] = time
+          .split(":")
+          .map((str) => parseInt(str, 10));
+        const newTo = setHours(setMinutes(date.to, minutes), hours);
+        setDate({ ...date, to: newTo });
+      }
+    }
+  };
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -72,11 +97,11 @@ export function DatePickerWithRange({
             {date?.from ? (
               date.to ? (
                 <>
-                  {format(date.from, "LLL dd, y")} -{" "}
-                  {format(date.to, "LLL dd, y")}
+                  {format(date.from, "LLL dd, y HH:mm")} -{" "}
+                  {format(date.to, "LLL dd, y HH:mm")}
                 </>
               ) : (
-                format(date.from, "LLL dd, y")
+                format(date.from, "LLL dd, y HH:mm")
               )
             ) : (
               <span>Pick a date</span>
@@ -84,14 +109,31 @@ export function DatePickerWithRange({
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
-          <Calendar
-            initialFocus
+          <DayPicker
             mode="range"
             defaultMonth={date?.from}
             selected={date}
             onSelect={setDate}
             numberOfMonths={2}
           />
+          <div className="p-2">
+            <label>
+              Start Time:{" "}
+              <input
+                type="time"
+                value={startTime}
+                onChange={(e) => handleTimeChange(e, "start")}
+              />
+            </label>
+            <label>
+              End Time:{" "}
+              <input
+                type="time"
+                value={endTime}
+                onChange={(e) => handleTimeChange(e, "end")}
+              />
+            </label>
+          </div>
         </PopoverContent>
       </div>
       <Dialog>
@@ -103,8 +145,8 @@ export function DatePickerWithRange({
             Are you sure you want to add this all products to Flash Sale?
           </DialogHeader>
           <DialogTitle className="text-sm font-medium">
-            Sale Start: {format(date?.from, "LLL dd, y")} -
-            Sale End: {format(date?.to, "LLL dd, y")}
+            Sale Start: {format(date?.from, "LLL dd, y HH:mm")} - Sale End:{" "}
+            {format(date?.to, "LLL dd, y HH:mm")}
             <span className="text-primary">*</span>
           </DialogTitle>
           <DialogDescription className="space-x-2">
@@ -134,45 +176,3 @@ export function DatePickerWithRange({
     </Popover>
   );
 }
-
-// import * as React from "react";
-// import { format } from "date-fns";
-// import { Calendar as CalendarIcon } from "lucide-react";
-
-// import { cn } from "../../../common/lib/utils";
-// import { Button } from "../../../common/ui/button";
-// import { Calendar } from "../../../common/ui/calendar";
-// import {
-//   Popover,
-//   PopoverContent,
-//   PopoverTrigger,
-// } from "../../../common/ui/popover";
-
-// export function DatePickerWithRange({ data, setFlashItem }) {
-//   const [date, setDate] = React.useState<Date>();
-
-//   return (
-//     <Popover>
-//       <PopoverTrigger asChild>
-//         <Button
-//           variant={"outline"}
-//           className={cn(
-//             "w-[280px] justify-start text-left font-normal",
-//             !date && "text-muted-foreground",
-//           )}
-//         >
-//           <CalendarIcon className="mr-2 h-4 w-4" />
-//           {date ? format(date, "PPP") : <span>Pick a date</span>}
-//         </Button>
-//       </PopoverTrigger>
-//       <PopoverContent className="w-auto p-0">
-//         <Calendar
-//           mode="single"
-//           selected={date}
-//           onSelect={setDate}
-//           initialFocus
-//         />
-//       </PopoverContent>
-//     </Popover>
-//   );
-// }
