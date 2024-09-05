@@ -29,6 +29,15 @@ import { fetchCategories } from "../../../common/api/categoryApi";
 import { Axios } from "../../../common/lib/axiosInstance";
 import { Input } from "../../../common/ui/input";
 import { Button } from "../../../common/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../../../common/ui/card";
+import { Label } from "../../../common/ui/label";
 
 interface FormValues {
   categoryName: string;
@@ -39,7 +48,13 @@ const updateCategoryNameSchema = z.object({
 });
 
 const AddCategoryForm = () => {
-  const { register, handleSubmit, reset } = useForm<FormValues>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { errors },
+  } = useForm<FormValues>();
   const [editCategoryId, setEditCategoryId] = useState<number | null>(null);
   const queryClient = useQueryClient();
   const { data: categories } = useQuery({
@@ -111,24 +126,60 @@ const AddCategoryForm = () => {
     }
   };
 
+  const categoryName = watch("categoryName", "");
+
   return (
     <div className="flex flex-col space-y-8">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex w-fit flex-col items-start space-y-3"
-      >
-        <div>
-          <label htmlFor="categoryName">Category Name:</label>
-          <Input
-            type="text"
-            id="categoryName"
-            {...register("categoryName", { required: true })}
-          />
-        </div>
-        <Button type="submit" className="w-full">
-          Add Category
-        </Button>
-      </form>
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle>Add New Category</CardTitle>
+          <CardDescription>
+            Create a new product category for your store
+          </CardDescription>
+        </CardHeader>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="categoryName">Category Name</Label>
+                <Input
+                  type="text"
+                  id="categoryName"
+                  placeholder="Enter category name"
+                  {...register("categoryName", {
+                    required: "Category name is required",
+                    maxLength: {
+                      value: 50,
+                      message: "Category name must be 50 characters or less",
+                    },
+                  })}
+                  className="transition-all duration-200 ease-in-out focus:ring-2 focus:ring-blue-500"
+                />
+                {errors.categoryName && <p>{errors.categoryName.message}</p>}
+                <p className="mt-2 text-sm text-muted-foreground">
+                  {categoryName.length}/50 characters
+                </p>
+              </div>
+            </div>
+          </CardContent>
+          <CardFooter className="flex justify-between">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => reset()}
+              className="transition-all duration-200 ease-in-out hover:bg-gray-100"
+            >
+              Clear
+            </Button>
+            <Button
+              type="submit"
+              className="transition-all duration-200 ease-in-out"
+            >
+              Add Category
+            </Button>
+          </CardFooter>
+        </form>
+      </Card>
 
       <div className="">
         <h3 className="mb-2 text-xl font-medium">Your Categories</h3>
