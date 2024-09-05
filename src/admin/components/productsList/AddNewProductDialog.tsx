@@ -1,13 +1,25 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Axios } from "../../../common/lib/axiosInstance";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Axios } from "../../../common/lib/axiosInstance";
 import { fetchCategories } from "../../../common/api/categoryApi";
 import { Button } from "../../../common/ui/button";
-import FileDropzone from "./imageupload";
+import { Input } from "../../../common/ui/input";
+import { Checkbox } from "../../../common/ui/checkbox";
+import { Label } from "../../../common/ui/label";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../../../common/ui/card";
+import { FileDropzone } from "./imageupload";
 
 const createProductSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -16,13 +28,10 @@ const createProductSchema = z.object({
   discounttag: z.boolean().optional(),
   rating: z.number().positive("Rating must be a positive number"),
   discountprice: z
-    .union([
-      z.number().positive("Discount price must be a positive number"),
-      z.undefined(),
-    ])
+    .number()
+    .positive("Discount price must be a positive number")
     .optional(),
-  sizes: z.union([z.string(), z.null()]).optional(),
-
+  sizes: z.string().nullable().optional(),
   returnpolicy: z.string().min(1, "Return policy is required"),
   description: z.string().min(1, "Description is required"),
   brand: z.string().min(1, "Brand is required"),
@@ -30,47 +39,29 @@ const createProductSchema = z.object({
   categories: z.string().optional(),
 });
 
-interface InitialData {
-  id: string;
-  title?: string;
-  price?: number;
-  image?: any;
-  discounttag?: boolean;
-  rating?: number;
-  discountprice?: number | null;
-  sizes?: string | null;
-  returnpolicy?: string;
-  description?: string;
-  brand?: string;
-  availability?: boolean;
-  categories?: string;
+type ProductFormData = z.infer<typeof createProductSchema>;
+
+interface ProductFormProps {
+  mode: "create" | "update";
+  initialData?: Partial<ProductFormData> & { id?: string };
 }
 
-interface AddNewProductDialogProps {
-  mode?: "create" | "update";
-  initialData?: InitialData;
-}
-
-const AddNewProductDialog = ({
-  mode,
-  initialData,
-}: AddNewProductDialogProps) => {
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    reset,
-    watch,
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(createProductSchema),
-    defaultValues: initialData,
-  });
+export default function ProductForm({ mode, initialData }: ProductFormProps) {
   const [step, setStep] = useState(1);
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
 
-  console.log(selectedCategories);
+  const {
+    control,
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm<ProductFormData>({
+    resolver: zodResolver(createProductSchema),
+    defaultValues: initialData,
+  });
 
   const {
     data: categories = [],
@@ -94,19 +85,7 @@ const AddNewProductDialog = ({
     }
   }, [initialData]);
 
-  console.log("initial datasssssss", initialData);
-
-  // const handleCategorySelect = (categoryId: any) => {
-  //   setSelectedCategories((prevSelected) => {
-  //     if (prevSelected.includes(categoryId)) {
-  //       return prevSelected.filter((id) => id !== categoryId);
-  //     } else {
-  //       return [...prevSelected, categoryId];
-  //     }
-  //   });
-  // };
-
-  const handleCategorySelect = ({ categoryId }: any) => {
+  const handleCategorySelect = (categoryId: number) => {
     setSelectedCategories((prevSelected) =>
       prevSelected.includes(categoryId)
         ? prevSelected.filter((id) => id !== categoryId)
@@ -114,54 +93,34 @@ const AddNewProductDialog = ({
     );
   };
 
-  const onSubmit = (data: any) => {
-    console.log("form data", data);
+  const onSubmit = async (data: ProductFormData) => {
     const formData = new FormData();
 
-    Object.keys(data).forEach((key) => {
-      if (key === "image" && data[key] instanceof FileList) {
-        formData.append(key, data[key][0]);
+    Object.entries(data).forEach(([key, value]) => {
+      if (key === "image" && value instanceof FileList) {
+        formData.append(key, value[0]);
       } else {
-        formData.append(key, data[key]);
+        formData.append(key, value as string);
       }
     });
 
-    console.log("form data", formData);
-
-    const request =
-      mode === "create"
+    try {
+      const response = await (mode === "create"
         ? Axios.post("/product/create", formData)
-        : Axios.patch(`/product/update/${initialData?.id}`, formData);
+        : Axios.patch(`/product/update/${initialData?.id}`, formData));
 
-    request
-      .then((response) => {
-        console.log("Success:", response.data);
-        reset();
-        toast.success(
-          `Product ${mode === "create" ? "created" : "updated"} successfully`,
-        );
-      })
-      .catch((error) => {
-        if (error.response) {
-          console.error("Error response:", error.response.data);
-          toast.error(
-            `Failed to ${mode === "create" ? "create" : "update"} product`,
-          );
-        } else if (error.request) {
-          console.error("Error request:", error.request);
-          toast.error(
-            `Failed to ${mode === "create" ? "create" : "update"} product`,
-          );
-        } else {
-          console.error("Error message:", error.message);
-          toast.error(
-            `Failed to ${mode === "create" ? "create" : "update"} product`,
-          );
-        }
-      });
+      console.log("Success:", response.data);
+      reset();
+      toast.success(
+        `Product ${mode === "create" ? "created" : "updated"} successfully`,
+      );
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(
+        `Failed to ${mode === "create" ? "create" : "update"} product`,
+      );
+    }
   };
-
-  setValue("categories", selectedCategories.join(","));
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading categories</div>;
@@ -170,198 +129,177 @@ const AddNewProductDialog = ({
   const prevStep = () => setStep((prevStep) => prevStep - 1);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <h1 className="mb-6 text-xl font-semibold lg:text-2xl">
-        {mode === "create" ? "Add New Product" : "Edit Product"}
-      </h1>
-
-      {step === 1 && (
-        <div className="grid items-center gap-3 md:grid-cols-2">
-          <div>
-            <label>Title</label>
-            <input
-              {...register("title")}
-              placeholder="JBL earphone"
-              className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3"
-            />
-            {errors.title && (
-              <p className="text-sm font-medium text-destructive">
-                {errors.title.message?.toString()}
-              </p>
-            )}
-          </div>
-          <div>
-            <label>Price</label>
-            <input
-              type="number"
-              {...register("price", { valueAsNumber: true })}
-              placeholder="10.15"
-              className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3"
-            />
-            {errors.price && (
-              <p className="text-sm font-medium text-destructive">
-                {errors.price.message?.toString()}
-              </p>
-            )}
-          </div>
-
-          <FileDropzone register={register} />
-          {/* <input
-              type="file"
-              {...register("image")}
-              className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3"
-            /> */}
-          {imageUrls.map((url, index) => (
-            <img key={index} src={url} alt={`Product Image ${index + 1}`} />
-          ))}
-          {errors.image && (
-            <p className="text-sm font-medium text-destructive">
-              {errors.image.message?.toString()}
-            </p>
+    <Card className="w-full max-w-2xl">
+      <CardHeader>
+        <CardTitle>
+          {mode === "create" ? "Add New Product" : "Edit Product"}
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          {step === 1 && (
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="title">Title</Label>
+                <Input
+                  id="title"
+                  {...register("title")}
+                  placeholder="JBL earphone"
+                />
+                {errors.title && (
+                  <p className="text-sm text-destructive">
+                    {errors.title.message}
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="price">Price</Label>
+                <Input
+                  id="price"
+                  type="number"
+                  {...register("price", { valueAsNumber: true })}
+                  placeholder="10.15"
+                />
+                {errors.price && (
+                  <p className="text-sm text-destructive">
+                    {errors.price.message}
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2 sm:col-span-2">
+                <Label>Product Image</Label>
+                <FileDropzone register={register} />
+                <div className="grid grid-cols-3 gap-2">
+                  {imageUrls.map((url, index) => (
+                    <img
+                      key={index}
+                      src={url}
+                      alt={`Product Image ${index + 1}`}
+                      className="rounded-md"
+                    />
+                  ))}
+                </div>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox id="discounttag" {...register("discounttag")} />
+                <Label htmlFor="discounttag">Discount Tag</Label>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="rating">Rating</Label>
+                <Input
+                  id="rating"
+                  type="number"
+                  {...register("rating", { valueAsNumber: true })}
+                  placeholder="3"
+                />
+                {errors.rating && (
+                  <p className="text-sm text-destructive">
+                    {errors.rating.message}
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="discountprice">Discount Price</Label>
+                <Input
+                  id="discountprice"
+                  type="number"
+                  {...register("discountprice", { valueAsNumber: true })}
+                />
+                {errors.discountprice && (
+                  <p className="text-sm text-destructive">
+                    {errors.discountprice.message}
+                  </p>
+                )}
+              </div>
+            </div>
           )}
 
-          <div className="flex items-center gap-2">
-            <label>Discount Tag</label>
-            <input
-              type="checkbox"
-              {...register("discounttag")}
-              className="h-6 w-fit rounded-md bg-gray-100 px-3"
-            />
-            {errors.discounttag && (
-              <p className="text-sm font-medium text-destructive">
-                {errors.discounttag.message?.toString()}
-              </p>
-            )}
-          </div>
-          <div>
-            <label>Rating</label>
-            <input
-              type="number"
-              {...register("rating", { valueAsNumber: true })}
-              placeholder="3"
-              className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3"
-            />
-            {errors.rating && (
-              <p className="text-sm font-medium text-destructive">
-                {errors.rating.message?.toString()}
-              </p>
-            )}
-          </div>
-          <div>
-            <label>Discount Price</label>
-            <input
-              type="number"
-              {...register("discountprice", { valueAsNumber: true })}
-              className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3"
-            />
-            {errors.discountprice && (
-              <p className="text-sm font-medium text-destructive">
-                {errors.discountprice.message?.toString()}
-              </p>
-            )}
-          </div>
-        </div>
-      )}
-
-      {step === 2 && (
-        <div className="grid gap-3 md:grid-cols-2">
-          <div>
-            <label>Sizes</label>
-            <input
-              type="text"
-              {...register("sizes")}
-              placeholder="l"
-              defaultValue={watch("sizes") || "default-size"} // Set your default value here
-              className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3"
-            />
-            {errors.sizes && (
-              <p className="text-sm font-medium text-destructive">
-                {errors.sizes.message?.toString()}
-              </p>
-            )}
-          </div>
-          <div>
-            <label>Return Policy</label>
-            <input
-              type="text"
-              {...register("returnpolicy")}
-              placeholder="45 days return policy"
-              className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3"
-            />
-            {errors.returnpolicy && (
-              <p className="text-sm font-medium text-destructive">
-                {errors.returnpolicy.message?.toString()}
-              </p>
-            )}
-          </div>
-          <div>
-            <label>Description</label>
-            <input
-              type="text"
-              {...register("description")}
-              placeholder="A timeless bluetooth earphone that never goes out of style."
-              className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3"
-            />
-            {errors.description && (
-              <p className="text-sm font-medium text-destructive">
-                {errors.description.message?.toString()}
-              </p>
-            )}
-          </div>
-          <div>
-            <label>Brand</label>
-            <input
-              type="text"
-              {...register("brand")}
-              placeholder="JBL"
-              className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3"
-            />
-            {errors.brand && (
-              <p className="text-sm font-medium text-destructive">
-                {errors.brand.message?.toString()}
-              </p>
-            )}
-          </div>
-          <div className="mt-3 flex items-start gap-2">
-            <label>Availability</label>
-            <input
-              type="checkbox"
-              {...register("availability")}
-              className="h-6 w-full rounded-md bg-gray-100 px-3"
-            />
-            {errors.availability && (
-              <p className="text-sm font-medium text-destructive">
-                {errors.availability.message?.toString()}
-              </p>
-            )}
-          </div>
-          <div>
-            <label>Categories</label>
-            <div className="mt-2 h-fit w-full rounded-md bg-gray-100 px-3">
-              {categories.map((category: any) => (
-                <button
-                  key={category.id}
-                  type="button"
-                  className={`m-1 rounded p-2 ${selectedCategories.includes(category.id) ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-                  onClick={() => handleCategorySelect(category.id)}
-                >
-                  {category.name}
-                </button>
-              ))}
+          {step === 2 && (
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="sizes">Sizes</Label>
+                <Input
+                  id="sizes"
+                  {...register("sizes")}
+                  placeholder="L, XL, XXL"
+                />
+                {errors.sizes && (
+                  <p className="text-sm text-destructive">
+                    {errors.sizes.message}
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="returnpolicy">Return Policy</Label>
+                <Input
+                  id="returnpolicy"
+                  {...register("returnpolicy")}
+                  placeholder="45 days return policy"
+                />
+                {errors.returnpolicy && (
+                  <p className="text-sm text-destructive">
+                    {errors.returnpolicy.message}
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2 sm:col-span-2">
+                <Label htmlFor="description">Description</Label>
+                <textarea
+                  id="description"
+                  {...register("description")}
+                  placeholder="A timeless bluetooth earphone that never goes out of style."
+                  className="h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                />
+                {errors.description && (
+                  <p className="text-sm text-destructive">
+                    {errors.description.message}
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="brand">Brand</Label>
+                <Input id="brand" {...register("brand")} placeholder="JBL" />
+                {errors.brand && (
+                  <p className="text-sm text-destructive">
+                    {errors.brand.message}
+                  </p>
+                )}
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox id="availability" {...register("availability")} />
+                <Label htmlFor="availability">Availability</Label>
+              </div>
+              <div className="space-y-2 sm:col-span-2">
+                <Label>Categories</Label>
+                <div className="flex flex-wrap gap-2">
+                  {categories.map((category: any) => (
+                    <Button
+                      key={category.id}
+                      type="button"
+                      variant={
+                        selectedCategories.includes(category.id)
+                          ? "default"
+                          : "outline"
+                      }
+                      onClick={() => handleCategorySelect(category.id)}
+                    >
+                      {category.name}
+                    </Button>
+                  ))}
+                </div>
+                <input
+                  type="hidden"
+                  {...register("categories")}
+                  value={selectedCategories.join(",")}
+                />
+              </div>
             </div>
-            <input type="hidden" {...register("categories")} />
-            {errors.categories && (
-              <p className="text-sm font-medium text-destructive">
-                {errors.categories.message?.toString()}
-              </p>
-            )}
-          </div>
-        </div>
-      )}
-
-      <div className="mt-6 flex justify-between">
+          )}
+        </form>
+      </CardContent>
+      <CardFooter className="flex justify-between">
         {step > 1 && (
-          <Button type="button" onClick={prevStep}>
+          <Button type="button" onClick={prevStep} variant="outline">
             Previous
           </Button>
         )}
@@ -370,13 +308,11 @@ const AddNewProductDialog = ({
             Next
           </Button>
         ) : (
-          <Button type="submit">
+          <Button type="submit" onClick={handleSubmit(onSubmit)}>
             {mode === "create" ? "Create Product" : "Update Product"}
           </Button>
         )}
-      </div>
-    </form>
+      </CardFooter>
+    </Card>
   );
-};
-
-export default AddNewProductDialog;
+}
