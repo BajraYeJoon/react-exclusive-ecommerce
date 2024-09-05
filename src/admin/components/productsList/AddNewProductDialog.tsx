@@ -7,7 +7,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { fetchCategories } from "../../../common/api/categoryApi";
 import { Button } from "../../../common/ui/button";
-
+import FileDropzone from "./imageupload";
 
 const createProductSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -205,29 +205,20 @@ const AddNewProductDialog = ({
             )}
           </div>
 
-          <div>
-            <label>Image</label>
-            <input
+          <FileDropzone register={register} />
+          {/* <input
               type="file"
               {...register("image")}
               className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3"
-            />
-            {imageUrls.length === 0 ? (
-              <img
-                src="https://via.placeholder.com/300"
-                alt="Placeholder Image"
-              />
-            ) : (
-              imageUrls.map((url, index) => (
-                <img key={index} src={url} alt={`Product Image ${index + 1}`} />
-              ))
-            )}
-            {errors.image && (
-              <p className="text-sm font-medium text-destructive">
-                {errors.image.message?.toString()}
-              </p>
-            )}
-          </div>
+            /> */}
+          {imageUrls.map((url, index) => (
+            <img key={index} src={url} alt={`Product Image ${index + 1}`} />
+          ))}
+          {errors.image && (
+            <p className="text-sm font-medium text-destructive">
+              {errors.image.message?.toString()}
+            </p>
+          )}
 
           <div className="flex items-center gap-2">
             <label>Discount Tag</label>
