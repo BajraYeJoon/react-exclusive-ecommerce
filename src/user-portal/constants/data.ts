@@ -11,6 +11,7 @@ import { CiDeliveryTruck } from "react-icons/ci";
 import { GrSecure } from "react-icons/gr";
 import { IconType } from "react-icons";
 import { BiHeadphone } from "react-icons/bi";
+import { UserRoutes } from "../utils/userLinks";
 
 interface ServiceDetail {
   id: number;
@@ -40,12 +41,11 @@ export const serviceDetailsInfo: ServiceDetail[] = [
   },
 ];
 
-
 export const navLinks = [
   { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
-  { label: "Sign Up", href: "/sign-up" },
+  { label: "About", href: UserRoutes.About },
+  { label: "Contact", href: UserRoutes.Contact },
+  { label: "Sign Up", href: UserRoutes.SignUp },
 ];
   
 

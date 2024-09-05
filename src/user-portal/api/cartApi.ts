@@ -29,3 +29,10 @@ export const deleteProductFromCart = async (id: number) => {
     `Error deleting product ${id} from cart`,
   );
 };
+
+export const removeItem = async (id: number) => {
+  return handleRequest(
+    () => Axios.delete(`/cart/delete/${id}/`).then((res) => res.data),
+    `Error removing product ${id} from cart`,
+  );
+};

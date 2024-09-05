@@ -1,4 +1,3 @@
-import { Button } from "../../components";
 import { useForm } from "react-hook-form";
 import { SignUpFormData } from "../../schemas/types";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,6 +6,7 @@ import { GoogleSignInComponent } from "./GoogleSignIn";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../../context/useAuthContext";
 import { Input } from "../../../common/ui/input";
+import { Button } from "../../../common/ui/button";
 
 const SignupPage = () => {
   const {

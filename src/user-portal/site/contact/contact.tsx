@@ -1,8 +1,9 @@
 import { Mail, PhoneIcon } from "lucide-react";
-import { Button, CustomBreakcrumb } from "../../components";
+import { CustomBreakcrumb } from "../../components";
 import { useForm } from "react-hook-form";
 import emailjs from "@emailjs/browser";
 import { toast } from "sonner";
+import { Button } from "../../../common/ui/button";
 
 const Contact = () => {
   const { register, handleSubmit } = useForm();
@@ -103,4 +104,4 @@ const Contact = () => {
   );
 };
 
-export default Contact;
+export { Contact };

@@ -2,17 +2,17 @@ import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { EyeIcon, HeartIcon } from "lucide-react";
 import { FaStar } from "react-icons/fa";
-import useWindow from "../../../common/lib/useWindow";
+import useWindow from "../../../../common/lib/useWindow";
 import {
   addFavorites,
   deleteFavorites,
   fetchFavorites,
-} from "../../api/wishlistApi";
-import { useAuthContext } from "../../context/useAuthContext";
+} from "../../../api/wishlistApi";
+import { useAuthContext } from "../../../context/useAuthContext";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button } from "../../../common/ui/button";
-import uuidv4 from "../../../common/lib/utils/uuid";
-import { useIncreaseQuantity } from "../../utils/cartutils";
+import { Button } from "../../../../common/ui/button";
+import uuidv4 from "../../../../common/lib/utils/uuid";
+import { useIncreaseQuantity } from "../../../utils/cartutils";
 
 interface ProductCardProps {
   title: string;
@@ -123,7 +123,7 @@ const ProductCard = ({
   return (
     <section className="mt-10 w-full max-w-72 md:mt-16">
       <div className="group relative h-32 w-full overflow-hidden rounded-b-md bg-card md:h-56">
-        <Link to={`/${title.toLowerCase().split(" ").join("-")}/${id}`}>
+        <Link to={`/${title?.toLowerCase().split(" ").join("-")}/${id}`}>
           <img
             className="h-full w-full object-contain p-4 transition-opacity duration-300 group-hover:opacity-40 md:p-8 lg:p-12"
             src={image}

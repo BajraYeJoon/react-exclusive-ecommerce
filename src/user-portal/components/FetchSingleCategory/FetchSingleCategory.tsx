@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { fetchProductByCategory } from "../../../common/api/categoryApi";
-import ProductCard from "../ProductCard/ProductCard";
+import ProductCard from "../product-components/productCard/ProductCard";
 import { Loading } from "../../site";
 const FetchSingleCategory = () => {
   const { categoryId } = useParams();
@@ -19,7 +19,7 @@ const FetchSingleCategory = () => {
     return <Loading />;
   }
   if (error) {
-    return <div>Error: {(error as Error).message}</div>;
+    return <div>Error: {error.message}</div>;
   }
 
   console.log(category.data.products);
