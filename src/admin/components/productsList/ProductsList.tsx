@@ -131,7 +131,13 @@ export default function ProductsList() {
         accessorKey: "categories",
         header: "Categories",
         cell: ({ row }) => {
-          return <div>hi</div>;
+          return (
+            <div>
+              {row.original.categories
+                .map((category: any) => category.name)
+                .join(", ")}
+            </div>
+          );
         },
       },
       {
@@ -275,14 +281,8 @@ export default function ProductsList() {
             </TableRow>
           ))}
         </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TableCell colSpan={3}>Total</TableCell>
-            <TableCell className="text-right">$2,500.00</TableCell>
-          </TableRow>
-        </TableFooter>
       </Table>
-      <div className="pagination">
+      <div className="pagination flex items-center justify-center gap-3">
         <button
           className="rounded border p-1"
           onClick={() => table.setPageIndex(0)}
@@ -345,7 +345,7 @@ export default function ProductsList() {
           ))}
         </select>
       </div>
-      <div>
+      <div className="text-center">
         Showing {table.getRowModel().rows.length} of {table.getRowCount()} Rows
       </div>
 
