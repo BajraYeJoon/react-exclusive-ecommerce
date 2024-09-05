@@ -25,6 +25,7 @@ import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { Routes } from "../../lib/links";
 import { Axios } from "../../../common/lib/axiosInstance";
+import { formatDateTime } from "../../lib/utils/formatTime";
 
 type Product = {
   id: number;
@@ -70,15 +71,55 @@ export default function FlashSaleAdmin() {
     return <Loading />;
   }
 
-  const flashSaleProducts = flashSaleProductsData ?? [];
+  const startDate = formatDateTime(
+    flashSaleProductsData && flashSaleProductsData[0]?.saleStart,
+  );
+  const startEnd = formatDateTime(
+    flashSaleProductsData && flashSaleProductsData[0]?.saleEnd,
+  );
+
+  const flashSaleProducts = flashSaleProductsData[0]?.products ?? [];
 
   return (
-    <div className="container mx-auto p-4">
+    <section className="flash-sale-cards container mx-auto p-4">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="mb-6 text-2xl font-bold">Flash Sale Items</h1>
+        <div>
+          <h1 className="mb-6 text-2xl font-bold">Flash Sale Items</h1>
+          {flashSaleProductsData && (
+            <div className="text-base font-medium">
+              <p>
+                Sale Start:{" "}
+                <span className="text-sm font-light">{startDate}</span>
+              </p>
+              <p>
+                Sale End: <span className="text-sm font-light">{startEnd}</span>
+              </p>
+            </div>
+          )}
+        </div>
 
         {flashSaleProducts.length > 0 && (
-          <Button onClick={() => clearAllSales.mutate()}>Clear All</Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button>Clear All</Button>
+            </DialogTrigger>
+            <DialogContent className="flex flex-col items-center justify-center gap-4">
+              <DialogHeader>
+                <DialogTitle className="text-center">
+                  Clear All Products
+                </DialogTitle>
+                <DialogDescription>
+                  Are you sure you want to clear all products on sale?
+                </DialogDescription>
+              </DialogHeader>
+              <DialogDescription className="space-x-2">
+                <Button onClick={() => clearAllSales.mutate()}>Yes</Button>
+                <DialogClose asChild>
+                  <Button variant="secondary">No</Button>
+                </DialogClose>
+              </DialogDescription>
+            </DialogContent>
+          </Dialog>
         )}
       </div>
 
@@ -95,7 +136,7 @@ export default function FlashSaleAdmin() {
         ) : (
           <>
             {flashSaleProducts.map((product: Product) => (
-              <Card className="relative" key={product.id}>
+              <Card className="relative py-3" key={product.id}>
                 <Badge className="absolute right-2 top-2">Sale</Badge>
                 <CardHeader>
                   <CardTitle className="mt-2 text-lg font-normal">
@@ -112,6 +153,7 @@ export default function FlashSaleAdmin() {
                           src={product.image[0]}
                           alt={product.title}
                           className="mb-2 h-32 w-full object-cover"
+                          loading="lazy"
                         />
                       )}
 
@@ -124,10 +166,10 @@ export default function FlashSaleAdmin() {
                     <ProductDetails data={product} />
                   </DialogContent>
                 </Dialog>
-                <CardFooter>
+                <CardFooter className="justify-center p-0">
                   <Dialog>
                     <DialogTrigger>
-                      <Button variant={"outline"}>
+                      <Button>
                         <X className="mr-2 h-4 w-4" /> Remove from Sale
                       </Button>
                     </DialogTrigger>
@@ -158,6 +200,6 @@ export default function FlashSaleAdmin() {
           </>
         )}
       </div>
-    </div>
+    </section>
   );
 }

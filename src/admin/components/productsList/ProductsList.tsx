@@ -42,7 +42,7 @@ import ProductDetails from "./ProductDetails";
 import uuidv4 from "../../../common/lib/utils/uuid";
 
 export default function ProductsList() {
-  const [flashItem, setFlashItem] = useRecoilState(flashSaleState);
+  const [flashItem, setFlashItem] = useRecoilState<number[]>(flashSaleState);
 
   console.log(flashItem, "flash item");
 
@@ -187,7 +187,7 @@ export default function ProductsList() {
           return (
             <input
               type="checkbox"
-              // checked={row.original.onSale}
+              // checked={flashItem.includes(row?.original?.id)}
               disabled={row.original.onSale}
               onChange={() => handleCheckboxChange(row.original.id)}
             />
