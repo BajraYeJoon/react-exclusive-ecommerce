@@ -26,6 +26,7 @@ import { useNavigate } from "react-router-dom";
 import { Routes } from "../../lib/links";
 import { Label } from "../../../common/ui/label";
 import { Input } from "../../../common/ui/input";
+import ConfirmationDialog from "../confirmation/ConfirmationDialog";
 
 export function DatePickerWithRange({
   className,
@@ -82,7 +83,7 @@ export function DatePickerWithRange({
           <Button
             key={item}
             variant={"default"}
-            className="h-fit max-w-12 rounded-md border border-foreground p-1"
+            className="h-fit max-w-5 rounded-md border border-foreground p-0.5"
             disabled
           >
             {item}
@@ -155,7 +156,7 @@ export function DatePickerWithRange({
           </div>
         </PopoverContent>
       </div>
-      <Dialog>
+      {/* <Dialog>
         <DialogTrigger asChild>
           <Button>Add to Flash Sale</Button>
         </DialogTrigger>
@@ -180,8 +181,9 @@ export function DatePickerWithRange({
                   queryClient.invalidateQueries({ queryKey: ["products"] });
                   toast.success("Product added to flash sale");
                   setFlashItem([]);
-                  navigate(`${Routes.Admin}/${Routes.FlashSales}`, { replace: true });
-
+                  navigate(`${Routes.Admin}/${Routes.FlashSales}`, {
+                    replace: true,
+                  });
                 })
               }
               onSelect={() => setOpen(false)}
@@ -193,7 +195,34 @@ export function DatePickerWithRange({
             </Button>
           </DialogDescription>
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
+      <ConfirmationDialog
+        triggerText="Add to Flash Sale"
+        title="Are you sure you want to add this all products to Flash Sale?"
+        description={
+          <>
+            Sale Start: {format(date?.from, "LLL dd, y HH:mm")} - Sale End:{" "}
+            {format(date?.to, "LLL dd, y HH:mm")}
+          </>
+        }
+        onConfirm={() =>
+          addProductToFlashSale({
+            saleStart: new Date(date?.from).toISOString(),
+            saleEnd: new Date(date?.to).toISOString(),
+            products: data,
+          }).then((res) => {
+            console.log(res);
+            queryClient.invalidateQueries({ queryKey: ["products"] });
+            toast.success("Product added to flash sale");
+            setFlashItem([]);
+            navigate(`${Routes.Admin}/${Routes.FlashSales}`, {
+              replace: true,
+            });
+          })
+        }
+        cancelText="No"
+        confirmText="Yes"
+      />
     </Popover>
   );
 }

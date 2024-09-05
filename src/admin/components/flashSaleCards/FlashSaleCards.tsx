@@ -26,6 +26,7 @@ import { Link } from "react-router-dom";
 import { Routes } from "../../lib/links";
 import { Axios } from "../../../common/lib/axiosInstance";
 import { formatDateTime } from "../../lib/utils/formatTime";
+import ConfirmationDialog from "../confirmation/ConfirmationDialog";
 
 type Product = {
   id: number;
@@ -72,10 +73,10 @@ export default function FlashSaleAdmin() {
   }
 
   const startDate = formatDateTime(
-    flashSaleProductsData && flashSaleProductsData[0]?.saleStart,
+    flashSaleProductsData ? flashSaleProductsData[0]?.saleStart : 0,
   );
   const startEnd = formatDateTime(
-    flashSaleProductsData && flashSaleProductsData[0]?.saleEnd,
+    flashSaleProductsData ? flashSaleProductsData[0]?.saleEnd : 0,
   );
 
   const flashSaleProducts = flashSaleProductsData[0]?.products ?? [];
@@ -99,27 +100,14 @@ export default function FlashSaleAdmin() {
         </div>
 
         {flashSaleProducts.length > 0 && (
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button>Clear All</Button>
-            </DialogTrigger>
-            <DialogContent className="flex flex-col items-center justify-center gap-4">
-              <DialogHeader>
-                <DialogTitle className="text-center">
-                  Clear All Products
-                </DialogTitle>
-                <DialogDescription>
-                  Are you sure you want to clear all products on sale?
-                </DialogDescription>
-              </DialogHeader>
-              <DialogDescription className="space-x-2">
-                <Button onClick={() => clearAllSales.mutate()}>Yes</Button>
-                <DialogClose asChild>
-                  <Button variant="secondary">No</Button>
-                </DialogClose>
-              </DialogDescription>
-            </DialogContent>
-          </Dialog>
+          <ConfirmationDialog
+            title="Are you sure you want to clear all products on sale?"
+            description="It cannot be undone."
+            triggerText="Clear All"
+            onConfirm={() => clearAllSales.mutate()}
+            cancelText="No"
+            confirmText="Yes"
+          />
         )}
       </div>
 
@@ -167,33 +155,18 @@ export default function FlashSaleAdmin() {
                   </DialogContent>
                 </Dialog>
                 <CardFooter className="justify-center p-0">
-                  <Dialog>
-                    <DialogTrigger>
-                      <Button>
+                  <ConfirmationDialog
+                    triggerText={
+                      <>
                         <X className="mr-2 h-4 w-4" /> Remove from Sale
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="flex flex-col items-center justify-center gap-4">
-                      <DialogHeader>
-                        Are you sure you want to remove this from Sale?
-                      </DialogHeader>
-                      <DialogTitle className="text-sm font-medium">
-                        This action cannot be undone.{" "}
-                        <span className="text-primary">*</span>
-                      </DialogTitle>
-                      <DialogDescription className="space-x-2">
-                        <Button
-                          variant={"destructive"}
-                          onClick={() => removeFromSale.mutate(product.id)}
-                        >
-                          Yes
-                        </Button>
-                        <Button variant={"secondary"}>
-                          <DialogClose>No</DialogClose>
-                        </Button>
-                      </DialogDescription>
-                    </DialogContent>
-                  </Dialog>
+                      </>
+                    }
+                    title="Are you sure you want to remove this from Sale?"
+                    description="This action cannot be undone."
+                    onConfirm={() => removeFromSale.mutate(product.id)}
+                    cancelText="No"
+                    confirmText="Yes"
+                  />
                 </CardFooter>
               </Card>
             ))}
