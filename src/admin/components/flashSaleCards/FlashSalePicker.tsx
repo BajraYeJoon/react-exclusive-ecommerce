@@ -1,7 +1,7 @@
 import * as React from "react";
 import { addDays, format, setHours, setMinutes } from "date-fns";
-import { CalendarArrowUp, Calendar as CalendarIcon } from "lucide-react";
-import { DateRange, DayPicker } from "react-day-picker";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { DateRange, DayPicker, getDefaultClassNames } from "react-day-picker";
 import { cn } from "../../../common/lib/utils";
 import { Button } from "../../../common/ui/button";
 import {
@@ -22,8 +22,10 @@ import {
   DialogTrigger,
 } from "../../../common/ui/dialog";
 import "react-day-picker/style.css";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Routes } from "../../lib/links";
+import { Label } from "../../../common/ui/label";
+import { Input } from "../../../common/ui/input";
 
 export function DatePickerWithRange({
   className,
@@ -38,12 +40,13 @@ export function DatePickerWithRange({
     from: addDays(new Date(), 1),
     to: addDays(new Date(), 20),
   });
- 
+
   const [startTime, setStartTime] = React.useState<string>("00:00");
   const [endTime, setEndTime] = React.useState<string>("23:59");
-  const navigate =  useNavigate()
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [open, setOpen] = React.useState(false);
+  const defaultClassNames = getDefaultClassNames();
 
   const handleTimeChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -88,7 +91,7 @@ export function DatePickerWithRange({
       </div>
       <div className={cn("grid gap-2", className)}>
         <span>
-          Please Select the Date for Sales. (
+          Please Select the Date for Sales. ({" "}
           <i className="text-xs">Click below</i>)
         </span>
         <PopoverTrigger asChild>
@@ -109,31 +112,46 @@ export function DatePickerWithRange({
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
+        <PopoverContent className="w-auto p-2" align="start">
           <DayPicker
             mode="range"
             defaultMonth={date?.from}
             selected={date}
             onSelect={setDate}
             numberOfMonths={2}
+            captionLayout="dropdown"
+            startMonth={new Date()}
+            endMonth={new Date(2025, 9)}
+            classNames={{
+              today: "text-primary",
+              selected: `bg-red-200 border-gray-500  text-black`,
+              range_start: `text-red-500 border-gray-500  text-black`,
+              range_end: `text-red-500 border-gray-500  text-black`,
+              chevron: `${defaultClassNames.chevron} text-red-500`,
+            }}
           />
-          <div className="p-2">
-            <label>
-              Start Time:{" "}
-              <input
+          <h2 className="my-4 text-sm font-medium lg:text-base">
+            Select the Time:
+          </h2>
+          <div className="flex justify-around gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="start-time">Start Time</Label>
+              <Input
                 type="time"
+                id="start-time"
                 value={startTime}
                 onChange={(e) => handleTimeChange(e, "start")}
               />
-            </label>
-            <label>
-              End Time:{" "}
-              <input
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="end-time">End Time</Label>
+              <Input
                 type="time"
+                id="end-time"
                 value={endTime}
                 onChange={(e) => handleTimeChange(e, "end")}
               />
-            </label>
+            </div>
           </div>
         </PopoverContent>
       </div>
@@ -162,7 +180,8 @@ export function DatePickerWithRange({
                   queryClient.invalidateQueries({ queryKey: ["products"] });
                   toast.success("Product added to flash sale");
                   setFlashItem([]);
-                  navigate(`${Routes.Admin}/${Routes.FlashSales}`)
+                  navigate(`${Routes.Admin}/${Routes.FlashSales}`, { replace: true });
+
                 })
               }
               onSelect={() => setOpen(false)}

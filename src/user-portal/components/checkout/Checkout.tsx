@@ -70,7 +70,7 @@ const Checkout = () => {
     Cookies.remove("checkoutData");
     resetCartAfterORderPlace([]);
     Cookies.set("order-placed", "true");
-    // Navigate("/order-placed");
+    Navigate("/order-placed");
   };
 
   console.log(
