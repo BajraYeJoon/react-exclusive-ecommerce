@@ -14,7 +14,7 @@ const FeaturedInfo = () => {
     ],
   });
 
-  const usersData = results[0].data;
+  const usersData = results ? results[0].data : 0;
   const productsData = results[1].data;
   // const revenueData = results[2].data;
 
@@ -35,17 +35,17 @@ const FeaturedInfo = () => {
       icon: CiMoneyBill,
       label: "Revenue",
       value: "$5,000",
-      generatedValue: "1100000",
+      generatedValue: "110",
     },
   ];
 
   return (
-    <div className="flex w-full justify-between gap-6">
+    <div className="flex justify-center gap-6 lg:justify-between">
       {ANALYTIC_CARD_INFO.map(({ icon, label, generatedValue, value }) => {
         const Icon = icon;
         return (
           <div
-            className="flex h-fit w-full flex-col gap-2 rounded-lg border border-gray-200 bg-white p-6 shadow"
+            className="flex h-fit w-fit flex-col gap-2 rounded-lg border border-gray-200 bg-white p-4 shadow md:w-full md:p-6"
             key={`${label}-${uuidv4()}`}
           >
             <Icon className="h-5 w-5" />
@@ -56,7 +56,7 @@ const FeaturedInfo = () => {
                 {generatedValue} &darr;
               </span>
             </div>
-            <p className="mb-3 font-normal text-gray-500 dark:text-gray-400">
+            <p className="mb-3 hidden text-xs font-normal text-gray-500 md:text-base">
               Compared to Prev 30 days.
             </p>
           </div>

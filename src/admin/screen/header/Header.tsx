@@ -34,7 +34,7 @@ const Header = () => {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <div className="block cursor-pointer md:hidden">
+          <div className="block cursor-pointer lg:hidden">
             {open ? (
               <X onClick={() => setOpen(!open)} />
             ) : (
@@ -52,7 +52,7 @@ const Header = () => {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: "-100%" }}
                 transition={{ duration: 0.5 }}
-                className="absolute left-0 top-0 z-10 mt-16 h-full w-full backdrop-blur-sm md:hidden"
+                className=":hidden absolute left-0 top-0 z-10 mt-16 h-full w-full backdrop-blur-sm"
                 onClick={() => setOpen(!open)}
               >
                 <SidebarContent />

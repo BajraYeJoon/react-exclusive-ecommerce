@@ -28,7 +28,7 @@ export default function WidgetLeft() {
   }
 
   return (
-    <div className="w-full max-w-md rounded-lg border border-gray-200 bg-white p-4 shadow sm:p-8">
+    <div className="w-full rounded-lg border border-gray-200 bg-white p-4 shadow sm:p-8 lg:max-w-md">
       <div className="mb-4 flex items-center justify-between">
         <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white">
           Latest Customers

@@ -4,7 +4,7 @@ const Sidebar = () => {
   return (
     <aside
       id="default-sidebar"
-      className="hidden h-screen w-64 sm:px-6 md:block lg:px-8"
+      className="hidden h-screen w-64 sm:px-6 lg:block lg:px-8"
       aria-label="Sidebar"
     >
       <SidebarContent />
