@@ -45,7 +45,7 @@ const FeaturedInfo = () => {
         const Icon = icon;
         return (
           <div
-            className="flex h-fit w-fit flex-col gap-2 rounded-lg border border-gray-200 bg-white p-4 shadow md:w-full md:p-6"
+            className="flex h-fit w-full flex-col gap-2 rounded-lg border border-gray-200 bg-white p-4 shadow md:w-full md:p-6"
             key={`${label}-${uuidv4()}`}
           >
             <Icon className="h-5 w-5" />
