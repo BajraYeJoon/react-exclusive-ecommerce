@@ -7,4 +7,6 @@ export enum Routes {
   AddCategory = "add-category",
   FlashSales = "flash-sales",
   Banners = "banners",
+  CMS = "change-content",
+  Profile = "profile",
 }

@@ -4,6 +4,7 @@ import {
   ProductsList,
   UserList,
   Banner,
+  StaticContent,
 } from "../admin/components";
 import { Routes } from "../admin/lib/links";
 import { Dashboard } from "../admin/screen";
@@ -36,5 +37,13 @@ export const adminRoutes = [
   {
     path: Routes.Banners,
     element: <Banner />,
+  },
+  {
+    path: Routes.CMS,
+    element: <StaticContent />,
+  },
+  {
+    path: Routes.Profile,
+    element: <Dashboard />,
   },
 ];

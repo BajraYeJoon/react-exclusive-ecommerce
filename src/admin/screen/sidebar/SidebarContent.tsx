@@ -5,6 +5,7 @@ import { FaProductHunt, FaSellsy } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { Routes } from "../../lib/links";
 import { GrDocumentImage } from "react-icons/gr";
+import { MdEditNote } from "react-icons/md";
 
 const sidebarItems = [
   {
@@ -42,7 +43,12 @@ const sidebarItems = [
     href: Routes.Banners,
     icon: GrDocumentImage,
     label: "Banners",
-  }
+  },
+  {
+    href: Routes.CMS,
+    icon: MdEditNote,
+    label: "Change Content",
+  },
 ];
 
 const SidebarContent = () => {

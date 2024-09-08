@@ -1,4 +1,4 @@
-import { MenuIcon, X } from "lucide-react";
+import { Link2OffIcon, LinkIcon, MenuIcon, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   DropdownMenu,
@@ -11,6 +11,8 @@ import {
 import { useAuthContext } from "../../../user-portal/context/useAuthContext";
 import { useState } from "react";
 import SidebarContent from "../sidebar/SidebarContent";
+import { Button } from "../../../common/ui/button";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
@@ -22,6 +24,11 @@ const Header = () => {
         <h2 className="text-base font-medium sm:text-xl">Exclusive Admin</h2>
 
         <div className="flex items-center gap-4">
+          <Link to={"/"}>
+            <Button>
+              Visit Website <LinkIcon size={16} className="ml-2" />
+            </Button>
+          </Link>
           <DropdownMenu>
             <DropdownMenuTrigger>
               <div className="profile-badge h-6 w-6 cursor-pointer overflow-hidden rounded-full bg-foreground/35"></div>
