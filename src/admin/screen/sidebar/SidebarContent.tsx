@@ -4,6 +4,7 @@ import { CgAdd } from "react-icons/cg";
 import { FaProductHunt, FaSellsy } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { Routes } from "../../lib/links";
+import { GrDocumentImage } from "react-icons/gr";
 
 const sidebarItems = [
   {
@@ -37,6 +38,11 @@ const sidebarItems = [
     icon: FaSellsy,
     label: "Flash Sales",
   },
+  {
+    href: Routes.Banners,
+    icon: GrDocumentImage,
+    label: "Banners",
+  }
 ];
 
 const SidebarContent = () => {

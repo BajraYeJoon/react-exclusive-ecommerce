@@ -6,4 +6,5 @@ export enum Routes {
   Products = "products",
   AddCategory = "add-category",
   FlashSales = "flash-sales",
+  Banners = "banners",
 }

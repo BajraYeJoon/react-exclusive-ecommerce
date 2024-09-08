@@ -13,11 +13,7 @@ import { deleteFlashSale, getFlashSale } from "../../api/flashSale";
 import { Loading } from "../../../user-portal/site";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "../../../common/ui/dialog";
 import ProductDetails from "../productsList/ProductDetails";
@@ -79,7 +75,9 @@ export default function FlashSaleAdmin() {
     flashSaleProductsData ? flashSaleProductsData[0]?.saleEnd : 0,
   );
 
-  const flashSaleProducts = flashSaleProductsData[0]?.products ?? [];
+  const flashSaleProducts = flashSaleProductsData
+    ? flashSaleProductsData[0]?.products
+    : [];
 
   return (
     <section className="flash-sale-cards container mx-auto p-4">

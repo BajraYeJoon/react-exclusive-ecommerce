@@ -3,6 +3,7 @@ import {
   FlashSaleAdmin,
   ProductsList,
   UserList,
+  Banner,
 } from "../admin/components";
 import { Routes } from "../admin/lib/links";
 import { Dashboard } from "../admin/screen";
@@ -31,5 +32,9 @@ export const adminRoutes = [
   {
     path: Routes.FlashSales,
     element: <FlashSaleAdmin />,
+  },
+  {
+    path: Routes.Banners,
+    element: <Banner />,
   },
 ];
