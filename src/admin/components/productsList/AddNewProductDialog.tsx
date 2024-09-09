@@ -102,6 +102,8 @@ export default function ProductForm({ mode, initialData }: ProductFormProps) {
       }
     });
 
+    console.log("Form Data:", formData);
+
     try {
       const response = await (mode === "create"
         ? Axios.post("/product/create", formData)
@@ -178,10 +180,7 @@ export default function ProductForm({ mode, initialData }: ProductFormProps) {
                   ))}
                 </div>
               </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="discounttag" {...register("discounttag")} />
-                <Label htmlFor="discounttag">Discount Tag</Label>
-              </div>
+
               <div className="space-y-2">
                 <Label htmlFor="rating">Rating</Label>
                 <Input
@@ -208,6 +207,10 @@ export default function ProductForm({ mode, initialData }: ProductFormProps) {
                     {errors.discountprice.message}
                   </p>
                 )}
+              </div>
+              <div className="flex space-x-2">
+                <Checkbox id="discounttag" {...register("discounttag")} />
+                <Label htmlFor="discounttag">Discount Tag</Label>
               </div>
             </div>
           )}
@@ -293,24 +296,24 @@ export default function ProductForm({ mode, initialData }: ProductFormProps) {
               </div>
             </div>
           )}
+          <CardFooter className="flex justify-between">
+            {step > 1 && (
+              <Button type="button" onClick={prevStep} variant="outline">
+                Previous
+              </Button>
+            )}
+            {step < 2 ? (
+              <Button type="button" onClick={nextStep}>
+                Next
+              </Button>
+            ) : (
+              <Button type="submit" onSubmit={handleSubmit(onSubmit)}>
+                {mode === "create" ? "Create Product" : "Update Product"}
+              </Button>
+            )}
+          </CardFooter>
         </form>
       </CardContent>
-      <CardFooter className="flex justify-between">
-        {step > 1 && (
-          <Button type="button" onClick={prevStep} variant="outline">
-            Previous
-          </Button>
-        )}
-        {step < 2 ? (
-          <Button type="button" onClick={nextStep}>
-            Next
-          </Button>
-        ) : (
-          <Button type="submit" onClick={handleSubmit(onSubmit)}>
-            {mode === "create" ? "Create Product" : "Update Product"}
-          </Button>
-        )}
-      </CardFooter>
     </Card>
   );
 }
