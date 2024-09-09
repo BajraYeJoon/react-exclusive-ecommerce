@@ -29,7 +29,9 @@ export default function AboutMain() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="">
+      <h2 className="mb-2 text-xl font-medium">Manage About</h2>
+      <hr />
       {isEditing ? (
         <OurStoryEdit
           content={content}
