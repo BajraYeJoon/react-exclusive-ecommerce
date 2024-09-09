@@ -3,13 +3,15 @@ import {
   FlashSaleAdmin,
   ProductsList,
   UserList,
+  Banner,
+  StaticContent,
 } from "../admin/components";
 import { Routes } from "../admin/lib/links";
 import { Dashboard } from "../admin/screen";
 
 export const adminRoutes = [
   {
-    index: true,
+    path: Routes.Dashboard,
     element: <Dashboard />,
   },
   {
@@ -31,5 +33,17 @@ export const adminRoutes = [
   {
     path: Routes.FlashSales,
     element: <FlashSaleAdmin />,
+  },
+  {
+    path: Routes.Banners,
+    element: <Banner />,
+  },
+  {
+    path: Routes.CMS,
+    element: <StaticContent />,
+  },
+  {
+    path: Routes.Profile,
+    element: <Dashboard />,
   },
 ];

@@ -52,10 +52,8 @@ export default function ProductForm({ mode, initialData }: ProductFormProps) {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   const {
-    control,
     register,
     handleSubmit,
-    setValue,
     reset,
     formState: { errors },
   } = useForm<ProductFormData>({

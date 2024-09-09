@@ -12,15 +12,15 @@ import {
 import { addProductToFlashSale } from "../../api/flashSale";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../../../common/ui/dialog";
+// import {
+//   Dialog,
+//   DialogClose,
+//   DialogContent,
+//   DialogDescription,
+//   DialogHeader,
+//   DialogTitle,
+//   DialogTrigger,
+// } from "../../../common/ui/dialog";
 import "react-day-picker/style.css";
 import { useNavigate } from "react-router-dom";
 import { Routes } from "../../lib/links";
@@ -105,8 +105,8 @@ export function DatePickerWithRange({
 
             {date ? (
               <>
-                {format(date?.from, "LLL dd, y HH:mm")} -{" "}
-                {format(date?.to, "LLL dd, y HH:mm")}
+                {date?.from ? format(date.from, "LLL dd, y HH:mm") : ""}
+                {format(date?.to || new Date(), "LLL dd, y HH:mm")}
               </>
             ) : (
               <span>Pick a date</span>
@@ -201,23 +201,22 @@ export function DatePickerWithRange({
         title="Are you sure you want to add this all products to Flash Sale?"
         description={
           <>
-            Sale Start: {format(date?.from, "LLL dd, y HH:mm")} - Sale End:{" "}
-            {format(date?.to, "LLL dd, y HH:mm")}
+             Sale Start: {format(date?.from ?? new Date(), "LLL dd, y HH:mm")} - Sale End:{" "}
+             {format(date?.to ?? new Date(), "LLL dd, y HH:mm")}
+
           </>
         }
         onConfirm={() =>
           addProductToFlashSale({
-            saleStart: new Date(date?.from).toISOString(),
-            saleEnd: new Date(date?.to).toISOString(),
+            saleStart: date?.from ? new Date(date.from).toISOString() : "",
+            saleEnd: new Date(date?.to || "").toISOString(),
             products: data,
           }).then((res) => {
             console.log(res);
             queryClient.invalidateQueries({ queryKey: ["products"] });
             toast.success("Product added to flash sale");
             setFlashItem([]);
-            navigate(`${Routes.Admin}/${Routes.FlashSales}`, {
-              replace: true,
-            });
+            navigate(`/${Routes.Admin}/${Routes.FlashSales}`);
           })
         }
         cancelText="No"

@@ -7,7 +7,7 @@ interface FileWithPreview extends File {
   preview: string;
 }
 
-export function FileDropzone({ register }) {
+export function FileDropzone({ register }: any) {
   const [files, setFiles] = useState<FileWithPreview[]>([]);
   const [isDragActive, setIsDragActive] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
