@@ -12,6 +12,7 @@ import {
   Check,
 } from "lucide-react";
 import { CiDeliveryTruck } from "react-icons/ci";
+import AboutMain from "./about/aboutMain";
 
 interface Service {
   id: number;
@@ -170,6 +171,7 @@ export default function Component() {
 
   return (
     <div className="p-6">
+      <AboutMain />
       <div className="mb-4 flex items-center justify-between">
         <h2 className="mb-6 text-2xl font-bold">Manage Services</h2>
         <Button className="" onClick={handleAdd}>
