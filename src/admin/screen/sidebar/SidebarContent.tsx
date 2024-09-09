@@ -6,6 +6,7 @@ import { NavLink } from "react-router-dom";
 import { Routes } from "../../lib/links";
 import { GrDocumentImage } from "react-icons/gr";
 import { MdEditNote } from "react-icons/md";
+import { CiDiscount1 } from "react-icons/ci";
 
 const sidebarItems = [
   {
@@ -48,6 +49,11 @@ const sidebarItems = [
     href: Routes.CMS,
     icon: MdEditNote,
     label: "Change Content",
+  },
+  {
+    href: Routes.Discount,
+    icon: CiDiscount1,
+    label: "Discount",
   },
 ];
 

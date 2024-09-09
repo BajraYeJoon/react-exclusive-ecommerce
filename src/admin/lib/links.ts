@@ -9,4 +9,5 @@ export enum Routes {
   Banners = "banners",
   CMS = "change-content",
   Profile = "profile",
+  Discount = "discount",
 }

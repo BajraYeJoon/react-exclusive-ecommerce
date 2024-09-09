@@ -5,6 +5,7 @@ import {
   UserList,
   Banner,
   StaticContent,
+  AdminDiscount,
 } from "../admin/components";
 import { Routes } from "../admin/lib/links";
 import { Dashboard } from "../admin/screen";
@@ -45,5 +46,9 @@ export const adminRoutes = [
   {
     path: Routes.Profile,
     element: <Dashboard />,
+  },
+  {
+    path: Routes.Discount,
+    element: <AdminDiscount />,
   },
 ];
