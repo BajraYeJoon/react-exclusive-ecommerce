@@ -6,15 +6,13 @@ export function TeamsDisplay({ employees }: any) {
       {employees.map((employee: any) => (
         <div key={employee.id} className="flex items-center justify-center">
           <div className="flex flex-col items-start gap-5">
-            <div className="bg-color-secondary">
-              <img
-                alt={employee.name}
-                loading="lazy"
-                decoding="async"
-                className="mt-5 h-44 object-contain object-bottom"
-                src={employee.imgSrc}
-              />
-            </div>
+            <img
+              alt={employee.name}
+              loading="lazy"
+              decoding="async"
+              className="mt-5 h-44 object-contain"
+              src={employee.imgSrc}
+            />
             <div className="max-3xl:gap-2 flex flex-col items-start gap-4">
               <div className="max-3xl:gap-1 flex flex-col items-start gap-2 capitalize">
                 <p className="max-3xl:text-base text-xl max-2xl:text-sm">

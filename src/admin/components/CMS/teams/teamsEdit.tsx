@@ -68,6 +68,12 @@ export function TeamsEdit({ employees, onSave, onCancel }: any) {
         {errors.employees && (
           <p className="text-red-500">All required fields must be filled</p>
         )}
+        <div className="mt-4 space-x-2">
+          <Button type="button" variant="outline" onClick={onCancel}>
+            Cancel
+          </Button>
+          <Button type="submit">Save Changes</Button>
+        </div>
       </form>
       <Button
         type="button"
@@ -83,12 +89,6 @@ export function TeamsEdit({ employees, onSave, onCancel }: any) {
       >
         Add Employee
       </Button>
-      <div className="mt-4 space-x-2">
-        <Button type="button" variant="outline" onClick={onCancel}>
-          Cancel
-        </Button>
-        <Button type="submit">Save Changes</Button>
-      </div>
     </div>
   );
 }
