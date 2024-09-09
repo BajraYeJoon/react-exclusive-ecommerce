@@ -21,7 +21,7 @@ const Analytics = () => {
         grid
         dataKey="Active User"
       />
-      <div className="flex flex-col-reverse items-center justify-center gap-6 lg:flex-row">
+      <div className="flex flex-col-reverse items-start justify-center gap-6 lg:flex-row">
         <WidgetLeft />
         <WidgetRight />
       </div>
