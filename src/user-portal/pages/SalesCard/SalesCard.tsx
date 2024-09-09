@@ -29,24 +29,23 @@ const SalesCard = () => {
   } = useQuery({
     queryKey: ["sale"],
     queryFn: fetchSalesProduct,
-    select: (salesData) => salesData.slice(0, 7),
   });
 
-  console.log(salesData, "salesdATA");
+  const salesValue = salesData[0].products;
 
-  if (!salesData || salesData.length === 0)
-    return (
-      <div className="px-6 py-12 font-sans">
-        <div className="container mx-auto flex flex-col items-center justify-center text-center">
-          <h2 className="mb-4 text-3xl font-bold sm:text-4xl">Stay tuned</h2>
-          <p className="mb-8 text-center text-base">
-            We're working on adding more SALE to our store. Stay tuned!
-          </p>
+  // if (!salesData || salesData.length === 0)
+  //   return (
+  //     <div className="px-6 py-12 font-sans">
+  //       <div className="container mx-auto flex flex-col items-center justify-center text-center">
+  //         <h2 className="mb-4 text-3xl font-bold sm:text-4xl">Stay tuned</h2>
+  //         <p className="mb-8 text-center text-base">
+  //           We're working on adding more SALE to our store. Stay tuned!
+  //         </p>
 
-          <Button>Explore More</Button>
-        </div>
-      </div>
-    );
+  //         <Button>Explore More</Button>
+  //       </div>
+  //     </div>
+  //   );
 
   return (
     <section className="sales-card-container flex flex-col gap-5 border-b border-foreground/30 pb-8 md:gap-7 md:pb-14">
@@ -85,7 +84,7 @@ const SalesCard = () => {
             <ProductCardSkeleton />
           ) : (
             <>
-              {salesData?.map((productCard: SalesCardProps) => (
+              {salesValue?.map((productCard: SalesCardProps) => (
                 <SwiperSlide key={`salesPRODUCT-${uuidv4()}`} className="">
                   <ProductCard {...productCard} discountTag />
                 </SwiperSlide>
