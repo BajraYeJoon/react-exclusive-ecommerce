@@ -216,7 +216,7 @@ export function DatePickerWithRange({
             queryClient.invalidateQueries({ queryKey: ["products"] });
             toast.success("Product added to flash sale");
             setFlashItem([]);
-            navigate(`${Routes.Admin}/${Routes.FlashSales}`);
+            navigate(`/${Routes.Admin}/${Routes.FlashSales}`);
           })
         }
         cancelText="No"
