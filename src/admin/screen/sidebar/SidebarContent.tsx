@@ -63,7 +63,7 @@ const SidebarContent = () => {
                 to={`/admin/${item.href}`}
                 className={({ isActive }) =>
                   `group flex items-center rounded-lg p-2 text-gray-900 ${
-                    isActive ? "bg-gray-200 dark:bg-gray-700" : ""
+                    isActive ? "bg-red-500/60 text-gray-200" : ""
                   }`
                 }
               >
@@ -72,7 +72,7 @@ const SidebarContent = () => {
                   {item.label}
                 </span>
                 {item.badge && (
-                  <span className="ms-3 inline-flex items-center justify-center rounded-full bg-gray-100 px-2 text-sm font-medium text-gray-800 dark:bg-gray-700 dark:text-gray-300">
+                  <span className="ms-3 inline-flex items-center justify-center rounded-full bg-primary px-2 text-sm font-medium text-white">
                     {item.badge}
                   </span>
                 )}

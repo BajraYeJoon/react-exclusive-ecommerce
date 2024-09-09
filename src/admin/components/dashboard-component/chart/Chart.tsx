@@ -1,44 +1,163 @@
+import { useState } from "react";
 import {
   LineChart,
   Line,
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  AreaChart,
+  Area,
   XAxis,
+  YAxis,
   CartesianGrid,
   Tooltip,
+  Legend,
   ResponsiveContainer,
 } from "recharts";
-import useWindow from "../../../../common/lib/useWindow";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../../../../common/ui/card";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "../../../../common/ui/tabs";
 
-interface ChartProps {
-  title: string;
-  data: {
-    name: string;
-    [key: string]: number | string;
-  }[];
-  dataKey: string;
-  grid: boolean;
-}
+// Dummy data for e-commerce charts
+const monthlySalesData = [
+  { month: "Jan", sales: 4000, orders: 240 },
+  { month: "Feb", sales: 3000, orders: 198 },
+  { month: "Mar", sales: 5000, orders: 300 },
+  { month: "Apr", sales: 4780, orders: 268 },
+  { month: "May", sales: 5890, orders: 320 },
+  { month: "Jun", sales: 6390, orders: 358 },
+  { month: "Jul", sales: 7490, orders: 400 },
+];
 
-const Chart = ({ title, data, dataKey, grid }: ChartProps) => {
-  const { dimension } = useWindow();
+const categoryData = [
+  { name: "Electronics", value: 4000 },
+  { name: "Clothing", value: 3000 },
+  { name: "Books", value: 2000 },
+  { name: "Home & Garden", value: 2780 },
+  { name: "Sports", value: 1890 },
+];
+
+const customerDemographics = [
+  { age: "18-24", male: 400, female: 500 },
+  { age: "25-34", male: 800, female: 1000 },
+  { age: "35-44", male: 1000, female: 1100 },
+  { age: "45-54", male: 600, female: 800 },
+  { age: "55+", male: 400, female: 500 },
+];
+
+const orderStatusData = [
+  { name: "Completed", value: 5400 },
+  { name: "Processing", value: 1200 },
+  { name: "Shipped", value: 2400 },
+  { name: "Cancelled", value: 400 },
+];
+
+export default function EcommerceAdminDashboard() {
+  const [activeTab, setActiveTab] = useState("sales");
 
   return (
-    <div className="mt-4 rounded-xl bg-white">
-      <div className="mx-4 my-2">
-        <h3 className="font-seimbold my-4 text-base tracking-wider">{title}</h3>
-        <ResponsiveContainer
-          width="100%"
-          aspect={dimension.width < 640 ? 2 / 1 : 4 / 1}
-        >
-          <LineChart data={data}>
-            <XAxis dataKey="name" stroke="#000" />
-            <Line type="monotone" dataKey={dataKey} stroke="#000" />
-            <Tooltip />
-            {grid && <CartesianGrid stroke="#e0dfdf" strokeDasharray="5 5" />}
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
-    </div>
+    <Card className="mx-auto w-full">
+      <CardHeader>
+        <CardTitle>E-commerce Admin Dashboard</CardTitle>
+        <CardDescription>Key metrics and data visualization</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <TabsList>
+            <TabsTrigger value="sales">Monthly Sales</TabsTrigger>
+            <TabsTrigger value="categories">Product Categories</TabsTrigger>
+            <TabsTrigger value="demographics">
+              Customer Demographics
+            </TabsTrigger>
+            <TabsTrigger value="orders">Order Status</TabsTrigger>
+          </TabsList>
+          <TabsContent value="sales">
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={monthlySalesData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="month" />
+                <YAxis yAxisId="left" />
+                <YAxis yAxisId="right" orientation="right" />
+                <Tooltip />
+                <Legend />
+                <Line
+                  yAxisId="left"
+                  type="monotone"
+                  dataKey="sales"
+                  stroke="#8884d8"
+                />
+                <Line
+                  yAxisId="right"
+                  type="monotone"
+                  dataKey="orders"
+                  stroke="#82ca9d"
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </TabsContent>
+          <TabsContent value="categories">
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={categoryData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="value" fill="#8884d8" />
+              </BarChart>
+            </ResponsiveContainer>
+          </TabsContent>
+          <TabsContent value="demographics">
+            <ResponsiveContainer width="100%" height={300}>
+              <AreaChart data={customerDemographics}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="age" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Area
+                  type="monotone"
+                  dataKey="male"
+                  stackId="1"
+                  stroke="#8884d8"
+                  fill="#8884d8"
+                />
+                <Area
+                  type="monotone"
+                  dataKey="female"
+                  stackId="1"
+                  stroke="#82ca9d"
+                  fill="#82ca9d"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </TabsContent>
+          <TabsContent value="orders">
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  dataKey="value"
+                  data={orderStatusData}
+                  fill="#8884d8"
+                  label
+                />
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </TabsContent>
+        </Tabs>
+      </CardContent>
+    </Card>
   );
-};
-
-export default Chart;
+}
