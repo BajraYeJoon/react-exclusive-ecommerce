@@ -1,7 +1,6 @@
 import { PagesHeader } from "../../components";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { Loading } from "../../site";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import { v4 as uuid } from "uuid";

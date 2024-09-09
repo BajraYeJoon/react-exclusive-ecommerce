@@ -1,6 +1,6 @@
 export enum Routes {
   Admin = "admin",
-  Dashboard = "",
+  Dashboard = "dashboard",
   Orders = "orders",
   Users = "users",
   Products = "products",

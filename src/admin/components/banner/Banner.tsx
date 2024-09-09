@@ -4,7 +4,7 @@ import { Button } from "../../../common/ui/button";
 import { fetchHeroBanner } from "../../../common/api/bannerApi";
 import uuidv4 from "../../../common/lib/utils/uuid";
 import ConfirmationDialog from "../confirmation/ConfirmationDialog";
-import { DeleteIcon, Edit2, PlusCircle, Trash2Icon } from "lucide-react";
+import { Edit2, PlusCircle, Trash2Icon } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -29,36 +29,36 @@ import {
 import { Checkbox } from "../../../common/ui/checkbox";
 import { fetchAllProducts } from "../../../common/api/productApi";
 
-const banners = [
-  {
-    id: 1,
-    title: "Summer Sale",
-    imageUrl: "/placeholder.svg?height=200&width=400",
-    targetUrl: "/summer-sale",
-    status: "Active",
-  },
-  {
-    id: 2,
-    title: "New Collection",
-    imageUrl: "/placeholder.svg?height=200&width=400",
-    targetUrl: "/new-collection",
-    status: "Inactive",
-  },
-  {
-    id: 3,
-    title: "Holiday Special",
-    imageUrl: "/placeholder.svg?height=200&width=400",
-    targetUrl: "/holiday-special",
-    status: "Scheduled",
-  },
-  {
-    id: 4,
-    title: "Flash Deal",
-    imageUrl: "/placeholder.svg?height=200&width=400",
-    targetUrl: "/flash-deal",
-    status: "Active",
-  },
-];
+// const banners = [
+//   {
+//     id: 1,
+//     title: "Summer Sale",
+//     imageUrl: "/placeholder.svg?height=200&width=400",
+//     targetUrl: "/summer-sale",
+//     status: "Active",
+//   },
+//   {
+//     id: 2,
+//     title: "New Collection",
+//     imageUrl: "/placeholder.svg?height=200&width=400",
+//     targetUrl: "/new-collection",
+//     status: "Inactive",
+//   },
+//   {
+//     id: 3,
+//     title: "Holiday Special",
+//     imageUrl: "/placeholder.svg?height=200&width=400",
+//     targetUrl: "/holiday-special",
+//     status: "Scheduled",
+//   },
+//   {
+//     id: 4,
+//     title: "Flash Deal",
+//     imageUrl: "/placeholder.svg?height=200&width=400",
+//     targetUrl: "/flash-deal",
+//     status: "Active",
+//   },
+// ];
 
 const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
   const baseClasses = "px-2 py-1 rounded-full text-xs font-semibold";
@@ -217,7 +217,7 @@ export default function Banner() {
 
       <div className="grid grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-4">
         {banners &&
-          banners.map((banner) => (
+          banners.map((banner: any) => (
             <div
               key={`banner-${uuidv4()}`}
               className="flex flex-col justify-between overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:shadow-lg"

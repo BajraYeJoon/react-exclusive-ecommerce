@@ -74,10 +74,10 @@ const Checkout = () => {
   };
 
   console.log(
-    checkoutValues.cartItems.map((item) => item.product.id),
+    checkoutValues.cartItems.map((item: any) => item.product.id),
     "checkoutasdfasdfsa",
   );
-  const productData = checkoutValues.cartItems.map((item) => item.product);
+  const productData = checkoutValues.cartItems.map((item: any) => item.product);
 
   return (
     <section className="mx-64 mb-28 mt-12 max-2xl:mx-6 lg:mt-32">

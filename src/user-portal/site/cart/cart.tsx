@@ -1,7 +1,6 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { CustomBreakcrumb } from "../../components";
 import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
-import { cartState } from "../../atoms/cartState";
 import { Link, useNavigate } from "react-router-dom";
 import { checkoutState } from "../../atoms/checkoutState";
 import Cookies from "js-cookie";
@@ -10,7 +9,6 @@ import { fetchCart } from "../../api/cartApi";
 import { cn } from "../../../common/lib/utils";
 import {
   applyCoupon,
-  clearCart,
   useClearCart,
   useDecreaseQuantity,
   useIncreaseQuantity,

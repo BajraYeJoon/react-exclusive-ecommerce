@@ -2,7 +2,7 @@ import { Mail, User2 } from "lucide-react";
 import { BsMenuButton } from "react-icons/bs";
 import { CgAdd } from "react-icons/cg";
 import { FaProductHunt, FaSellsy } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { Routes } from "../../lib/links";
 import { GrDocumentImage } from "react-icons/gr";
 import { MdEditNote } from "react-icons/md";
@@ -59,9 +59,13 @@ const SidebarContent = () => {
           const Icon = item.icon;
           return (
             <li key={index}>
-              <Link
+              <NavLink
                 to={`/admin/${item.href}`}
-                className="group flex items-center rounded-lg p-2 text-gray-900"
+                className={({ isActive }) =>
+                  `group flex items-center rounded-lg p-2 text-gray-900 ${
+                    isActive ? "bg-gray-200 dark:bg-gray-700" : ""
+                  }`
+                }
               >
                 <Icon className="h-6 w-6" />
                 <span className="ms-3 flex-1 whitespace-nowrap text-sm md:text-base">
@@ -72,7 +76,7 @@ const SidebarContent = () => {
                     {item.badge}
                   </span>
                 )}
-              </Link>
+              </NavLink>
             </li>
           );
         })}

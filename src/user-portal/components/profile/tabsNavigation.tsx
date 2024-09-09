@@ -6,7 +6,7 @@ import {
 } from "react-icons/fa";
 import { Button } from "../../../common/ui/button";
 
-const TabNavigation = ({ activeTab, setActiveTab, logout }) => {
+const TabNavigation = ({ activeTab, setActiveTab, logout }: any) => {
   const tabs = [
     { id: "general", label: "General", icon: FaUser },
     { id: "orders", label: "My Orders", icon: FaShoppingCart },

@@ -11,7 +11,7 @@ import { Dashboard } from "../admin/screen";
 
 export const adminRoutes = [
   {
-    index: true,
+    path: Routes.Dashboard,
     element: <Dashboard />,
   },
   {

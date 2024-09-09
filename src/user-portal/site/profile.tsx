@@ -37,7 +37,7 @@ const ProfilePage: React.FC = () => {
     },
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: any) => {
     mutation.mutate(data);
   };
 

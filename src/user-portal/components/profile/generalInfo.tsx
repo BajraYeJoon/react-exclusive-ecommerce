@@ -7,8 +7,8 @@ interface FormData {
   phone?: string;
 }
 
-const GeneralInfo = ({ userdetail, onSubmit }) => {
-  const { register, handleSubmit, reset } = useForm<FormData>();
+const GeneralInfo = ({ userdetail, onSubmit }: any) => {
+  const { register, handleSubmit } = useForm<FormData>();
 
   return (
     <div>

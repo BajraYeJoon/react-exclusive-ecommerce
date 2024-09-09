@@ -5,7 +5,7 @@ import {
   DialogHeader,
 } from "../../../common/ui/dialog";
 
-const ProductDetails = ({ data }) => {
+const ProductDetails = ({ data }: any) => {
   return (
     <Dialog>
       <DialogHeader>{data.title}</DialogHeader>
