@@ -385,7 +385,7 @@ export default function ProductsList() {
   );
 }
 
-function Filter({ column, table }: { column: any; table: any }) {
+export function Filter({ column, table }: { column: any; table: any }) {
   const firstValue = table
     .getPreFilteredRowModel()
     .flatRows[0]?.getValue(column.id);

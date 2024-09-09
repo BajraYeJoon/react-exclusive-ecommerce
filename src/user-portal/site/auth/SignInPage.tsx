@@ -10,6 +10,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
 import { CgSpinner } from "react-icons/cg";
+import { Routes } from "../../../admin/lib/links";
+import { UserRoutes } from "../../utils/userLinks";
 
 const SignInPage = () => {
   const { login, isLoading } = useAuthContext();
@@ -27,11 +29,11 @@ const SignInPage = () => {
       await login(data);
       const user = JSON.parse(Cookies.get("user") || "{}");
       console.log(user);
-      if (user.user.role === "admin") {
-        navigate("/admin");
+      if (user.user.role === `${Routes.Admin}`) {
+        navigate(`/${Routes.Admin}/${Routes.Dashboard}`);
         toast.success("Welcome to the admin panel");
       } else {
-        navigate("/profile");
+        navigate(`/${UserRoutes.Profile}`);
         toast.success("You are now logged in");
       }
     } catch (error) {
