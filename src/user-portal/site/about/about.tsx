@@ -80,7 +80,7 @@ const About = () => {
               key={index}
             >
               <div className="space-y-3 text-center">
-                <p className="__className_39e0cc group-hover:text-color-text-1 max-3xl:text-3xl text-4xl transition-colors duration-300 ease-in-out max-2xl:text-xl">
+                <p className="group-hover:text-color-text-1 max-3xl:text-3xl text-4xl transition-colors duration-300 ease-in-out max-2xl:text-xl">
                   {value}
                 </p>
                 <p className="group-hover:text-color-text-1 text-lg transition-colors duration-300 ease-in-out max-2xl:text-base">
@@ -118,7 +118,7 @@ const About = () => {
                   </div>
                   <div className="max-3xl:gap-2 flex flex-col items-start gap-4">
                     <div className="max-3xl:gap-1 flex flex-col items-start gap-2 capitalize">
-                      <p className="__className_81fb23 max-3xl:text-3xl text-4xl max-2xl:text-2xl">
+                      <p className="max-3xl:text-3xl text-4xl max-2xl:text-2xl">
                         {employee.name}
                       </p>
                       <p className="text-lg max-2xl:text-base">

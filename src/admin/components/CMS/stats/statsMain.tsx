@@ -31,7 +31,7 @@ export default function Stats({ isPro = false }: StatsProps) {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <section className="">
       <h2 className="mb-4 text-xl font-medium">Manage Stats</h2>
       {isEditing ? (
         <StatsEdit
@@ -48,6 +48,6 @@ export default function Stats({ isPro = false }: StatsProps) {
           </Button>
         </>
       )}
-    </div>
+    </section>
   );
 }
