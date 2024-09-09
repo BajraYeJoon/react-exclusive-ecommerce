@@ -114,7 +114,7 @@ const FeaturedInfo = () => {
 
 export default FeaturedInfo;
 
-function AnalyticsCardSkeleton() {
+export function AnalyticsCardSkeleton() {
   return (
     <Card className="bg-background">
       <CardHeader className="space-y-0 pb-2">

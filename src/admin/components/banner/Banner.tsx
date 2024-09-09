@@ -33,6 +33,8 @@ import { fetchAllProducts } from "../../../common/api/productApi";
 import { Filter } from "../productsList/ProductsList";
 import { createBanner, deleteBanner } from "../../api/createBanner";
 import { toast } from "sonner";
+import { AnalyticsCardSkeleton } from "../dashboard-component/featuredInfo/FeaturedInfo";
+import uuidv4 from "../../../common/lib/utils/uuid";
 
 const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
   const baseClasses = "px-2 py-1 rounded-full text-xs font-semibold";
@@ -84,7 +86,7 @@ export default function Banner() {
       if (prev.includes(productId)) {
         return prev.filter((id) => id !== productId);
       } else {
-        return [ productId];
+        return [productId];
       }
     });
   };
@@ -315,48 +317,58 @@ export default function Banner() {
       </header>
 
       <div className="grid grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-4">
-        {banners?.map((banner: any) => (
-          <div
-            key={`banner-${banner.id}`}
-            className="flex flex-col justify-between overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:shadow-lg"
-          >
-            <img
-              src={banner.image[0]}
-              alt={banner.title}
-              className="h-56 w-full object-cover md:h-48 md:w-full"
-            />
-            <div className="p-4">
-              <h2 className="mb-2 text-base font-semibold text-gray-800">
-                {banner.title}
-              </h2>
-              <p className="mb-2 text-sm text-gray-600">
-                Target: "/target-url"
-              </p>
-              <StatusBadge status={banner.brand} />
-            </div>
-            <div className="flex flex-col justify-between p-2 md:flex-row">
-              <Button
-                variant="secondary"
-                className="flex w-full items-center lg:w-fit"
+        {isLoading ? (
+          <>
+            {Array.from({ length: 4 }).map(() => (
+              <AnalyticsCardSkeleton key={`skeleton-${uuidv4()}`} />
+            ))}
+          </>
+        ) : (
+          <>
+            {banners?.map((banner: any) => (
+              <div
+                key={`banner-${banner.id}`}
+                className="flex flex-col justify-between overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:shadow-lg"
               >
-                <Edit2 className="mr-1 h-4 w-4" />
-                Edit
-              </Button>
-              <ConfirmationDialog
-                triggerText={
-                  <>
-                    <Trash2Icon className="mr-2" /> Delete
-                  </>
-                }
-                title="Delete Banner"
-                description="Are you sure you want to delete this banner?"
-                onConfirm={() => deleteBannerMutation.mutate()}
-                confirmText="Delete"
-                cancelText="No"
-              />
-            </div>
-          </div>
-        ))}
+                <img
+                  src={banner.image[0]}
+                  alt={banner.title}
+                  className="h-56 w-full object-cover md:h-48 md:w-full"
+                />
+                <div className="p-4">
+                  <h2 className="mb-2 text-base font-semibold text-gray-800">
+                    {banner.title}
+                  </h2>
+                  <p className="mb-2 text-sm text-gray-600">
+                    Target: "/target-url"
+                  </p>
+                  <StatusBadge status={banner.brand} />
+                </div>
+                <div className="flex flex-col justify-between p-2 md:flex-row">
+                  <Button
+                    variant="secondary"
+                    className="flex w-full items-center lg:w-fit"
+                  >
+                    <Edit2 className="mr-1 h-4 w-4" />
+                    Edit
+                  </Button>
+                  <ConfirmationDialog
+                    triggerText={
+                      <>
+                        <Trash2Icon className="mr-2" /> Delete
+                      </>
+                    }
+                    title="Delete Banner"
+                    description="Are you sure you want to delete this banner?"
+                    onConfirm={() => deleteBannerMutation.mutate()}
+                    confirmText="Delete"
+                    cancelText="No"
+                  />
+                </div>
+              </div>
+            ))}
+          </>
+        )}
       </div>
     </div>
   );

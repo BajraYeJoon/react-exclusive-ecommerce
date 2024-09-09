@@ -38,6 +38,9 @@ import {
   CardTitle,
 } from "../../../common/ui/card";
 import { Label } from "../../../common/ui/label";
+import { Loading } from "../../../user-portal/site";
+import { Skeleton } from "../../../common/ui/skeleton";
+import uuidv4 from "../../../common/lib/utils/uuid";
 
 interface FormValues {
   categoryName: string;
@@ -57,7 +60,7 @@ const AddCategoryForm = () => {
   } = useForm<FormValues>();
   const [editCategoryId, setEditCategoryId] = useState<number | null>(null);
   const queryClient = useQueryClient();
-  const { data: categories } = useQuery({
+  const { data: categories, isLoading } = useQuery({
     queryKey: ["add"],
     queryFn: fetchCategories,
   });
@@ -129,7 +132,7 @@ const AddCategoryForm = () => {
   const categoryName = watch("categoryName", "");
 
   return (
-    <div className="flex flex-col space-y-8">
+    <div className="mx-6 flex flex-col space-y-8">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Add New Category</CardTitle>
@@ -184,75 +187,90 @@ const AddCategoryForm = () => {
       <div className="">
         <h3 className="mb-2 text-xl font-medium">Your Categories</h3>
         <div className="flex flex-wrap gap-2">
-          {categories?.map((category: any) => (
-            <Button
-              key={category.id}
-              variant={"outline"}
-              className="group relative"
-            >
-              {category.name}
-              <div className="absolute right-0 top-0 hidden flex-col text-lg group-hover:flex">
-                <Dialog>
-                  <DialogTrigger>
-                    <MdCancel className="group-hover:text-primary" />
-                  </DialogTrigger>
-                  <DialogContent className="flex flex-col items-center justify-center gap-4">
-                    <DialogHeader>
-                      Are you sure you want to remove this Category?
-                    </DialogHeader>
-                    <DialogTitle className="text-sm font-medium">
-                      It will remove all the products as well.{" "}
-                      <span className="text-primary">*</span>
-                    </DialogTitle>
-                    <DialogDescription className="space-x-2">
-                      <Button
-                        variant={"destructive"}
-                        onClick={() => handleCategoryDelete(category.id)}
-                      >
-                        Yes
-                      </Button>
-                      <Button variant={"secondary"}>
-                        <DialogClose>No</DialogClose>
-                      </Button>
-                    </DialogDescription>
-                  </DialogContent>
-                </Dialog>
+          {isLoading ? (
+            <>
+              {Array.from({ length: 12 }).map(() => (
+                <Skeleton className="h-12 w-40" key={uuidv4()} />
+              ))}
+            </>
+          ) : (
+            <>
+              {categories?.map((category: any) => (
+                <Button
+                  key={category.id}
+                  variant={"outline"}
+                  className="group relative"
+                >
+                  {category.name}
+                  <div className="absolute right-0 top-0 hidden flex-col text-lg group-hover:flex">
+                    <Dialog>
+                      <DialogTrigger>
+                        <MdCancel className="group-hover:text-primary" />
+                      </DialogTrigger>
+                      <DialogContent className="flex flex-col items-center justify-center gap-4">
+                        <DialogHeader>
+                          Are you sure you want to remove this Category?
+                        </DialogHeader>
+                        <DialogTitle className="text-sm font-medium">
+                          It will remove all the products as well.{" "}
+                          <span className="text-primary">*</span>
+                        </DialogTitle>
+                        <DialogDescription className="space-x-2">
+                          <Button
+                            variant={"destructive"}
+                            onClick={() => handleCategoryDelete(category.id)}
+                          >
+                            Yes
+                          </Button>
+                          <Button variant={"secondary"}>
+                            <DialogClose>No</DialogClose>
+                          </Button>
+                        </DialogDescription>
+                      </DialogContent>
+                    </Dialog>
 
-                <Dialog>
-                  <DialogTrigger onClick={() => setEditCategoryId(category.id)}>
-                    <MdEdit className="group-hover:text-primary" />
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>Edit Category</DialogHeader>
-                    <Form {...form}>
-                      <form
-                        onSubmit={form.handleSubmit(updateNameonSubmit)}
-                        className="space-y-8"
+                    <Dialog>
+                      <DialogTrigger
+                        onClick={() => setEditCategoryId(category.id)}
                       >
-                        <FormField
-                          control={form.control}
-                          name="categoryName"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Username</FormLabel>
-                              <FormControl>
-                                <Input placeholder={category.name} {...field} />
-                              </FormControl>
-                              <FormDescription>
-                                This will be the new category name
-                              </FormDescription>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <Button type="submit">Submit</Button>
-                      </form>
-                    </Form>
-                  </DialogContent>
-                </Dialog>
-              </div>
-            </Button>
-          ))}
+                        <MdEdit className="group-hover:text-primary" />
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>Edit Category</DialogHeader>
+                        <Form {...form}>
+                          <form
+                            onSubmit={form.handleSubmit(updateNameonSubmit)}
+                            className="space-y-8"
+                          >
+                            <FormField
+                              control={form.control}
+                              name="categoryName"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Username</FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      placeholder={category.name}
+                                      {...field}
+                                    />
+                                  </FormControl>
+                                  <FormDescription>
+                                    This will be the new category name
+                                  </FormDescription>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                            <Button type="submit">Submit</Button>
+                          </form>
+                        </Form>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
+                </Button>
+              ))}
+            </>
+          )}
         </div>
       </div>
     </div>
