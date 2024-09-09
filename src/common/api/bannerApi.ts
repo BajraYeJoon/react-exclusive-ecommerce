@@ -7,3 +7,4 @@ export const fetchHeroBanner = async () => {
     "Error fetching hero banner",
   );
 };
+
