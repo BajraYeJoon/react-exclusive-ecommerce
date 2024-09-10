@@ -144,18 +144,20 @@ export default function ProductsList() {
       {
         id: "edit",
         header: "Edit",
-        cell: ({ row }) => (
-          <button onClick={() => handleEdit(row.original)}>
-            <Dialog>
-              <DialogTrigger asChild>
-                <FaEdit />
-              </DialogTrigger>
-              <DialogContent>
-                <AddNewProductDialog mode="update" initialData={row.original} />
-              </DialogContent>
-            </Dialog>
-          </button>
-        ),
+        cell: ({ row }) => {
+          return (
+            <button onClick={() => handleEdit(row.original)}>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <FaEdit />
+                </DialogTrigger>
+                <DialogContent>
+                  <AddNewProductDialog initialData={row.original} />
+                </DialogContent>
+              </Dialog>
+            </button>
+          );
+        },
       },
       {
         id: "delete",
