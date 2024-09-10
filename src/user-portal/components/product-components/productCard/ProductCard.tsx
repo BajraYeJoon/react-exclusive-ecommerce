@@ -132,7 +132,6 @@ const ProductCard = ({
           </button>
           <Link
             to={`product/${id}`}
-            replace={true}
             className="flex h-4 w-4 items-center justify-center rounded-full bg-foreground/20 lg:h-7 lg:w-7"
           >
             <EyeIcon size={dimension.width < 768 ? 10 : 18} />

@@ -29,7 +29,7 @@ export default function DiscountCreator() {
   const { handleSubmit } = methods;
 
   const onSubmit = (data: DiscountData) => {
-    // Here you would typically send the data to your backend
+    console.log(data);
   };
 
   const nextStep = () => setStep(step + 1);
@@ -44,7 +44,10 @@ export default function DiscountCreator() {
         </DialogTrigger>
         <DialogContent>
           <FormProvider {...methods}>
-            <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="w-full max-w-4xl"
+            >
               <h1 className="mb-6 text-3xl font-bold">Create Discount Offer</h1>
 
               {step === 1 && <DiscountForm />}

@@ -23,7 +23,7 @@ export const DiscountPreview = ({
   usageLimit,
   gradient,
 }: Props) => (
-  <Card className="mx-auto w-full max-w-md overflow-hidden">
+  <Card className="mx-auto w-full max-w-sm overflow-hidden">
     <div className={`bg-gradient-to-r ${gradient} p-6 text-white`}>
       <h3 className="mb-2 text-2xl font-bold">{name || "Coupon Name"}</h3>
       <p className="mb-4 text-4xl font-extrabold">
