@@ -42,7 +42,9 @@ export default function UserList() {
     pageSize: 10,
   });
 
-  const removeUser = async (userId: number) => {};
+  const removeUser = async (userId: number) => {
+    console.log("Remove user with id: ", userId);
+  };
 
   const columns = useMemo<ColumnDef<any>[]>(
     () => [
