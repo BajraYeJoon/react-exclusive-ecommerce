@@ -80,36 +80,6 @@ const ProductCard = ({
     );
   };
 
-  // const addToCartMutation = useMutation({
-  //   mutationFn: addProductToCart,
-  //   onSuccess: () => {
-  //     setCart((currentCart) => {
-  //       const productIndex = currentCart.findIndex((item) => item.id === id);
-  //       if (productIndex !== -1) {
-  //         toast.success(
-  //           `Your ${title} has been added to the cart ${
-  //             currentCart[productIndex].quantity + 1
-  //           } times`,
-  //         );
-  //         return currentCart.map((item, index) =>
-  //           index === productIndex
-  //             ? { ...item, quantity: item.quantity + 1 }
-  //             : item,
-  //         );
-  //       } else {
-  //         toast.success(`Your ${title} has been added to the cart`);
-  //         return [
-  //           ...currentCart,
-  //           { product: {}, title, price, image, id, quantity: 1 },
-  //         ];
-  //       }
-  //     });
-  //   },
-  //   onError: () => {
-  //     toast.error("Failed to add product to cart");
-  //   },
-  // });
-
   const { mutate: addToCart } = useIncreaseQuantity();
 
   const handleFavoriteClick = () => {

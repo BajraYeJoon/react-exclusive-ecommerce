@@ -55,8 +55,6 @@ export default function Reviews({ values }: any) {
     [0, 0, 0, 0, 0],
   );
 
-  console.log(values, "values");
-
   return (
     <div className="rounded-lg bg-background p-6 shadow-md">
       <h2 className="mb-4 text-2xl font-bold">Reviews</h2>

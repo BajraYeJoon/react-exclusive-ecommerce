@@ -69,8 +69,6 @@ export default function Banner() {
   const [bannerItem, setBannerItem] = useState<number[]>([]);
   const queryClient = useQueryClient();
 
-  console.log(bannerItem, "banner item");
-
   const { data: products, error } = useQuery({
     queryKey: ["products"],
     queryFn: fetchAllProducts,

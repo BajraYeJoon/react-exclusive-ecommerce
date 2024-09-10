@@ -45,8 +45,6 @@ const ArrivalProductsGrid = () => {
     select: (products) => products.slice(0, 4),
   });
 
-  console.log(products, "new arrivaksssss");
-
   if (isLoading) {
     return (
       <div className="grid h-[500px] grid-cols-2 grid-rows-2 gap-4 md:h-[400px] md:grid-cols-4 lg:h-[600px]">
@@ -86,7 +84,6 @@ const ArrivalProductsGrid = () => {
 };
 
 const GridItem = ({ product, additionalClasses }: GridItemProps) => {
-  console.log(product.image[0], "image", product.id);
   // https://haaamsknsjjifhavpila.supabase.co/storage/v1/object/public/nest-ecommerce/public/9676642f-9075-41db-a8ba-302b83b2821b-nando-jpeg-quality-001.jpg
   return (
     <div

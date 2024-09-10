@@ -43,7 +43,7 @@ import uuidv4 from "../../../common/lib/utils/uuid";
 export default function ProductsList() {
   const [flashItem, setFlashItem] = useRecoilState<number[]>(flashSaleState);
 
-  console.log(flashItem, "flash item");
+  
 
   const { data: products, isLoading } = useQuery({
     queryKey: ["products"],
@@ -216,7 +216,6 @@ export default function ProductsList() {
 
   const handleEdit = (product: any) => {
     // Implement edit functionality here
-    console.log("Edit product", product);
   };
 
   const handleDelete = (productId: any) => {

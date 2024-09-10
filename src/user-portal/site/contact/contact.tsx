@@ -9,7 +9,6 @@ const Contact = () => {
   const { register, handleSubmit } = useForm();
 
   const onSubmit = (data: any, e: any) => {
-    console.log(data);
     e.preventDefault();
 
     const form = e.target;

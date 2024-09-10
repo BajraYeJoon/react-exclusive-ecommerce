@@ -22,7 +22,6 @@ const FetchSingleCategory = () => {
     return <div>Error: {error.message}</div>;
   }
 
-  console.log(category.data.products);
   const productsByCategory = category?.data?.products;
 
   return (

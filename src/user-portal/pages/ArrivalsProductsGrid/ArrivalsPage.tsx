@@ -30,8 +30,6 @@ const ArrivalsPage = () => {
     return <Loading />;
   }
 
-  console.log(newArrivals);
-
   return (
     <section className="mx-72 mt-10 gap-40 max-2xl:mx-6 max-2xl:gap-28 md:mt-16">
       <div className="product-card-container flex w-full flex-wrap items-center justify-center gap-4 overflow-hidden lg:justify-evenly">

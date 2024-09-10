@@ -36,15 +36,13 @@ export default function UserList() {
   });
 
   const users = usersData?.data;
-  console.log(users);
+  
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
   });
 
-  const removeUser = async (userId: number) => {
-    console.log(userId, "removal");
-  };
+  const removeUser = async (userId: number) => {};
 
   const columns = useMemo<ColumnDef<any>[]>(
     () => [
@@ -99,7 +97,6 @@ export default function UserList() {
         id: "remove",
         header: "Remove",
         cell: ({ row }) => {
-          console.log(row.original.role);
           return (
             <>
               {row.original.role !== "admin" && (

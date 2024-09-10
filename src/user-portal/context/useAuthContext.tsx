@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { toast } from "sonner";
@@ -23,6 +23,7 @@ interface SignupResponse {
 }
 
 type AuthContextType = {
+  isAdmin: boolean;
   isLoggedIn: boolean;
   login: ({ name, password }: LoginProps) => void;
   logout: () => void;
@@ -38,6 +39,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
   const [isLoading, setIsLoading] = useState(false);
 
+  const [isAdmin] = useState(
+    JSON.parse(Cookies.get("user") ?? "{}") === "admin" ? true : false,
+  );
+
+  console.log(isAdmin, "isAdmin");
+
   const fetchUserDetails = async (token: string) => {
     try {
       const response = await axios.get(
@@ -49,7 +56,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         },
       );
       const userDetails = response.data;
-      Cookies.set("user", JSON.stringify(userDetails), { expires: 7 });
+
+      Cookies.set("user", JSON.stringify(userDetails.user.role), {
+        expires: 7,
+      });
     } catch (error) {
       console.error("Failed to fetch user details", error);
     }
@@ -118,7 +128,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn, isLoading, login, logout, signup }}
+      value={{ isAdmin, isLoggedIn, isLoading, login, logout, signup }}
     >
       {children}
     </AuthContext.Provider>

@@ -25,7 +25,6 @@ const AllProducts = () => {
   if (error) return <div>An error occurred: {error.message}</div>;
 
   const products = allproducts;
-  console.log(products);
 
   return (
     <section className="mx-72 mb-28 gap-40 max-2xl:mx-6 max-2xl:gap-28">

@@ -55,7 +55,7 @@ const Singleproduct = () => {
   const [details, setDetails] = useState<any>([]);
   const { mutate: addToCart } = useIncreaseQuantity();
 
-  console.log(productId);
+  
 
   useEffect(() => {
     (async () => {
@@ -64,7 +64,7 @@ const Singleproduct = () => {
     })();
   }, [productId]);
 
-  console.log(details);
+  
 
   // const sizeOPtions = [
   //   { value: "xs", label: "XS" },
