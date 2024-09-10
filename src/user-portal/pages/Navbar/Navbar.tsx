@@ -63,13 +63,13 @@ const Navbar = () => {
   const { data: cart } = useQuery({
     queryKey: ["cart"],
     queryFn: fetchCart,
-    enabled: isLoggedIn,
+    enabled: !isAdmin && isLoggedIn,
   });
 
   const { data: favorites } = useQuery({
     queryKey: ["favorites"],
     queryFn: fetchFavorites,
-    enabled: isLoggedIn,
+    enabled: !isAdmin && isLoggedIn,
   });
   const favoritesquantity = favorites?.data.length || 0;
   const cartquantity = cart?.length || 0;
@@ -161,14 +161,16 @@ const Navbar = () => {
             </Link>
           )}
 
-          <Link to="/cart" className="flex gap-1">
-            <LucideShoppingCart size={20} />
-            {cartquantity > 0 && (
-              <span className="cart-quantity rounded-full bg-primary px-2 py-1 text-xs font-light text-background">
-                {cartquantity}
-              </span>
-            )}
-          </Link>
+          {!isAdmin && (
+            <Link to="/cart" className="flex gap-1">
+              <LucideShoppingCart size={20} />
+              {cartquantity > 0 && (
+                <span className="cart-quantity rounded-full bg-primary px-2 py-1 text-xs font-light text-background">
+                  {cartquantity}
+                </span>
+              )}
+            </Link>
+          )}
 
           {isLoggedIn && (
             <Link to={`/profile`}>

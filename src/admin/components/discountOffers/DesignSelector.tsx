@@ -10,21 +10,13 @@ const designs = [
 
 export default function DesignSelector() {
   const { watch, register } = useFormContext();
-  const {
-    name,
-    type,
-    value,
-    code,
-    startDate,
-    endDate,
-    minimumPurchase,
-    usageLimit,
-  } = watch();
+  const { name, type, value, code, startDate, endDate, minimumPurchase } =
+    watch();
 
   return (
-    <div className="space-y-6">
+    <div className="h-96 space-y-6 overflow-y-auto">
       <h2 className="text-2xl font-semibold">Choose Coupon Design</h2>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+      <div className="flex flex-wrap gap-4">
         {designs.map((designOption) => (
           <div key={designOption.id} className="space-y-2">
             <div className="flex items-center space-x-2">
@@ -44,7 +36,6 @@ export default function DesignSelector() {
               startDate={startDate}
               endDate={endDate}
               minimumPurchase={minimumPurchase}
-              usageLimit={usageLimit}
               gradient={designOption.gradient}
             />
           </div>

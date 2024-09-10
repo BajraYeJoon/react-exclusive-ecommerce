@@ -8,7 +8,6 @@ interface Props {
   startDate: string;
   endDate: string;
   minimumPurchase: number;
-  usageLimit: number;
   gradient: string;
 }
 
@@ -20,10 +19,9 @@ export const DiscountPreview = ({
   startDate,
   endDate,
   minimumPurchase,
-  usageLimit,
   gradient,
 }: Props) => (
-  <Card className="mx-auto w-full max-w-md overflow-hidden">
+  <Card className="mx-auto w-full max-w-sm overflow-hidden">
     <div className={`bg-gradient-to-r ${gradient} p-6 text-white`}>
       <h3 className="mb-2 text-2xl font-bold">{name || "Coupon Name"}</h3>
       <p className="mb-4 text-4xl font-extrabold">
@@ -40,7 +38,6 @@ export const DiscountPreview = ({
           Valid: {startDate || "Start Date"} - {endDate || "End Date"}
         </p>
         <p>Minimum Purchase: ${minimumPurchase || 0}</p>
-        <p>Usage Limit: {usageLimit || 0}</p>
       </div>
     </div>
     <CardContent className="bg-white p-4">

@@ -46,7 +46,10 @@ interface ProductFormProps {
   initialData?: Partial<ProductFormData> & { id?: string };
 }
 
-export default function ProductForm({ mode, initialData }: ProductFormProps) {
+export default function ProductForm({
+  mode = "create",
+  initialData,
+}: ProductFormProps) {
   const [step, setStep] = useState(1);
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
@@ -83,6 +86,8 @@ export default function ProductForm({ mode, initialData }: ProductFormProps) {
     }
   }, [initialData]);
 
+  console.log();
+
   const handleCategorySelect = (categoryId: number) => {
     setSelectedCategories((prevSelected) =>
       prevSelected.includes(categoryId)
@@ -94,6 +99,8 @@ export default function ProductForm({ mode, initialData }: ProductFormProps) {
   const onSubmit = async (data: ProductFormData) => {
     const formData = new FormData();
 
+    console.log("Form data", formData);
+
     Object.entries(data).forEach(([key, value]) => {
       if (key === "image" && value instanceof FileList) {
         formData.append(key, value[0]);
@@ -102,12 +109,15 @@ export default function ProductForm({ mode, initialData }: ProductFormProps) {
       }
     });
 
+    console.log("api call start");
+
     try {
       const response = await (mode === "create"
         ? Axios.post("/product/create", formData)
         : Axios.patch(`/product/update/${initialData?.id}`, formData));
 
       reset();
+      console.log(response);
       toast.success(
         `Product ${mode === "create" ? "created" : "updated"} successfully`,
       );

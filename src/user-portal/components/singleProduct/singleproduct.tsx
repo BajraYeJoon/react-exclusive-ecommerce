@@ -12,16 +12,7 @@ import { fetchProductDetails } from "../../../common/api/productApi";
 import { useIncreaseQuantity } from "../../utils/cartutils";
 import Reviews from "./ratings";
 
-// interface RadioOption {
-//   value: string;
-//   label: string;
-// }
 
-// interface SizeProps {
-//   name: string;
-//   options: RadioOption[];
-//   defaultValue?: string;
-// }
 
 interface FeatureItemProps {
   icon: React.ReactNode;
@@ -29,33 +20,10 @@ interface FeatureItemProps {
   description: string;
 }
 
-// const SizesGroup = ({ name, options, defaultValue }: SizeProps) => {
-//   return (
-//     <div className="mt-3 flex select-none flex-wrap items-center gap-1">
-//       {options.map((option, index) => (
-//         <label key={index} className="">
-//           <input
-//             type="radio"
-//             name={name}
-//             value={option.value}
-//             className="peer sr-only"
-//             defaultChecked={defaultValue === option.value}
-//           />
-//           <p className="rounded-lg border px-6 py-2 font-bold peer-checked:bg-primary peer-checked:text-background">
-//             {option.label}
-//           </p>
-//         </label>
-//       ))}
-//     </div>
-//   );
-// };
-
 const Singleproduct = () => {
   const { productId } = useParams();
   const [details, setDetails] = useState<any>([]);
   const { mutate: addToCart } = useIncreaseQuantity();
-
-  
 
   useEffect(() => {
     (async () => {
@@ -64,14 +32,7 @@ const Singleproduct = () => {
     })();
   }, [productId]);
 
-  
-
-  // const sizeOPtions = [
-  //   { value: "xs", label: "XS" },
-  //   { value: " sm", label: "SM" },
-  //   { value: "l", label: "L" },
-  //   { value: "xl", label: "XL" },
-  // ];
+  console.log(details, "details");
 
   return (
     <section className="py-12 sm:py-16">
@@ -140,7 +101,7 @@ const Singleproduct = () => {
                 {details.title}
                 <span
                   className={cn(
-                    `ml-6 flex flex-wrap rounded-full bg-foreground/10 px-2 py-1 text-xs font-medium text-foreground/70`,
+                    `ml-3 inline-flex w-fit flex-wrap justify-center rounded-full bg-foreground/10 px-2 py-1 text-xs font-medium text-foreground/70`,
                     details.availability === true
                       ? "bg-green-400"
                       : "bg-red-400",
@@ -175,11 +136,15 @@ const Singleproduct = () => {
                 <ShoppingBasket className="mr-4" />
                 Add to cart
               </Button>
-{/* 
+              {/* 
+              {details.ratings ? <h2>no ratings for this product</h2> : 
+              <> */}
               {details.ratings?.map((rating: any) => {
                 return <Reviews values={rating} key={rating.id} />;
-              })} */}
-              <Reviews values={details.ratings} />
+              })}
+              {/* </>
+          } */}
+
               <ul className="mt-8 space-y-2 border p-4">
                 <FeatureItem
                   icon={<CgGlobeAlt size={50} />}
@@ -219,44 +184,3 @@ const FeatureItem: React.FC<FeatureItemProps> = ({
 
 export default Singleproduct;
 
-// const Reviews = ({ values }) => {
-//   return (
-//     <div className="flex flex-col gap-2">
-//       <h1 className="py-5 text-lg">Reviews</h1>
-
-//       {/* <div className="flex flex-wrap gap-2 w-full py-2">
-//             <span className="px-2 p-1 hover:bg-blue-400 bg-gray-950 bg-opacity-30">Experience</span>
-//             <span className="px-2 p-1 hover:bg-blue-400 bg-gray-950 bg-opacity-30">Quality</span>
-//             <span className="px-2 p-1 hover:bg-blue-400 bg-gray-950 bg-opacity-30">Design</span>
-//             <span className="px-2 p-1 hover:bg-blue-400 bg-gray-950 bg-opacity-30">Size</span>
-//             <span className="px-2 p-1 hover:bg-blue-400 bg-gray-950 bg-opacity-30">Features</span>
-//             <span className="px-2 p-1 hover:bg-blue-400 bg-gray-950 bg-opacity-30">Value</span>
-//             <span className="px-2 p-1 hover:bg-blue-400 bg-gray-950 bg-opacity-30">Relplacement</span>
-//         </div> */}
-
-//       <div className="flex flex-col gap-3">
-//         <div className="flex flex-col gap-4 p-4">
-//           <div className="justify flex justify-between">
-//             <div className="flex gap-2">
-//               <div className="h-7 w-7 rounded-full bg-red-500 text-center">
-//                 J
-//               </div>
-//               <span>Jess Hopkins</span>
-//             </div>
-//             <div className="flex gap-1 p-1 text-orange-300">
-//               {Array.from({ length: values.rating }).map(() => (
-//                 <StarIcon key={`reviewsstart-${uuidv4()}`} />
-//               ))}
-//             </div>
-//           </div>
-
-//           <div>{values.comment}</div>
-
-//           <div className="flex justify-between">
-//             <span>Feb 13, 2021</span>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
