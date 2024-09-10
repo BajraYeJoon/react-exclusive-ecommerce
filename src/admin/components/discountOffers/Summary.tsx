@@ -71,7 +71,6 @@ export default function Summary() {
             startDate={startDate}
             endDate={endDate}
             minimumPurchase={minimumPurchase}
-            usageLimit={usageLimit}
             gradient={selectedDesign.gradient}
           />
         </div>

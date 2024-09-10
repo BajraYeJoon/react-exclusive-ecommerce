@@ -10,16 +10,8 @@ const designs = [
 
 export default function DesignSelector() {
   const { watch, register } = useFormContext();
-  const {
-    name,
-    type,
-    value,
-    code,
-    startDate,
-    endDate,
-    minimumPurchase,
-    usageLimit,
-  } = watch();
+  const { name, type, value, code, startDate, endDate, minimumPurchase } =
+    watch();
 
   return (
     <div className="h-96 space-y-6 overflow-y-auto">
@@ -44,7 +36,6 @@ export default function DesignSelector() {
               startDate={startDate}
               endDate={endDate}
               minimumPurchase={minimumPurchase}
-              usageLimit={usageLimit}
               gradient={designOption.gradient}
             />
           </div>
