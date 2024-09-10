@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
-import "swiper/css/navigation";
+// import "swiper/css/navigation";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import { Skeleton } from "../../../common/ui/skeleton";
 import { Button } from "../../../common/ui/button";
@@ -38,6 +38,7 @@ const Carousel = () => {
       <Swiper
         spaceBetween={30}
         centeredSlides={true}
+        
         autoplay={{
           delay: 3000,
           disableOnInteraction: false,
@@ -45,8 +46,7 @@ const Carousel = () => {
         pagination={{
           clickable: true,
         }}
-        navigation={true}
-        modules={[Navigation, Pagination, Autoplay]}
+        modules={[Pagination, Autoplay]}
         className="mySwiper w-full"
       >
         {banner.length === 0 ? (

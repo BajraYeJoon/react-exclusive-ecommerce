@@ -140,17 +140,22 @@ const ProductCard = ({
             <EyeIcon size={dimension.width < 768 ? 10 : 18} />
           </Link>
         </div>
-
-        <Button
-          className="group cursor-pointer"
-          onClick={() => addToCart({ id: id, type: "add" })}
-        >
-          <div className="absolute bottom-0 left-0 w-full bg-foreground opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-            <p className="py-2 text-center text-sm font-normal tracking-tight text-background">
-              Add to Cart
-            </p>
-          </div>
-        </Button>
+         
+         {
+          !isAdmin && (
+            <Button
+            className="group cursor-pointer"
+            onClick={() => addToCart({ id: id, type: "add" })}
+          >
+            <div className="absolute bottom-0 left-0 w-full bg-foreground opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+              <p className="py-2 text-center text-sm font-normal tracking-tight text-background">
+                Add to Cart
+              </p>
+            </div>
+          </Button>
+          )
+         }
+        
       </div>
 
       <div className="my-4 space-y-3 pb-5">

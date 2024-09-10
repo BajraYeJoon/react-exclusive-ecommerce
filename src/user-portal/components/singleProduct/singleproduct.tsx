@@ -11,8 +11,7 @@ import { v4 as uuidv4 } from "uuid";
 import { fetchProductDetails } from "../../../common/api/productApi";
 import { useIncreaseQuantity } from "../../utils/cartutils";
 import Reviews from "./ratings";
-
-
+import { useAuthContext } from "../../context/useAuthContext";
 
 interface FeatureItemProps {
   icon: React.ReactNode;
@@ -24,6 +23,7 @@ const Singleproduct = () => {
   const { productId } = useParams();
   const [details, setDetails] = useState<any>([]);
   const { mutate: addToCart } = useIncreaseQuantity();
+  const { isAdmin } = useAuthContext();
 
   useEffect(() => {
     (async () => {
@@ -132,10 +132,13 @@ const Singleproduct = () => {
               <h2 className="text-forerground mt-8 text-base">Sizes</h2>
               <Button>{details.sizes}</Button>
 
-              <Button className="mt-6" onClick={() => addToCart(details.id)}>
-                <ShoppingBasket className="mr-4" />
-                Add to cart
-              </Button>
+              {!isAdmin && (
+                <Button className="mt-6" onClick={() => addToCart(details.id)}>
+                  <ShoppingBasket className="mr-4" />
+                  Add to cart
+                </Button>
+              )}
+
               {/* 
               {details.ratings ? <h2>no ratings for this product</h2> : 
               <> */}
