@@ -119,7 +119,6 @@ const AddCategoryForm = () => {
   };
 
   const updateNameonSubmit = (data: any) => {
-    console.log(data);
     if (editCategoryId !== null) {
       handleCategoryEdit.mutate({
         id: editCategoryId,

@@ -31,7 +31,6 @@ const Favorites = () => {
   };
 
   const favorites = favoritesData?.data || [];
-  console.log(favorites);
 
   return (
     <section className="relative mx-8 my-6 h-[40vh] md:mx-12 md:my-12 lg:mx-auto lg:max-w-7xl">

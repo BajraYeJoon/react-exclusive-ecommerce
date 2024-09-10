@@ -20,10 +20,12 @@ type SearchResultProps = {
 
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
-  const { isLoggedIn } = useAuthContext();
+  const { isLoggedIn, isAdmin } = useAuthContext();
   const [searchQuery, setSearchQuery] = useState("");
   const [results, setResults] = useState<SearchResultProps[]>([]);
   const resultsRef = useRef<HTMLDivElement>(null);
+
+  // console.log(isAdmin, 'am i admin????')
 
   useEffect(() => {
     const debouncedFetchResults = debounce(async (query: string) => {
@@ -149,13 +151,15 @@ const Navbar = () => {
             )}
           </div>
 
-          <Link to="/favorites">
-            {favoritesquantity > 0 ? (
-              <HeartIcon size={20} fill="red" />
-            ) : (
-              <HeartIcon size={20} fill="none" />
-            )}
-          </Link>
+          {!isAdmin && (
+            <Link to="/favorites">
+              {favoritesquantity > 0 ? (
+                <HeartIcon size={20} fill="red" />
+              ) : (
+                <HeartIcon size={20} fill="none" />
+              )}
+            </Link>
+          )}
 
           <Link to="/cart" className="flex gap-1">
             <LucideShoppingCart size={20} />

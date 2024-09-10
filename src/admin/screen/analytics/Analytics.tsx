@@ -10,7 +10,7 @@ const Analytics = () => {
   //   queryFn: fetchAllUsers,
   // });
 
-  // console.log(userData.data);
+  //
 
   return (
     <div className="mx-6 flex w-full flex-col space-y-5 md:mx-12 lg:mx-8">

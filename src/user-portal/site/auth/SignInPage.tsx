@@ -28,8 +28,8 @@ const SignInPage = () => {
     try {
       await login(data);
       const user = JSON.parse(Cookies.get("user") || "{}");
-      console.log(user);
-      if (user.user.role === `${Routes.Admin}`) {
+
+      if (user === `${Routes.Admin}`) {
         navigate(`/${Routes.Admin}/${Routes.Dashboard}`);
         toast.success("Welcome to the admin panel");
       } else {

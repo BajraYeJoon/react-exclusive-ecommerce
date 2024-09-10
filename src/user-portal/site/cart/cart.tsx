@@ -46,7 +46,7 @@ const Cart = () => {
     queryFn: fetchCart,
   });
 
-  console.log(cartItems, "caaaaaart");
+  
 
   const navigateToCheckout = (cartItems: any, total: number) => {
     const checkoutData = {
@@ -59,10 +59,9 @@ const Cart = () => {
 
     setCheckoutData(checkoutData);
     Cookies.set("checkoutData", checkoutData.id);
-    console.log(checkoutData, "checkoutData");
+
     navigate("/checkout");
   };
-
 
   const { mutate: increaseQuantity } = useIncreaseQuantity();
   const { mutate: decreaseQuantity } = useDecreaseQuantity();
@@ -79,21 +78,14 @@ const Cart = () => {
     get: ({ get }) => {
       const discount = get(discountState);
 
-      console.log("Discount:", discount);
-
       const subTotal = Array.isArray(cartItems)
         ? cartItems.reduce((acc, item) => {
-            console.log("Item:", item);
             return acc + item.product.price * item.quantity;
           }, 0)
         : 0;
 
-      console.log("SubTotal:", subTotal);
-
       const charge = 45;
       const discountAmount = subTotal * discount;
-
-      console.log("Discount Amount:", discountAmount);
 
       return {
         subTotal,

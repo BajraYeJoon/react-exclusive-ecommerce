@@ -102,14 +102,11 @@ export default function ProductForm({ mode, initialData }: ProductFormProps) {
       }
     });
 
-    console.log("Form Data:", formData);
-
     try {
       const response = await (mode === "create"
         ? Axios.post("/product/create", formData)
         : Axios.patch(`/product/update/${initialData?.id}`, formData));
 
-      console.log("Success:", response.data);
       reset();
       toast.success(
         `Product ${mode === "create" ? "created" : "updated"} successfully`,
@@ -249,7 +246,7 @@ export default function ProductForm({ mode, initialData }: ProductFormProps) {
                   id="description"
                   {...register("description")}
                   placeholder="A timeless bluetooth earphone that never goes out of style."
-                  className="h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground"
                 />
                 {errors.description && (
                   <p className="text-sm text-destructive">

@@ -31,7 +31,7 @@ const SalesCard = () => {
     queryFn: fetchSalesProduct,
   });
 
-  const salesValue = salesData[0].products;
+  const salesValue = salesData ? salesData[0].products : [];
 
   // if (!salesData || salesData.length === 0)
   //   return (

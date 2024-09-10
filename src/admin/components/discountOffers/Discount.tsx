@@ -29,7 +29,6 @@ export default function DiscountCreator() {
   const { handleSubmit } = methods;
 
   const onSubmit = (data: DiscountData) => {
-    console.log(data);
     // Here you would typically send the data to your backend
   };
 

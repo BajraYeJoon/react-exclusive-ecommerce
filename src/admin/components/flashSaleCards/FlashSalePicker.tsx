@@ -177,7 +177,7 @@ export function DatePickerWithRange({
                   saleEnd: new Date(date?.to).toISOString(),
                   products: data,
                 }).then((res) => {
-                  console.log(res);
+                  
                   queryClient.invalidateQueries({ queryKey: ["products"] });
                   toast.success("Product added to flash sale");
                   setFlashItem([]);
@@ -201,9 +201,8 @@ export function DatePickerWithRange({
         title="Are you sure you want to add this all products to Flash Sale?"
         description={
           <>
-             Sale Start: {format(date?.from ?? new Date(), "LLL dd, y HH:mm")} - Sale End:{" "}
-             {format(date?.to ?? new Date(), "LLL dd, y HH:mm")}
-
+            Sale Start: {format(date?.from ?? new Date(), "LLL dd, y HH:mm")} -
+            Sale End: {format(date?.to ?? new Date(), "LLL dd, y HH:mm")}
           </>
         }
         onConfirm={() =>
@@ -212,7 +211,6 @@ export function DatePickerWithRange({
             saleEnd: new Date(date?.to || "").toISOString(),
             products: data,
           }).then((res) => {
-            console.log(res);
             queryClient.invalidateQueries({ queryKey: ["products"] });
             toast.success("Product added to flash sale");
             setFlashItem([]);
