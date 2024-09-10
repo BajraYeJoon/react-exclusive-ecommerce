@@ -30,13 +30,13 @@ const ProductCard = ({
   id,
 }: ProductCardProps) => {
   const { dimension } = useWindow();
-  const { isLoggedIn } = useAuthContext();
+  const { isLoggedIn, isAdmin } = useAuthContext();
   const queryClient = useQueryClient();
 
   const { data: favoritesData } = useQuery({
     queryKey: ["favorites"],
     queryFn: fetchFavorites,
-    enabled: isLoggedIn,
+    enabled: !isAdmin && isLoggedIn,
   });
   const favorites = favoritesData?.data || [];
 
@@ -120,16 +120,19 @@ const ProductCard = ({
         )}
 
         <div className="absolute right-4 top-4 flex flex-col gap-2">
-          <button
-            className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-foreground/20 lg:h-7 lg:w-7"
-            onClick={handleFavoriteClick}
-          >
-            <HeartIcon
-              size={dimension.width < 768 ? 10 : 18}
-              fill={isFavorite(id) ? "red" : "none"}
-              className={isFavorite(id) ? "text-primary" : ""}
-            />
-          </button>
+          {!isAdmin && (
+            <button
+              className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-foreground/20 lg:h-7 lg:w-7"
+              onClick={handleFavoriteClick}
+            >
+              <HeartIcon
+                size={dimension.width < 768 ? 10 : 18}
+                fill={isFavorite(id) ? "red" : "none"}
+                className={isFavorite(id) ? "text-primary" : ""}
+              />
+            </button>
+          )}
+
           <Link
             to={`product/${id}`}
             className="flex h-4 w-4 items-center justify-center rounded-full bg-foreground/20 lg:h-7 lg:w-7"

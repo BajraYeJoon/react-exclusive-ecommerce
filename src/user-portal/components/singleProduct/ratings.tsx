@@ -2,6 +2,9 @@ import { StarIcon } from "lucide-react";
 import uuidv4 from "../../../common/lib/utils/uuid";
 
 export default function Reviews({ values }: any) {
+
+  console.log(values, "ratings values");
+
   const reviews = [
     {
       id: 1,
@@ -44,7 +47,7 @@ export default function Reviews({ values }: any) {
       date: "2023-01-05",
     },
   ];
-  const totalReviews = reviews.length;
+  const totalReviews = values.length;
   const averageRating =
     reviews.reduce((sum, review) => sum + review.rating, 0) / totalReviews;
   const ratingBreakdown = reviews.reduce(
