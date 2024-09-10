@@ -6,6 +6,7 @@ import {
   Banner,
   StaticContent,
   AdminDiscount,
+  DiscountCreator,
 } from "../admin/components";
 import { Routes } from "../admin/lib/links";
 import { Dashboard } from "../admin/screen";
@@ -49,6 +50,6 @@ export const adminRoutes = [
   },
   {
     path: Routes.Discount,
-    element: <AdminDiscount />,
+    element: <DiscountCreator />,
   },
 ];
