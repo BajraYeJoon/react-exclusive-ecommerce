@@ -11,7 +11,7 @@ export function TeamsDisplay({ employees }: any) {
               loading="lazy"
               decoding="async"
               className="mt-5 h-44 object-contain"
-              src={employee.imgSrc}
+              src={employee.image}
             />
             <div className="max-3xl:gap-2 flex flex-col items-start gap-4">
               <div className="max-3xl:gap-1 flex flex-col items-start gap-2 capitalize">

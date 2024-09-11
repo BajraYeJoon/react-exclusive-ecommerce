@@ -1,6 +1,8 @@
 import { useFieldArray, useForm } from "react-hook-form";
 import { Input } from "../../../../common/ui/input";
 import { Button } from "../../../../common/ui/button";
+import { useMutation, useQueryClient } from "react-query";
+import axios from "axios";
 
 export function TeamsEdit({ employees, onSave, onCancel }: any) {
   const {
@@ -17,13 +19,24 @@ export function TeamsEdit({ employees, onSave, onCancel }: any) {
     name: "employees",
   });
 
+  const queryClient = useQueryClient();
+  const mutation = useMutation(
+    (newEmployees: any) =>
+      axios.put("{{render}}/employee", { employees: newEmployees }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("employees");
+      },
+    },
+  );
+
   const onSubmit = (data: any) => {
+    mutation.mutate(data.employees);
     onSave(data.employees);
   };
 
   return (
     <div className="flex flex-col">
-      {" "}
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-wrap gap-2">
         {fields.map((field, index) => (
           <div
