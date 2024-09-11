@@ -148,9 +148,16 @@ export default function ProductsList() {
           return (
             <button onClick={() => handleEdit(row.original)}>
               <Dialog>
-                <DialogTrigger asChild>Edit</DialogTrigger>
+                <DialogTrigger>
+                  <>
+                    <FaEdit />
+                  </>
+                </DialogTrigger>
                 <DialogContent>
-                  <AddNewProductDialog initialData={row.original} />
+                  <AddNewProductDialog
+                    mode="update"
+                    initialData={row.original}
+                  />
                 </DialogContent>
               </Dialog>
             </button>

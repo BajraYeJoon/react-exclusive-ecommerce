@@ -134,16 +134,15 @@ const ProductCard = ({
           )}
 
           <Link
-            to={`product/${id}`}
+            to={`/product/${id}`}
             className="flex h-4 w-4 items-center justify-center rounded-full bg-foreground/20 lg:h-7 lg:w-7"
           >
             <EyeIcon size={dimension.width < 768 ? 10 : 18} />
           </Link>
         </div>
-         
-         {
-          !isAdmin && (
-            <Button
+
+        {!isAdmin && (
+          <Button
             className="group cursor-pointer"
             onClick={() => addToCart({ id: id, type: "add" })}
           >
@@ -153,9 +152,7 @@ const ProductCard = ({
               </p>
             </div>
           </Button>
-          )
-         }
-        
+        )}
       </div>
 
       <div className="my-4 space-y-3 pb-5">
