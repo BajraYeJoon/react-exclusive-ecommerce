@@ -11,13 +11,12 @@ export function OurStoryDisplay({ content }: OurStoryDisplayProps) {
         <h1 className="mb-4 text-3xl capitalize max-2xl:text-base">
           {content.title}
         </h1>
-        <p className="mb-4 text-base max-2xl:text-sm">{content.paragraph1}</p>
-        <p className="text-base max-2xl:text-sm">{content.paragraph2}</p>
+        <p className="mb-4 text-base max-2xl:text-sm">{content.body}</p>
       </div>
       <img
         alt="girls"
         decoding="async"
-        src={content.imageUrl}
+        src={content.image}
         className="w-96 object-contain md:w-[300px] lg:w-[400px]"
       />
     </div>

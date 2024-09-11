@@ -1,24 +1,45 @@
+import { Button } from "../../../../common/ui/button";
+import { Card, CardContent, CardFooter } from "../../../../common/ui/card";
 import { Stat } from "./statsMain";
+import { PencilIcon, TrashIcon } from "lucide-react";
 
 interface StatsDisplayProps {
   stats: Stat[];
+  onEdit: (stat: Stat) => void;
+  onDelete: (id: number) => void;
 }
 
-export function StatsDisplay({ stats }: StatsDisplayProps) {
+export function StatsDisplay({ stats, onEdit, onDelete }: StatsDisplayProps) {
   return (
-    <section className="flex flex-wrap justify-start gap-4">
-      {stats.map(({ description, value }, index) => (
-        <div
-          className="flex flex-col items-center gap-9 rounded-md border border-foreground/25 px-9 py-5 lg:px-6"
-          key={index}
+    <section className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {stats.map((stat) => (
+        <Card
+          key={stat.id}
+          className="transition-all duration-300 hover:shadow-md"
         >
-          <div className="space-y-3 text-center">
-            <p className="text-sm font-medium md:text-base lg:text-xl">
-              {value}
-            </p>
-            <p className="text-xs md:text-sm lg:text-base">{description}</p>
-          </div>
-        </div>
+          <CardContent className="p-6">
+            <div className="space-y-2 text-center">
+              <p className="text-3xl font-bold text-primary">{stat.value}</p>
+              <p className="text-sm text-muted-foreground">
+                {stat.description}
+              </p>
+            </div>
+          </CardContent>
+          <CardFooter className="justify-between p-4 pt-0">
+            <Button variant="outline" size="sm" onClick={() => onEdit(stat)}>
+              <PencilIcon className="mr-2 h-4 w-4" />
+              Edit
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onDelete(stat.id)}
+            >
+              <TrashIcon className="mr-2 h-4 w-4" />
+              Delete
+            </Button>
+          </CardFooter>
+        </Card>
       ))}
     </section>
   );
