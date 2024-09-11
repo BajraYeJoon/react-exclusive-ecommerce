@@ -20,7 +20,7 @@ type DiscountData = {
   endDate: string;
   minimumPurchase: number;
   usageLimit: number;
-  design: string;
+  // design: string;
 };
 
 export default function DiscountCreator() {

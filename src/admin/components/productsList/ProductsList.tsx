@@ -32,18 +32,17 @@ import { toast } from "sonner";
 import { fetchAllProducts } from "../../../common/api/productApi";
 import { Axios } from "../../../common/lib/axiosInstance";
 import { Loading } from "../../../user-portal/site";
-import AddNewProductDialog from "./AddNewProductDialog";
 import { Button } from "../../../common/ui/button";
 import { useRecoilState } from "recoil";
 import { flashSaleState } from "../../../user-portal/atoms/flashSaleState";
 import { DatePickerWithRange } from "../flashSaleCards/FlashSalePicker";
 import ProductDetails from "./ProductDetails";
 import uuidv4 from "../../../common/lib/utils/uuid";
+import AddNewProductDialog from "./AddNewProductDialog";
+import UpdateProductForm from "./UpdateP";
 
 export default function ProductsList() {
   const [flashItem, setFlashItem] = useRecoilState<number[]>(flashSaleState);
-
-  
 
   const { data: products, isLoading } = useQuery({
     queryKey: ["products"],
@@ -149,15 +148,14 @@ export default function ProductsList() {
             <button onClick={() => handleEdit(row.original)}>
               <Dialog>
                 <DialogTrigger>
-                  <>
-                    <FaEdit />
-                  </>
+                  <FaEdit />
                 </DialogTrigger>
                 <DialogContent>
-                  <AddNewProductDialog
+                  {/* <AddNewProductDialog
                     mode="update"
                     initialData={row.original}
-                  />
+                  /> */}
+                  <UpdateProductForm initialData={row.original} />
                 </DialogContent>
               </Dialog>
             </button>
@@ -240,7 +238,7 @@ export default function ProductsList() {
           <Button>Add new Product</Button>
         </DialogTrigger>
         <DialogContent>
-          <AddNewProductDialog mode="create" />
+          <AddNewProductDialog />
         </DialogContent>
       </Dialog>
       <Table>
