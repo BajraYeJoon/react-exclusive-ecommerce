@@ -149,7 +149,7 @@ export default function Banner() {
   });
 
   const deleteBannerMutation = useMutation({
-    mutationFn: () => deleteBanner(bannerData?.bannerData?.id),
+    mutationFn: (bannerId: number) => deleteBanner(bannerId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["banners"] });
       toast.success("Banner deleted successfully");
@@ -358,7 +358,7 @@ export default function Banner() {
                     }
                     title="Delete Banner"
                     description="Are you sure you want to delete this banner?"
-                    onConfirm={() => deleteBannerMutation.mutate()}
+                    onConfirm={() => deleteBannerMutation.mutate(banner.id)}
                     confirmText="Delete"
                     cancelText="No"
                   />

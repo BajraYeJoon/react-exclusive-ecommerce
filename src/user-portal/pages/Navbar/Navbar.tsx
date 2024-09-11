@@ -12,6 +12,8 @@ import { fetchCart } from "../../api/cartApi";
 import { fetchFavorites } from "../../api/wishlistApi";
 import uuidv4 from "../../../common/lib/utils/uuid";
 import { debounce } from "../../utils/debounce";
+import { Routes } from "../../../admin/lib/links";
+import { Button } from "../../../common/ui/button";
 
 type SearchResultProps = {
   id: number;
@@ -172,7 +174,13 @@ const Navbar = () => {
             </Link>
           )}
 
-          {isLoggedIn && (
+          {isAdmin && (
+            <Link to={`/${Routes.Admin}/${Routes.Dashboard}`}>
+              <Button>Dashboard</Button>
+            </Link>
+          )}
+
+          {isLoggedIn && !isAdmin && (
             <Link to={`/profile`}>
               <div className="profile-badge h-6 w-6 cursor-pointer overflow-hidden rounded-full bg-foreground/35"></div>
             </Link>
