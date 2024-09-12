@@ -103,61 +103,59 @@ export default function Stats() {
 
   return (
     <section className="space-y-6">
-      <div>
-        <h2 className="mb-4 text-xl font-medium">Manage Stats</h2>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={() => setCurrentStat(null)}>Add New Stat</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogTitle>
-              {currentStat ? "Edit Stat" : "Add New Stat"}
-            </DialogTitle>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              <div>
-                <Label htmlFor="value">Value</Label>
-                <Input
-                  id="value"
-                  {...register("value", { required: "Value is required" })}
-                  placeholder="e.g., 100+"
-                />
-                {errors.value && (
-                  <p className="text-sm text-red-500">{errors.value.message}</p>
-                )}
-              </div>
-              <div>
-                <Label htmlFor="description">Description</Label>
-                <Input
-                  id="description"
-                  {...register("description", {
-                    required: "Description is required",
-                  })}
-                  placeholder="e.g., Happy Customers"
-                />
-                {errors.description && (
-                  <p className="text-sm text-red-500">
-                    {errors.description.message}
-                  </p>
-                )}
-              </div>
-              <div className="flex justify-end space-x-2">
-                <DialogClose asChild>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={handleDialogClose}
-                  >
-                    Cancel
-                  </Button>
-                </DialogClose>
-                <Button type="submit">
-                  {currentStat ? "Update Stat" : "Add Stat"}
+      <h2 className="mb-4 text-xl font-medium">Manage Stats</h2>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogTrigger asChild>
+          <Button onClick={() => setCurrentStat(null)}>Add New Stat</Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogTitle>
+            {currentStat ? "Edit Stat" : "Add New Stat"}
+          </DialogTitle>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div>
+              <Label htmlFor="value">Value</Label>
+              <Input
+                id="value"
+                {...register("value", { required: "Value is required" })}
+                placeholder="e.g., 100+"
+              />
+              {errors.value && (
+                <p className="text-sm text-red-500">{errors.value.message}</p>
+              )}
+            </div>
+            <div>
+              <Label htmlFor="description">Description</Label>
+              <Input
+                id="description"
+                {...register("description", {
+                  required: "Description is required",
+                })}
+                placeholder="e.g., Happy Customers"
+              />
+              {errors.description && (
+                <p className="text-sm text-red-500">
+                  {errors.description.message}
+                </p>
+              )}
+            </div>
+            <div className="flex justify-end space-x-2">
+              <DialogClose asChild>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleDialogClose}
+                >
+                  Cancel
                 </Button>
-              </div>
-            </form>
-          </DialogContent>
-        </Dialog>
-      </div>
+              </DialogClose>
+              <Button type="submit">
+                {currentStat ? "Update Stat" : "Add Stat"}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       <StatsDisplay stats={stats} onEdit={handleEdit} onDelete={handleDelete} />
     </section>

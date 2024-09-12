@@ -11,7 +11,7 @@ interface StatsDisplayProps {
 
 export function StatsDisplay({ stats, onEdit, onDelete }: StatsDisplayProps) {
   return (
-    <section className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <section className="grid grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-4">
       {stats.map((stat) => (
         <Card
           key={stat.id}
@@ -25,7 +25,7 @@ export function StatsDisplay({ stats, onEdit, onDelete }: StatsDisplayProps) {
               </p>
             </div>
           </CardContent>
-          <CardFooter className="justify-between p-4 pt-0">
+          <CardFooter className="flex flex-col justify-between gap-2 p-4 pt-0 md:flex-row">
             <Button variant="outline" size="sm" onClick={() => onEdit(stat)}>
               <PencilIcon className="mr-2 h-4 w-4" />
               Edit
@@ -33,7 +33,7 @@ export function StatsDisplay({ stats, onEdit, onDelete }: StatsDisplayProps) {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => onDelete(stat.id)}
+              onClick={() => onDelete(stat.id || 0)}
             >
               <TrashIcon className="mr-2 h-4 w-4" />
               Delete

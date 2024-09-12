@@ -7,7 +7,6 @@ import { updateAbout } from "../../../../common/api/cms/about";
 
 interface OurStoryEditProps {
   content: OurStoryContent;
-  onSave: (content: OurStoryContent) => void;
   onCancel: () => void;
 }
 

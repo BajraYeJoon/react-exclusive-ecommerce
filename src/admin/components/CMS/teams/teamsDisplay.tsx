@@ -2,7 +2,7 @@ import { FaTwitter, FaLinkedin } from "react-icons/fa";
 
 export function TeamsDisplay({ employees }: any) {
   return (
-    <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-5">
+    <div className="grid grid-cols-1 gap-8 md:grid-cols-3 lg:grid-cols-5">
       {employees.map((employee: any) => (
         <div key={employee.id} className="flex items-center justify-center">
           <div className="flex flex-col items-start gap-5">

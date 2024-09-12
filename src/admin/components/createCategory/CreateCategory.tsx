@@ -157,7 +157,11 @@ const AddCategoryForm = () => {
                   })}
                   className="transition-all duration-200 ease-in-out focus:ring-2 focus:ring-blue-500"
                 />
-                {errors.categoryName && <p>{errors.categoryName.message}</p>}
+                {errors.categoryName && (
+                  <p className="text-sm text-red-500">
+                    {errors.categoryName.message}
+                  </p>
+                )}
                 <p className="mt-2 text-sm text-muted-foreground">
                   {categoryName.length}/50 characters
                 </p>

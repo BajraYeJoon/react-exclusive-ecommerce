@@ -103,9 +103,9 @@ export default function EmployeeManagement() {
 
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Employee Management</h1>
+    <section>
+      <div className="mb-6 flex items-center justify-between gap-6">
+        <h1 className="text-base font-bold md:text-2xl">Employee Management</h1>
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogTrigger asChild>
             <Button>
@@ -120,18 +120,20 @@ export default function EmployeeManagement() {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-2 gap-6 md:grid-cols-3">
         {employees?.map((employee: Employee) => (
           <Card key={employee.id} className="overflow-hidden">
             <CardContent className="p-4">
-              <div className="mb-4 flex items-center">
+              <div className="flex flex-col items-center">
                 <img
                   src={employee.image}
                   alt={employee.name}
-                  className="mr-4 h-16 w-16 rounded-full object-cover"
+                  className="mr-4 h-12 w-12 rounded-full object-cover md:h-16 md:w-16"
                 />
-                <div>
-                  <h2 className="text-xl font-semibold">{employee.name}</h2>
+                <div className="my-2">
+                  <h2 className="text-sm font-semibold md:text-xl">
+                    {employee.name}
+                  </h2>
                   <p className="text-gray-600">{employee.position}</p>
                 </div>
               </div>
@@ -156,7 +158,7 @@ export default function EmployeeManagement() {
                 </a>
               )}
             </CardContent>
-            <CardFooter className="flex justify-end space-x-2 bg-gray-50 p-4">
+            <CardFooter className="flex flex-col justify-end space-y-2 bg-gray-50 p-4 md:flex-row md:space-x-2">
               <Button
                 variant="outline"
                 size="sm"
@@ -183,7 +185,7 @@ export default function EmployeeManagement() {
           <EmployeeForm onSubmit={onSubmit} editingEmployee={editingEmployee} />
         </DialogContent>
       </Dialog>
-    </div>
+    </section>
   );
 }
 

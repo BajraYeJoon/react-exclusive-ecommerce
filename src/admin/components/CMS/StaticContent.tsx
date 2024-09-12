@@ -5,10 +5,10 @@ import Teams from "./teams/teamsMain";
 
 export default function Component() {
   return (
-    <div className="my-5 space-y-5">
+    <div className="mx-auto w-full space-y-12 p-3 md:px-6">
       <AboutMain />
       <hr />
-      <Stats isPro={true} />
+      <Stats />
       <hr />
       <Teams />
       <hr />

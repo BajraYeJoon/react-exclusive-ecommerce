@@ -26,7 +26,7 @@ interface Props {
 
 export default function UserProfileCard({ info }: Props) {
   return (
-    <Card className="relative mx-auto max-w-2xl overflow-hidden">
+    <Card className="relative overflow-hidden">
       <div className="h-32 bg-gradient-to-r from-cyan-500 to-blue-500" />
       <CardContent className="px-6 pb-6">
         <Avatar className="absolute left-3 top-20 h-24 w-24 border-4 border-white">
@@ -47,7 +47,7 @@ export default function UserProfileCard({ info }: Props) {
           <InfoItem icon={<Mail className="h-4 w-4" />} text={info.email} />
           <InfoItem icon={<Phone className="h-4 w-4" />} text={info.phone} />
         </div>
-        <div className="mt-6 flex justify-between border-t border-gray-200 pt-6 text-sm text-muted-foreground">
+        <div className="mt-6 flex flex-col justify-between gap-3 border-t border-gray-200 pt-6 text-sm text-muted-foreground lg:flex-row">
           <div className="flex items-center">
             <User className="mr-2 h-6 w-6" />
             <span>

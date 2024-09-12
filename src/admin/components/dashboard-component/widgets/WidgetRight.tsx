@@ -48,7 +48,7 @@ const products = [
 
 function WidgetRight() {
   return (
-    <div className="space-y-4">
+    <div className="w-full space-y-4">
       <h3 className="text-xl font-medium">Recent Orders</h3>
       <Table>
         <TableHeader>

@@ -13,7 +13,6 @@ export interface OurStoryContent {
 
 export default function AboutMain() {
   const [isEditing, setIsEditing] = useState(false);
-  const queryClient = useQueryClient();
 
   const {
     data: contentData,

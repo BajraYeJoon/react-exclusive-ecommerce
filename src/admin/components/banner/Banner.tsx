@@ -36,22 +36,6 @@ import { toast } from "sonner";
 import { AnalyticsCardSkeleton } from "../dashboard-component/featuredInfo/FeaturedInfo";
 import uuidv4 from "../../../common/lib/utils/uuid";
 
-const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
-  const baseClasses = "px-2 py-1 rounded-full text-xs font-semibold";
-  const statusClasses = {
-    Active: "bg-green-100 text-green-800",
-    Inactive: "bg-red-100 text-red-800",
-    Scheduled: "bg-yellow-100 text-yellow-800",
-  };
-
-  return (
-    <span
-      className={`${baseClasses} ${statusClasses[status as keyof typeof statusClasses]}`}
-    >
-      {status}
-    </span>
-  );
-};
 
 interface Product {
   id: number;
@@ -162,11 +146,13 @@ export default function Banner() {
   return (
     <div className="container mx-auto p-6">
       <header className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Banner Management</h1>
+        <h1 className="text-lg font-bold text-gray-900 md:text-2xl">
+          Banner Management
+        </h1>
         <Dialog>
           <DialogTrigger>
             <Button className="flex items-center">
-              <PlusCircle className="mr-2" />
+              <PlusCircle className="mr-2" size={14} />
               Add New Banner
             </Button>
           </DialogTrigger>
@@ -331,29 +317,29 @@ export default function Banner() {
                 <img
                   src={banner.image[0]}
                   alt={banner.title}
-                  className="h-56 w-full object-cover md:h-48 md:w-full"
+                  className="h-24 w-full object-cover md:h-48 md:w-full"
                 />
-                <div className="p-4">
-                  <h2 className="mb-2 text-base font-semibold text-gray-800">
+                <div className="p-2 md:p-4">
+                  <h2 className="mb-2 text-sm font-semibold text-gray-800 md:text-base">
                     {banner.title}
                   </h2>
-                  <p className="mb-2 text-sm text-gray-600">
-                    Target: "/target-url"
-                  </p>
-                  <StatusBadge status={banner.brand} />
+
+                  <span className="text-xs font-medium text-gray-600">
+                    {banner?.brand}
+                  </span>
                 </div>
-                <div className="flex flex-col justify-between p-2 md:flex-row">
+                <div className="flex flex-col justify-between gap-2 p-2 md:flex-row">
                   <Button
                     variant="secondary"
                     className="flex w-full items-center lg:w-fit"
                   >
-                    <Edit2 className="mr-1 h-4 w-4" />
+                    <Edit2 className="mr-1 h-4 w-4" size={14} />
                     Edit
                   </Button>
                   <ConfirmationDialog
                     triggerText={
                       <>
-                        <Trash2Icon className="mr-2" /> Delete
+                        <Trash2Icon className="mr-2" size={14} /> Delete
                       </>
                     }
                     title="Delete Banner"

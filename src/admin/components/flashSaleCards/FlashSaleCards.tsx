@@ -82,20 +82,7 @@ export default function FlashSaleAdmin() {
   return (
     <section className="flash-sale-cards container mx-auto p-4">
       <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h1 className="mb-6 text-2xl font-bold">Flash Sale Items</h1>
-          {flashSaleProductsData && (
-            <div className="text-base font-medium">
-              <p>
-                Sale Start:{" "}
-                <span className="text-sm font-light">{startDate}</span>
-              </p>
-              <p>
-                Sale End: <span className="text-sm font-light">{startEnd}</span>
-              </p>
-            </div>
-          )}
-        </div>
+        <h1 className="mb-6 text-2xl font-bold">Flash Sale Items</h1>
 
         {flashSaleProducts.length > 0 && (
           <ConfirmationDialog
@@ -109,7 +96,21 @@ export default function FlashSaleAdmin() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div className="my-4">
+        {flashSaleProductsData && (
+          <div className="text-base font-medium">
+            <p>
+              Sale Start:{" "}
+              <span className="text-sm font-light">{startDate}</span>
+            </p>
+            <p>
+              Sale End: <span className="text-sm font-light">{startEnd}</span>
+            </p>
+          </div>
+        )}
+      </div>
+
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {!flashSaleProducts.length ? (
           <div className="space-y-4">
             No products on Sale 🎉
@@ -122,37 +123,36 @@ export default function FlashSaleAdmin() {
         ) : (
           <>
             {flashSaleProducts.map((product: Product) => (
-              <Card className="relative py-3" key={product.id}>
+              <Card
+                className="relative flex flex-col justify-between py-3"
+                key={product.id}
+              >
                 <Badge className="absolute right-2 top-2">Sale</Badge>
                 <CardHeader>
-                  <CardTitle className="mt-2 text-lg font-normal">
+                  <CardTitle className="mt-2 text-sm font-normal md:text-lg">
                     {product.title}
                   </CardTitle>
                 </CardHeader>
                 <Dialog>
                   <DialogTrigger className="w-full">
-                    <CardContent className="">
-                      {!product.image ? (
-                        <Loading />
-                      ) : (
-                        <img
-                          src={product.image[0]}
-                          alt={product.title}
-                          className="mb-2 h-32 w-full object-cover"
-                          loading="lazy"
-                        />
-                      )}
+                    {!product.image ? (
+                      <Loading />
+                    ) : (
+                      <img
+                        src={product.image[0]}
+                        alt={product.title}
+                        className="mb-2 h-32 w-full object-contain"
+                        loading="lazy"
+                      />
+                    )}
 
-                      <p className="font-medium">
-                        ${product?.price?.toFixed(2)}
-                      </p>
-                    </CardContent>
+                    <p className="font-medium">${product?.price?.toFixed(2)}</p>
                   </DialogTrigger>
                   <DialogContent>
                     <ProductDetails data={product} />
                   </DialogContent>
                 </Dialog>
-                <CardFooter className="justify-center p-0">
+                <CardFooter className="justify-center overflow-hidden p-0">
                   <ConfirmationDialog
                     triggerText={
                       <>

@@ -1,6 +1,5 @@
+import React, { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchAllUsers } from "../../../api/fetchUser";
-import { Fragment, useMemo, useState } from "react";
 import {
   ColumnDef,
   flexRender,
@@ -10,13 +9,13 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { fetchAllUsers } from "../../../api/fetchUser";
 import { Loading } from "../../../../user-portal/site";
 import { Button } from "../../../../common/ui/button";
 import {
   Table,
   TableBody,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -36,7 +35,7 @@ export default function UserList() {
   });
 
   const users = usersData?.data;
-  
+
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
@@ -51,11 +50,7 @@ export default function UserList() {
       {
         accessorKey: "id",
         header: "User ID",
-        cell: (info) => (
-          <span className="font-medium">
-            {info.getValue() as React.ReactNode}
-          </span>
-        ),
+        cell: (info) => info.getValue(),
       },
       {
         accessorKey: "name",
@@ -72,43 +67,29 @@ export default function UserList() {
       {
         accessorKey: "createdAt",
         header: "Joined At",
-        cell: (info) => (
-          <span>
-            {new Date(info.getValue() as string).toLocaleDateString()}
-          </span>
-        ),
+        cell: (info) =>
+          new Date(info.getValue() as string).toLocaleDateString(),
       },
       {
-        accessorKey: "view",
-        header: "View",
-        id: "view",
-        cell: ({ row }) => {
-          return (
+        id: "actions",
+        header: "Actions",
+        cell: ({ row }) => (
+          <div className="flex space-x-12">
             <Dialog>
               <DialogTrigger>
-                <EyeIcon />
+                <EyeIcon className="h-5 w-5" />
               </DialogTrigger>
               <DialogContent>
                 <UserDialogContent info={row.original} />
               </DialogContent>
             </Dialog>
-          );
-        },
-      },
-      {
-        id: "remove",
-        header: "Remove",
-        cell: ({ row }) => {
-          return (
-            <>
-              {row.original.role !== "admin" && (
-                <Button onClick={() => removeUser(row.original.id)}>
-                  Remove
-                </Button>
-              )}
-            </>
-          );
-        },
+            {row.original.role !== "admin" && (
+              <Button onClick={() => removeUser(row.original.id)} size="sm">
+                Remove
+              </Button>
+            )}
+          </div>
+        ),
       },
     ],
     [],
@@ -133,172 +114,71 @@ export default function UserList() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <Table>
-        <TableHeader>
-          <TableRow>
+    <div className="w-full space-y-4 px-4">
+      <h3 className="text-xl font-medium md:hidden">Users</h3>
+      <div className="overflow-x-scroll">
+        <Table className="w-full">
+          <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <Fragment key={headerGroup.id}>
+              <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} className="w-[100px]">
-                    <div
-                      {...{
-                        className: header.column.getCanSort()
-                          ? "cursor-pointer select-none"
-                          : "",
-                        onClick: header.column.getToggleSortingHandler(),
-                      }}
-                    >
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
-                      {{
-                        asc: " 🔼",
-                        desc: " 🔽",
-                      }[header.column.getIsSorted() as string] || ""}
-                      {header.column.getCanFilter() && header.id !== "id" ? (
-                        <div>
-                          <Filter column={header.column} table={table} />
-                        </div>
-                      ) : null}
-                    </div>
+                  <TableHead key={header.id} className="px-2 py-3">
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext(),
+                    )}
                   </TableHead>
                 ))}
-              </Fragment>
+              </TableRow>
             ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows.map((row) => (
-            <TableRow key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TableCell colSpan={2}>Total Users</TableCell>
-            <TableCell className="text-right">{users?.length}</TableCell>
-          </TableRow>
-        </TableFooter>
-      </Table>
-      <div className="pagination">
-        <button
-          className="rounded border p-1"
-          onClick={() => table.setPageIndex(0)}
-          disabled={!table.getCanPreviousPage()}
-        >
-          {"<<"}
-        </button>
-        <button
-          className="rounded border p-1"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          {"<"}
-        </button>
-        <button
-          className="rounded border p-1"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          {">"}
-        </button>
-        <button
-          className="rounded border p-1"
-          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-          disabled={!table.getCanNextPage()}
-        >
-          {">>"}
-        </button>
-        <span className="flex items-center gap-1">
-          <div>Page</div>
-          <strong>
-            {table.getState().pagination.pageIndex + 1} of{" "}
-            {table.getPageCount()}
-          </strong>
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows.map((row) => (
+              <TableRow key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id} className="px-2 py-3">
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+
+      <div className="flex flex-col items-center justify-between space-y-2 sm:flex-row sm:space-y-0">
+        <div className="flex items-center space-x-2">
+          <Button
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Previous
+          </Button>
+          <Button
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            Next
+          </Button>
+        </div>
+        <span className="text-sm text-gray-700">
+          Page {table.getState().pagination.pageIndex + 1} of{" "}
+          {table.getPageCount()}
         </span>
-        <span className="flex items-center gap-1">
-          | Go to page:
-          <input
-            type="number"
-            min="1"
-            max={table.getPageCount()}
-            defaultValue={table.getState().pagination.pageIndex + 1}
-            onChange={(e) => {
-              const page = e.target.value ? Number(e.target.value) - 1 : 0;
-              table.setPageIndex(page);
-            }}
-            className="w-16 rounded border p-1"
-          />
-        </span>
-        <select
+        {/* <select
           value={table.getState().pagination.pageSize}
           onChange={(e) => {
             table.setPageSize(Number(e.target.value));
           }}
+          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 sm:w-auto"
         >
           {[10, 20, 30, 40, 50].map((pageSize) => (
             <option key={pageSize} value={pageSize}>
               Show {pageSize}
             </option>
           ))}
-        </select>
-      </div>
-      <div>
-        Showing {table.getRowModel().rows.length} of {table.getRowCount()} Rows
+        </select> */}
       </div>
     </div>
-  );
-}
-
-function Filter({ column, table }: { column: any; table: any }) {
-  const firstValue = table
-    .getPreFilteredRowModel()
-    .flatRows[0]?.getValue(column.id);
-
-  const columnFilterValue = column.getFilterValue();
-
-  return typeof firstValue === "number" ? (
-    <div className="flex space-x-2" onClick={(e) => e.stopPropagation()}>
-      <input
-        type="number"
-        value={(columnFilterValue as [number, number])?.[0] ?? ""}
-        onChange={(e) =>
-          column.setFilterValue((old: [number, number]) => [
-            e.target.value,
-            old?.[1],
-          ])
-        }
-        placeholder={`Min`}
-        className="w-24 rounded border shadow"
-      />
-      <input
-        type="number"
-        value={(columnFilterValue as [number, number])?.[1] ?? ""}
-        onChange={(e) =>
-          column.setFilterValue((old: [number, number]) => [
-            old?.[0],
-            e.target.value,
-          ])
-        }
-        placeholder={`Max`}
-        className="w-24 rounded border shadow"
-      />
-    </div>
-  ) : (
-    <input
-      className="w-36 rounded border shadow"
-      onChange={(e) => column.setFilterValue(e.target.value)}
-      onClick={(e) => e.stopPropagation()}
-      placeholder={`Search...`}
-      type="text"
-      value={(columnFilterValue ?? "") as string}
-    />
   );
 }

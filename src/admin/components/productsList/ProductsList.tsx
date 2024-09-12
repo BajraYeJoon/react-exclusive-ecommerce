@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -18,7 +17,6 @@ import {
   TableHeader,
   TableRow,
 } from "../../../common/ui/table";
-
 import {
   Dialog,
   DialogClose,
@@ -43,7 +41,6 @@ import UpdateProductForm from "./UpdateP";
 
 export default function ProductsList() {
   const [flashItem, setFlashItem] = useRecoilState<number[]>(flashSaleState);
-
   const { data: products, isLoading } = useQuery({
     queryKey: ["products"],
     queryFn: fetchAllProducts,
@@ -66,7 +63,6 @@ export default function ProductsList() {
 
   const deleteMutation = useMutation({
     mutationFn: (productId: number) => deleteProduct(productId),
-
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
     },
@@ -96,16 +92,16 @@ export default function ProductsList() {
       {
         accessorKey: "title",
         header: "Title",
-        cell: ({ row }) => {
-          return (
-            <Dialog>
-              <DialogTrigger>{row.original.title}</DialogTrigger>
-              <DialogContent>
-                <ProductDetails data={row.original} />
-              </DialogContent>
-            </Dialog>
-          );
-        },
+        cell: ({ row }) => (
+          <Dialog>
+            <DialogTrigger className="text-left">
+              {row.original.title}
+            </DialogTrigger>
+            <DialogContent>
+              <ProductDetails data={row.original} />
+            </DialogContent>
+          </Dialog>
+        ),
       },
       {
         accessorKey: "onSale",
@@ -114,12 +110,11 @@ export default function ProductsList() {
       },
       {
         accessorKey: "stock",
-        header: "Stock Amount",
+        header: "Stock",
       },
       {
         accessorKey: "price",
-        header: "Amount",
-
+        header: "Price",
         cell: (info) => (
           <span className="text-right">
             ${info.getValue() as React.ReactNode}
@@ -129,77 +124,53 @@ export default function ProductsList() {
       {
         accessorKey: "categories",
         header: "Categories",
-        maxSize: 10,
-        cell: ({ row }) => {
-          return (
-            <div>
-              {row.original.categories
-                .map((category: any) => category.name)
-                .join(", ")}
-            </div>
-          );
-        },
-      },
-      {
-        id: "edit",
-        header: "Edit",
-        cell: ({ row }) => {
-          return (
-            <button onClick={() => handleEdit(row.original)}>
-              <Dialog>
-                <DialogTrigger>
-                  <FaEdit />
-                </DialogTrigger>
-                <DialogContent>
-                  {/* <AddNewProductDialog
-                    mode="update"
-                    initialData={row.original}
-                  /> */}
-                  <UpdateProductForm initialData={row.original} />
-                </DialogContent>
-              </Dialog>
-            </button>
-          );
-        },
-      },
-      {
-        id: "delete",
-        header: "Delete",
         cell: ({ row }) => (
-          <Dialog>
-            <DialogTrigger>
-              <FaTrash />
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                Are you sure you want to delete this product?
-              </DialogHeader>
-              <DialogDescription>
-                <Button onClick={() => handleDelete(row.original.id)}>
-                  Yes
-                </Button>
-                <Button variant={"secondary"}>
-                  <DialogClose>No</DialogClose>
-                </Button>
-              </DialogDescription>
-            </DialogContent>
-          </Dialog>
+          <div className="max-w-[150px] truncate">
+            {row.original.categories
+              .map((category: any) => category.name)
+              .join(", ")}
+          </div>
         ),
       },
       {
-        id: "addtoFlash",
-        header: "Add to Flash Sale",
-        minSize: 100,
-        cell: ({ row }) => {
-          return (
+        id: "actions",
+        header: "Actions",
+        cell: ({ row }) => (
+          <div className="flex space-x-2">
+            <Dialog>
+              <DialogTrigger>
+                <FaEdit className="text-blue-500" />
+              </DialogTrigger>
+              <DialogContent>
+                <UpdateProductForm initialData={row.original} />
+              </DialogContent>
+            </Dialog>
+            <Dialog>
+              <DialogTrigger>
+                <FaTrash className="text-red-500" />
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  Are you sure you want to delete this product?
+                </DialogHeader>
+                <DialogDescription>
+                  <Button onClick={() => handleDelete(row.original.id)}>
+                    Yes
+                  </Button>
+                  <Button variant={"secondary"}>
+                    <DialogClose>No</DialogClose>
+                  </Button>
+                </DialogDescription>
+              </DialogContent>
+            </Dialog>
             <input
               type="checkbox"
-              // checked={flashItem.includes(row?.original?.id)}
               disabled={row.original.onSale}
               onChange={() => handleCheckboxChange(row.original.id)}
+              className="ml-2"
             />
-          );
-        },
+          </div>
+        ),
       },
     ],
     [],
@@ -219,10 +190,6 @@ export default function ProductsList() {
     onPaginationChange: setPagination,
   });
 
-  const handleEdit = (product: any) => {
-    // Implement edit functionality here
-  };
-
   const handleDelete = (productId: any) => {
     deleteMutation.mutate(productId);
   };
@@ -232,134 +199,101 @@ export default function ProductsList() {
   }
 
   return (
-    <div className="flex flex-col gap-2">
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button>Add new Product</Button>
-        </DialogTrigger>
-        <DialogContent>
-          <AddNewProductDialog />
-        </DialogContent>
-      </Dialog>
-      <Table>
-        <TableHeader>
-          <TableRow>
+    <div className="my-4 flex flex-col gap-4 px-2 md:px-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold">Products List</h2>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="w-fit">Add new Product</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <AddNewProductDialog />
+          </DialogContent>
+        </Dialog>
+      </div>
+
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <React.Fragment key={headerGroup.id}>
+              <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} className="w-[100px]">
+                  <TableHead key={header.id} className="px-2 py-3">
                     <div
-                      {...{
-                        className: header.column.getCanSort()
+                      className={`${
+                        header.column.getCanSort()
                           ? "cursor-pointer select-none"
-                          : "",
-                        onClick: header.column.getToggleSortingHandler(),
-                      }}
+                          : ""
+                      } flex items-center space-x-2`}
+                      onClick={header.column.getToggleSortingHandler()}
                     >
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
-                      {{
-                        asc: " 🔼",
-                        desc: " 🔽",
-                      }[header.column.getIsSorted() as string] ?? null}
-                      {header.column.getCanFilter() && header.id !== "id" ? (
-                        <div>
-                          <Filter column={header.column} table={table} />
-                        </div>
-                      ) : null}
+                      <span>
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                      </span>
+                      <span>
+                        {{
+                          asc: " 🔼",
+                          desc: " 🔽",
+                        }[header.column.getIsSorted() as string] ?? null}
+                      </span>
                     </div>
+                    {header.column.getCanFilter() && header.id !== "id" && (
+                      <div className="mt-2">
+                        <Filter column={header.column} table={table} />
+                      </div>
+                    )}
                   </TableHead>
                 ))}
-              </React.Fragment>
+              </TableRow>
             ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows.map((row) => (
-            <TableRow key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <div className="pagination flex items-center justify-center gap-3">
-        <button
-          className="rounded border p-1"
-          onClick={() => table.setPageIndex(0)}
-          disabled={!table.getCanPreviousPage()}
-        >
-          {"<<"}
-        </button>
-        <button
-          className="rounded border p-1"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          {"<"}
-        </button>
-        <button
-          className="rounded border p-1"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          {">"}
-        </button>
-        <button
-          className="rounded border p-1"
-          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-          disabled={!table.getCanNextPage()}
-        >
-          {">>"}
-        </button>
-        <span className="flex items-center gap-1">
-          <div>Page</div>
-          <strong>
-            {table.getState().pagination.pageIndex + 1} of{" "}
-            {table.getPageCount()}
-          </strong>
-        </span>
-        <span className="flex items-center gap-1">
-          | Go to page:
-          <input
-            type="number"
-            min="1"
-            max={table.getPageCount()}
-            defaultValue={table.getState().pagination.pageIndex + 1}
-            onChange={(e) => {
-              const page = e.target.value ? Number(e.target.value) - 1 : 0;
-              table.setPageIndex(page);
-            }}
-            className="w-16 rounded border p-1"
-          />
-        </span>
-        <select
-          value={table.getState().pagination.pageSize}
-          onChange={(e) => {
-            table.setPageSize(Number(e.target.value));
-          }}
-        >
-          {[10, 20, 30, 40, 50].map((pageSize) => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select>
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows.map((row) => (
+              <TableRow key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id} className="px-2 py-3">
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
-      <div className="text-center">
-        Showing {table.getRowModel().rows.length} of {table.getRowCount()} Rows
+
+      <div className="flex flex-col items-center justify-between space-y-2 sm:flex-row sm:space-y-0">
+        <div className="flex items-center space-x-2">
+          <Button
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Previous
+          </Button>
+          <Button
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            Next
+          </Button>
+        </div>
+        <span className="text-sm text-gray-700">
+          Page {table.getState().pagination.pageIndex + 1} of{" "}
+          {table.getPageCount()}
+        </span>
+        <span className="text-sm text-gray-700">
+          Showing {table.getRowModel().rows.length} of {table.getRowCount()}{" "}
+          Rows
+        </span>
       </div>
 
       {flashItem.length > 0 && (
-        <div className="fixed bottom-4 right-4">
+        <div className="fixed bottom-4 right-4 z-10">
           <Dialog>
             <div className="flex flex-col items-center justify-center gap-2 rounded-md border bg-slate-200 p-2">
-              <span className="flex flex-wrap justify-between gap-2">
+              <span className="flex max-w-[200px] flex-wrap justify-between gap-2">
                 {flashItem.map((item) => (
                   <Button
                     variant={"outline"}
@@ -371,9 +305,8 @@ export default function ProductsList() {
                   </Button>
                 ))}
               </span>
-
               <DialogTrigger>
-                <Button>Add All to Flash Sale</Button>
+                <Button>Add to Flash Sale</Button>
               </DialogTrigger>
             </div>
             <DialogContent>
@@ -398,7 +331,7 @@ export function Filter({ column, table }: { column: any; table: any }) {
 
   return typeof firstValue === "number" ? (
     <div
-      className="flex flex-col items-center"
+      className="flex flex-col space-y-2"
       onClick={(e) => e.stopPropagation()}
     >
       <input
@@ -411,7 +344,7 @@ export function Filter({ column, table }: { column: any; table: any }) {
           ])
         }
         placeholder={`Min`}
-        className="w-24 rounded border shadow"
+        className="w-full rounded border px-2 py-1 text-sm shadow"
       />
       <input
         type="number"
@@ -423,12 +356,12 @@ export function Filter({ column, table }: { column: any; table: any }) {
           ])
         }
         placeholder={`Max`}
-        className="w-24 rounded border shadow"
+        className="w-full rounded border px-2 py-1 text-sm shadow"
       />
     </div>
   ) : (
     <input
-      className="max-w-12 rounded border shadow lg:max-w-32"
+      className="w-full rounded border px-2 py-1 text-sm shadow"
       onChange={(e) => column.setFilterValue(e.target.value)}
       onClick={(e) => e.stopPropagation()}
       placeholder={`Search...`}

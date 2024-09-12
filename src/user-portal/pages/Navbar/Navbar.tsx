@@ -174,7 +174,7 @@ const Navbar = () => {
             </Link>
           )}
 
-          {!isAdmin && (
+          {isAdmin && isLoggedIn && (
             <Link to={`/${Routes.Admin}/${Routes.Dashboard}`}>
               <Button>Dashboard</Button>
             </Link>
