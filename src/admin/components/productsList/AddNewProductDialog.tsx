@@ -83,10 +83,10 @@ export default function AddNewProductDialog() {
   const onSubmit = async (data: CreateProductFormData) => {
     const formData = new FormData();
     Object.entries(data).forEach(([key, value]) => {
-      if (key === "images") {
-        productImages.forEach((image, index) => {
+      if (key === "image") {
+        productImages.forEach((image) => {
           if (image instanceof File) {
-            formData.append(`images[${index}]`, image);
+            formData.append("image", image);
           }
         });
       } else {
@@ -186,7 +186,7 @@ export default function AddNewProductDialog() {
                     id="description"
                     {...register("description")}
                     placeholder="A timeless bluetooth earphone that never goes out of style."
-                    className="h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground "
+                    className="h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground"
                   />
                   {errors.description && (
                     <p className="text-sm text-destructive">

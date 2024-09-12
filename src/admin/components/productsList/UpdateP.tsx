@@ -30,6 +30,7 @@ const updateProductSchema = z.object({
   description: z.string().optional(),
   brand: z.string().optional(),
   availability: z.boolean().optional(),
+  image: z.array(z.any()).optional(),
 });
 
 type UpdateProductFormData = z.infer<typeof updateProductSchema>;
@@ -60,6 +61,8 @@ export default function UpdateProductForm({
 
   const formValues = watch();
 
+  console.log(initialData, "intitalk datas");
+
   const { data: categories = [] } = useQuery({
     queryKey: ["categories"],
     queryFn: fetchCategories,
@@ -87,6 +90,9 @@ export default function UpdateProductForm({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["product", initialData.id] });
     },
+    onError: (error: any) => {
+      console.error("Failed to delete image", error);
+    },
   });
 
   useEffect(() => {
@@ -105,7 +111,7 @@ export default function UpdateProductForm({
   const handleImageDelete = async (index: number) => {
     const imageToDelete = images[index];
     if (typeof imageToDelete === "string") {
-      await deleteImageMutation.mutateAsync(imageToDelete);
+      await deleteImageMutation.mutate(imageToDelete);
     }
     setImages((prevImages) => prevImages.filter((_, i) => i !== index));
   };
@@ -118,36 +124,36 @@ export default function UpdateProductForm({
     );
   };
 
-  const getChangedValues = (
-    currentValues: UpdateProductFormData,
-  ): Partial<UpdateProductFormData> => {
-    const changedValues: Partial<UpdateProductFormData> = {};
+  // const getChangedValues = (
+  //   currentValues: UpdateProductFormData,
+  // ): Partial<UpdateProductFormData> => {
+  //   const changedValues: Partial<UpdateProductFormData> = {};
 
-    Object.keys(currentValues).forEach((key) => {
-      const typedKey = key as keyof UpdateProductFormData;
-      if (currentValues[typedKey] !== initialData[typedKey]) {
-        changedValues[typedKey] = currentValues[typedKey];
-      }
-    });
+  //   Object.keys(currentValues).forEach((key) => {
+  //     const typedKey = key as keyof UpdateProductFormData;
+  //     if (currentValues[typedKey] !== initialData[typedKey]) {
+  //       changedValues[typedKey] = currentValues[typedKey];
+  //     }
+  //   });
 
-    // Check if categories have changed
-    if (
-      JSON.stringify(selectedCategories) !==
-      JSON.stringify(initialData.categories?.map((cat) => cat.id))
-    ) {
-      changedValues.categories = selectedCategories;
-    }
+  //   // Check if categories have changed
+  //   if (
+  //     JSON.stringify(selectedCategories) !==
+  //     JSON.stringify(initialData.categories?.map((cat) => cat.id))
+  //   ) {
+  //     changedValues.categories = selectedCategories;
+  //   }
 
-    return changedValues;
-  };
+  //   return changedValues;
+  // };
 
   const onSubmit = async (data: UpdateProductFormData) => {
-    const changedValues = getChangedValues(data);
-    if (Object.keys(changedValues).length > 0) {
-      await updateProductMutation.mutateAsync(changedValues);
-    } else {
-      console.log("No changes detected");
-    }
+    // const changedValues = getChangedValues(data);
+    // if (Object.keys(changedValues).length > 0) {
+    await updateProductMutation.mutateAsync(data);
+    // } else {
+    //   console.log("No changes detected");
+    // }
   };
 
   return (
@@ -305,14 +311,28 @@ export default function UpdateProductForm({
               )}
             />
 
-            <div className="space-y-2 sm:col-span-2">
+            <Controller
+              name="image"
+              control={control}
+              render={({ field }) => (
+                <div className="space-y-2 sm:col-span-2">
+                  <Label htmlFor="image">Product Image</Label>
+                  <FileDropzone
+                    onDrop={handleImageDrop}
+                    files={field.value || images}
+                    onRemove={handleImageDelete}
+                  />
+                </div>
+              )}
+            />
+            {/* <div className="space-y-2 sm:col-span-2">
               <Label>Product Images</Label>
               <FileDropzone
                 onDrop={handleImageDrop}
                 files={images}
                 onRemove={handleImageDelete}
               />
-            </div>
+            </div> */}
 
             <div className="space-y-2 sm:col-span-2">
               <Label>Categories</Label>

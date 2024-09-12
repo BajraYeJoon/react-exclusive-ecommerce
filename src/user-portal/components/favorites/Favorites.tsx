@@ -6,11 +6,14 @@ import { Button } from "../../../common/ui/button";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Loading } from "../../site";
+import { useAuthContext } from "../../context/useAuthContext";
 
 const Favorites = () => {
+  const { isLoggedIn, isAdmin } = useAuthContext();
   const { data: favoritesData, isLoading } = useQuery({
     queryKey: ["favorites"],
     queryFn: fetchFavorites,
+    enabled: isLoggedIn && !isAdmin,
   });
   const queryClient = useQueryClient();
   const deleteAll = useMutation({
@@ -19,8 +22,8 @@ const Favorites = () => {
       queryClient.invalidateQueries({ queryKey: ["favorites"] });
       toast.success("Favorites cleared");
     },
-    onError: (error) => {
-      console.error("Error deleting favorites:", error);
+    onError: (error: any) => {
+      console.error("Error deleting favorites:", error?.response?.data);
     },
   });
 
@@ -39,7 +42,9 @@ const Favorites = () => {
           breadcrumbTitle="Favorites"
           breadcrumbValue={favorites as []}
         />
-        <Button onClick={DeleteAllFavorites}>Clear All</Button>
+        {isLoggedIn && !isAdmin && (
+          <Button onClick={DeleteAllFavorites}>Clear All</Button>
+        )}
       </div>
 
       {favorites.length === 0 ? (

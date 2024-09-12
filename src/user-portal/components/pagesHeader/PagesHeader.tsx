@@ -41,7 +41,9 @@ const PagesHeader = ({
           <h2 className="text-lg font-medium capitalize tracking-wide text-foreground lg:text-4xl">
             {Heading}
           </h2>
-          {flashTimer && <CountdownTimer targetDate={dateTimeAfterThreeDays} />}
+          {flashTimer && salesData && (
+            <CountdownTimer targetDate={dateTimeAfterThreeDays} />
+          )}
         </div>
         {!cta ? (
           <div className="page-navigations flex items-center gap-2">

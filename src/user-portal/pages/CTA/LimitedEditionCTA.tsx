@@ -3,6 +3,7 @@ import { Button } from "../../../common/ui/button";
 import { fetchSalesProduct } from "../../../common/api/productApi";
 import { ExpiredNotice } from "../../components/flashSaleTimer/counttimer";
 import { useCountdown } from "../../components/flashSaleTimer/useCountdown";
+import { Link } from "react-router-dom";
 
 const LimitedEditionCTA = () => {
   const { data: salesData } = useQuery({
@@ -25,7 +26,9 @@ const LimitedEditionCTA = () => {
         </h2>
 
         <LimitedCounter targetDate={new Date(CUSTOM_DAYS_IN_MS)} />
-        <Button className="w-full bg-green-500 md:w-fit">Buy Now</Button>
+        <Link className="md:w-fit" to={"/products/5"}>
+          <Button className="w-full bg-green-500">Buy Now</Button>
+        </Link>
       </div>
       <img
         src="/limitededitioncta.webp"

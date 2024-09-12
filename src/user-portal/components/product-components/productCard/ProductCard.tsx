@@ -126,7 +126,7 @@ const ProductCard = ({
               onClick={handleFavoriteClick}
             >
               <HeartIcon
-                size={dimension.width < 768 ? 10 : 18}
+                size={dimension.width < 768 ? 12 : 18}
                 fill={isFavorite(id) ? "red" : "none"}
                 className={isFavorite(id) ? "text-primary" : ""}
               />
@@ -137,7 +137,7 @@ const ProductCard = ({
             to={`/product/${id}`}
             className="flex h-4 w-4 items-center justify-center rounded-full bg-foreground/20 lg:h-7 lg:w-7"
           >
-            <EyeIcon size={dimension.width < 768 ? 10 : 18} />
+            <EyeIcon size={dimension.width < 768 ? 12 : 18} />
           </Link>
         </div>
 

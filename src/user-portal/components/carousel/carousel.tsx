@@ -1,5 +1,5 @@
 import { ArrowRight } from "lucide-react";
-import { SiApple } from "react-icons/si";
+// import { SiApple } from "react-icons/si";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -24,7 +24,7 @@ const Carousel = () => {
   });
 
   if (isLoading) {
-    return <Skeleton className="skeleton loading mt-4 h-96 w-full" />;
+    return <Skeleton className="skeleton loading mt-4 h-32 md:h-72 lg:h-96 w-full" />;
   }
 
   const banner = bannerData ? bannerData.bannerData : [];
@@ -62,17 +62,17 @@ const Carousel = () => {
             <SwiperSlide key={index}>
               <div className="carousel-content grid h-56 w-full grid-cols-2 overflow-hidden bg-foreground p-4 align-middle md:grid-cols-2 md:p-0 lg:h-96">
                 <div className="carousel-text flex flex-col items-start justify-center gap-0 text-background md:gap-6 md:pl-10 lg:pl-14">
-                  <span className="brand-icon inline-flex items-center gap-3 md:gap-6">
-                    <SiApple className="text-md md:text-base lg:text-xl" />
+                  {/* <span className="brand-icon inline-flex items-center gap-3 md:gap-6"> */}
+                    {/* <SiApple className="text-md md:text-base lg:text-xl" /> */}
                     <span className="text-[10px] font-light md:text-base lg:text-lg">
                       {content.title}
-                    </span>
+                    {/* </span> */}
                   </span>
                   <h1 className="carousel-title my-2 text-balance text-sm font-medium tracking-wide sm:leading-5 md:text-2xl lg:text-5xl lg:leading-[4.2rem]">
                     {content.title}
                   </h1>
                   <Link
-                    to="/products"
+                    to={`/product/${content.id}`}
                     className="shop-now-link inline-flex items-center gap-1 border-b border-background/25 text-xs text-background md:text-base lg:text-lg"
                   >
                     Shop Now <ArrowRight size={20} className="ml-2" />
