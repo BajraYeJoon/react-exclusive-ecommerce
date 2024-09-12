@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useForm, FormProvider } from "react-hook-form";
+import { useState, useEffect } from "react";
+import { useForm, FormProvider, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Axios } from "../../../common/lib/axiosInstance";
@@ -16,7 +16,7 @@ import { Label } from "../../../common/ui/label";
 import { Input } from "../../../common/ui/input";
 import { Checkbox } from "../../../common/ui/checkbox";
 import { Button } from "../../../common/ui/button";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchCategories } from "../../../common/api/categoryApi";
 
 const updateProductSchema = z.object({
@@ -50,25 +50,31 @@ export default function UpdateProductForm({
   initialData,
 }: UpdateProductFormProps) {
   const [selectedCategories, setSelectedCategories] = useState<number[]>(
-    initialData.categories?.map((cat) => cat.id) || [],
+    initialData.categories?.map((cat: any) => cat.id) || [],
   );
+  const queryClient = useQueryClient();
 
   const methods = useForm<UpdateProductFormData>({
     resolver: zodResolver(updateProductSchema),
     defaultValues: {
       ...initialData,
-      categories: initialData.categories?.map((cat) => cat.id) || [],
+      categories: initialData.categories?.map((cat: any) => cat.id) || [],
       images: initialData.images || [],
     },
   });
 
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors },
     setValue,
     watch,
   } = methods;
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "images",
+  });
 
   const images = watch("images");
 
@@ -81,19 +87,49 @@ export default function UpdateProductForm({
     queryFn: fetchCategories,
   });
 
+  const updateProductMutation = useMutation({
+    mutationFn: (data: UpdateProductFormData) =>
+      Axios.patch(`/product/${initialData.id}`, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["product", initialData.id] });
+    },
+  });
+
+  const addImageMutation = useMutation({
+    mutationFn: (formData: FormData) =>
+      Axios.post(`/product/addimage/${initialData.id}`, formData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["product", initialData.id] });
+    },
+  });
+
+  const deleteImageMutation = useMutation({
+    mutationFn: (imageUrl: string) =>
+      Axios.post(`/product/deleteimage/${initialData.id}`, { url: imageUrl }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["product", initialData.id] });
+    },
+  });
+
+  const handleImageDrop = (acceptedFiles: File[]) => {
+    acceptedFiles.forEach((file) => append(file));
+  };
+
+  const deleteAllImagesMutation = useMutation({
+    mutationFn: () => Axios.post(`/product/deleteallimages/${initialData.id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["product", initialData.id] });
+    },
+  });
+
   useEffect(() => {
     setValue("categories", selectedCategories);
   }, [selectedCategories, setValue]);
 
   const handleImageDelete = async (imageUrl: string) => {
     try {
-      await Axios.post(`/product/deleteimage/${initialData.id}`, {
-        url: imageUrl,
-      });
-      setValue(
-        "images",
-        (images as string[]).filter((img) => img !== imageUrl),
-      );
+      await deleteImageMutation.mutateAsync(imageUrl);
+      remove(fields.findIndex((field) => field === imageUrl));
     } catch (error) {
       console.error("Error deleting image:", error);
     }
@@ -101,7 +137,7 @@ export default function UpdateProductForm({
 
   const handleDeleteAllImages = async () => {
     try {
-      await Axios.post(`/product/deleteallimages/${initialData.id}`);
+      await deleteAllImagesMutation.mutateAsync();
       setValue("images", []);
     } catch (error) {
       console.error("Error deleting all images:", error);
@@ -116,24 +152,19 @@ export default function UpdateProductForm({
     );
   };
 
-  console.log(errors);
-
   const onSubmit = async (data: UpdateProductFormData) => {
     try {
-      // Update product details
       const { images, ...productData } = data;
-      await Axios.patch(`/product/${initialData.id}`, productData);
+      await updateProductMutation.mutateAsync(productData);
 
-      // Handle new image uploads
       const newImages =
         images?.filter((img): img is File => img instanceof File) || [];
       for (const newImage of newImages) {
         const formData = new FormData();
         formData.append("image", newImage);
-        await Axios.post(`/product/addimage/${initialData.id}`, formData);
+        await addImageMutation.mutateAsync(formData);
       }
 
-      // Handle success (e.g., redirect or show a success message)
       console.log("Product updated successfully");
     } catch (error) {
       console.error("Error updating product:", error);
@@ -145,13 +176,14 @@ export default function UpdateProductForm({
 
   return (
     <FormProvider {...methods}>
-      <Card className="h-96 w-full overflow-y-scroll">
+      <Card className="h-[calc(100vh-4rem)] w-full overflow-y-auto">
         <CardHeader>
           <CardTitle>Update Product</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="grid gap-4 sm:grid-cols-2">
+              {/* ... (other form fields remain unchanged) ... */}
               <div className="space-y-2">
                 <Label htmlFor="title">Title</Label>
                 <Input
@@ -212,7 +244,7 @@ export default function UpdateProductForm({
                 <Input
                   id="stock"
                   type="number"
-                  {...register("stock")}
+                  {...register("stock", { valueAsNumber: true })}
                   placeholder="1"
                 />
                 {errors.stock && (
@@ -281,39 +313,7 @@ export default function UpdateProductForm({
 
               <div className="space-y-2 sm:col-span-2">
                 <Label>Product Images</Label>
-                <FileDropzone />
-                {images && images.length > 0 && (
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {(images as (string | File)[]).map((file, index) => (
-                      <div key={index} className="relative">
-                        <img
-                          src={
-                            typeof file === "string"
-                              ? file
-                              : URL.createObjectURL(file)
-                          }
-                          alt={`Product ${index}`}
-                          className="h-24 w-24 object-cover"
-                        />
-                        <Button
-                          type="button"
-                          onClick={() =>
-                            handleImageDelete(
-                              typeof file === "string"
-                                ? file
-                                : URL.createObjectURL(file),
-                            )
-                          }
-                          variant="destructive"
-                          size="sm"
-                          className="absolute right-0 top-0"
-                        >
-                          Delete
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                <FileDropzone onDrop={handleImageDrop} />
                 <Button
                   type="button"
                   onClick={handleDeleteAllImages}

@@ -1,43 +1,61 @@
-import { useFormContext } from "react-hook-form";
+import React from "react";
+import { useFormContext, useFieldArray } from "react-hook-form";
 import { useDropzone } from "react-dropzone";
+import { Button } from "../../../common/ui/button";
 
-export function FileDropzone() {
-  const { setValue, watch } = useFormContext();
-  const images = watch("images");
+interface FileDropzoneProps {
+  onDrop: (acceptedFiles: File[]) => void;
+}
+
+export function FileDropzone({ onDrop }: FileDropzoneProps) {
+  const { control } = useFormContext();
+  const { fields, remove } = useFieldArray({
+    control,
+    name: "images",
+  });
 
   const { getRootProps, getInputProps } = useDropzone({
-    multiple: true,
-    onDrop: (acceptedFiles) => {
-      const files = acceptedFiles.map((file) => URL.createObjectURL(file));
-      setValue("images", [...(images || []), ...acceptedFiles]);
+    accept: {
+      "image/*": [],
     },
+    multiple: true,
+    onDrop,
   });
 
   return (
-    <div {...getRootProps()} className="dropzone">
-      <input {...getInputProps()} />
-      {images && images.length > 0 ? (
-        <div className="flex flex-wrap gap-2">
-          {images.map((file, index) =>
-            typeof file === "string" ? (
-              <img
-                key={index}
-                src={file}
-                alt={`Product ${index}`}
-                className="h-24 w-24 object-cover"
-              />
-            ) : (
-              <img
-                key={index}
-                src={URL.createObjectURL(file)}
-                alt={`Product ${index}`}
-                className="h-24 w-24 object-cover"
-              />
-            ),
-          )}
-        </div>
-      ) : (
+    <div>
+      <div
+        {...getRootProps()}
+        className="cursor-pointer rounded-lg border-2 border-dashed border-gray-300 p-6 text-center transition-colors hover:border-gray-400"
+      >
+        <input {...getInputProps()} />
         <p>Drag 'n' drop images here, or click to select</p>
+      </div>
+      {fields.length > 0 && (
+        <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+          {fields.map((file, index) => (
+            <div key={file.id} className="group relative">
+              <img
+                src={
+                  typeof file === "string"
+                    ? file
+                    : URL.createObjectURL(file as File)
+                }
+                alt={`Product ${index}`}
+                className="h-24 w-24 rounded-md object-cover"
+              />
+              <Button
+                type="button"
+                onClick={() => remove(index)}
+                variant="destructive"
+                size="sm"
+                className="absolute right-0 top-0 opacity-0 transition-opacity group-hover:opacity-100"
+              >
+                Delete
+              </Button>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );
