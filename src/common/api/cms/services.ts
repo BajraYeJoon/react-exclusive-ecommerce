@@ -14,3 +14,18 @@ export const addService = async (data: any) => {
     "Failed to add service",
   );
 };
+
+export const updateService = async (data: FormData) => {
+  const id = data.get("id");
+  return handleRequest(
+    () => Axios.patch(`/services/${id}`, data),
+    "Failed to update service",
+  );
+};
+
+export const deleteService = async (id: any) => {
+  return handleRequest(
+    () => Axios.delete(`/services/${id}`),
+    "Failed to delete service",
+  );
+};

@@ -1,235 +1,202 @@
-import React, { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
-import {
-  Check,
-  Headphones,
-  Package,
-  Pencil,
-  Plus,
-  Trash2,
-  X,
-} from "lucide-react";
-import { CiDeliveryTruck } from "react-icons/ci";
+'use client'
 
-import { Card, CardContent } from "../../../../common/ui/card";
-import { Input } from "../../../../common/ui/input";
-import { Button } from "../../../../common/ui/button";
-import { addService, fetchServices } from "../../../../common/api/cms/services";
+import { useState } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useForm, SubmitHandler } from 'react-hook-form'
+import { Plus, Pencil, Trash2, X } from 'lucide-react'
+import { addService, deleteService, fetchServices, updateService } from '../../../../common/api/cms/services'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../../../../common/ui/dialog'
+import { Button } from '../../../../common/ui/button'
+import { Card, CardContent, CardFooter } from '../../../../common/ui/card'
+import { Label } from '../../../../common/ui/label'
+import { Input } from '../../../../common/ui/input'
 
 interface Service {
-  id: number;
-  title: string;
-  description: string;
-  icon: string;
+  id: string
+  title: string
+  description: string
+  icon: string // URL of the icon image
 }
 
-const iconMap: { [key: string]: React.ElementType } = {
-  CiDeliveryTruck,
-  Package,
-  Headphones,
-  Plus,
-};
+interface ServiceFormInputs {
+  title: string
+  description: string
+  icon: FileList
+}
 
-const ServiceMain = () => {
-  const [editingId, setEditingId] = useState<number | null>(null);
-  const [newService, setNewService] = useState<Omit<Service, "id"> | null>(
-    null,
-  );
-  const queryClient = useQueryClient();
+export default function ServiceManagement() {
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [editingService, setEditingService] = useState<Service | null>(null)
+  const queryClient = useQueryClient()
+  const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm<ServiceFormInputs>()
 
-  const {
-    data: servicesData,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["services"],
-    queryFn: fetchServices,
-  });
+  const { data: servicesData, isLoading, error } = useQuery({
+    queryKey: ['services'],
+    queryFn: fetchServices
+  })
 
-  const services = servicesData?.data;
-  console.log(services, "services");
+  const services = servicesData?.data
 
   const addServiceMutation = useMutation({
     mutationFn: addService,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["services"] });
-      setNewService(null);
-    },
-  });
+      queryClient.invalidateQueries({ queryKey: ['services'] })
+      setIsAddDialogOpen(false)
+      reset()
+    }
+  })
 
-  // const updateServiceMutation = useMutation({
-  //   mutationFn: updateService,
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries({ queryKey: ["services"] });
-  //     setEditingId(null);
-  //   },
-  // });
+  const updateServiceMutation = useMutation({
+    mutationFn: updateService,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['services'] })
+      setIsEditDialogOpen(false)
+      setEditingService(null)
+      reset()
+    }
+  })
 
-  // const deleteServiceMutation = useMutation({
-  //   mutationFn: deleteService,
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries({ queryKey: ["services"] });
-  //   },
-  // });
+  const deleteServiceMutation = useMutation({
+    mutationFn: deleteService,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['services'] })
+    }
+  })
 
-  // const handleSave = (id: number, updatedService: FormData) => {
-  //   updateServiceMutation.mutate({ id, ...Object.fromEntries(updatedService) });
-  // };
+  const onSubmit: SubmitHandler<ServiceFormInputs> = (data) => {
+    const formData = new FormData()
+    formData.append('title', data.title)
+    formData.append('description', data.description)
+    if (data.icon[0]) {
+      formData.append('icon', data.icon[0])
+    }
+    
+    if (editingService) {
+      formData.append('id', editingService.id)
+      updateServiceMutation.mutate(formData)
+    } else {
+      addServiceMutation.mutate(formData)
+    }
+  }
 
-  const handleAdd = () => {
-    setNewService({ title: "", description: "", icon: "Plus" });
-    setEditingId(null);
-  };
+  const handleEdit = (service: Service) => {
+    setEditingService(service)
+    setValue('title', service.title)
+    setValue('description', service.description)
+    setIsEditDialogOpen(true)
+  }
 
-  const handleSaveNew = (formData: FormData) => {
-    const newServiceData = Object.fromEntries(formData) as Omit<Service, "id">;
-    addServiceMutation.mutate(newServiceData);
-  };
+  const handleDelete = (id: string) => {
+    if (window.confirm('Are you sure you want to delete this service?')) {
+      deleteServiceMutation.mutate(id)
+    }
+  }
 
-  // const handleDelete = (id: number) => {
-  //   deleteServiceMutation.mutate(id);
-  // };
-
-  const ServiceCard = ({
-    service,
-    isEditing,
-    onSave,
-  }: {
-    service: Service;
-    isEditing: boolean;
-    onSave: (updatedService: FormData) => void;
-  }) => {
-    const [editedService, setEditedService] = useState(service);
-    const [iconFile, setIconFile] = useState<File | null>(null);
-
-    const handleEdit = (id: number) => {
-      setEditingId(id);
-      setNewService(null);
-    };
-
-    const handleIconChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (e.target.files && e.target.files[0]) {
-        setIconFile(e.target.files[0]);
-      }
-    };
-
-    const handleInputChange = (
-      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    ) => {
-      const { name, value } = e.target;
-      setEditedService((prev) => ({ ...prev, [name]: value }));
-    };
-
-    const handleSaveWithIcon = () => {
-      const formData = new FormData();
-      formData.append("title", editedService.title);
-      formData.append("description", editedService.description);
-      if (iconFile) {
-        formData.append("icon", iconFile);
-      }
-      onSave(formData);
-    };
-
-    const IconComponent = iconMap[service.icon] || Plus;
-
-    return (
-      <Card className="w-full overflow-hidden transition-all duration-300 hover:shadow-lg">
-        <CardContent className="p-6">
-          <div className="mb-4 flex items-center">
-            <div className="mr-4 rounded-full bg-primary p-3">
-              {isEditing ? (
-                <Input type="file" onChange={handleIconChange} />
-              ) : (
-                <img
-                  src={service.icon}
-                  alt="Service Icon"
-                  className="h-10 w-10"
-                />
-              )}
-            </div>
-            <div className="flex-1">
-              {isEditing ? (
-                <div className="space-y-2">
-                  <Input
-                    type="text"
-                    name="title"
-                    value={editedService.title}
-                    onChange={handleInputChange}
-                    placeholder="Title"
-                  />
-                  <textarea
-                    name="description"
-                    value={editedService.description}
-                    onChange={handleInputChange}
-                    placeholder="Description"
-                  />
-                  <Button onClick={handleSaveWithIcon}>
-                    <Check className="mr-2 h-4 w-4" /> Save
-                  </Button>
-                </div>
-              ) : (
-                <div className="space-y-2">
-                  <h3 className="text-lg font-semibold">{service.title}</h3>
-                  <p className="text-sm text-muted-foreground">
-                    {service.description}
-                  </p>
-                  <div className="flex space-x-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleEdit(service.id)}
-                    >
-                      <Pencil className="mr-2 h-4 w-4" /> Edit
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      // onClick={() => handleDelete(service.id)}
-                    >
-                      <Trash2 className="mr-2 h-4 w-4" /> Delete
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  };
-
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading services</div>;
+  if (isLoading) return <div>Loading services...</div>
+  if (error) return <div>Error loading services: {(error as Error).message}</div>
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">Manage Services</h2>
-        <Button onClick={handleAdd}>
-          <Plus className="mr-2 h-4 w-4" /> Add New Service
-        </Button>
+    <div className="container mx-auto p-4">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Services Management</h1>
+        <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+          <DialogTrigger asChild>
+            <Button><Plus className="mr-2 h-4 w-4" /> Add New Service</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Add New Service</DialogTitle>
+            </DialogHeader>
+            <ServiceForm onSubmit={onSubmit} />
+          </DialogContent>
+        </Dialog>
       </div>
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {services?.map((service: Service) => (
-          <ServiceCard
-            key={service.id}
-            service={service}
-            isEditing={editingId === service.id}
-            // onSave={(updatedService) => handleSave(service.id, updatedService)}
-            onSave={() => console.log("Save")}
-          />
+          <Card key={service.id} className="overflow-hidden">
+            <CardContent className="p-4">
+              <div className="flex items-center mb-4">
+                <img src={service.icon} alt={service.title} className="w-12 h-12 object-cover rounded-full mr-4" />
+                <h2 className="text-xl font-semibold">{service.title}</h2>
+              </div>
+              <p className="text-gray-600">{service.description}</p>
+            </CardContent>
+            <CardFooter className="bg-gray-50 p-4 flex justify-end space-x-2">
+              <Button variant="outline" size="sm" onClick={() => handleEdit(service)}>
+                <Pencil className="mr-2 h-4 w-4" /> Edit
+              </Button>
+              <Button variant="outline" size="sm" onClick={() => handleDelete(service.id)}>
+                <Trash2 className="mr-2 h-4 w-4" /> Delete
+              </Button>
+            </CardFooter>
+          </Card>
         ))}
-        {newService && (
-          <ServiceCard
-            service={{ id: 0, ...newService }}
-            isEditing={true}
-            onSave={handleSaveNew}
-          />
-        )}
       </div>
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Service</DialogTitle>
+          </DialogHeader>
+          <ServiceForm onSubmit={onSubmit} editingService={editingService} />
+        </DialogContent>
+      </Dialog>
     </div>
-  );
-};
+  )
+}
 
-export default ServiceMain;
+interface ServiceFormProps {
+  onSubmit: SubmitHandler<ServiceFormInputs>
+  editingService?: Service | null
+}
+
+function ServiceForm({ onSubmit, editingService }: ServiceFormProps) {
+  const { register, handleSubmit, formState: { errors }, watch } = useForm<ServiceFormInputs>()
+  const iconFile = watch('icon')
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <div>
+        <Label htmlFor="title">Title</Label>
+        <Input 
+          id="title"
+          defaultValue={editingService?.title}
+          {...register("title", { required: "Title is required" })} 
+        />
+        {errors.title && <p className="text-red-500 text-sm">{errors.title.message}</p>}
+      </div>
+      <div>
+        <Label htmlFor="description">Description</Label>
+        <textarea 
+          id="description"
+          defaultValue={editingService?.description}
+          {...register("description", { required: "Description is required" })} 
+        />
+        {errors.description && <p className="text-red-500 text-sm">{errors.description.message}</p>}
+      </div>
+      <div>
+        <Label htmlFor="icon">Icon</Label>
+        <Input 
+          id="icon"
+          type="file" 
+          accept="image/*" 
+          {...register("icon", { required: editingService ? false : "Icon is required" })} 
+        />
+        {errors.icon && <p className="text-red-500 text-sm">{errors.icon.message}</p>}
+      </div>
+      {editingService && !iconFile?.[0] && (
+        <div className="mt-2">
+          <Label>Current Icon</Label>
+          <img src={editingService.icon} alt="Current Icon" className="w-20 h-20 object-cover rounded-full mt-1" />
+        </div>
+      )}
+      {iconFile?.[0] && (
+        <div className="mt-2">
+          <Label>Icon Preview</Label>
+          <img src={URL.createObjectURL(iconFile[0])} alt="Icon Preview" className="w-20 h-20 object-cover rounded-full mt-1" />
+        </div>
+      )}
+      <Button type="submit">{editingService ? 'Update' : 'Add'} Service</Button>
+    </form>
+  )
+}
