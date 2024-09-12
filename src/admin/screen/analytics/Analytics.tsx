@@ -13,7 +13,7 @@ const Analytics = () => {
   //
 
   return (
-    <div className="mx-6 flex w-full flex-col space-y-5 md:mx-12 lg:mx-8">
+    <div className="mx-auto mb-5 flex w-full flex-col gap-5 px-4 md:mx-12 lg:mx-8">
       <FeaturedInfo />
       <Chart
         data={userData}
@@ -21,7 +21,7 @@ const Analytics = () => {
         grid
         dataKey="Active User"
       />
-      <div className="flex flex-col-reverse items-start justify-center gap-6 lg:flex-row">
+      <div className="my-7 flex flex-col-reverse items-start justify-center gap-14 md:gap-6 lg:flex-row">
         <WidgetLeft />
         <WidgetRight />
       </div>

@@ -69,12 +69,11 @@ export default function EcommerceAdminDashboard() {
   return (
     <Card className="mx-auto w-full">
       <CardHeader>
-        <CardTitle>E-commerce Admin Dashboard</CardTitle>
-        <CardDescription>Key metrics and data visualization</CardDescription>
+        <CardTitle>Charts</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-2">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList>
+          <TabsList className="flex h-fit flex-wrap justify-between">
             <TabsTrigger value="sales">Monthly Sales</TabsTrigger>
             <TabsTrigger value="categories">Product Categories</TabsTrigger>
             <TabsTrigger value="demographics">
@@ -95,7 +94,7 @@ export default function EcommerceAdminDashboard() {
                   yAxisId="left"
                   type="monotone"
                   dataKey="sales"
-                  stroke="#8884d8"
+                  stroke="red"
                 />
                 <Line
                   yAxisId="right"
