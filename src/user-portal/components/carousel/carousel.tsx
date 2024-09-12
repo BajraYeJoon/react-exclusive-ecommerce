@@ -5,8 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
-// import "swiper/css/navigation";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { Pagination, Autoplay } from "swiper/modules";
 import { Skeleton } from "../../../common/ui/skeleton";
 import { Button } from "../../../common/ui/button";
 import { fetchHeroBanner } from "../../../common/api/bannerApi";
@@ -24,12 +23,9 @@ const Carousel = () => {
     queryFn: fetchHeroBanner,
   });
 
-  // Handle case where data is still loading
   if (isLoading) {
     return <Skeleton className="skeleton loading mt-4 h-96 w-full" />;
   }
-
-  
 
   const banner = bannerData ? bannerData.bannerData : [];
 
@@ -38,7 +34,6 @@ const Carousel = () => {
       <Swiper
         spaceBetween={30}
         centeredSlides={true}
-        
         autoplay={{
           delay: 3000,
           disableOnInteraction: false,
@@ -64,16 +59,16 @@ const Carousel = () => {
           </div>
         ) : (
           banner.map((content: Content, index: number) => (
-            <SwiperSlide key={index} className="">
-              <div className="carousel-content grid h-56 w-full grid-cols-1 overflow-hidden bg-foreground p-4 align-middle md:grid-cols-2 md:p-0 lg:h-96">
+            <SwiperSlide key={index}>
+              <div className="carousel-content grid h-56 w-full grid-cols-2 overflow-hidden bg-foreground p-4 align-middle md:grid-cols-2 md:p-0 lg:h-96">
                 <div className="carousel-text flex flex-col items-start justify-center gap-0 text-background md:gap-6 md:pl-10 lg:pl-14">
                   <span className="brand-icon inline-flex items-center gap-3 md:gap-6">
                     <SiApple className="text-md md:text-base lg:text-xl" />
-                    <span className="text-xs font-light md:text-base lg:text-lg">
+                    <span className="text-[10px] font-light md:text-base lg:text-lg">
                       {content.title}
                     </span>
                   </span>
-                  <h1 className="carousel-title text-balance text-2xl font-medium leading-[4.2rem] tracking-wide lg:text-5xl">
+                  <h1 className="carousel-title my-2 text-balance text-sm font-medium tracking-wide sm:leading-5 md:text-2xl lg:text-5xl lg:leading-[4.2rem]">
                     {content.title}
                   </h1>
                   <Link
@@ -87,7 +82,7 @@ const Carousel = () => {
                   <img
                     src={content.image[0]}
                     alt="Description"
-                    className="-mt-14 w-full object-contain opacity-50 md:mt-0 md:h-[200px] md:opacity-100 lg:h-[300px]"
+                    className="w-full rounded-sm border object-contain sm:border-0 md:mt-0 md:h-[200px] md:opacity-100 lg:h-[300px]"
                   />
                 </div>
               </div>

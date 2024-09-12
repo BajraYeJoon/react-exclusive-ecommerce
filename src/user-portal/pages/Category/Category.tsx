@@ -66,7 +66,7 @@ const Category = () => {
           <Swiper
             spaceBetween={20}
             pagination={{ clickable: true }}
-            className="mySwiper flex h-fit md:h-32"
+            className="mySwiper flex h-24 md:h-32"
             modules={[Navigation]}
             navigation={{
               enabled: true,
@@ -75,7 +75,7 @@ const Category = () => {
             }}
             breakpoints={{
               320: {
-                slidesPerView: 2,
+                slidesPerView: 3,
               },
               540: {
                 slidesPerView: 3,
@@ -94,7 +94,7 @@ const Category = () => {
             {categories?.map((category: CategoryType) => {
               return (
                 <SwiperSlide
-                  className="group gap-2 rounded-md border-2 border-foreground/20 py-4 hover:border-none hover:bg-primary md:p-6"
+                  className="group flex items-center justify-center gap-2 rounded-md border-2 border-foreground/20 py-4 hover:border-none hover:bg-primary md:p-6"
                   key={`category-${uuid()}`}
                 >
                   <Link

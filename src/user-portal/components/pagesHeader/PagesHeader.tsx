@@ -2,6 +2,8 @@ import NavigationArrows from "../navigationalArrows/NavigationalArrows";
 import { Link } from "react-router-dom";
 import CountdownTimer from "../flashSaleTimer/counttimer";
 import { Button } from "../../../common/ui/button";
+import { useQuery } from "@tanstack/react-query";
+import { fetchSalesProduct } from "../../../common/api/productApi";
 
 interface PagesHeaderProps {
   flashTimer?: boolean;
@@ -16,10 +18,16 @@ const PagesHeader = ({
   Heading,
   cta,
 }: PagesHeaderProps) => {
-  const THREE_DAYS_IN_MS = 40000000;
-  const NOW_IN_MS = new Date().getTime();
+  const { data: salesData } = useQuery({
+    queryKey: ["sale"],
+    queryFn: fetchSalesProduct,
+  });
 
-  const dateTimeAfterThreeDays = new Date(NOW_IN_MS + THREE_DAYS_IN_MS);
+  const dateConversion = new Date(salesData && salesData[0]?.saleEnd);
+
+  const CUSTOM_DAYS_IN_MS = dateConversion.getTime();
+
+  const dateTimeAfterThreeDays = new Date(CUSTOM_DAYS_IN_MS);
   return (
     <div className="page-header-container flex flex-col gap-3">
       <div className="flex items-center gap-3 text-primary">
@@ -34,7 +42,6 @@ const PagesHeader = ({
             {Heading}
           </h2>
           {flashTimer && <CountdownTimer targetDate={dateTimeAfterThreeDays} />}
-          {/* <div className="flex items-center gap-3 text-color-text-3 mb-3"></div> */}
         </div>
         {!cta ? (
           <div className="page-navigations flex items-center gap-2">

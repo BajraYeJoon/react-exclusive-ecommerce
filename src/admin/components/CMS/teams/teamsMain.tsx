@@ -98,12 +98,9 @@ export default function EmployeeManagement() {
   };
 
   const handleDelete = (id: string) => {
-    if (window.confirm("Are you sure you want to delete this employee?")) {
-      deleteMutation.mutate(id);
-    }
+    deleteMutation.mutate(id);
   };
 
-  if (isLoading) return <div>Loading...</div>;
 
   return (
     <div className="container mx-auto p-4">

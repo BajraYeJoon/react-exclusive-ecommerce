@@ -23,8 +23,8 @@ import { Button } from "../../../common/ui/button";
 const createProductSchema = z.object({
   title: z.string().min(1, "Title is required"),
   price: z.number().positive("Price must be a positive number"),
-  image: z.any().optional(),
-  discounttag: z.string().optional(),
+  image: z.array(z.any()).optional(),
+  discounttag: z.boolean().optional(),
   stock: z.number(),
   discountprice: z
     .number()
@@ -34,7 +34,7 @@ const createProductSchema = z.object({
   returnpolicy: z.string().min(1, "Return policy is required"),
   description: z.string().min(1, "Description is required"),
   brand: z.string().min(1, "Brand is required"),
-  availability: z.string(),
+  availability: z.boolean().optional(),
   categories: z.string().optional(),
 });
 
@@ -43,11 +43,14 @@ type CreateProductFormData = z.infer<typeof createProductSchema>;
 export default function AddNewProductDialog() {
   const methods = useForm<CreateProductFormData>({
     resolver: zodResolver(createProductSchema),
-    defaultValues: {},
+    defaultValues: {
+      image: [],
+    },
   });
 
   const [step, setStep] = useState(1);
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+  const [productImages, setProductImages] = useState<Array<string | File>>([]);
 
   const {
     register,
@@ -80,8 +83,12 @@ export default function AddNewProductDialog() {
   const onSubmit = async (data: CreateProductFormData) => {
     const formData = new FormData();
     Object.entries(data).forEach(([key, value]) => {
-      if (key === "image" && value instanceof File) {
-        formData.append(key, value);
+      if (key === "images") {
+        productImages.forEach((image, index) => {
+          if (image instanceof File) {
+            formData.append(`images[${index}]`, image);
+          }
+        });
       } else {
         formData.append(key, value as string);
       }
@@ -90,6 +97,7 @@ export default function AddNewProductDialog() {
     try {
       await Axios.post("/product/create", formData);
       reset();
+      setProductImages([]);
       // Handle success (e.g., redirect or show a success message)
     } catch (error) {
       // Handle error
@@ -100,6 +108,19 @@ export default function AddNewProductDialog() {
     // Convert selected categories to a comma-separated string for the form
     setValue("categories", selectedCategories.join(","));
   }, [selectedCategories, setValue]);
+
+  const handleImageDrop = (acceptedFiles: File[]) => {
+    setProductImages((prev) => [...prev, ...acceptedFiles]);
+    setValue("image", acceptedFiles);
+  };
+
+  const handleImageRemove = (index: number) => {
+    setProductImages((prev) => prev.filter((_, i) => i !== index));
+    setValue(
+      "image",
+      productImages.filter((_, i) => i !== index),
+    );
+  };
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading categories</div>;
@@ -150,7 +171,7 @@ export default function AddNewProductDialog() {
                   <Input
                     id="stock"
                     type="number"
-                    {...register("stock")}
+                    {...register("stock", { valueAsNumber: true })}
                     placeholder="3"
                   />
                   {errors.stock && (
@@ -165,7 +186,7 @@ export default function AddNewProductDialog() {
                     id="description"
                     {...register("description")}
                     placeholder="A timeless bluetooth earphone that never goes out of style."
-                    className="h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground"
+                    className="h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground "
                   />
                   {errors.description && (
                     <p className="text-sm text-destructive">
@@ -187,7 +208,12 @@ export default function AddNewProductDialog() {
                   )}
                 </div>
                 <div className="flex space-x-2">
-                  <Checkbox id="discounttag" {...register("discounttag")} />
+                  <Checkbox
+                    id="discounttag"
+                    {...register("discounttag", {
+                      setValueAs: (value) => value === "on",
+                    })}
+                  />
                   <Label htmlFor="discounttag">Discount Tag</Label>
                 </div>
               </div>
@@ -224,8 +250,12 @@ export default function AddNewProductDialog() {
                 </div>
 
                 <div className="space-y-2 sm:col-span-2">
-                  <Label>Product Image</Label>
-                  <FileDropzone />
+                  <Label>Product Images</Label>
+                  <FileDropzone
+                    onDrop={handleImageDrop}
+                    files={productImages}
+                    onRemove={handleImageRemove}
+                  />
                 </div>
 
                 <div className="space-y-2">
@@ -238,7 +268,12 @@ export default function AddNewProductDialog() {
                   )}
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Checkbox id="availability" {...register("availability")} />
+                  <Checkbox
+                    id="availability"
+                    {...register("availability", {
+                      setValueAs: (value) => value === "on",
+                    })}
+                  />
                   <Label htmlFor="availability">Availability</Label>
                 </div>
                 <div className="space-y-2 sm:col-span-2">
