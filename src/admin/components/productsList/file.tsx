@@ -1,19 +1,14 @@
 import React from "react";
-import { useFormContext, useFieldArray } from "react-hook-form";
 import { useDropzone } from "react-dropzone";
 import { Button } from "../../../common/ui/button";
 
 interface FileDropzoneProps {
   onDrop: (acceptedFiles: File[]) => void;
+  files: Array<string | File>;
+  onRemove: (index: number) => void;
 }
 
-export function FileDropzone({ onDrop }: FileDropzoneProps) {
-  const { control } = useFormContext();
-  const { fields, remove } = useFieldArray({
-    control,
-    name: "images",
-  });
-
+export function FileDropzone({ onDrop, files, onRemove }: FileDropzoneProps) {
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/*": [],
@@ -31,10 +26,10 @@ export function FileDropzone({ onDrop }: FileDropzoneProps) {
         <input {...getInputProps()} />
         <p>Drag 'n' drop images here, or click to select</p>
       </div>
-      {fields.length > 0 && (
+      {files.length > 0 && (
         <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-          {fields.map((file, index) => (
-            <div key={file.id} className="group relative">
+          {files.map((file, index) => (
+            <div key={index} className="group relative">
               <img
                 src={
                   typeof file === "string"
@@ -46,7 +41,7 @@ export function FileDropzone({ onDrop }: FileDropzoneProps) {
               />
               <Button
                 type="button"
-                onClick={() => remove(index)}
+                onClick={() => onRemove(index)}
                 variant="destructive"
                 size="sm"
                 className="absolute right-0 top-0 opacity-0 transition-opacity group-hover:opacity-100"
