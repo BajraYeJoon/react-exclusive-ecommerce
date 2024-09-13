@@ -36,10 +36,13 @@ export default function DiscountCRUD() {
 
   const { register, handleSubmit, reset, setValue } = useForm();
 
-  const { data: coupons, isLoading } = useQuery({
+  const { data: couponsData, isLoading } = useQuery({
     queryKey: ["coupons"],
     queryFn: () => Axios.get("/coupon").then((res) => res.data),
   });
+
+  const coupons = couponsData;
+  console.log(coupons);
 
   const addCouponMutation = useMutation({
     mutationFn: (newCoupon) => Axios.post("/coupon", newCoupon),
