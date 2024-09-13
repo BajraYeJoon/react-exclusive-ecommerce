@@ -329,13 +329,6 @@ export default function Banner() {
                   </span>
                 </div>
                 <div className="flex flex-col justify-between gap-2 p-2 md:flex-row">
-                  <Button
-                    variant="secondary"
-                    className="flex w-full items-center lg:w-fit"
-                  >
-                    <Edit2 className="mr-1 h-4 w-4" size={14} />
-                    Edit
-                  </Button>
                   <ConfirmationDialog
                     triggerText={
                       <>

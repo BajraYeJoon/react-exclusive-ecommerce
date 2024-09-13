@@ -1,16 +1,13 @@
 import { useDropzone } from "react-dropzone";
 import { Button } from "../../../common/ui/button";
-import { useForm } from "react-hook-form";
 
 interface FileDropzoneProps {
   onDrop: (acceptedFiles: File[]) => void;
   files: Array<string | File>;
-  onRemove: (index: number) => void;
+  onRemove: (url: string) => void; // Update this type
 }
 
 export function FileDropzone({ onDrop, files, onRemove }: FileDropzoneProps) {
-  const { register } = useForm();
-
   const { getRootProps, getInputProps } = useDropzone({
     multiple: true,
     onDrop,
@@ -22,7 +19,7 @@ export function FileDropzone({ onDrop, files, onRemove }: FileDropzoneProps) {
         {...getRootProps()}
         className="cursor-pointer rounded-lg border-2 border-dashed border-gray-300 p-6 text-center transition-colors hover:border-gray-400"
       >
-        <input {...getInputProps()} type="file" {...register("image")} />
+        <input {...getInputProps()} type="file" />
         <p>Drag 'n' drop images here, or click to select</p>
       </div>
       {files.length > 0 && (
@@ -41,8 +38,7 @@ export function FileDropzone({ onDrop, files, onRemove }: FileDropzoneProps) {
               <Button
                 type="button"
                 onClick={() => {
-                  onRemove(index);
-                  console.log(index);
+                  onRemove(typeof file === "string" ? file : ""); // Pass URL if it's a string
                 }}
                 variant="destructive"
                 size="sm"

@@ -70,7 +70,7 @@ export default function UpdateProductForm({
     mutationFn: (data: Partial<UpdateProductFormData>) =>
       Axios.patch(`/product/${initialData.id}`, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["product", initialData.id] });
+      queryClient.invalidateQueries({ queryKey: ["products", initialData.id] });
     },
   });
 
@@ -78,15 +78,17 @@ export default function UpdateProductForm({
     mutationFn: (formData: FormData) =>
       Axios.patch(`/product/addimage/${initialData.id}`, formData),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["product", initialData.id] });
+      queryClient.invalidateQueries({ queryKey: ["products", initialData.id] });
     },
   });
 
   const deleteImageMutation = useMutation({
     mutationFn: (imageUrl: string) =>
-      Axios.post(`/product/deleteimage/${initialData.id}`, { url: imageUrl }),
+      Axios.delete(`/product/deleteimage/${initialData.id}`, {
+        data: { url: imageUrl }, // Correct way to pass URL in DELETE request
+      }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["product", initialData.id] });
+      queryClient.invalidateQueries({ queryKey: ["products", initialData.id] });
     },
     onError: (error: any) => {
       console.error("Failed to delete image", error);
@@ -106,12 +108,14 @@ export default function UpdateProductForm({
     }
   };
 
-  const handleImageDelete = async (index: number) => {
-    const imageToDelete = images[index];
-    if (typeof imageToDelete === "string") {
-      await deleteImageMutation.mutate(imageToDelete);
+  const handleImageDelete = async (url: string) => {
+    try {
+      await deleteImageMutation.mutateAsync(url);
+      queryClient.invalidateQueries({ queryKey: ["products", initialData.id] });
+      setImages((prevImages) => prevImages.filter((img) => img !== url));
+    } catch (error) {
+      console.error("Failed to delete image", error);
     }
-    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
   };
 
   const handleCategoryToggle = (categoryId: number) => {
@@ -122,36 +126,13 @@ export default function UpdateProductForm({
     );
   };
 
-  // const getChangedValues = (
-  //   currentValues: UpdateProductFormData,
-  // ): Partial<UpdateProductFormData> => {
-  //   const changedValues: Partial<UpdateProductFormData> = {};
-
-  //   Object.keys(currentValues).forEach((key) => {
-  //     const typedKey = key as keyof UpdateProductFormData;
-  //     if (currentValues[typedKey] !== initialData[typedKey]) {
-  //       changedValues[typedKey] = currentValues[typedKey];
-  //     }
-  //   });
-
-  //   // Check if categories have changed
-  //   if (
-  //     JSON.stringify(selectedCategories) !==
-  //     JSON.stringify(initialData.categories?.map((cat) => cat.id))
-  //   ) {
-  //     changedValues.categories = selectedCategories;
-  //   }
-
-  //   return changedValues;
-  // };
-
   const onSubmit = async (data: UpdateProductFormData) => {
-    // const changedValues = getChangedValues(data);
-    // if (Object.keys(changedValues).length > 0) {
-    await updateProductMutation.mutateAsync(data);
-    // } else {
-    //   console.log("No changes detected");
-    // }
+    const updatedDat = {
+      ...data,
+      categories: selectedCategories,
+    };
+
+    await updateProductMutation.mutateAsync(updatedDat);
   };
 
   return (

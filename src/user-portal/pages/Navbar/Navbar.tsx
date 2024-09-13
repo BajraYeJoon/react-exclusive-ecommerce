@@ -27,7 +27,9 @@ const Navbar = () => {
   const [results, setResults] = useState<SearchResultProps[]>([]);
   const resultsRef = useRef<HTMLDivElement>(null);
 
-  // console.log(isAdmin, 'am i admin????')
+  
+
+  console.log(isAdmin, "am i admin????");
 
   useEffect(() => {
     const debouncedFetchResults = debounce(async (query: string) => {
@@ -163,7 +165,7 @@ const Navbar = () => {
             </Link>
           )}
 
-          {!isAdmin && (
+          {!isAdmin && isLoggedIn ? (
             <Link to="/cart" className="flex gap-1">
               <LucideShoppingCart size={20} />
               {cartquantity > 0 && (
@@ -172,7 +174,7 @@ const Navbar = () => {
                 </span>
               )}
             </Link>
-          )}
+          ) : null}
 
           {isAdmin && isLoggedIn && (
             <Link to={`/${Routes.Admin}/${Routes.Dashboard}`}>

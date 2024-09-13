@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 // import { serviceDetailsInfo } from "../../constants/data";
 import { fetchServices } from "../../../common/api/cms/services";
+import { ServiceLoader } from "../../../common/components/cmsLoader";
 
 interface ServiceDetail {
   id: string;
@@ -17,13 +18,11 @@ const ServiceDetails = () => {
 
   const serviceDetailsInfo = serviceData?.data || [];
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <ServiceLoader />;
 
   return (
     <section className="grid grid-cols-1 place-items-center justify-evenly gap-12 sm:grid-cols-2 md:grid-cols-3 md:flex-row">
       {serviceDetailsInfo.map((serviceDetail: ServiceDetail) => {
-        // const ServiceIcon = serviceDetail.icon;
-
         return (
           <article
             key={serviceDetail.id}

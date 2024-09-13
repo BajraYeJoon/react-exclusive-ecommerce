@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [isAdmin] = useState(
-    JSON.parse(Cookies.get("user") ?? "{}") === "admin" ? true : false,
+    JSON.parse(Cookies.get("user") || "{}") === "admin",
   );
 
   console.log(isAdmin, "isAdmin");

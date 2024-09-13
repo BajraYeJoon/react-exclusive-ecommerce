@@ -17,28 +17,28 @@ export function StatsDisplay({ stats, onEdit, onDelete }: StatsDisplayProps) {
           key={stat.id}
           className="transition-all duration-300 hover:shadow-md"
         >
-          <CardContent className="p-6">
+          <CardContent className="space-y-3 p-4">
             <div className="space-y-2 text-center">
               <p className="text-3xl font-bold text-primary">{stat.value}</p>
               <p className="text-sm text-muted-foreground">
                 {stat.description}
               </p>
             </div>
+            <CardFooter className="flex items-center justify-center p-0">
+              <Button variant="outline" size="sm" onClick={() => onEdit(stat)}>
+                <PencilIcon className="mr-2 h-4 w-4" />
+                <span className="hidden md:inline">Edit</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onDelete(stat.id || 0)}
+              >
+                <TrashIcon className="mr-2 h-4 w-4" />
+                <span className="hidden md:inline">Delete</span>
+              </Button>
+            </CardFooter>
           </CardContent>
-          <CardFooter className="flex flex-col justify-between gap-2 p-4 pt-0 md:flex-row">
-            <Button variant="outline" size="sm" onClick={() => onEdit(stat)}>
-              <PencilIcon className="mr-2 h-4 w-4" />
-              Edit
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onDelete(stat.id || 0)}
-            >
-              <TrashIcon className="mr-2 h-4 w-4" />
-              Delete
-            </Button>
-          </CardFooter>
         </Card>
       ))}
     </section>

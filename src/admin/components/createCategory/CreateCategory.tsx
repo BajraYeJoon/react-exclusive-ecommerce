@@ -9,6 +9,7 @@ import {
   DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -29,14 +30,7 @@ import { fetchCategories } from "../../../common/api/categoryApi";
 import { Axios } from "../../../common/lib/axiosInstance";
 import { Input } from "../../../common/ui/input";
 import { Button } from "../../../common/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../../../common/ui/card";
+
 import { Label } from "../../../common/ui/label";
 import { Skeleton } from "../../../common/ui/skeleton";
 import uuidv4 from "../../../common/lib/utils/uuid";
@@ -131,60 +125,64 @@ const AddCategoryForm = () => {
 
   return (
     <div className="mx-6 flex flex-col space-y-8">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Add New Category</CardTitle>
-          <CardDescription>
-            Create a new product category for your store
-          </CardDescription>
-        </CardHeader>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="categoryName">Category Name</Label>
-                <Input
-                  type="text"
-                  id="categoryName"
-                  placeholder="Enter category name"
-                  {...register("categoryName", {
-                    required: "Category name is required",
-                    maxLength: {
-                      value: 50,
-                      message: "Category name must be 50 characters or less",
-                    },
-                  })}
-                  className="transition-all duration-200 ease-in-out focus:ring-2 focus:ring-blue-500"
-                />
-                {errors.categoryName && (
-                  <p className="text-sm text-red-500">
-                    {errors.categoryName.message}
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button>Add Category</Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add New Category</DialogTitle>
+            <DialogDescription>
+              Create a new product category for your store
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="categoryName">Category Name</Label>
+                  <Input
+                    type="text"
+                    id="categoryName"
+                    placeholder="Enter category name"
+                    {...register("categoryName", {
+                      required: "Category name is required",
+                      maxLength: {
+                        value: 50,
+                        message: "Category name must be 50 characters or less",
+                      },
+                    })}
+                    className="transition-all duration-200 ease-in-out focus:ring-2 focus:ring-blue-500"
+                  />
+                  {errors.categoryName && (
+                    <p className="text-sm text-red-500">
+                      {errors.categoryName.message}
+                    </p>
+                  )}
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    {categoryName.length}/50 characters
                   </p>
-                )}
-                <p className="mt-2 text-sm text-muted-foreground">
-                  {categoryName.length}/50 characters
-                </p>
+                </div>
               </div>
-            </div>
-          </CardContent>
-          <CardFooter className="flex justify-between">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => reset()}
-              className="transition-all duration-200 ease-in-out hover:bg-gray-100"
-            >
-              Clear
-            </Button>
-            <Button
-              type="submit"
-              className="transition-all duration-200 ease-in-out"
-            >
-              Add Category
-            </Button>
-          </CardFooter>
-        </form>
-      </Card>
+              <DialogFooter className="flex justify-between">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => reset()}
+                className="transition-all duration-200 ease-in-out hover:bg-gray-100"
+              >
+                Clear
+              </Button>
+              <Button
+                type="submit"
+                className="transition-all duration-200 ease-in-out"
+              >
+                Add Category
+              </Button>
+            </DialogFooter>
+        
+          </form>
+        </DialogContent>
+      </Dialog>
 
       <div className="">
         <h3 className="mb-2 text-xl font-medium">Your Categories</h3>

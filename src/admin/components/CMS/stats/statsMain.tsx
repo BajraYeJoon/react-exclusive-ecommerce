@@ -18,6 +18,7 @@ import {
 } from "../../../../common/ui/dialog";
 import { Input } from "../../../../common/ui/input";
 import { Label } from "../../../../common/ui/label";
+import { StatsLoader } from "../../../../common/components/cmsLoader";
 
 export interface Stat {
   id?: number;
@@ -98,7 +99,7 @@ export default function Stats() {
     deleteMutation.mutate(id);
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <StatsLoader />;
   if (error) return <div>Error loading stats</div>;
 
   return (

@@ -17,7 +17,7 @@ export function OurStoryDisplay({ content }: Readonly<OurStoryDisplayProps>) {
         alt="girls"
         decoding="async"
         src={content.image}
-        className="w-44 object-contain md:w-[300px] lg:w-[600px]"
+        className="w-44 object-contain md:w-[300px] lg:w-[500px]"
       />
     </div>
   );

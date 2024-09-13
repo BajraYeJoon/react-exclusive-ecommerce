@@ -19,6 +19,7 @@ import { Button } from "../../../../common/ui/button";
 import { Card, CardContent, CardFooter } from "../../../../common/ui/card";
 import { Label } from "../../../../common/ui/label";
 import { Input } from "../../../../common/ui/input";
+import { EmployeeLoader } from "../../../../common/components/cmsLoader";
 export interface Employee {
   id: string;
   name: string;
@@ -42,7 +43,7 @@ export default function EmployeeManagement() {
   const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null);
   const queryClient = useQueryClient();
 
-  const { data: employeesData } = useQuery({
+  const { data: employeesData, isLoading } = useQuery({
     queryKey: ["employees"],
     queryFn: fetchEmployees,
   });
@@ -72,6 +73,10 @@ export default function EmployeeManagement() {
       queryClient.invalidateQueries({ queryKey: ["employees"] });
     },
   });
+
+  if (isLoading) {
+    return <EmployeeLoader />;
+  }
 
   const onSubmit: SubmitHandler<EmployeeFormInputs> = (data) => {
     const formData = new FormData();

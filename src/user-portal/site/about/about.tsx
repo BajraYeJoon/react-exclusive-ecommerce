@@ -11,7 +11,11 @@ import { fetchAbout } from "../../../common/api/cms/about";
 import { fetchStats } from "../../../common/api/cms/stats";
 import { fetchEmployees } from "../../../common/api/cms/employee";
 import { Link } from "react-router-dom";
-
+import {
+  EmployeeLoader,
+  StatsLoader,
+  StoryLoader,
+} from "../../../common/components/cmsLoader";
 
 interface EmployeeProps {
   id: number | string;
@@ -49,13 +53,7 @@ const About = () => {
 
       <div className="space-y-32">
         {isLoadingStory ? (
-          <div className="flex items-center justify-between gap-16">
-            <div className="flex w-1/2 flex-col gap-8">
-              <div className="h-12 animate-pulse rounded bg-gray-200"></div>
-              <div className="h-24 animate-pulse rounded bg-gray-200"></div>
-            </div>
-            <div className="h-[600px] w-1/2 animate-pulse rounded bg-gray-200"></div>
-          </div>
+          <StoryLoader />
         ) : (
           <div className="flex items-center justify-between gap-16">
             <div className="flex flex-col gap-8 text-ellipsis">
@@ -76,14 +74,7 @@ const About = () => {
         )}
 
         {isLoadingStats ? (
-          <div className="flex justify-center gap-12">
-            {[1, 2, 3, 4].map((index) => (
-              <div
-                key={index}
-                className="h-32 w-1/4 animate-pulse rounded bg-gray-200"
-              ></div>
-            ))}
-          </div>
+          <StatsLoader />
         ) : (
           <div className="flex justify-center gap-12">
             {stats?.map(({ description, value, id }: any) => (
@@ -105,13 +96,7 @@ const About = () => {
         )}
 
         {isLoadingEmployees ? (
-          <>
-            {[1, 2, 3].map((index) => (
-              <div key={index} className="flex items-center justify-center">
-                <div className="h-96 w-64 animate-pulse rounded bg-gray-200"></div>
-              </div>
-            ))}
-          </>
+          <EmployeeLoader />
         ) : (
           <Swiper
             className="mySwiper flex h-full items-center justify-center"

@@ -4,6 +4,7 @@ import { Button } from "../../../../common/ui/button";
 import { OurStoryEdit } from "./OurStoryEdit";
 import { OurStoryDisplay } from "./OurStoryDisplay";
 import { fetchAbout } from "../../../../common/api/cms/about";
+import { StoryLoader } from "../../../../common/components/cmsLoader";
 
 export interface OurStoryContent {
   title: string;
@@ -23,11 +24,10 @@ export default function AboutMain() {
     queryFn: fetchAbout,
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <StoryLoader />;
   if (error) return <div>Error loading content</div>;
 
   const content = contentData?.data;
-
 
   return (
     <div className="">

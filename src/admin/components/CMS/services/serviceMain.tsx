@@ -19,6 +19,7 @@ import { Button } from "../../../../common/ui/button";
 import { Card, CardContent, CardFooter } from "../../../../common/ui/card";
 import { Label } from "../../../../common/ui/label";
 import { Input } from "../../../../common/ui/input";
+import { ServiceLoader } from "../../../../common/components/cmsLoader";
 
 interface Service {
   id: string;
@@ -106,7 +107,7 @@ export default function ServiceManagement() {
     }
   };
 
-  if (isLoading) return <div>Loading services...</div>;
+  if (isLoading) return <ServiceLoader />;
   if (error)
     return <div>Error loading services: {(error as Error).message}</div>;
 
