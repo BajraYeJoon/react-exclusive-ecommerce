@@ -1,126 +1,241 @@
 import { useQuery } from "@tanstack/react-query";
-import { motion } from "framer-motion";
-import { Copy, CheckCircle, Calendar, Tag, DollarSign } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Copy,
+  CheckCircle,
+  Calendar,
+  Tag,
+  DollarSign,
+  Percent,
+  Clock,
+  Gift,
+} from "lucide-react";
 import { useState } from "react";
 import { Axios } from "../../lib/axiosInstance";
 
-const fetchCoupon = async () => {
+// Types
+interface Coupon {
+  id: string;
+  name: string;
+  code: string;
+  type: "fixed_Amount" | "percentage";
+  value: number;
+  startDate: string;
+  expirationDate: string;
+}
+
+interface CouponProps {
+  coupon: Coupon;
+  onCopy: (code: string) => void;
+  isCopied: boolean;
+}
+
+const fetchCoupons = async (): Promise<Coupon[]> => {
   const response = await Axios.get("/coupon");
-  return response;
+  return response.data;
 };
 
-export default function Component() {
-  const [copied, setCopied] = useState(false);
+const CouponDesign1: React.FC<CouponProps> = ({ coupon, onCopy, isCopied }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -20 }}
+    transition={{ duration: 0.5 }}
+    className="relative overflow-hidden rounded-lg bg-gradient-to-br from-amber-100 to-amber-200 shadow-lg"
+  >
+    <div className="absolute -right-4 -top-4 h-24 w-24 rotate-12 bg-yellow-400" />
+    <div className="p-6">
+      <h2 className="mb-2 text-2xl font-bold text-gray-800">{coupon.name}</h2>
+      <div className="mb-4 flex items-center">
+        {coupon.type === "fixed_Amount" ? (
+          <DollarSign className="mr-1 h-6 w-6 text-green-600" />
+        ) : (
+          <Percent className="mr-1 h-6 w-6 text-blue-600" />
+        )}
+        <span className="text-3xl font-bold text-gray-900">
+          {coupon.type === "fixed_Amount"
+            ? `$${coupon.value.toFixed(2)} OFF`
+            : `${coupon.value} OFF`}
+        </span>
+      </div>
+      <div className="mb-4 flex items-center justify-between">
+        <span className="rounded-full bg-yellow-300 px-3 py-1 text-sm font-semibold text-yellow-800">
+          {coupon.code}
+        </span>
+        <button
+          onClick={() => onCopy(coupon.code)}
+          className="rounded-full bg-blue-600 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-blue-700"
+          aria-label={isCopied ? "Copied" : "Copy code"}
+        >
+          {isCopied ? "Copied!" : "Copy Code"}
+        </button>
+      </div>
+      <div className="flex items-center text-sm text-gray-600">
+        <Clock className="mr-1 h-4 w-4" />
+        <span>
+          Expires: {new Date(coupon.expirationDate).toLocaleDateString()}
+        </span>
+      </div>
+    </div>
+  </motion.div>
+);
+
+const CouponDesign2: React.FC<CouponProps> = ({ coupon, onCopy, isCopied }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -20 }}
+    transition={{ duration: 0.5 }}
+    className="overflow-hidden rounded-lg bg-white shadow-lg"
+  >
+    <div className="bg-gradient-to-r from-purple-600 to-indigo-600 p-4 text-white">
+      <h2 className="text-xl font-bold">{coupon.name}</h2>
+    </div>
+    <div className="p-6">
+      <div className="mb-4 text-center">
+        <span className="text-4xl font-bold text-indigo-600">
+          {coupon.type === "fixed_Amount"
+            ? `$${coupon.value.toFixed(2)}`
+            : `${coupon.value}`}
+        </span>
+        <span className="ml-1 text-lg font-semibold text-gray-600">OFF</span>
+      </div>
+      <div className="mb-4 flex items-center justify-between">
+        <span className="rounded-md bg-gray-100 px-3 py-1 font-mono text-sm text-gray-800">
+          {coupon.code}
+        </span>
+        <button
+          onClick={() => onCopy(coupon.code)}
+          className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-indigo-700"
+          aria-label={isCopied ? "Copied" : "Copy code"}
+        >
+          {isCopied ? (
+            <CheckCircle className="h-5 w-5" />
+          ) : (
+            <Copy className="h-5 w-5" />
+          )}
+        </button>
+      </div>
+      <div className="flex items-center justify-between text-xs text-gray-500">
+        <div className="flex items-center">
+          <Calendar className="mr-1 h-4 w-4" />
+          <span>
+            Valid from: {new Date(coupon.startDate).toLocaleDateString()}
+          </span>
+        </div>
+        <div className="flex items-center">
+          <Tag className="mr-1 h-4 w-4" />
+          <span>
+            Expires: {new Date(coupon.expirationDate).toLocaleDateString()}
+          </span>
+        </div>
+      </div>
+    </div>
+  </motion.div>
+);
+
+const CouponDesign3: React.FC<CouponProps> = ({ coupon, onCopy, isCopied }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -20 }}
+    transition={{ duration: 0.5 }}
+    className="relative overflow-hidden rounded-lg bg-gradient-to-br from-green-400 to-blue-500 p-1 shadow-lg"
+  >
+    <div className="rounded-lg bg-white p-5">
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-gray-800">{coupon.name}</h2>
+        <Gift className="h-8 w-8 text-green-500" />
+      </div>
+      <div className="mb-4 flex items-center justify-center">
+        <span className="bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-5xl font-extrabold text-transparent">
+          {coupon.type === "fixed_Amount"
+            ? `$${coupon.value.toFixed(2)}`
+            : `${coupon.value}%`}
+        </span>
+        <span className="ml-2 text-2xl font-bold text-gray-600">OFF</span>
+      </div>
+      <div className="mb-4 flex items-center justify-between">
+        <span className="rounded-full bg-gray-100 px-4 py-2 font-mono text-lg font-semibold text-gray-800">
+          {coupon.code}
+        </span>
+        <button
+          onClick={() => onCopy(coupon.code)}
+          className="rounded-full bg-gradient-to-r from-green-400 to-blue-500 px-6 py-2 text-sm font-bold text-white transition-all hover:from-green-500 hover:to-blue-600"
+          aria-label={isCopied ? "Copied" : "Copy code"}
+        >
+          {isCopied ? "Copied!" : "Copy Code"}
+        </button>
+      </div>
+      <div className="flex items-center justify-between text-sm text-gray-600">
+        <div className="flex items-center">
+          <Calendar className="mr-1 h-4 w-4" />
+          <span>Valid: {new Date(coupon.startDate).toLocaleDateString()}</span>
+        </div>
+        <div className="flex items-center">
+          <Clock className="mr-1 h-4 w-4" />
+          <span>
+            Expires: {new Date(coupon.expirationDate).toLocaleDateString()}
+          </span>
+        </div>
+      </div>
+    </div>
+  </motion.div>
+);
+
+// Main Component
+export default function EnhancedCoupons() {
+  const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
   const {
-    data: couponsData,
+    data: coupons,
     isLoading,
     error,
-  } = useQuery({
+  } = useQuery<Coupon[]>({
     queryKey: ["coupons"],
-    queryFn: fetchCoupon,
+    queryFn: fetchCoupons,
   });
 
-  const coupons = couponsData?.data;
-  console.log(coupons);
+  const copyCode = (code: string) => {
+    navigator.clipboard.writeText(code);
+    setCopiedCode(code);
+    setTimeout(() => setCopiedCode(null), 2000);
+  };
 
-  if (isLoading) return <div className="p-4 text-center">Loading...</div>;
+  if (isLoading)
+    return <div className="p-4 text-center">Loading coupons...</div>;
   if (error)
     return (
       <div className="p-4 text-center text-red-500">
         Error fetching coupon data
       </div>
     );
-  if (!coupons || coupons?.length === 0)
-    return <div className="p-4 text-center">No coupon available</div>;
+  if (!coupons || coupons.length === 0)
+    return <div className="p-4 text-center">No coupons available</div>;
 
-  const copyCode = (code: any) => {
-    navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const getCouponDesign = (index: number, coupon: Coupon) => {
+    const designs = [CouponDesign1, CouponDesign2, CouponDesign3];
+    const DesignComponent = designs[index % designs.length];
+    return (
+      <DesignComponent
+        key={coupon.id}
+        coupon={coupon}
+        onCopy={copyCode}
+        isCopied={copiedCode === coupon.code}
+      />
+    );
   };
 
   return (
-    <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
-      {coupons.map((coupon: any) => (
-        <motion.div
-          key={coupon.id}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-6 w-full overflow-hidden rounded-2xl bg-white shadow-xl"
-        >
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white md:p-8 lg:p-10">
-            <h2 className="mb-2 text-2xl font-bold md:text-3xl lg:text-4xl">
-              {coupon.name}
-            </h2>
-            <p className="text-lg opacity-90 md:text-xl">Limited Time Offer</p>
-          </div>
-
-          <div className="p-6 md:p-8 lg:p-10">
-            <div className="mb-8 flex flex-col items-center justify-between md:flex-row">
-              <div className="mb-4 text-4xl font-bold text-blue-600 md:mb-0 md:text-5xl">
-                <DollarSign className="mr-2 inline-block" />
-                {coupon.value.toFixed(2)}
-              </div>
-              <div className="text-lg font-semibold uppercase text-gray-600">
-                {coupon.type === "fixed_Amount"
-                  ? "Fixed Amount"
-                  : "Percentage Off"}
-              </div>
-            </div>
-
-            <div className="mb-8 flex flex-col items-center justify-center space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
-              <span className="w-full rounded-lg bg-gray-100 px-6 py-3 text-center font-mono text-lg text-gray-800 sm:w-auto sm:text-xl">
-                {coupon.code}
-              </span>
-              <button
-                onClick={() => copyCode(coupon.code)}
-                className="flex w-full items-center justify-center rounded-lg bg-blue-600 px-6 py-3 font-bold text-white transition duration-300 hover:bg-blue-700 sm:w-auto"
-              >
-                {copied ? (
-                  <CheckCircle className="mr-2" />
-                ) : (
-                  <Copy className="mr-2" />
-                )}
-                {copied ? "Copied!" : "Copy Code"}
-              </button>
-            </div>
-
-            <div className="mb-8 flex flex-col items-center justify-between text-sm text-gray-600 sm:flex-row">
-              <div className="mb-2 flex items-center sm:mb-0">
-                <Calendar className="mr-2" />
-                <span>
-                  Valid from: {new Date(coupon.startDate).toLocaleDateString()}
-                </span>
-              </div>
-              <div className="flex items-center">
-                <Tag className="mr-2" />
-                <span>
-                  Expires on:{" "}
-                  {new Date(coupon.expirationDate).toLocaleDateString()}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="relative">
-            <div className="absolute -top-3 left-0 -ml-3 h-6 w-6 rounded-full bg-gray-100"></div>
-            <div className="absolute -top-3 right-0 -mr-3 h-6 w-6 rounded-full bg-gray-100"></div>
-            <div className="my-4 border-t-2 border-dashed border-gray-300"></div>
-          </div>
-
-          <div className="bg-gray-50 p-6 md:p-8 lg:p-10">
-            <p className="text-center text-gray-600">
-              Use this code at checkout to get{" "}
-              {coupon.type === "fixed_Amount"
-                ? `$${coupon.value.toFixed(2)} off`
-                : `${coupon.value}% off`}{" "}
-              your purchase. Terms and conditions apply.
-            </p>
-          </div>
-        </motion.div>
-      ))}
+    <div>
+      <h1 className="mb-8 text-center text-3xl font-bold text-gray-800">
+        Available Coupons
+      </h1>
+      <AnimatePresence>
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {coupons.map((coupon, index) => getCouponDesign(index, coupon))}
+        </div>
+      </AnimatePresence>
     </div>
   );
 }
