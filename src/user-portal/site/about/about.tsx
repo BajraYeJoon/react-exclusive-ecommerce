@@ -48,19 +48,21 @@ const About = () => {
   const isLoadingEmployees = results[2].isLoading;
 
   return (
-    <section className="relative mx-8 my-6 h-fit md:mx-12 md:my-12 lg:mx-auto lg:max-w-7xl">
+    <section className="relative mx-8 my-12 h-fit md:mx-12 lg:max-w-7xl xl:mx-auto">
       <CustomBreakcrumb breadcrumbTitle="About" />
 
-      <div className="space-y-32">
+      <div className="my-3 space-y-24">
         {isLoadingStory ? (
           <StoryLoader />
         ) : (
-          <div className="flex items-center justify-between gap-16">
+          <div className="flex flex-col items-center justify-between gap-16 md:flex-row">
             <div className="flex flex-col gap-8 text-ellipsis">
               <h1 className="text-6xl capitalize max-2xl:text-4xl">
                 {story?.title}
               </h1>
-              <p className="text-lg max-2xl:text-base">{story?.body}</p>
+              <p className="text-lg max-2xl:text-sm md:text-base">
+                {story?.body}
+              </p>
             </div>
             <img
               alt="girls"
@@ -68,7 +70,7 @@ const About = () => {
               height="700"
               decoding="async"
               src={story?.image}
-              className="max-3xl:w-[600px] w-[600px] object-contain max-2xl:w-[500px]"
+              className="max-3xl:w-[600px] w-[600px] object-contain max-2xl:w-[400px]"
             />
           </div>
         )}
@@ -76,10 +78,10 @@ const About = () => {
         {isLoadingStats ? (
           <StatsLoader />
         ) : (
-          <div className="flex justify-center gap-12">
+          <div className="grid grid-cols-2 justify-center gap-4 md:grid-cols-3 lg:grid-cols-4">
             {stats?.map(({ description, value, id }: any) => (
               <div
-                className="3 group flex flex-col items-center gap-9 rounded-md border border-foreground/25 px-9 py-5 hover:bg-primary lg:px-12"
+                className="group flex flex-col items-center gap-9 rounded-md border border-foreground/25 px-9 py-5 hover:bg-primary md:flex-row lg:px-12"
                 key={id}
               >
                 <div className="space-y-3 text-center">
@@ -99,51 +101,55 @@ const About = () => {
           <EmployeeLoader />
         ) : (
           <Swiper
-            className="mySwiper flex h-full items-center justify-center"
+            className="mySwiper flex h-fit items-center justify-center"
             modules={[Pagination]}
             spaceBetween={50}
-            slidesPerView={3}
             pagination={{
               clickable: true,
             }}
+            breakpoints={{
+              320: {
+                slidesPerView: 2,
+              },
+              640: {
+                slidesPerView: 2,
+              },
+              768: {
+                slidesPerView: 3,
+              },
+              1024: {
+                slidesPerView: 4,
+              },
+            }}
           >
             {employees.map((employee: EmployeeProps) => (
-              <SwiperSlide
-                key={employee.id}
-                className="flex items-center justify-center"
-              >
-                <div className="flex items-center justify-center">
-                  <div className="flex flex-col items-start gap-5">
-                    <div className="bg-color-secondary">
-                      <img
-                        alt={employee.name}
-                        loading="lazy"
-                        width="200"
-                        height="200"
-                        decoding="async"
-                        data-nimg="1"
-                        className="max-3xl:h-64 max-3xl:mx-10 mx-14 mt-5 h-80 object-contain object-bottom max-2xl:mx-8 max-2xl:h-48"
-                        src={employee.image}
-                      />
-                    </div>
-                    <div className="max-3xl:gap-2 flex flex-col items-start gap-4">
-                      <div className="max-3xl:gap-1 flex flex-col items-start gap-2 capitalize">
-                        <p className="max-3xl:text-3xl text-4xl max-2xl:text-2xl">
-                          {employee.name}
-                        </p>
-                        <p className="text-lg max-2xl:text-base">
-                          {employee.position}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-5">
-                        <Link to={employee?.twitter ?? ""}>
-                          <FaTwitter size={20} />
-                        </Link>
-                        <Link to={employee?.linkedin ?? ""}>
-                          <FaLinkedin size={20} />
-                        </Link>
-                      </div>
-                    </div>
+              <SwiperSlide key={employee.id}>
+                <img
+                  alt={employee.name}
+                  loading="lazy"
+                  width="200"
+                  height="200"
+                  decoding="async"
+                  data-nimg="1"
+                  className="max-3xl:h-64 max-3xl:mx-10 mx-14 mt-5 h-80 object-contain object-bottom max-2xl:mx-8 max-2xl:h-48"
+                  src={employee.image}
+                />
+                <div className="max-3xl:gap-2 flex flex-col items-start gap-4">
+                  <div className="max-3xl:gap-1 flex flex-col items-start gap-2 capitalize">
+                    <p className="max-3xl:text-3xl text-4xl max-2xl:text-2xl">
+                      {employee.name}
+                    </p>
+                    <p className="text-lg max-2xl:text-base">
+                      {employee.position}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-5">
+                    <Link to={employee?.twitter ?? ""}>
+                      <FaTwitter size={20} />
+                    </Link>
+                    <Link to={employee?.linkedin ?? ""}>
+                      <FaLinkedin size={20} />
+                    </Link>
                   </div>
                 </div>
               </SwiperSlide>

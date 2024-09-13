@@ -183,7 +183,6 @@ const CouponDesign3: React.FC<CouponProps> = ({ coupon, onCopy, isCopied }) => (
   </motion.div>
 );
 
-// Main Component
 export default function EnhancedCoupons() {
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
 

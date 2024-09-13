@@ -28,19 +28,18 @@ const ServiceDetails = () => {
             key={serviceDetail.id}
             className="service-details flex max-w-sm flex-col items-center justify-center gap-5 text-center"
           >
-            <div className="flex h-16 w-16 items-center justify-center rounded-full border-[14px] border-background/80 bg-foreground md:h-16 md:w-16 lg:h-24 lg:w-24">
-              {/* <ServiceIcon className="h-10 w-10 text-background" /> */}
+            <div className="flex h-24 w-24 items-center justify-center rounded-full border-[14px] border-background/80 bg-foreground md:h-16 md:w-16 lg:h-24 lg:w-24">
               <img
                 src={serviceDetail.icon}
                 alt=""
-                className="rounded-full object-contain"
+                className="rounded-full object-cover"
               />
             </div>
             <div className="space-y-1">
-              <h4 className="uppecase text-sm font-bold uppercase tracking-wide md:text-[20px]">
+              <h4 className="uppecase text-base font-bold uppercase tracking-wide md:text-[20px]">
                 {serviceDetail.title}
               </h4>
-              <p className="text-xs font-light md:text-base">
+              <p className="text-sm font-light md:text-base">
                 {serviceDetail.description}
               </p>
             </div>
