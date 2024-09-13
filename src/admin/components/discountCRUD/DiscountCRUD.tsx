@@ -27,10 +27,11 @@ import {
   DialogTrigger,
 } from "../../../common/ui/dialog";
 import { Axios } from "../../../common/lib/axiosInstance";
+import { AxiosError } from "axios";
 
 export default function DiscountCRUD() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingCoupon, setEditingCoupon] = useState(null);
+  const [editingCoupon, setEditingCoupon] = useState<any>(null);
   const queryClient = useQueryClient();
 
   const { register, handleSubmit, reset, setValue } = useForm();
@@ -51,7 +52,7 @@ export default function DiscountCRUD() {
     onError: () => toast.error("Failed to add coupon"),
   });
 
-  const updateCouponMutation = useMutation({
+  const updateCouponMutation = useMutation<void, AxiosError, { id: string }>({
     mutationFn: (updatedCoupon) =>
       Axios.patch(`/coupon/${updatedCoupon.id}`, updatedCoupon),
     onSuccess: () => {
@@ -73,7 +74,7 @@ export default function DiscountCRUD() {
     onError: () => toast.error("Failed to delete coupon"),
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: any) => {
     if (editingCoupon) {
       updateCouponMutation.mutate({ ...data, id: editingCoupon.id });
     } else {
@@ -81,7 +82,7 @@ export default function DiscountCRUD() {
     }
   };
 
-  const handleEdit = (coupon) => {
+  const handleEdit = (coupon: any) => {
     setEditingCoupon(coupon);
     Object.keys(coupon).forEach((key) => {
       if (key === "startDate" || key === "expirationDate") {
@@ -93,7 +94,7 @@ export default function DiscountCRUD() {
     setIsDialogOpen(true);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (id: any) => {
     if (window.confirm("Are you sure you want to delete this coupon?")) {
       deleteCouponMutation.mutate(id);
     }
@@ -228,7 +229,7 @@ export default function DiscountCRUD() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {coupons?.map((coupon) => (
+              {coupons?.map((coupon: any) => (
                 <TableRow key={coupon.id}>
                   <TableCell>{coupon.name}</TableCell>
                   <TableCell>{coupon.code}</TableCell>

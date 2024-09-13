@@ -5,7 +5,6 @@ import {
   UserList,
   Banner,
   StaticContent,
-  DiscountCreator,
 } from "../admin/components";
 import DiscountCRUD from "../admin/components/discountCRUD/DiscountCRUD";
 import { Routes } from "../admin/lib/links";

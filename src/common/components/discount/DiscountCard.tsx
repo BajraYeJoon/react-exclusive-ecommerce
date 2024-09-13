@@ -34,7 +34,7 @@ export default function Component() {
   if (!coupons || coupons?.length === 0)
     return <div className="p-4 text-center">No coupon available</div>;
 
-  const copyCode = (code) => {
+  const copyCode = (code: any) => {
     navigator.clipboard.writeText(code);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -42,7 +42,7 @@ export default function Component() {
 
   return (
     <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
-      {coupons.map((coupon) => (
+      {coupons.map((coupon: any) => (
         <motion.div
           key={coupon.id}
           initial={{ opacity: 0, y: 20 }}
