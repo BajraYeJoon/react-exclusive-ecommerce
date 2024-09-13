@@ -1,4 +1,3 @@
-import React from "react";
 import { useDropzone } from "react-dropzone";
 import { Button } from "../../../common/ui/button";
 import { useForm } from "react-hook-form";

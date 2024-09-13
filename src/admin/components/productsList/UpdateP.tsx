@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -54,12 +54,10 @@ export default function UpdateProductForm({
     initialData.images || [],
   );
 
-  const { control, handleSubmit, watch } = useForm<UpdateProductFormData>({
+  const { control, handleSubmit } = useForm<UpdateProductFormData>({
     resolver: zodResolver(updateProductSchema),
     defaultValues: initialData,
   });
-
-  const formValues = watch();
 
   console.log(initialData, "intitalk datas");
 
@@ -249,7 +247,12 @@ export default function UpdateProductForm({
               render={({ field }) => (
                 <div className="space-y-2">
                   <Label htmlFor="sizes">Sizes</Label>
-                  <Input id="sizes" {...field} placeholder="S, M, L, XL" />
+                  <Input
+                    id="sizes"
+                    {...field}
+                    placeholder="S, M, L, XL"
+                    value={field.value || ""}
+                  />
                 </div>
               )}
             />

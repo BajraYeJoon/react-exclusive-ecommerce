@@ -6,7 +6,6 @@ import { checkoutState } from "../../atoms/checkoutState";
 import Cookies from "js-cookie";
 import { useState } from "react";
 import { fetchCart } from "../../api/cartApi";
-import { cn } from "../../../common/lib/utils";
 import {
   applyCoupon,
   useClearCart,
@@ -17,18 +16,17 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { v4 as uuid } from "uuid";
 import { Button } from "../../../common/ui/button";
-import uuidv4 from "../../../common/lib/utils/uuid";
 import { ProductCardSkeleton } from "../../../common/components";
 import { ConfirmationDialog } from "../../../admin/components";
 
-const cartHeaderData = [
-  { label: "Price" },
-  { label: "Quantity" },
-  { label: "Total" },
-  {
-    label: "",
-  },
-];
+// const cartHeaderData = [
+//   { label: "Price" },
+//   { label: "Quantity" },
+//   { label: "Total" },
+//   {
+//     label: "",
+//   },
+// ];
 
 const discountState = atom<number>({
   key: "discountState",

@@ -12,6 +12,16 @@ import { fetchStats } from "../../../common/api/cms/stats";
 import { fetchEmployees } from "../../../common/api/cms/employee";
 import { Link } from "react-router-dom";
 
+
+interface EmployeeProps {
+  id: number | string;
+  name: string;
+  position: string;
+  image: string;
+  twitter?: string;
+  linkedin?: string;
+}
+
 const About = () => {
   const results = useQueries({
     queries: [
@@ -96,18 +106,12 @@ const About = () => {
 
         {isLoadingEmployees ? (
           <>
-             {[1, 2, 3].map((index) => (
-              <div
-                key={index}
-                className="flex items-center justify-center"
-              >
+            {[1, 2, 3].map((index) => (
+              <div key={index} className="flex items-center justify-center">
                 <div className="h-96 w-64 animate-pulse rounded bg-gray-200"></div>
               </div>
             ))}
           </>
-          
-         
-      
         ) : (
           <Swiper
             className="mySwiper flex h-full items-center justify-center"
@@ -118,7 +122,7 @@ const About = () => {
               clickable: true,
             }}
           >
-            {employees.map((employee) => (
+            {employees.map((employee: EmployeeProps) => (
               <SwiperSlide
                 key={employee.id}
                 className="flex items-center justify-center"
@@ -147,10 +151,10 @@ const About = () => {
                         </p>
                       </div>
                       <div className="flex items-center gap-5">
-                        <Link to={employee?.twitter}>
+                        <Link to={employee?.twitter ?? ""}>
                           <FaTwitter size={20} />
                         </Link>
-                        <Link to={employee?.linkedin}>
+                        <Link to={employee?.linkedin ?? ""}>
                           <FaLinkedin size={20} />
                         </Link>
                       </div>

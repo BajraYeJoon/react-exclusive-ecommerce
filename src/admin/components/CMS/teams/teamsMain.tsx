@@ -44,7 +44,7 @@ export default function EmployeeManagement() {
   const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null);
   const queryClient = useQueryClient();
 
-  const { data: employeesData, isLoading } = useQuery({
+  const { data: employeesData } = useQuery({
     queryKey: ["employees"],
     queryFn: fetchEmployees,
   });

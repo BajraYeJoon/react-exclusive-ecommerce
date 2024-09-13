@@ -1,5 +1,5 @@
 import React from "react";
-import { MapPin, Mail, Phone, User, Calendar } from "lucide-react";
+import { Mail, Phone, User, Calendar } from "lucide-react";
 import { Card, CardContent } from "../../../../common/ui/card";
 import {
   Avatar,

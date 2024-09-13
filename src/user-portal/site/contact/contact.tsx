@@ -8,7 +8,7 @@ import { Button } from "../../../common/ui/button";
 const Contact = () => {
   const { register, handleSubmit } = useForm();
 
-  const onSubmit = (data: any, e: any) => {
+  const onSubmit = (e: any) => {
     e.preventDefault();
 
     const form = e.target;

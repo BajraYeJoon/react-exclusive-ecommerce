@@ -38,7 +38,6 @@ import {
   CardTitle,
 } from "../../../common/ui/card";
 import { Label } from "../../../common/ui/label";
-import { Loading } from "../../../user-portal/site";
 import { Skeleton } from "../../../common/ui/skeleton";
 import uuidv4 from "../../../common/lib/utils/uuid";
 

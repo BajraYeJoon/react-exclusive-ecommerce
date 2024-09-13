@@ -27,7 +27,7 @@ const SignupPage = () => {
     const { email, password, name, phoneNumber } = data;
 
     try {
-      const response = signup({ name, email, password, phoneNumber });
+      await signup({ name, email, password, phoneNumber });
       reset();
     } catch (err) {
       console.error("Signup error", err);

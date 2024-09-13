@@ -1,6 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 // import { serviceDetailsInfo } from "../../constants/data";
 import { fetchServices } from "../../../common/api/cms/services";
+
+interface ServiceDetail {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+}
+
 const ServiceDetails = () => {
   const { data: serviceData, isLoading } = useQuery({
     queryKey: ["serviceDetails"],
@@ -13,7 +21,7 @@ const ServiceDetails = () => {
 
   return (
     <section className="grid grid-cols-1 place-items-center justify-evenly gap-12 sm:grid-cols-2 md:grid-cols-3 md:flex-row">
-      {serviceDetailsInfo.map((serviceDetail) => {
+      {serviceDetailsInfo.map((serviceDetail: ServiceDetail) => {
         // const ServiceIcon = serviceDetail.icon;
 
         return (

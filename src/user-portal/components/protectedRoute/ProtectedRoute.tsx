@@ -11,6 +11,8 @@ interface ProtectedRouteProps {
 const ProtectedRoute = ({ children, role }: ProtectedRouteProps) => {
   const { isLoggedIn } = useAuthContext();
 
+  console.log(role, "role");
+
   // const user = JSON.parse(Cookies.get("user") ?? "{}");
 
   if (!isLoggedIn) {

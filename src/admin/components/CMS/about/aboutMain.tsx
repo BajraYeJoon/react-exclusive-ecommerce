@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "../../../../common/ui/button";
 import { OurStoryEdit } from "./OurStoryEdit";
 import { OurStoryDisplay } from "./OurStoryDisplay";
-import { fetchAbout, updateAbout } from "../../../../common/api/cms/about";
+import { fetchAbout } from "../../../../common/api/cms/about";
 
 export interface OurStoryContent {
   title: string;

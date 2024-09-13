@@ -3,7 +3,6 @@ import { fetchAllUsers } from "../../../api/fetchUser";
 import NewUsers from "../../user-component/newUsers/NewUsers";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
-import { Loading } from "../../../../user-portal/site";
 import { Skeleton } from "../../../../common/ui/skeleton";
 import uuidv4 from "../../../../common/lib/utils/uuid";
 

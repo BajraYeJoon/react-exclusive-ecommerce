@@ -1,27 +1,36 @@
-'use client'
-
-import { useState } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { useForm, SubmitHandler } from 'react-hook-form'
-import { Plus, Pencil, Trash2, X } from 'lucide-react'
-import { addService, deleteService, fetchServices, updateService } from '../../../../common/api/cms/services'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../../../../common/ui/dialog'
-import { Button } from '../../../../common/ui/button'
-import { Card, CardContent, CardFooter } from '../../../../common/ui/card'
-import { Label } from '../../../../common/ui/label'
-import { Input } from '../../../../common/ui/input'
+import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { Plus, Pencil, Trash2 } from "lucide-react";
+import {
+  addService,
+  deleteService,
+  fetchServices,
+  updateService,
+} from "../../../../common/api/cms/services";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../../../../common/ui/dialog";
+import { Button } from "../../../../common/ui/button";
+import { Card, CardContent, CardFooter } from "../../../../common/ui/card";
+import { Label } from "../../../../common/ui/label";
+import { Input } from "../../../../common/ui/input";
 
 interface Service {
-  id: string
-  title: string
-  description: string
-  icon: string // URL of the icon image
+  id: string;
+  title: string;
+  description: string;
+  icon: string; // URL of the icon image
 }
 
 interface ServiceFormInputs {
-  title: string
-  description: string
-  icon: FileList
+  title: string;
+  description: string;
+  icon: FileList;
 }
 
 export default function ServiceManagement() {

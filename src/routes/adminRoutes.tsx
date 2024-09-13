@@ -5,7 +5,6 @@ import {
   UserList,
   Banner,
   StaticContent,
-  AdminDiscount,
   DiscountCreator,
 } from "../admin/components";
 import { Routes } from "../admin/lib/links";

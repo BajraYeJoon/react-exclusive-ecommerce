@@ -210,7 +210,7 @@ export function DatePickerWithRange({
             saleStart: date?.from ? new Date(date.from).toISOString() : "",
             saleEnd: new Date(date?.to || "").toISOString(),
             products: data,
-          }).then((res) => {
+          }).then(() => {
             queryClient.invalidateQueries({ queryKey: ["products"] });
             toast.success("Product added to flash sale");
             setFlashItem([]);
