@@ -5,6 +5,7 @@ export enum UserRoutes {
   SignUp = "sign-up",
   SignIn = "sign-in",
   ForgotPassword = "forgot-password",
+  EmailVerification = "/auth/verifyemail",
   VerifyOtp = "verify-otp",
   Profile = "profile",
   Cart = "cart",
