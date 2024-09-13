@@ -122,10 +122,10 @@ export default function EmployeeManagement() {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="grid grid-cols-2 gap-6 md:grid-cols-3">
+      <div className="grid grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-4">
         {employees?.map((employee: Employee) => (
-          <Card key={employee.id} className="overflow-hidden">
-            <CardContent className="flex p-4">
+          <Card key={employee.id} className="w-full overflow-hidden">
+            <CardContent className="flex flex-col p-4 sm:flex-row">
               <div className="flex flex-col items-center">
                 <img
                   src={employee.image}
@@ -159,7 +159,7 @@ export default function EmployeeManagement() {
                   LinkedIn
                 </a>
               )}
-              <CardFooter className="flex flex-col justify-end space-y-2 bg-gray-50 p-4 md:flex-row md:space-x-2">
+              <CardFooter className="flex flex-col justify-end space-y-2 p-4">
                 <Button
                   variant="outline"
                   size="sm"
