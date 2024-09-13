@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchNewArrivals } from "../../../common/api/productApi";
 import uuidv4 from "../../../common/lib/utils/uuid";
 import { cn } from "../../../common/lib/utils";
+import { Link } from "react-router-dom";
 
 type GridItemProps = {
   product: NewArrivalsProductProps;
@@ -16,8 +17,8 @@ const ArrivalProductsGrid = () => {
   const additionalClasses = [
     "col-span-2 md:row-span-2 lg:bg-cover",
     "col-span-2 bg-right shadow-[inset_-100px_0_100px_10px_rgba(255,255,255,0.2)] lg:bg-cover",
-    "relative bg-center p-10 lg:bg-cover",
-    "relative bg-center p-14 md:p-10 lg:bg-cover",
+    "relative bg-center p-6 lg:bg-cover",
+    "relative bg-center p-6 md:p-10 lg:bg-cover",
   ];
 
   const SkeletonGridItem = ({
@@ -44,8 +45,6 @@ const ArrivalProductsGrid = () => {
 
     select: (products) => products.slice(0, 4),
   });
-
-  console.log(products, "new arrivaksssss");
 
   if (isLoading) {
     return (
@@ -86,7 +85,6 @@ const ArrivalProductsGrid = () => {
 };
 
 const GridItem = ({ product, additionalClasses }: GridItemProps) => {
-  console.log(product.image[0], "image", product.id);
   // https://haaamsknsjjifhavpila.supabase.co/storage/v1/object/public/nest-ecommerce/public/9676642f-9075-41db-a8ba-302b83b2821b-nando-jpeg-quality-001.jpg
   return (
     <div
@@ -101,16 +99,18 @@ const GridItem = ({ product, additionalClasses }: GridItemProps) => {
           <p className="text-[10px] tracking-wide text-background/60 md:text-[12px] lg:text-sm">
             {product.description.slice(0, 40)}...
           </p>
-          <ShopNowButton />
+          <ShopNowButton id={product.id} />
         </div>
       </div>
     </div>
   );
 };
-const ShopNowButton = () => (
-  <Button variant={"ghost"} size={"ghostsize"}>
-    Shop Now
-  </Button>
+const ShopNowButton = ({ id }: any) => (
+  <Link to={`/products/${id}`}>
+    <Button variant={"ghost"} size={"ghostsize"}>
+      Shop Now
+    </Button>
+  </Link>
 );
 
 export default ArrivalProductsGrid;

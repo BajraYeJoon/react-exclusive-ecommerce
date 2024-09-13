@@ -30,13 +30,13 @@ const ProductCard = ({
   id,
 }: ProductCardProps) => {
   const { dimension } = useWindow();
-  const { isLoggedIn } = useAuthContext();
+  const { isLoggedIn, isAdmin } = useAuthContext();
   const queryClient = useQueryClient();
 
   const { data: favoritesData } = useQuery({
     queryKey: ["favorites"],
     queryFn: fetchFavorites,
-    enabled: isLoggedIn,
+    enabled: !isAdmin && isLoggedIn,
   });
   const favorites = favoritesData?.data || [];
 
@@ -80,36 +80,6 @@ const ProductCard = ({
     );
   };
 
-  // const addToCartMutation = useMutation({
-  //   mutationFn: addProductToCart,
-  //   onSuccess: () => {
-  //     setCart((currentCart) => {
-  //       const productIndex = currentCart.findIndex((item) => item.id === id);
-  //       if (productIndex !== -1) {
-  //         toast.success(
-  //           `Your ${title} has been added to the cart ${
-  //             currentCart[productIndex].quantity + 1
-  //           } times`,
-  //         );
-  //         return currentCart.map((item, index) =>
-  //           index === productIndex
-  //             ? { ...item, quantity: item.quantity + 1 }
-  //             : item,
-  //         );
-  //       } else {
-  //         toast.success(`Your ${title} has been added to the cart`);
-  //         return [
-  //           ...currentCart,
-  //           { product: {}, title, price, image, id, quantity: 1 },
-  //         ];
-  //       }
-  //     });
-  //   },
-  //   onError: () => {
-  //     toast.error("Failed to add product to cart");
-  //   },
-  // });
-
   const { mutate: addToCart } = useIncreaseQuantity();
 
   const handleFavoriteClick = () => {
@@ -126,7 +96,7 @@ const ProductCard = ({
         <Link to={`/${title?.toLowerCase().split(" ").join("-")}/${id}`}>
           <img
             className="h-full w-full object-contain p-4 transition-opacity duration-300 group-hover:opacity-40 md:p-8 lg:p-12"
-            src={image}
+            src={image[0]}
             alt="product image"
             onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) =>
               ((e.target as HTMLImageElement).src =
@@ -150,35 +120,39 @@ const ProductCard = ({
         )}
 
         <div className="absolute right-4 top-4 flex flex-col gap-2">
-          <button
-            className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-foreground/20 lg:h-7 lg:w-7"
-            onClick={handleFavoriteClick}
-          >
-            <HeartIcon
-              size={dimension.width < 768 ? 10 : 18}
-              fill={isFavorite(id) ? "red" : "none"}
-              className={isFavorite(id) ? "text-primary" : ""}
-            />
-          </button>
+          {!isAdmin && (
+            <button
+              className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-foreground/20 lg:h-7 lg:w-7"
+              onClick={handleFavoriteClick}
+            >
+              <HeartIcon
+                size={dimension.width < 768 ? 12 : 18}
+                fill={isFavorite(id) ? "red" : "none"}
+                className={isFavorite(id) ? "text-primary" : ""}
+              />
+            </button>
+          )}
+
           <Link
-            to={`product/${id}`}
-            replace={true}
+            to={`/product/${id}`}
             className="flex h-4 w-4 items-center justify-center rounded-full bg-foreground/20 lg:h-7 lg:w-7"
           >
-            <EyeIcon size={dimension.width < 768 ? 10 : 18} />
+            <EyeIcon size={dimension.width < 768 ? 12 : 18} />
           </Link>
         </div>
 
-        <Button
-          className="group cursor-pointer"
-          onClick={() => addToCart({ id: id, type: "add" })}
-        >
-          <div className="absolute bottom-0 left-0 w-full bg-foreground opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-            <p className="py-2 text-center text-sm font-normal tracking-tight text-background">
-              Add to Cart
-            </p>
-          </div>
-        </Button>
+        {!isAdmin && (
+          <Button
+            className="group cursor-pointer"
+            onClick={() => addToCart({ id: id, type: "add" })}
+          >
+            <div className="absolute bottom-0 left-0 w-full bg-foreground opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+              <p className="py-2 text-center text-sm font-normal tracking-tight text-background">
+                Add to Cart
+              </p>
+            </div>
+          </Button>
+        )}
       </div>
 
       <div className="my-4 space-y-3 pb-5">

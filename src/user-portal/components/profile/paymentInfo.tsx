@@ -1,4 +1,3 @@
-import React from "react";
 import { FaCreditCard } from "react-icons/fa";
 
 const PaymentInfo = () => {

@@ -20,7 +20,7 @@ const ForgotPassword = () => {
     try {
       const response = await sendOtp(data.email);
       setEmail(data.email);
-      console.log("Response:", response.data);
+
       toast.success("otp has been sent to your email");
       Cookies.set("key", response.data.message);
 

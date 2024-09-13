@@ -3,7 +3,8 @@ import { handleRequest } from "./handleRequest";
 
 export const fetchHeroBanner = async () => {
   return handleRequest(
-    () => Axios.get(`/banner/items`).then((res) => res.data.data),
+    () => Axios.get(`/banner/items`).then((res) => res.data),
     "Error fetching hero banner",
   );
 };
+

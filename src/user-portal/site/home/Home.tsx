@@ -1,3 +1,4 @@
+import { DiscountCard } from "../../../common/components";
 import {
   Hero,
   SalesCard,
@@ -13,6 +14,7 @@ const Home = () => {
   return (
     <div className="mx-72 mb-28 flex flex-col gap-40 max-2xl:mx-6 max-2xl:gap-28">
       <Hero />
+      <DiscountCard />
       <SalesCard />
       <Category />
       <BestProducts />

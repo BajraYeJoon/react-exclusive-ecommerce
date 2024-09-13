@@ -56,7 +56,7 @@ const Checkout = () => {
     const orderData = {
       id: uuid().toString().substring(2, 15),
       billingInfo: data,
-      products: checkoutValues.cartItems,
+      products: productData.map((item) => item.id),
       shipping: 45,
       total: checkoutValues.total,
       paymentMethod: data.paymentMethod,
@@ -66,14 +66,21 @@ const Checkout = () => {
     setOrderPlaceData(orderData);
     reset();
     resetCheckoutCartAfterOrderPlace({ cartItems: [], total: 0 });
+    console.log("orderData", orderData);
     Cookies.remove("checkoutData");
     resetCartAfterORderPlace([]);
     Cookies.set("order-placed", "true");
     Navigate("/order-placed");
   };
 
+  console.log(
+    checkoutValues.cartItems.map((item: any) => item.product.id),
+    "checkoutasdfasdfsa",
+  );
+  const productData = checkoutValues.cartItems.map((item: any) => item.product);
+
   return (
-    <section className="mx-8 mb-28 mt-12 md:mx-12 lg:mx-72 lg:mt-32">
+    <section className="mx-64 mb-28 mt-12 max-2xl:mx-6 lg:mt-32">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="grid w-full grid-cols-1 items-start justify-between gap-24 md:grid-cols-2"
@@ -142,31 +149,26 @@ const Checkout = () => {
           </div>
         </div>
         <div className="flex flex-col gap-4 md:gap-7 lg:gap-8">
-          {checkoutValues.cartItems.map(
-            (
-              cartData: { image: string; title: string; price: number },
-              index,
-            ) => (
-              <Fragment key={index}>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 lg:gap-5">
-                    <img
-                      src={cartData.image}
-                      alt=""
-                      className="h-10 w-10 md:h-12 md:w-12"
-                    />
-                    <h4 className="text-xs md:text-lg lg:text-xl">
-                      {cartData.title}
-                    </h4>
-                  </div>
-
-                  <p className="text-sm md:text-lg lg:text-xl">
-                    ${cartData.price}
-                  </p>
+          {productData.map((cartData, index) => (
+            <Fragment key={index}>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 lg:gap-5">
+                  <img
+                    src={cartData.image[0]}
+                    alt=""
+                    className="h-10 w-10 md:h-12 md:w-12"
+                  />
+                  <h4 className="text-xs md:text-lg lg:text-base">
+                    {cartData.title}
+                  </h4>
                 </div>
-              </Fragment>
-            ),
-          )}
+
+                <p className="text-sm md:text-lg lg:text-xl">
+                  ${cartData.price}
+                </p>
+              </div>
+            </Fragment>
+          ))}
 
           <div className="flex items-center justify-between border-b pb-3 text-sm lg:text-base">
             <h3>Shipping:</h3>

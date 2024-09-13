@@ -1,27 +1,29 @@
 import CustomBreakcrumb from "../customBreakcrumb/CustomBreakcrumb";
-import { ShoppingBasket } from "lucide-react";
+import { ShoppingBasket, StarIcon } from "lucide-react";
 import { Button } from "../../../common/ui/button";
 import { CgGlobeAlt } from "react-icons/cg";
 import { FcCancel } from "react-icons/fc";
 import { useParams } from "react-router-dom";
-import { Suspense, useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "../../../common/lib/utils";
 import { BiStar } from "react-icons/bi";
 import { v4 as uuidv4 } from "uuid";
 import { fetchProductDetails } from "../../../common/api/productApi";
 import { useIncreaseQuantity } from "../../utils/cartutils";
 import Reviews from "./ratings";
-
-// interface RadioOption {
-//   value: string;
-//   label: string;
-// }
-
-// interface SizeProps {
-//   name: string;
-//   options: RadioOption[];
-//   defaultValue?: string;
-// }
+import { useAuthContext } from "../../context/useAuthContext";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { MdAddCircleOutline, MdStarOutline } from "react-icons/md";
+import { Loading } from "../../site";
+import { Axios } from "../../../common/lib/axiosInstance";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../../../common/ui/dialog";
+import { toast } from "sonner";
 
 interface FeatureItemProps {
   icon: React.ReactNode;
@@ -29,173 +31,217 @@ interface FeatureItemProps {
   description: string;
 }
 
-// const SizesGroup = ({ name, options, defaultValue }: SizeProps) => {
-//   return (
-//     <div className="mt-3 flex select-none flex-wrap items-center gap-1">
-//       {options.map((option, index) => (
-//         <label key={index} className="">
-//           <input
-//             type="radio"
-//             name={name}
-//             value={option.value}
-//             className="peer sr-only"
-//             defaultChecked={defaultValue === option.value}
-//           />
-//           <p className="rounded-lg border px-6 py-2 font-bold peer-checked:bg-primary peer-checked:text-background">
-//             {option.label}
-//           </p>
-//         </label>
-//       ))}
-//     </div>
-//   );
-// };
-
 const Singleproduct = () => {
   const { productId } = useParams();
-  const [details, setDetails] = useState<any>([]);
+  const [selectedImage, setSelectedImage] = useState<string>("");
   const { mutate: addToCart } = useIncreaseQuantity();
+  const { isAdmin, isLoggedIn } = useAuthContext();
+  const queryClient = useQueryClient();
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
 
-  console.log(productId);
+  const { data: details, isLoading } = useQuery({
+    queryKey: ["productdetails"],
+    queryFn: () => fetchProductDetails(productId ?? ""),
+  });
+
+  const { data: ratingsData } = useQuery({
+    queryKey: ["ratings"],
+    queryFn: () => Axios.get(`/rating/${details.id}`),
+  });
+
+  const ratings = ratingsData?.data;
+  console.log(ratings, "ratings");
 
   useEffect(() => {
-    (async () => {
-      const productDetails = await fetchProductDetails(productId!);
-      setDetails(productDetails);
-    })();
-  }, [productId]);
+    if (details?.image?.length > 0) {
+      setSelectedImage(details.image[0]);
+    }
+  }, [details]);
 
-  console.log(details);
+  if (isLoading) {
+    return (
+      <div className="flex h-[90vh] items-center justify-center">
+        <Loading />
+      </div>
+    );
+  }
 
-  // const sizeOPtions = [
-  //   { value: "xs", label: "XS" },
-  //   { value: " sm", label: "SM" },
-  //   { value: "l", label: "L" },
-  //   { value: "xl", label: "XL" },
-  // ];
+  const handleRatingSubmit = async () => {
+    try {
+      await Axios.post(`rating/create/${details.id}`, { rating, comment });
+      queryClient.invalidateQueries({ queryKey: ["ratings"] });
+      setRating(0);
+      setComment("");
+      toast.success("Rating submitted successfully!");
+    } catch (error) {
+      toast.error("Failed to submit rating. Please try again.");
+    }
+  };
 
   return (
     <section className="py-12 sm:py-16">
       <div className="container mx-auto px-4">
         <CustomBreakcrumb breadcrumbTitle={`${details.brand}`} />
 
-        <Suspense fallback={<div>Loading...</div>}>
-          <div className="lg:col-gap-12 xl:col-gap-16 mt-8 grid grid-cols-1 gap-12 lg:mt-12 lg:grid-cols-5 lg:gap-16">
-            <div className="col-auto lg:col-span-3 lg:row-end-1">
-              <div className="lg:flex lg:items-start">
-                <div className="w-full lg:order-2 lg:ml-5">
-                  <div className="h-56 w-full overflow-hidden rounded-lg md:h-[400px] lg:h-[500px]">
-                    {details.image === "" ? (
-                      <img
-                        className="h-full w-full object-contain"
-                        src={details.image}
-                        alt=""
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center bg-foreground/35">
-                        No Image
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <div className="mt-2 w-full lg:order-1 lg:w-32 lg:flex-shrink-0">
-                  <div className="flex flex-row items-start lg:flex-col">
-                    <button
-                      type="button"
-                      className="flex-0 mb-3 aspect-square h-20 overflow-hidden rounded-lg border-2 border-gray-900 text-center"
-                    >
-                      <img
-                        className="h-full w-full object-cover"
-                        src="https://plus.unsplash.com/premium_photo-1669703777565-05ec5f5dd7c4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fHRzaGlydHxlbnwwfHwwfHx8MA%3D%3D"
-                        alt=""
-                      />
-                    </button>
-                    <button
-                      type="button"
-                      className="flex-0 mb-3 aspect-square h-20 overflow-hidden rounded-lg border-2 border-transparent text-center"
-                    >
-                      <img
-                        className="h-full w-full object-cover"
-                        src="https://plus.unsplash.com/premium_photo-1669703777565-05ec5f5dd7c4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fHRzaGlydHxlbnwwfHwwfHx8MA%3D%3D"
-                        alt=""
-                      />
-                    </button>
-                    <button
-                      type="button"
-                      className="flex-0 mb-3 aspect-square h-20 overflow-hidden rounded-lg border-2 border-transparent text-center"
-                    >
-                      <img
-                        className="h-full w-full object-cover"
-                        src="https://plus.unsplash.com/premium_photo-1669703777565-05ec5f5dd7c4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fHRzaGlydHxlbnwwfHwwfHx8MA%3D%3D"
-                        alt=""
-                      />
-                    </button>
-                  </div>
+        <div className="lg:col-gap-12 xl:col-gap-16 mt-8 grid grid-cols-1 gap-12 lg:mt-12 lg:grid-cols-5 lg:gap-16">
+          <div className="col-auto lg:col-span-3 lg:row-end-1">
+            <div className="lg:flex lg:items-start">
+              <div className="w-full lg:order-2 lg:ml-5">
+                <div className="h-56 w-full overflow-hidden rounded-lg md:h-[400px] lg:h-[500px]">
+                  <img
+                    className="h-full w-full object-contain"
+                    src={selectedImage}
+                    alt=""
+                  />
                 </div>
               </div>
-            </div>
 
-            <div className="flex flex-col gap-2 lg:col-span-2 lg:row-span-2 lg:row-end-2">
-              <h1 className="text-3xl font-light">
-                {details.title}
-                <span
-                  className={cn(
-                    `ml-6 flex flex-wrap rounded-full bg-foreground/10 px-2 py-1 text-xs font-medium text-foreground/70`,
-                    details.availability === true
-                      ? "bg-green-400"
-                      : "bg-red-400",
-                  )}
-                >
-                  {details.availability === true
-                    ? " in stock"
-                    : " out of stock"}
-                </span>
-              </h1>
-              <p className="text-base text-gray-400">{details.brand}</p>
-              <div className="my-5 flex items-center">
-                {Array.from({ length: Math.ceil(details.rating) }).map(() => (
+              {details.image?.length > 1 && (
+                <div className="mt-2 w-full lg:order-1 lg:w-32 lg:flex-shrink-0">
+                  <div className="flex flex-row items-start lg:flex-col">
+                    {details.image.map((image: string, index: number) => (
+                      <button
+                        key={index}
+                        type="button"
+                        className={`flex-0 mb-3 aspect-square h-20 overflow-hidden rounded-lg border-2 ${
+                          selectedImage === image
+                            ? "border-gray-900"
+                            : "border-transparent"
+                        } text-center`}
+                        onClick={() => setSelectedImage(image)}
+                      >
+                        <img
+                          className="h-full w-full object-cover"
+                          src={image}
+                          alt=""
+                        />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2 lg:col-span-2 lg:row-span-2 lg:row-end-2">
+            <h1 className="text-3xl font-light">
+              {details.title}
+              <span
+                className={cn(
+                  `ml-3 inline-flex w-fit flex-wrap justify-center rounded-full bg-foreground/10 px-2 py-1 text-xs font-medium text-foreground/70`,
+                  details.availability === true ? "bg-green-400" : "bg-red-400",
+                )}
+              >
+                {details.availability === true ? " in stock" : " out of stock"}
+              </span>
+            </h1>
+            <p className="text-base text-gray-400">{details.brand}</p>
+            <div className="my-5 flex items-center">
+              {Array.from({ length: Math.ceil(ratings?.totalRating) }).map(
+                () => (
                   <BiStar
                     key={`star-${uuidv4()}`}
                     size={20}
                     className="text-yellow-500"
                   />
-                ))}
+                ),
+              )}
 
-                <p className="ml-2 text-sm font-medium text-gray-500">
-                  {details.rating} Ratings
-                </p>
-              </div>
-              <h1 className="text-3xl">${details.price}</h1>
-              <p>{details.description}</p>
-              <hr className="w-full bg-foreground/35" />
-              <h2 className="text-forerground mt-8 text-base">Sizes</h2>
-              <Button>{details.sizes}</Button>
-
+              <p className="ml-2 text-sm font-medium text-gray-500">
+                {ratings ? ratings.allRatings[0].ratings.length : 0} Reviews
+              </p>
+            </div>
+            <h1 className="text-3xl">${details.price}</h1>
+            <p>{details.description}</p>
+            <hr className="w-full bg-foreground/35" />
+            <h2 className="text-forerground mt-8 text-base">Available Sizes</h2>
+            <Button variant={"outline"} className="uppercase">
+              {" "}
+              {details.sizes}
+            </Button>
+            {!isAdmin && details.availability === true && (
               <Button className="mt-6" onClick={() => addToCart(details.id)}>
                 <ShoppingBasket className="mr-4" />
                 Add to cart
               </Button>
-{/* 
-              {details.ratings?.map((rating: any) => {
-                return <Reviews values={rating} key={rating.id} />;
-              })} */}
-              <Reviews values={details.ratings} />
-              <ul className="mt-8 space-y-2 border p-4">
-                <FeatureItem
-                  icon={<CgGlobeAlt size={50} />}
-                  title="Free shipping worldwide"
-                  description="Enter your postal code for product availability"
-                />
-                <hr className="w-full bg-foreground" />
-                <FeatureItem
-                  icon={<FcCancel size={50} />}
-                  title="Cancel Anytime"
-                  description={details.returnpolicy}
-                />
-              </ul>
-            </div>
+            )}
+
+            {ratings?.totalRating === 0 ? (
+              <div className="flex items-center justify-center rounded-lg border border-gray-300 bg-gray-50 p-4">
+                <MdAddCircleOutline size={24} className="mr-2 text-gray-500" />
+                <h3 className="text-gray-700">No ratings for this product</h3>
+                {isLoggedIn && !isAdmin && (
+                  <Dialog>
+                    <DialogTrigger>
+                      <Button variant="outline" className="ml-4">
+                        Add Rating
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader>
+                        <DialogTitle>Add Your Rating</DialogTitle>
+                      </DialogHeader>
+                      <div className="grid gap-4 py-4">
+                        <div className="flex items-center justify-center space-x-2">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <button
+                              key={star}
+                              onClick={() => setRating(star)}
+                              className="rounded text-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                              {star <= rating ? (
+                                <StarIcon className="text-yellow-500" />
+                              ) : (
+                                <MdStarOutline className="text-gray-400" />
+                              )}
+                            </button>
+                          ))}
+                        </div>
+                        <textarea
+                          placeholder="Add your comment"
+                          value={comment}
+                          onChange={(e) => setComment(e.target.value)}
+                          rows={4}
+                        />
+                      </div>
+                      <div className="flex justify-end space-x-2">
+                        <DialogTrigger asChild>
+                          <Button variant="secondary">Cancel</Button>
+                        </DialogTrigger>
+                        <Button
+                          onClick={handleRatingSubmit}
+                          disabled={rating === 0}
+                        >
+                          Submit
+                        </Button>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                )}
+              </div>
+            ) : (
+              <>
+                {/* {details.ratings?.map((rating: any) => { */}
+                <Reviews values={ratings} key={`${uuidv4()}`} />;{/* })} */}
+              </>
+            )}
+
+            <ul className="mt-8 space-y-2 border p-4">
+              <FeatureItem
+                icon={<CgGlobeAlt size={50} />}
+                title="Free shipping worldwide"
+                description="Enter your postal code for product availability"
+              />
+              <hr className="w-full bg-foreground" />
+              <FeatureItem
+                icon={<FcCancel size={50} />}
+                title="Cancel Anytime"
+                description={details.returnpolicy}
+              />
+            </ul>
           </div>
-        </Suspense>
+        </div>
       </div>
     </section>
   );
@@ -218,45 +264,3 @@ const FeatureItem: React.FC<FeatureItemProps> = ({
 };
 
 export default Singleproduct;
-
-// const Reviews = ({ values }) => {
-//   return (
-//     <div className="flex flex-col gap-2">
-//       <h1 className="py-5 text-lg">Reviews</h1>
-
-//       {/* <div className="flex flex-wrap gap-2 w-full py-2">
-//             <span className="px-2 p-1 hover:bg-blue-400 bg-gray-950 bg-opacity-30">Experience</span>
-//             <span className="px-2 p-1 hover:bg-blue-400 bg-gray-950 bg-opacity-30">Quality</span>
-//             <span className="px-2 p-1 hover:bg-blue-400 bg-gray-950 bg-opacity-30">Design</span>
-//             <span className="px-2 p-1 hover:bg-blue-400 bg-gray-950 bg-opacity-30">Size</span>
-//             <span className="px-2 p-1 hover:bg-blue-400 bg-gray-950 bg-opacity-30">Features</span>
-//             <span className="px-2 p-1 hover:bg-blue-400 bg-gray-950 bg-opacity-30">Value</span>
-//             <span className="px-2 p-1 hover:bg-blue-400 bg-gray-950 bg-opacity-30">Relplacement</span>
-//         </div> */}
-
-//       <div className="flex flex-col gap-3">
-//         <div className="flex flex-col gap-4 p-4">
-//           <div className="justify flex justify-between">
-//             <div className="flex gap-2">
-//               <div className="h-7 w-7 rounded-full bg-red-500 text-center">
-//                 J
-//               </div>
-//               <span>Jess Hopkins</span>
-//             </div>
-//             <div className="flex gap-1 p-1 text-orange-300">
-//               {Array.from({ length: values.rating }).map(() => (
-//                 <StarIcon key={`reviewsstart-${uuidv4()}`} />
-//               ))}
-//             </div>
-//           </div>
-
-//           <div>{values.comment}</div>
-
-//           <div className="flex justify-between">
-//             <span>Feb 13, 2021</span>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };

@@ -12,6 +12,8 @@ import { fetchCart } from "../../api/cartApi";
 import { fetchFavorites } from "../../api/wishlistApi";
 import uuidv4 from "../../../common/lib/utils/uuid";
 import { debounce } from "../../utils/debounce";
+import { Routes } from "../../../admin/lib/links";
+import { Button } from "../../../common/ui/button";
 
 type SearchResultProps = {
   id: number;
@@ -20,10 +22,12 @@ type SearchResultProps = {
 
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
-  const { isLoggedIn } = useAuthContext();
+  const { isLoggedIn, isAdmin } = useAuthContext();
   const [searchQuery, setSearchQuery] = useState("");
   const [results, setResults] = useState<SearchResultProps[]>([]);
   const resultsRef = useRef<HTMLDivElement>(null);
+
+  // console.log(isAdmin, 'am i admin????')
 
   useEffect(() => {
     const debouncedFetchResults = debounce(async (query: string) => {
@@ -61,13 +65,13 @@ const Navbar = () => {
   const { data: cart } = useQuery({
     queryKey: ["cart"],
     queryFn: fetchCart,
-    enabled: isLoggedIn,
+    enabled: !isAdmin && isLoggedIn,
   });
 
   const { data: favorites } = useQuery({
     queryKey: ["favorites"],
     queryFn: fetchFavorites,
-    enabled: isLoggedIn,
+    enabled: !isAdmin && isLoggedIn,
   });
   const favoritesquantity = favorites?.data.length || 0;
   const cartquantity = cart?.length || 0;
@@ -149,24 +153,34 @@ const Navbar = () => {
             )}
           </div>
 
-          <Link to="/favorites">
-            {favoritesquantity > 0 ? (
-              <HeartIcon size={20} fill="red" />
-            ) : (
-              <HeartIcon size={20} fill="none" />
-            )}
-          </Link>
+          {!isAdmin && (
+            <Link to="/favorites">
+              {favoritesquantity > 0 ? (
+                <HeartIcon size={20} fill="red" />
+              ) : (
+                <HeartIcon size={20} fill="none" />
+              )}
+            </Link>
+          )}
 
-          <Link to="/cart" className="flex gap-1">
-            <LucideShoppingCart size={20} />
-            {cartquantity > 0 && (
-              <span className="cart-quantity rounded-full bg-primary px-2 py-1 text-xs font-light text-background">
-                {cartquantity}
-              </span>
-            )}
-          </Link>
+          {!isAdmin && (
+            <Link to="/cart" className="flex gap-1">
+              <LucideShoppingCart size={20} />
+              {cartquantity > 0 && (
+                <span className="cart-quantity rounded-full bg-primary px-2 py-1 text-xs font-light text-background">
+                  {cartquantity}
+                </span>
+              )}
+            </Link>
+          )}
 
-          {isLoggedIn && (
+          {isAdmin && isLoggedIn && (
+            <Link to={`/${Routes.Admin}/${Routes.Dashboard}`}>
+              <Button>Dashboard</Button>
+            </Link>
+          )}
+
+          {isLoggedIn && !isAdmin && (
             <Link to={`/profile`}>
               <div className="profile-badge h-6 w-6 cursor-pointer overflow-hidden rounded-full bg-foreground/35"></div>
             </Link>

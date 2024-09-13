@@ -7,7 +7,7 @@ const AdminLayout = () => {
   return (
     <MaxWidthWrapper>
       <Header />
-      <div className="mt-10 flex gap-4">
+      <div className="mt-2 flex gap-4">
         <SidebarPanel />
 
         <Outlet />

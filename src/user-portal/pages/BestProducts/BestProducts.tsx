@@ -53,7 +53,7 @@ const BestProducts = () => {
           <ProductCardSkeleton />
         ) : (
           <>
-            {bestSellingProducts.map((bestProductCard: any) => (
+            {bestSellingProducts?.map((bestProductCard: any) => (
               <SwiperSlide key={`bestproduct-${uuidv4()}`} className="">
                 <ProductCard {...bestProductCard} />
               </SwiperSlide>

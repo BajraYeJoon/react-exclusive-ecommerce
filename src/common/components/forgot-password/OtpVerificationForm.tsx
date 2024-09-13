@@ -17,13 +17,10 @@ const OtpVerificationForm = () => {
   const navigate = useNavigate();
 
   const email = useRecoilValue(emailState);
-  console.log(email, " emailllllllllllllllllll");
+  
 
   const onSubmit: SubmitHandler<FieldValues> = async (data: any) => {
-    console.log(data);
-
     const otpbyUser = data.code1 + data.code2 + data.code3 + data.code4;
-    console.log(otpbyUser);
 
     const payload = {
       otp: otpbyUser,

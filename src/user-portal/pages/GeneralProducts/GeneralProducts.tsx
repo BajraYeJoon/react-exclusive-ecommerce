@@ -59,7 +59,7 @@ const GeneralProducts = () => {
             <ProductCardSkeleton />
           ) : (
             <>
-              {generalProducts.map((gproduct: any) => (
+              {generalProducts?.map((gproduct: any) => (
                 <SwiperSlide key={`generalproduct-${uuidv4()}`} className="">
                   <ProductCard {...gproduct} />
                 </SwiperSlide>

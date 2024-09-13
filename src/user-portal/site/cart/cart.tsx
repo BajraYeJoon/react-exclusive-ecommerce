@@ -1,16 +1,13 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { CustomBreakcrumb } from "../../components";
 import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
-import { cartState } from "../../atoms/cartState";
 import { Link, useNavigate } from "react-router-dom";
 import { checkoutState } from "../../atoms/checkoutState";
 import Cookies from "js-cookie";
 import { useState } from "react";
 import { fetchCart } from "../../api/cartApi";
-import { cn } from "../../../common/lib/utils";
 import {
   applyCoupon,
-  clearCart,
   useClearCart,
   useDecreaseQuantity,
   useIncreaseQuantity,
@@ -19,17 +16,17 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { v4 as uuid } from "uuid";
 import { Button } from "../../../common/ui/button";
-import uuidv4 from "../../../common/lib/utils/uuid";
 import { ProductCardSkeleton } from "../../../common/components";
+import { ConfirmationDialog } from "../../../admin/components";
 
-const cartHeaderData = [
-  { label: "Price" },
-  { label: "Quantity" },
-  { label: "Total" },
-  {
-    label: "",
-  },
-];
+// const cartHeaderData = [
+//   { label: "Price" },
+//   { label: "Quantity" },
+//   { label: "Total" },
+//   {
+//     label: "",
+//   },
+// ];
 
 const discountState = atom<number>({
   key: "discountState",
@@ -48,7 +45,13 @@ const Cart = () => {
     queryFn: fetchCart,
   });
 
-  console.log(cartItems, "caaaaaart");
+  const handleQuantityChange = (id: number, type: "add" | "sub") => {
+    if (type === "add") {
+      increaseQuantity({ id, type });
+    } else {
+      decreaseQuantity({ id, type });
+    }
+  };
 
   const navigateToCheckout = (cartItems: any, total: number) => {
     const checkoutData = {
@@ -61,10 +64,9 @@ const Cart = () => {
 
     setCheckoutData(checkoutData);
     Cookies.set("checkoutData", checkoutData.id);
-    console.log(checkoutData, "checkoutData");
+
     navigate("/checkout");
   };
-
 
   const { mutate: increaseQuantity } = useIncreaseQuantity();
   const { mutate: decreaseQuantity } = useDecreaseQuantity();
@@ -81,21 +83,14 @@ const Cart = () => {
     get: ({ get }) => {
       const discount = get(discountState);
 
-      console.log("Discount:", discount);
-
       const subTotal = Array.isArray(cartItems)
         ? cartItems.reduce((acc, item) => {
-            console.log("Item:", item);
             return acc + item.product.price * item.quantity;
           }, 0)
         : 0;
 
-      console.log("SubTotal:", subTotal);
-
       const charge = 45;
       const discountAmount = subTotal * discount;
-
-      console.log("Discount Amount:", discountAmount);
 
       return {
         subTotal,
@@ -130,99 +125,107 @@ const Cart = () => {
           breadcrumbTitle="Cart"
           breadcrumbValue={cartItems as []}
         />
-        <Button className="w-fit" onClick={() => clearCart()}>
+        {/* <Button className="w-fit" onClick={() => clearCart()}>
           Clear All
-        </Button>
+        </Button> */}
+        <ConfirmationDialog
+          triggerText="Clear All"
+          title="Clear Cart"
+          description="Are you sure you want to clear all items from cart?"
+          onConfirm={() => clearCart()}
+          confirmText="Yes, Clear All"
+          cancelText="No"
+        />
       </div>
 
-      <div className="grid grid-cols-2 py-6 text-foreground/40">
-        <div className="text-xl font-normal leading-8">Product</div>
-        <p className="hidden items-center justify-between text-xl font-normal leading-8 sm:flex">
-          {cartHeaderData.map((header) => (
-            <span
-              key={`cart-header-${uuidv4()}`}
-              className="w-full text-center"
+      <table className="w-full">
+        <thead>
+          <tr className="border-b">
+            <th className="w-[50%] px-2 py-4 text-left">Product</th>
+            <th className="px-2 py-4 text-right">Price</th>
+            <th className="px-2 py-4 text-center">Quantity</th>
+            <th className="px-2 py-4 text-right">Total</th>
+            <th className="px-2 py-4"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {cartItems.map((item: any) => (
+            <tr
+              key={item.product.id}
+              className={`border-b transition-all duration-300 ease-in-out`}
             >
-              {header.label}
-            </span>
-          ))}
-        </p>
-      </div>
-
-      <div className="border-b-2 md:my-4">
-        {isLoading ? (
-          <div>it is isLoading</div>
-        ) : (
-          <>
-            {cartItems.map((item: any) => (
-              <div
-                key={item.product.id}
-                className="grid grid-cols-3 gap-6 md:grid-cols-2"
-              >
-                <div className="col-span-2 flex w-full items-center gap-3 md:col-span-1">
+              <td className="px-2 py-4">
+                <div className="flex items-center space-x-4">
                   <img
                     src={item.product.image[0]}
                     alt={item.product.title}
-                    className="h-16 w-16 rounded-md"
+                    className="h-16 w-16 rounded-md object-cover"
                   />
-                  <h5 className="text-sm font-medium text-black md:text-base">
-                    {item.product.title}
-                  </h5>
+                  <span className="font-medium">{item.product.title}</span>
                 </div>
-                <div className="flex w-fit flex-col items-center justify-around gap-2 sm:flex-row md:w-full">
-                  <h6 className="text-center text-sm font-medium leading-9 text-foreground md:text-base">
-                    {item.product.price}{" "}
-                  </h6>
-                  <div className="flex items-center justify-center rounded-md border p-1">
-                    <input
-                      type="text"
-                      className="max-w-16 px-4"
-                      placeholder={item.quantity.toString()}
-                      readOnly
-                    />
-                    <div className="flex flex-col items-center justify-center">
-                      <ChevronUp
-                        size={14}
-                        className={cn(
-                          "cursor-pointer",
-                          item.quantity === item.product.stock &&
-                            "cursor-not-allowed",
-                        )}
-                        onClick={() =>
-                          increaseQuantity({
-                            id: item.product.id,
-                            type: "add",
-                          })
-                        }
-                      />
-
-                      <ChevronDown
-                        size={14}
-                        className={cn(
-                          "cursor-pointer",
-                          item.quantity <= 1 && "cursor-not-allowed",
-                        )}
-                        onClick={() =>
-                          decreaseQuantity({
-                            id: item.product.id,
-                            type: "sub",
-                          })
-                        }
-                      />
-                    </div>
-                  </div>
-                  <h6 className="text-center text-sm font-medium leading-9 md:text-lg">
-                    {(item.product.price * item.quantity).toFixed(2)}
-                  </h6>
-                  <Button onClick={() => removeItem(item.product.id)}>
-                    Remove
-                  </Button>
+              </td>
+              <td className="px-2 py-4 text-right">
+                ${item.product.price.toFixed(2)}
+              </td>
+              <td className="px-2 py-4">
+                <div className="flex items-center justify-center space-x-2">
+                  <button
+                    className={`rounded border p-1 ${
+                      item.quantity <= 1
+                        ? "cursor-not-allowed bg-gray-100"
+                        : "bg-white hover:bg-gray-100"
+                    }`}
+                    onClick={() => handleQuantityChange(item.product.id, "sub")}
+                    disabled={item.quantity <= 1}
+                    aria-label="Decrease quantity"
+                  >
+                    <ChevronDown className="h-4 w-4" />
+                  </button>
+                  <input
+                    type="text"
+                    value={item.quantity}
+                    readOnly
+                    className="w-12 rounded border p-1 text-center"
+                    aria-label={`Quantity of ${item.product.title}`}
+                  />
+                  <button
+                    className={`rounded border p-1 ${
+                      item.quantity >= item.product.stock
+                        ? "cursor-not-allowed bg-gray-100"
+                        : "bg-white hover:bg-gray-100"
+                    }`}
+                    onClick={() => handleQuantityChange(item.product.id, "add")}
+                    disabled={item.quantity >= item.product.stock}
+                    aria-label="Increase quantity"
+                  >
+                    <ChevronUp className="h-4 w-4" />
+                  </button>
                 </div>
-              </div>
-            ))}
-          </>
-        )}
-      </div>
+              </td>
+              <td className="px-2 py-4 text-right font-medium">
+                ${(item.product.price * item.quantity).toFixed(2)}
+              </td>
+              <td className="px-2 py-4 text-right">
+                {/* <button
+                  onClick={() => removeItem(item.product.id)}
+                  className="text-red-600 transition-colors duration-200 hover:text-red-800"
+                  aria-label={`Remove ${item.product.title} from cart`}
+                >
+                  Remove
+                </button> */}
+                <ConfirmationDialog
+                  triggerText="Remove"
+                  title="Remove"
+                  description="Are you sure?"
+                  onConfirm={() => removeItem(item.product.id)}
+                  confirmText="yes"
+                  cancelText="NO"
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
       <div className="flex flex-col items-center justify-between gap-12 md:flex-row md:items-start">
         <div className="mt-8 flex flex-col items-center justify-center gap-3">

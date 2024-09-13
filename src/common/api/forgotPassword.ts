@@ -20,7 +20,7 @@ export const verifyOtp = async (data: any) => {
       return response.data;
     } else {
       toast.error("Failed to reset password");
-      console.log(response);
+
       return null;
     }
   } catch (error) {

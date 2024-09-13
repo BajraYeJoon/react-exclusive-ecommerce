@@ -23,13 +23,12 @@ const SignupPage = () => {
   const { signup } = useAuthContext();
 
   const onSubmit = async (data: SignUpFormData) => {
-    console.log(data);
+    
     const { email, password, name, phoneNumber } = data;
 
     try {
-      const response = signup({ name, email, password, phoneNumber });
+      await signup({ name, email, password, phoneNumber });
       reset();
-      console.log(response);
     } catch (err) {
       console.error("Signup error", err);
     }

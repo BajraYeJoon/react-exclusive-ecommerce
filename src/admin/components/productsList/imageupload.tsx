@@ -7,7 +7,7 @@ interface FileWithPreview extends File {
   preview: string;
 }
 
-export function FileDropzone({ register }) {
+export function FileDropzone({ register }: any) {
   const [files, setFiles] = useState<FileWithPreview[]>([]);
   const [isDragActive, setIsDragActive] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -85,7 +85,7 @@ export function FileDropzone({ register }) {
           multiple
           onChange={handleFileInputChange}
           className="hidden"
-          accept="image/*,application/pdf"
+          accept="image/*,"
         />
         <AnimatePresence>
           {isDragActive ? (
@@ -94,12 +94,10 @@ export function FileDropzone({ register }) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
-              className="pointer-events-none select-none"
+              className="cursor-pointer"
             >
-              <Upload className="pointer-events-none mx-auto size-8 select-none text-blue-500" />
-              <p className="pointer-events-none mt-2 select-none text-sm text-blue-500">
-                Drop files here...
-              </p>
+              <Upload className="mx-auto size-8" />
+              <p className="mt-2 text-sm">Drop files here...</p>
             </motion.div>
           ) : (
             <motion.div
