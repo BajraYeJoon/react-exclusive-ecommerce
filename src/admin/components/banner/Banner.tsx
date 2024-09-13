@@ -3,7 +3,7 @@ import React, { useState, useMemo } from "react";
 import { Button } from "../../../common/ui/button";
 import { fetchHeroBanner } from "../../../common/api/bannerApi";
 import ConfirmationDialog from "../confirmation/ConfirmationDialog";
-import { Edit2, PlusCircle, Trash2Icon } from "lucide-react";
+import { PlusCircle, Trash2Icon } from "lucide-react";
 import {
   Dialog,
   DialogContent,

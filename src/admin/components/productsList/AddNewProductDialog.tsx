@@ -114,11 +114,11 @@ export default function AddNewProductDialog() {
     setValue("image", acceptedFiles);
   };
 
-  const handleImageRemove = (index: number) => {
-    setProductImages((prev) => prev.filter((_, i) => i !== index));
+  const handleImageRemove = (url: string) => {
+    setProductImages((prev) => prev.filter((img) => img !== url));
     setValue(
       "image",
-      productImages.filter((_, i) => i !== index),
+      productImages.filter((img) => img !== url),
     );
   };
 
