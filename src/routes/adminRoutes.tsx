@@ -8,6 +8,7 @@ import {
   AdminDiscount,
   DiscountCreator,
 } from "../admin/components";
+import DiscountCRUD from "../admin/components/discountCRUD/DiscountCRUD";
 import { Routes } from "../admin/lib/links";
 import { Dashboard } from "../admin/screen";
 
@@ -50,6 +51,7 @@ export const adminRoutes = [
   },
   {
     path: Routes.Discount,
-    element: <DiscountCreator />,
+    // element: <DiscountCreator />,
+    element: <DiscountCRUD />,
   },
 ];
