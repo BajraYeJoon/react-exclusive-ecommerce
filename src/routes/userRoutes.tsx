@@ -27,6 +27,7 @@ import {
   Singleproduct,
 } from "../user-portal/components";
 import { ArrivalsPage } from "../user-portal/pages";
+import EmailVerification from "../user-portal/components/email/Verification";
 
 export const userRoutes = [
   { index: true, element: <Home /> },
@@ -38,6 +39,7 @@ export const userRoutes = [
     children: [
       { path: UserRoutes.SignUp, element: <SignupPage /> },
       { path: UserRoutes.SignIn, element: <SignInPage /> },
+      { path: UserRoutes.EmailVerification, element: <EmailVerification />},
       { path: UserRoutes.ForgotPassword, element: <ForgotPassword /> },
       {
         path: UserRoutes.VerifyOtp,

@@ -77,6 +77,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       await fetchUserDetails(data.token);
       setIsLoggedIn(true);
       Cookies.set("token", data.token, { expires: 7 });
+      // Update the Axios instance after setting the token
+      Axios.defaults.headers.common["Authorization"] =
+        `Bearer ${Cookies.get("token")}`;
     } catch (error) {
       console.error("Login failed", error);
     } finally {
