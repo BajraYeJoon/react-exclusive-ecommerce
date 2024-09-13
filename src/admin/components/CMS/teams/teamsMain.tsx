@@ -125,7 +125,7 @@ export default function EmployeeManagement() {
       <div className="grid grid-cols-2 gap-6 md:grid-cols-3">
         {employees?.map((employee: Employee) => (
           <Card key={employee.id} className="overflow-hidden">
-            <CardContent className="p-4">
+            <CardContent className="flex p-4">
               <div className="flex flex-col items-center">
                 <img
                   src={employee.image}
@@ -159,23 +159,23 @@ export default function EmployeeManagement() {
                   LinkedIn
                 </a>
               )}
+              <CardFooter className="flex flex-col justify-end space-y-2 bg-gray-50 p-4 md:flex-row md:space-x-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleEdit(employee)}
+                >
+                  <Pencil className="mr-2 h-4 w-4" /> Edit
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleDelete(employee.id)}
+                >
+                  <Trash2 className="mr-2 h-4 w-4" /> Delete
+                </Button>
+              </CardFooter>
             </CardContent>
-            <CardFooter className="flex flex-col justify-end space-y-2 bg-gray-50 p-4 md:flex-row md:space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleEdit(employee)}
-              >
-                <Pencil className="mr-2 h-4 w-4" /> Edit
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleDelete(employee.id)}
-              >
-                <Trash2 className="mr-2 h-4 w-4" /> Delete
-              </Button>
-            </CardFooter>
           </Card>
         ))}
       </div>

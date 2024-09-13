@@ -23,7 +23,7 @@ const updateProductSchema = z.object({
   title: z.string().optional(),
   price: z.number().positive().optional(),
   discounttag: z.boolean().optional(),
-  stock: z.number().optional(),
+  stock: z.number().min(0).optional(),
   discountprice: z.number().positive().optional(),
   sizes: z.string().nullable().optional(),
   returnpolicy: z.string().optional(),
@@ -54,12 +54,16 @@ export default function UpdateProductForm({
     initialData.images || [],
   );
 
-  const { control, handleSubmit } = useForm<UpdateProductFormData>({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<UpdateProductFormData>({
     resolver: zodResolver(updateProductSchema),
     defaultValues: initialData,
   });
 
-  console.log(initialData, "intitalk datas");
+  console.log(errors);
 
   const { data: categories = [] } = useQuery({
     queryKey: ["categories"],
@@ -70,7 +74,7 @@ export default function UpdateProductForm({
     mutationFn: (data: Partial<UpdateProductFormData>) =>
       Axios.patch(`/product/${initialData.id}`, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["products", initialData.id] });
+      queryClient.invalidateQueries({ queryKey: ["products"] });
     },
   });
 
@@ -78,17 +82,17 @@ export default function UpdateProductForm({
     mutationFn: (formData: FormData) =>
       Axios.patch(`/product/addimage/${initialData.id}`, formData),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["products", initialData.id] });
+      queryClient.invalidateQueries({ queryKey: ["products"] });
     },
   });
 
   const deleteImageMutation = useMutation({
-    mutationFn: (imageUrl: string) =>
+    mutationFn: (index: number) =>
       Axios.delete(`/product/deleteimage/${initialData.id}`, {
-        data: { url: imageUrl }, // Correct way to pass URL in DELETE request
+        data: { index: index },
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["products", initialData.id] });
+      queryClient.invalidateQueries({ queryKey: ["products"] });
     },
     onError: (error: any) => {
       console.error("Failed to delete image", error);
@@ -108,11 +112,11 @@ export default function UpdateProductForm({
     }
   };
 
-  const handleImageDelete = async (url: string) => {
+  const handleImageDelete = async (index: number) => {
     try {
-      await deleteImageMutation.mutateAsync(url);
+      await deleteImageMutation.mutateAsync(index);
       queryClient.invalidateQueries({ queryKey: ["products", initialData.id] });
-      setImages((prevImages) => prevImages.filter((img) => img !== url));
+      setImages((prevImages) => prevImages.filter((_, i) => i !== index));
     } catch (error) {
       console.error("Failed to delete image", error);
     }

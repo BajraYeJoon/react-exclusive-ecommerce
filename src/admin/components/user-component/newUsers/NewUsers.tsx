@@ -33,17 +33,20 @@ const NewUsers = ({ values }: any) => {
             {values.email}
           </p>
         </div>
-        <Button>
-          <Dialog>
-            <DialogTrigger className="flex items-center justify-center gap-2">
+        <Dialog>
+          <DialogTrigger
+            className="flex items-center justify-center gap-2"
+            asChild
+          >
+            <Button>
               <EyeIcon />
               View
-            </DialogTrigger>
-            <DialogContent>
-              <UserDialogContent info={values} />
-            </DialogContent>
-          </Dialog>
-        </Button>
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <UserDialogContent info={values} />
+          </DialogContent>
+        </Dialog>
       </div>
     </li>
   );

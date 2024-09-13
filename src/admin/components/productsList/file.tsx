@@ -4,7 +4,7 @@ import { Button } from "../../../common/ui/button";
 interface FileDropzoneProps {
   onDrop: (acceptedFiles: File[]) => void;
   files: Array<string | File>;
-  onRemove: (url: string) => void; // Update this type
+  onRemove: (index: number) => void;
 }
 
 export function FileDropzone({ onDrop, files, onRemove }: FileDropzoneProps) {
@@ -38,7 +38,7 @@ export function FileDropzone({ onDrop, files, onRemove }: FileDropzoneProps) {
               <Button
                 type="button"
                 onClick={() => {
-                  onRemove(typeof file === "string" ? file : ""); // Pass URL if it's a string
+                  onRemove(index);
                 }}
                 variant="destructive"
                 size="sm"
