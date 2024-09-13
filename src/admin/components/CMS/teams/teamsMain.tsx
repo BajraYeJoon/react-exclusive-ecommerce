@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -48,8 +46,8 @@ export default function EmployeeManagement() {
     queryKey: ["employees"],
     queryFn: fetchEmployees,
   });
-   
-  const employees = employeesData?.data
+
+  const employees = employeesData?.data;
 
   const addMutation = useMutation({
     mutationFn: addEmployee,
@@ -100,7 +98,6 @@ export default function EmployeeManagement() {
   const handleDelete = (id: string) => {
     deleteMutation.mutate(id);
   };
-
 
   return (
     <section>
