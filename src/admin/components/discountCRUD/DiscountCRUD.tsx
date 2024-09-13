@@ -28,6 +28,7 @@ import {
 } from "../../../common/ui/dialog";
 import { Axios } from "../../../common/lib/axiosInstance";
 import { AxiosError } from "axios";
+import { Loading } from "../../../user-portal/site";
 
 export default function DiscountCRUD() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -109,7 +110,7 @@ export default function DiscountCRUD() {
     reset();
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loading />;
 
   return (
     <div className="container mx-auto p-4">
