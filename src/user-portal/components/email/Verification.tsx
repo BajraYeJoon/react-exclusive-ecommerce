@@ -3,9 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Axios } from "../../../common/lib/axiosInstance";
 
 const EmailVerification: React.FC = () => {
-  const [verificationStatus, setVerificationStatus] = useState<
-    "loading" | "success" | "error"
-  >("loading");
+  const [verificationStatus, setVerificationStatus] = useState;
+  "loading" | "success" | ("error" > "loading");
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -20,8 +19,9 @@ const EmailVerification: React.FC = () => {
       }
 
       try {
-        const response = await Axios.get(`/auth/verifyemail?token=${token}`);
-        if (response.status === 200) {
+        // Send the token to your backend for verification
+        const response = await Axios.post("/auth/verify-email", { token });
+        if (response.data.success) {
           setVerificationStatus("success");
         } else {
           setVerificationStatus("error");

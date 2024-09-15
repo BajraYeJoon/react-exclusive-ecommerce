@@ -1,62 +1,64 @@
-import { ChevronDown, ChevronUp } from "lucide-react";
-import { CustomBreakcrumb } from "../../components";
-import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
-import { Link, useNavigate } from "react-router-dom";
-import { checkoutState } from "../../atoms/checkoutState";
-import Cookies from "js-cookie";
-import { useState } from "react";
-import { fetchCart } from "../../api/cartApi";
-import {
-  applyCoupon,
-  useClearCart,
-  useDecreaseQuantity,
-  useIncreaseQuantity,
-  useRemoveItem,
-} from "../../utils/cartutils";
-import { useQuery } from "@tanstack/react-query";
-import { v4 as uuid } from "uuid";
-import { Button } from "../../../common/ui/button";
-import { ProductCardSkeleton } from "../../../common/components";
-import { ConfirmationDialog } from "../../../admin/components";
-import { Axios } from "../../../common/lib/axiosInstance";
+'use client'
+
+import { useState } from "react"
+import { useQuery } from "@tanstack/react-query"
+import { atom, selector, useRecoilState, useRecoilValue } from "recoil"
+import { Link, useNavigate } from "react-router-dom"
+import Cookies from "js-cookie"
+import { v4 as uuid } from "uuid"
+import { ChevronDown, ChevronUp, Trash2 } from "lucide-react"
+import { CustomBreakcrumb } from "../../components"
+import { checkoutState } from "../../atoms/checkoutState"
+import { fetchCart } from "../../api/cartApi"
+import { useClearCart, useDecreaseQuantity, useIncreaseQuantity, useRemoveItem } from "../../utils/cartutils"
+import { ProductCardSkeleton } from "../../../common/components"
+import { ConfirmationDialog } from "../../../admin/components"
+import { Axios } from "../../../common/lib/axiosInstance"
+import { toast } from "sonner"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../common/ui/table"
+import { Button } from "../../../common/ui/button"
+import { Input } from "../../../common/ui/input"
 
 // Define discountState atom
-const discountState = atom<number>({
+const discountState = atom<{ type: 'fixed' | 'percentage', value: number }>({
   key: "discountState",
-  default: 0,
-});
+  default: { type: 'fixed', value: 0 },
+})
 
 const Cart = () => {
-  const [, setCheckoutData] = useRecoilState(checkoutState);
-  const navigate = useNavigate();
-  const [couponCode, setCouponCode] = useState("");
-  const [discount, setDiscount] = useState(0);
+  const [, setCheckoutData] = useRecoilState(checkoutState)
+  const [discount, setDiscount] = useRecoilState(discountState)
+  const navigate = useNavigate()
+  const [couponCode, setCouponCode] = useState("")
 
   // Fetch cart items
   const { data: cartItems, isLoading } = useQuery({
     queryKey: ["cart"],
     queryFn: fetchCart,
-  });
+  })
 
   // Fetch available coupons
   const { data: coupons, isLoading: loadingCoupons } = useQuery({
     queryKey: ["coupons"],
     queryFn: () => Axios.get("/coupon").then((res) => res.data),
-  });
+  })
+
+  console.log(coupons, 'coupons')
+
 
   // Mutation hooks for cart operations
-  const { mutate: increaseQuantity } = useIncreaseQuantity();
-  const { mutate: decreaseQuantity } = useDecreaseQuantity();
-  const { mutate: removeItem } = useRemoveItem();
-  const { mutate: clearCart } = useClearCart();
+  const { mutate: increaseQuantity } = useIncreaseQuantity()
+  const { mutate: decreaseQuantity } = useDecreaseQuantity()
+  const { mutate: removeItem } = useRemoveItem()
+  const { mutate: clearCart } = useClearCart()
 
   const handleQuantityChange = (id: number, type: "add" | "sub") => {
     if (type === "add") {
-      increaseQuantity({ id, type });
+      increaseQuantity({ id, type })
     } else {
-      decreaseQuantity({ id, type });
+      decreaseQuantity({ id, type })
     }
-  };
+  }
 
   const navigateToCheckout = (cartItems: any, total: number) => {
     const checkoutData = {
@@ -64,57 +66,67 @@ const Cart = () => {
       cartItems,
       total,
       couponCode,
-      discount,
-    };
+      discount: discount.value,
+    }
 
-    setCheckoutData(checkoutData);
-    Cookies.set("checkoutData", checkoutData.id);
+    setCheckoutData(checkoutData)
+    Cookies.set("checkoutData", checkoutData.id)
 
-    navigate("/checkout");
-  };
+    navigate("/checkout")
+  }
 
   const handleCouponChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const code = e.target.value;
-    setCouponCode(code);
-  };
+    setCouponCode(e.target.value)
+  }
 
   const validateCoupon = (code: string) => {
-    const coupon = coupons?.find((coupon) => coupon.code === code);
+    const coupon = coupons?.find((coupon) => coupon.code === code)
     if (coupon) {
-      setDiscount(coupon.discount);
-      return true;
+      setDiscount({ type: coupon.type, value: coupon.value })
+      return true
     }
-    return false;
-  };
+    return false
+  }
 
   const handleApplyCoupon = () => {
     if (validateCoupon(couponCode)) {
-      //  applyCoupon(couponCode);
+      toast.success(
+        "Coupon applied successfully"
+      )
     } else {
-      // Handle invalid coupon
-      alert("Invalid coupon code");
+      toast.error(
+        "Invalid coupon code"
+      )
     }
-  };
+  }
 
   const calculateTotal = selector({
     key: "CalculateTotal",
     get: ({ get }) => {
-      const discount = get(discountState);
+      const discountInfo = get(discountState)
       const subTotal = Array.isArray(cartItems)
         ? cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0)
-        : 0;
-      const charge = 45;
-      const discountAmount = subTotal * discount;
+        : 0
+      const charge = 45
+      let discountAmount = 0
+      
+      if (discountInfo.type === 'fixed') {
+        discountAmount = discountInfo.value
+      } else if (discountInfo.type === 'percentage') {
+        discountAmount = subTotal * (discountInfo.value / 100)
+      }
+
       return {
         subTotal,
+        discountAmount,
         total: subTotal + charge - discountAmount,
-      };
+      }
     },
-  });
+  })
 
-  const total = useRecoilValue(calculateTotal);
+  const total = useRecoilValue(calculateTotal)
 
-  if (cartItems === undefined && !cartItems) {
+  if (cartItems === undefined || cartItems.length === 0) {
     return (
       <div className="flex h-[50vh] flex-col items-center justify-center gap-4 lg:h-[90vh]">
         <h1 className="flex flex-col text-3xl font-semibold text-gray-400">
@@ -124,11 +136,11 @@ const Cart = () => {
           Add some products from here...
         </Link>
       </div>
-    );
+    )
   }
 
   if (isLoading || loadingCoupons) {
-    return <ProductCardSkeleton />;
+    return <ProductCardSkeleton />
   }
 
   return (
@@ -148,23 +160,20 @@ const Cart = () => {
         />
       </div>
 
-      <table className="w-full">
-        <thead>
-          <tr className="border-b">
-            <th className="w-[50%] px-2 py-4 text-left">Product</th>
-            <th className="px-2 py-4 text-right">Price</th>
-            <th className="px-2 py-4 text-center">Quantity</th>
-            <th className="px-2 py-4 text-right">Total</th>
-            <th className="px-2 py-4"></th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[50%]">Product</TableHead>
+            <TableHead className="text-right">Price</TableHead>
+            <TableHead className="text-center">Quantity</TableHead>
+            <TableHead className="text-right">Total</TableHead>
+            <TableHead></TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {cartItems.map((item: any) => (
-            <tr
-              key={item.product.id}
-              className={`border-b transition-all duration-300 ease-in-out`}
-            >
-              <td className="px-2 py-4">
+            <TableRow key={item.product.id}>
+              <TableCell>
                 <div className="flex items-center space-x-4">
                   <img
                     src={item.product.image[0]}
@@ -173,77 +182,71 @@ const Cart = () => {
                   />
                   <span className="font-medium">{item.product.title}</span>
                 </div>
-              </td>
-              <td className="px-2 py-4 text-right">
+              </TableCell>
+              <TableCell className="text-right">
                 ${item.product.price.toFixed(2)}
-              </td>
-              <td className="px-2 py-4">
+              </TableCell>
+              <TableCell>
                 <div className="flex items-center justify-center space-x-2">
-                  <button
-                    className={`rounded border p-1 ${
-                      item.quantity <= 1
-                        ? "cursor-not-allowed bg-gray-100"
-                        : "bg-white hover:bg-gray-100"
-                    }`}
+                  <Button
+                    variant="outline"
+                    size="icon"
                     onClick={() => handleQuantityChange(item.product.id, "sub")}
                     disabled={item.quantity <= 1}
                     aria-label="Decrease quantity"
                   >
                     <ChevronDown className="h-4 w-4" />
-                  </button>
-                  <input
+                  </Button>
+                  <Input
                     type="text"
                     value={item.quantity}
                     readOnly
-                    className="w-12 rounded border p-1 text-center"
+                    className="w-12 text-center"
                     aria-label={`Quantity of ${item.product.title}`}
                   />
-                  <button
-                    className={`rounded border p-1 ${
-                      item.quantity >= item.product.stock
-                        ? "cursor-not-allowed bg-gray-100"
-                        : "bg-white hover:bg-gray-100"
-                    }`}
+                  <Button
+                    variant="outline"
+                    size="icon"
                     onClick={() => handleQuantityChange(item.product.id, "add")}
                     disabled={item.quantity >= item.product.stock}
                     aria-label="Increase quantity"
                   >
                     <ChevronUp className="h-4 w-4" />
-                  </button>
+                  </Button>
                 </div>
-              </td>
-              <td className="px-2 py-4 text-right font-medium">
+              </TableCell>
+              <TableCell className="text-right font-medium">
                 ${(item.product.price * item.quantity).toFixed(2)}
-              </td>
-              <td className="px-2 py-4 text-right">
+              </TableCell>
+              <TableCell>
                 <ConfirmationDialog
-                  triggerText="Remove"
-                  title="Remove"
-                  description="Are you sure?"
+                  triggerText={<Trash2 className="h-4 w-4" />}
+                  title="Remove Item"
+                  description="Are you sure you want to remove this item from your cart?"
                   onConfirm={() => removeItem(item.product.id)}
-                  confirmText="yes"
-                  cancelText="NO"
+                  confirmText="Remove"
+                  cancelText="Cancel"
                 />
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
 
-      <div className="flex flex-col items-center justify-between gap-12 md:flex-row md:items-start">
-        <div className="mt-8 flex flex-col items-center justify-center gap-3">
-          <input
+      <div className="mt-8 flex flex-col items-center justify-between gap-12 md:flex-row md:items-start">
+        <div className="flex flex-col items-center justify-center gap-3">
+          <Input
             type="text"
             value={couponCode}
             onChange={handleCouponChange}
             placeholder="Enter Coupon Code"
-            className="w-full rounded-md border p-2"
+            className="w-full"
           />
           <Button
             className="w-full"
             onClick={handleApplyCoupon}
           >
-            Add Coupon Code
+            Apply Coupon
           </Button>
         </div>
         <div className="mb-8 w-full max-w-sm rounded-md border border-foreground/50 p-6">
@@ -252,7 +255,7 @@ const Cart = () => {
               Sub Total
             </p>
             <h6 className="text-base font-semibold leading-8 text-gray-900 md:text-xl">
-              {total.subTotal.toFixed(2)}
+              ${total.subTotal.toFixed(2)}
             </h6>
           </div>
 
@@ -264,13 +267,13 @@ const Cart = () => {
               $45.00
             </h6>
           </div>
-          {discount > 0 && (
+          {total.discountAmount > 0 && (
             <div className="flex w-full items-center justify-between py-6">
               <p className="text-base font-normal leading-8 text-green-500 md:text-xl">
-                Coupon Code Applied
+                Discount Applied
               </p>
               <h6 className="text-base font-semibold leading-8 text-green-500 md:text-xl">
-                -{(total.subTotal * discount).toFixed(2)}
+                -${total.discountAmount.toFixed(2)}
               </h6>
             </div>
           )}
@@ -279,7 +282,7 @@ const Cart = () => {
               Total
             </p>
             <h6 className="text-lg font-medium leading-9 md:text-2xl">
-              {total.total.toFixed(2)}
+              ${total.total.toFixed(2)}
             </h6>
           </div>
           <Button
@@ -291,7 +294,7 @@ const Cart = () => {
         </div>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export { Cart };
+export { Cart }
