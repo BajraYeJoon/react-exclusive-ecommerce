@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import * as z from "zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Axios } from "../../../common/lib/axiosInstance";
 import { fetchCategories } from "../../../common/api/categoryApi";
-
 import { FileDropzone } from "./file";
 import {
   Card,
@@ -14,7 +13,15 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../common/ui/card";
-import { Label } from "../../../common/ui/label";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../../../common/ui/form";
 import { Input } from "../../../common/ui/input";
 import { Checkbox } from "../../../common/ui/checkbox";
 import { Button } from "../../../common/ui/button";
@@ -53,22 +60,15 @@ export default function UpdateProductForm({
   const [images, setImages] = useState<Array<string | File>>(
     initialData.images || [],
   );
-  const [originalData, setOriginalData] =
-    useState<UpdateProductFormData>(initialData);
   const [imageChanged, setImageChanged] = useState(false);
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-    watch,
-  } = useForm<UpdateProductFormData>({
+  const form = useForm<UpdateProductFormData>({
     resolver: zodResolver(updateProductSchema),
     defaultValues: initialData,
   });
 
-  console.log(initialData, "EDIT PRODUCT");
-  console.log(errors);
+  console.log(form.formState.errors, 'formerrs')
+  console.log(form.formState.dirtyFields, 'dirty')
 
   const { data: categories = [] } = useQuery({
     queryKey: ["categories"],
@@ -106,12 +106,11 @@ export default function UpdateProductForm({
 
   useEffect(() => {
     setImages(initialData.images || []);
-    setOriginalData(initialData);
   }, [initialData.images]);
 
   const handleImageDrop = async (acceptedFiles: File[]) => {
     setImages((prevImages) => [...prevImages, ...acceptedFiles]);
-    setImageChanged(true); // Mark image as changed
+    setImageChanged(true); // Set to true when new images are added
     for (const file of acceptedFiles) {
       const formData = new FormData();
       formData.append("image", file);
@@ -124,7 +123,7 @@ export default function UpdateProductForm({
       await deleteImageMutation.mutateAsync(index);
       queryClient.invalidateQueries({ queryKey: ["products", initialData.id] });
       setImages((prevImages) => prevImages.filter((_, i) => i !== index));
-      setImageChanged(true); // Mark image as changed
+      setImageChanged(true); // Set to true when an image is deleted
     } catch (error) {
       console.error("Failed to delete image", error);
     }
@@ -138,26 +137,31 @@ export default function UpdateProductForm({
     );
   };
   const onSubmit = async (data: UpdateProductFormData) => {
-    // Collect only the fields that have changed
     const changes: Partial<UpdateProductFormData> = {};
-    for (const key in data) {
-      if (data[key] !== originalData[key]) {
+    Object.keys(data).forEach((key) => {
+      if (data[key] !== initialData[key]) {
         changes[key] = data[key];
       }
+    });
+
+    if (
+      Object.keys(changes).length > 0 ||
+      selectedCategories.length !== initialData.categories?.length ||
+      imageChanged
+    ) {
+      const updatedData = {
+        ...changes,
+        categories: selectedCategories,
+      };
+
+      // Only include image data if it has changed
+      if (imageChanged) {
+        updatedData.image = data.image;
+      }
+
+      await updateProductMutation.mutateAsync(updatedData);
+      setImageChanged(false); // Reset the flag after successful update
     }
-  
-    // Conditionally add the image field if it has changed
-    if (imageChanged) {
-      changes.image = data.image;
-    }
-  
-    // Add selected categories to the changes
-    const updatedData = {
-      ...changes,
-      categories: selectedCategories,
-    };
-  
-    await updateProductMutation.mutateAsync(updatedData);
   };
 
   return (
@@ -166,209 +170,248 @@ export default function UpdateProductForm({
         <CardTitle>Update Product</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Controller
-              name="title"
-              control={control}
-              render={({ field }) => (
-                <div className="space-y-2">
-                  <Label htmlFor="title">Title</Label>
-                  <Input id="title" {...field} placeholder="Product title" />
-                </div>
-              )}
-            />
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Title</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Product title" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <Controller
-              name="price"
-              control={control}
-              render={({ field }) => (
-                <div className="space-y-2">
-                  <Label htmlFor="price">Price</Label>
-                  <Input
-                    id="price"
-                    type="number"
-                    step="0.01"
-                    {...field}
-                    onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                    placeholder="99.99"
-                  />
-                </div>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Price</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        step="0.01"
+                        placeholder="99.99"
+                        {...field}
+                        onChange={(e) =>
+                          field.onChange(parseFloat(e.target.value))
+                        }
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <Controller
-              name="discountprice"
-              control={control}
-              render={({ field }) => (
-                <div className="space-y-2">
-                  <Label htmlFor="discountprice">Discount Price</Label>
-                  <Input
-                    id="discountprice"
-                    type="number"
-                    step="0.01"
-                    {...field}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      field.onChange(value === "" ? null : parseFloat(value));
-                    }}
-                    value={field.value ?? ""}
-                    placeholder="79.99"
-                  />
-                </div>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="discountprice"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Discount Price</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        step="0.01"
+                        placeholder="79.99"
+                        {...field}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          field.onChange(
+                            value === "" ? null : parseFloat(value),
+                          );
+                        }}
+                        value={field.value ?? ""}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <Controller
-              name="discounttag"
-              control={control}
-              render={({ field }) => (
-                <div className="space-y-2">
-                  <Label htmlFor="discounttag">Discount Tag</Label>
-                  <Checkbox
-                    id="discounttag"
-                    checked={field.value ?? false}
-                    onCheckedChange={(checked) =>
-                      field.onChange(checked ?? null)
-                    }
-                  />
-                </div>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="discounttag"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value ?? false}
+                        onCheckedChange={(checked) =>
+                          field.onChange(checked ?? null)
+                        }
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel>Discount Tag</FormLabel>
+                      <FormDescription>
+                        Apply a discount tag to this product
+                      </FormDescription>
+                    </div>
+                  </FormItem>
+                )}
+              />
 
-            <Controller
-              name="stock"
-              control={control}
-              render={({ field }) => (
-                <div className="space-y-2">
-                  <Label htmlFor="stock">Stock</Label>
-                  <Input
-                    id="stock"
-                    type="number"
-                    {...field}
-                    onChange={(e) => field.onChange(parseInt(e.target.value))}
-                    placeholder="1"
-                  />
-                </div>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="stock"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Stock</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        placeholder="1"
+                        {...field}
+                        onChange={(e) =>
+                          field.onChange(parseInt(e.target.value))
+                        }
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <Controller
-              name="sizes"
-              control={control}
-              render={({ field }) => (
-                <div className="space-y-2">
-                  <Label htmlFor="sizes">Sizes</Label>
-                  <Input
-                    id="sizes"
-                    {...field}
-                    placeholder="S, M, L, XL"
-                    value={field.value || ""}
-                  />
-                </div>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="sizes"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Sizes</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="S, M, L, XL"
+                        {...field}
+                        value={field.value || ""}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <Controller
-              name="returnpolicy"
-              control={control}
-              render={({ field }) => (
-                <div className="space-y-2 sm:col-span-2">
-                  <Label htmlFor="returnpolicy">Return Policy</Label>
-                  <Input
-                    id="returnpolicy"
-                    {...field}
-                    placeholder="30-day return policy"
-                  />
-                </div>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="returnpolicy"
+                render={({ field }) => (
+                  <FormItem className="sm:col-span-2">
+                    <FormLabel>Return Policy</FormLabel>
+                    <FormControl>
+                      <Input placeholder="30-day return policy" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <Controller
-              name="description"
-              control={control}
-              render={({ field }) => (
-                <div className="space-y-2 sm:col-span-2">
-                  <Label htmlFor="description">Description</Label>
-                  <textarea
-                    id="description"
-                    {...field}
-                    placeholder="Detailed product description"
-                    className="h-32 w-full rounded-md border px-3 py-2 text-sm"
-                  />
-                </div>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem className="sm:col-span-2">
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <textarea
+                        placeholder="Detailed product description"
+                        className="h-32"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <Controller
-              name="brand"
-              control={control}
-              render={({ field }) => (
-                <div className="space-y-2">
-                  <Label htmlFor="brand">Brand</Label>
-                  <Input id="brand" {...field} placeholder="Brand name" />
-                </div>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="brand"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Brand</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Brand name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <Controller
-              name="availability"
-              control={control}
-              render={({ field }) => (
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="availability"
-                    checked={field.value ?? false}
-                    onCheckedChange={(checked) =>
-                      field.onChange(checked ?? null)
-                    }
-                  />
-                  <Label htmlFor="availability">Available</Label>
-                </div>
-              )}
-            />
-            <Controller
-              name="image"
-              control={control}
-              render={({ field }) => (
-                <div className="space-y-2 sm:col-span-2">
-                  <Label htmlFor="image">Product Image</Label>
-                  <FileDropzone
-                    onDrop={handleImageDrop}
-                    files={field.value || images}
-                    onRemove={handleImageDelete}
-                  />
-                </div>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="availability"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value ?? false}
+                        onCheckedChange={(checked) =>
+                          field.onChange(checked ?? null)
+                        }
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel>Available</FormLabel>
+                      <FormDescription>
+                        Is this product currently available?
+                      </FormDescription>
+                    </div>
+                  </FormItem>
+                )}
+              />
 
-            <div className="space-y-2 sm:col-span-2">
-              <Label>Categories</Label>
-              <div className="flex flex-wrap gap-2">
-                {categories.map((category: any) => (
-                  <Button
-                    key={category.id}
-                    type="button"
-                    variant={
-                      selectedCategories.includes(category.id)
-                        ? "default"
-                        : "outline"
-                    }
-                    onClick={() => handleCategoryToggle(category.id)}
-                  >
-                    {category.name}
-                  </Button>
-                ))}
-              </div>
+              <FormField
+                control={form.control}
+                name="image"
+                render={({ field }) => (
+                  <FormItem className="sm:col-span-2">
+                    <FormLabel>Product Image</FormLabel>
+                    <FormControl>
+                      <FileDropzone
+                        onDrop={handleImageDrop}
+                        files={field.value || images}
+                        onRemove={handleImageDelete}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormItem className="sm:col-span-2">
+                <FormLabel>Categories</FormLabel>
+                <div className="flex flex-wrap gap-2">
+                  {categories.map((category: any) => (
+                    <Button
+                      key={category.id}
+                      type="button"
+                      variant={
+                        selectedCategories.includes(category.id)
+                          ? "default"
+                          : "outline"
+                      }
+                      onClick={() => handleCategoryToggle(category.id)}
+                    >
+                      {category.name}
+                    </Button>
+                  ))}
+                </div>
+              </FormItem>
             </div>
-          </div>
 
-          <CardFooter className="px-0">
-            <Button type="submit" className="w-full">
-              Update Product
-            </Button>
-          </CardFooter>
-        </form>
+            <CardFooter className="px-0">
+              <Button type="submit" className="w-full">
+                Update Product
+              </Button>
+            </CardFooter>
+          </form>
+        </Form>
       </CardContent>
     </Card>
   );

@@ -18,16 +18,9 @@ import { v4 as uuid } from "uuid";
 import { Button } from "../../../common/ui/button";
 import { ProductCardSkeleton } from "../../../common/components";
 import { ConfirmationDialog } from "../../../admin/components";
+import { Axios } from "../../../common/lib/axiosInstance";
 
-// const cartHeaderData = [
-//   { label: "Price" },
-//   { label: "Quantity" },
-//   { label: "Total" },
-//   {
-//     label: "",
-//   },
-// ];
-
+// Define discountState atom
 const discountState = atom<number>({
   key: "discountState",
   default: 0,
@@ -35,15 +28,27 @@ const discountState = atom<number>({
 
 const Cart = () => {
   const [, setCheckoutData] = useRecoilState(checkoutState);
-
   const navigate = useNavigate();
   const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(0);
 
+  // Fetch cart items
   const { data: cartItems, isLoading } = useQuery({
     queryKey: ["cart"],
     queryFn: fetchCart,
   });
+
+  // Fetch available coupons
+  const { data: coupons, isLoading: loadingCoupons } = useQuery({
+    queryKey: ["coupons"],
+    queryFn: () => Axios.get("/coupon").then((res) => res.data),
+  });
+
+  // Mutation hooks for cart operations
+  const { mutate: increaseQuantity } = useIncreaseQuantity();
+  const { mutate: decreaseQuantity } = useDecreaseQuantity();
+  const { mutate: removeItem } = useRemoveItem();
+  const { mutate: clearCart } = useClearCart();
 
   const handleQuantityChange = (id: number, type: "add" | "sub") => {
     if (type === "add") {
@@ -68,30 +73,38 @@ const Cart = () => {
     navigate("/checkout");
   };
 
-  const { mutate: increaseQuantity } = useIncreaseQuantity();
-  const { mutate: decreaseQuantity } = useDecreaseQuantity();
-  const { mutate: removeItem } = useRemoveItem();
-  const { mutate: clearCart } = useClearCart();
-
   const handleCouponChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const code = e.target.value;
     setCouponCode(code);
+  };
+
+  const validateCoupon = (code: string) => {
+    const coupon = coupons?.find((coupon) => coupon.code === code);
+    if (coupon) {
+      setDiscount(coupon.discount);
+      return true;
+    }
+    return false;
+  };
+
+  const handleApplyCoupon = () => {
+    if (validateCoupon(couponCode)) {
+      //  applyCoupon(couponCode);
+    } else {
+      // Handle invalid coupon
+      alert("Invalid coupon code");
+    }
   };
 
   const calculateTotal = selector({
     key: "CalculateTotal",
     get: ({ get }) => {
       const discount = get(discountState);
-
       const subTotal = Array.isArray(cartItems)
-        ? cartItems.reduce((acc, item) => {
-            return acc + item.product.price * item.quantity;
-          }, 0)
+        ? cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0)
         : 0;
-
       const charge = 45;
       const discountAmount = subTotal * discount;
-
       return {
         subTotal,
         total: subTotal + charge - discountAmount,
@@ -114,7 +127,7 @@ const Cart = () => {
     );
   }
 
-  if (isLoading) {
+  if (isLoading || loadingCoupons) {
     return <ProductCardSkeleton />;
   }
 
@@ -125,9 +138,6 @@ const Cart = () => {
           breadcrumbTitle="Cart"
           breadcrumbValue={cartItems as []}
         />
-        {/* <Button className="w-fit" onClick={() => clearCart()}>
-          Clear All
-        </Button> */}
         <ConfirmationDialog
           triggerText="Clear All"
           title="Clear Cart"
@@ -206,13 +216,6 @@ const Cart = () => {
                 ${(item.product.price * item.quantity).toFixed(2)}
               </td>
               <td className="px-2 py-4 text-right">
-                {/* <button
-                  onClick={() => removeItem(item.product.id)}
-                  className="text-red-600 transition-colors duration-200 hover:text-red-800"
-                  aria-label={`Remove ${item.product.title} from cart`}
-                >
-                  Remove
-                </button> */}
                 <ConfirmationDialog
                   triggerText="Remove"
                   title="Remove"
@@ -238,7 +241,7 @@ const Cart = () => {
           />
           <Button
             className="w-full"
-            onClick={() => applyCoupon(couponCode, setDiscount)}
+            onClick={handleApplyCoupon}
           >
             Add Coupon Code
           </Button>

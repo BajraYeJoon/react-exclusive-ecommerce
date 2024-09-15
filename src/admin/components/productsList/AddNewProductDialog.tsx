@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 import { Axios } from "../../../common/lib/axiosInstance";
-
 import { FileDropzone } from "./file";
 import { useQuery } from "@tanstack/react-query";
 import { fetchCategories } from "../../../common/api/categoryApi";
@@ -14,19 +13,26 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../common/ui/card";
-import { Label } from "../../../common/ui/label";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../../../common/ui/form";
 import { Input } from "../../../common/ui/input";
 import { Checkbox } from "../../../common/ui/checkbox";
 import { Button } from "../../../common/ui/button";
 
-// Define the schema
 const createProductSchema = z.object({
   title: z.string().min(1, "Title is required"),
-  price: z.number().positive("Price must be a positive number"),
+  price: z.coerce.number().positive("Price must be a positive number"),
   image: z.array(z.any()).optional(),
   discounttag: z.boolean().optional(),
-  stock: z.number(),
-  discountprice: z
+  stock: z.coerce.number().int().positive("Stock must be a positive integer"),
+  discountprice: z.coerce
     .number()
     .positive("Discount price must be a positive number")
     .optional(),
@@ -41,26 +47,19 @@ const createProductSchema = z.object({
 type CreateProductFormData = z.infer<typeof createProductSchema>;
 
 export default function AddNewProductDialog() {
-  const methods = useForm<CreateProductFormData>({
-    resolver: zodResolver(createProductSchema),
-    defaultValues: {
-      image: [],
-    },
-  });
-
   const [step, setStep] = useState(1);
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   const [productImages, setProductImages] = useState<Array<string | File>>([]);
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    setValue,
-    formState: { errors },
-  } = methods;
-
-  console.log(errors);
+  const form = useForm<CreateProductFormData>({
+    resolver: zodResolver(createProductSchema),
+    defaultValues: {
+      image: [],
+      discounttag: false,
+      availability: false,
+      categories: [],
+    },
+  });
 
   const {
     data: categories = [],
@@ -80,6 +79,8 @@ export default function AddNewProductDialog() {
     );
   };
 
+  console.log(form.formState.errors, "eeeeee");
+
   const onSubmit = async (data: CreateProductFormData) => {
     const formData = new FormData();
 
@@ -91,36 +92,33 @@ export default function AddNewProductDialog() {
           }
         });
       } else if (key === "categories") {
-        formData.append(key, JSON.stringify(value)); // Convert categories array to JSON if needed
+        formData.append(key, JSON.stringify(value));
       } else if (value !== null) {
-        formData.append(key, value);
+        formData.append(key, String(value));
       }
     });
 
-    console.log(formData);
-
     try {
       await Axios.post("/product/create", formData);
-
-      reset();
+      form.reset();
       setProductImages([]);
     } catch (error) {
-      console.log(error, "heres the error on submmtting");
+      console.error("Error submitting form:", error);
     }
   };
 
   useEffect(() => {
-    setValue("categories", selectedCategories);
-  }, [selectedCategories, setValue]);
+    form.setValue("categories", selectedCategories);
+  }, [selectedCategories, form]);
 
   const handleImageDrop = (acceptedFiles: File[]) => {
     setProductImages((prev) => [...prev, ...acceptedFiles]);
-    setValue("image", acceptedFiles);
+    form.setValue("image", acceptedFiles);
   };
 
   const handleImageRemove = (index: number) => {
     setProductImages((prev) => prev.filter((_, i) => i !== index));
-    setValue(
+    form.setValue(
       "image",
       productImages.filter((_, i) => i !== index),
     );
@@ -133,180 +131,220 @@ export default function AddNewProductDialog() {
   const prevStep = () => setStep((prevStep) => prevStep - 1);
 
   return (
-    <FormProvider {...methods}>
-      <Card>
-        <CardHeader>
-          <CardTitle>Add New Product</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)}>
+    <Card>
+      <CardHeader>
+        <CardTitle>Add New Product</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             {step === 1 && (
               <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="title">Title</Label>
-                  <Input
-                    id="title"
-                    {...register("title")}
-                    placeholder="JBL earphone"
-                  />
-                  {errors.title && (
-                    <p className="text-sm text-destructive">
-                      {errors.title.message}
-                    </p>
+                <FormField
+                  control={form.control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Title</FormLabel>
+                      <FormControl>
+                        <Input placeholder="JBL earphone" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
                   )}
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="price">Price</Label>
-                  <Input
-                    id="price"
-                    type="number"
-                    {...register("price", { valueAsNumber: true })}
-                    placeholder="10.15"
-                  />
-                  {errors.price && (
-                    <p className="text-sm text-destructive">
-                      {errors.price.message}
-                    </p>
+                />
+                <FormField
+                  control={form.control}
+                  name="price"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Price</FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="10.15" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
                   )}
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="stock">Stock</Label>
-                  <Input
-                    id="stock"
-                    type="number"
-                    {...register("stock", { valueAsNumber: true })}
-                    placeholder="3"
-                  />
-                  {errors.stock && (
-                    <p className="text-sm text-destructive">
-                      {errors.stock.message}
-                    </p>
+                />
+                <FormField
+                  control={form.control}
+                  name="stock"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Stock</FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="3" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
                   )}
-                </div>
-                <div className="space-y-2 sm:col-span-2">
-                  <Label htmlFor="description">Description</Label>
-                  <textarea
-                    id="description"
-                    {...register("description")}
-                    placeholder="A timeless bluetooth earphone that never goes out of style."
-                    className="h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground"
-                  />
-                  {errors.description && (
-                    <p className="text-sm text-destructive">
-                      {errors.description.message}
-                    </p>
+                />
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem className="sm:col-span-2">
+                      <FormLabel>Description</FormLabel>
+                      <FormControl>
+                        <textarea
+                          placeholder="A timeless bluetooth earphone that never goes out of style."
+                          className="h-24"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
                   )}
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="discountprice">Discount Price</Label>
-                  <Input
-                    id="discountprice"
-                    type="number"
-                    {...register("discountprice", { valueAsNumber: true })}
-                  />
-                  {errors.discountprice && (
-                    <p className="text-sm text-destructive">
-                      {errors.discountprice.message}
-                    </p>
+                />
+                <FormField
+                  control={form.control}
+                  name="discountprice"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Discount Price</FormLabel>
+                      <FormControl>
+                        <Input type="number" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
                   )}
-                </div>
-                <div className="flex space-x-2">
-                  <Checkbox
-                    id="discounttag"
-                    {...register("discounttag", {
-                      setValueAs: (value) => value === "on",
-                    })}
-                  />
-                  <Label htmlFor="discounttag">Discount Tag</Label>
-                </div>
+                />
+                <FormField
+                  control={form.control}
+                  name="discounttag"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel>Discount Tag</FormLabel>
+                        <FormDescription>
+                          Apply a discount tag to this product
+                        </FormDescription>
+                      </div>
+                    </FormItem>
+                  )}
+                />
               </div>
             )}
 
             {step === 2 && (
               <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="sizes">Sizes</Label>
-                  <Input
-                    id="sizes"
-                    {...register("sizes")}
-                    placeholder="L, XL, XXL"
-                  />
-                  {errors.sizes && (
-                    <p className="text-sm text-destructive">
-                      {errors.sizes.message}
-                    </p>
+                <FormField
+                  control={form.control}
+                  name="sizes"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Sizes</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="L, XL, XXL"
+                          value={field.value || ""}
+                          onChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
                   )}
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="returnpolicy">Return Policy</Label>
-                  <Input
-                    id="returnpolicy"
-                    {...register("returnpolicy")}
-                    placeholder="45 days return policy"
-                  />
-                  {errors.returnpolicy && (
-                    <p className="text-sm text-destructive">
-                      {errors.returnpolicy.message}
-                    </p>
+                />
+                <FormField
+                  control={form.control}
+                  name="returnpolicy"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Return Policy</FormLabel>
+                      <FormControl>
+                        <Input placeholder="45 days return policy" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
                   )}
-                </div>
-
-                <div className="space-y-2 sm:col-span-2">
-                  <Label>Product Images</Label>
-                  <FileDropzone
-                    onDrop={handleImageDrop}
-                    files={productImages}
-                    onRemove={handleImageRemove}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="brand">Brand</Label>
-                  <Input id="brand" {...register("brand")} placeholder="JBL" />
-                  {errors.brand && (
-                    <p className="text-sm text-destructive">
-                      {errors.brand.message}
-                    </p>
+                />
+                <FormField
+                  control={form.control}
+                  name="image"
+                  render={({ field }) => (
+                    <FormItem className="sm:col-span-2">
+                      <FormLabel>Product Images</FormLabel>
+                      <FormControl>
+                        <FileDropzone
+                          onDrop={handleImageDrop}
+                          files={productImages}
+                          onRemove={handleImageRemove}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
                   )}
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="availability"
-                    {...register("availability", {
-                      setValueAs: (value) => value === "on",
-                    })}
-                  />
-                  <Label htmlFor="availability">Availability</Label>
-                </div>
-                <div className="space-y-2 sm:col-span-2">
-                  <Label>Categories</Label>
-                  <div className="flex flex-wrap gap-2">
-                    {categories.map((category: any) => (
-                      <Button
-                        key={category.id}
-                        type="button"
-                        variant={
-                          selectedCategories.includes(category.id)
-                            ? "default"
-                            : "outline"
-                        }
-                        onClick={() => handleCategorySelect(category.id)}
-                      >
-                        {category.name}
-                      </Button>
-                    ))}
-                  </div>
-                  <input
-                    type="hidden"
-                    {...register("categories")}
-                    // value={selectedCategories.join(",")}
-                  />
-                </div>
+                />
+                <FormField
+                  control={form.control}
+                  name="brand"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Brand</FormLabel>
+                      <FormControl>
+                        <Input placeholder="JBL" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="availability"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel>Availability</FormLabel>
+                        <FormDescription>
+                          Is this product currently available?
+                        </FormDescription>
+                      </div>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="categories"
+                  render={() => (
+                    <FormItem className="sm:col-span-2">
+                      <FormLabel>Categories</FormLabel>
+                      <FormControl>
+                        <div className="flex flex-wrap gap-2">
+                          {categories.map((category: any) => (
+                            <Button
+                              key={category.id}
+                              type="button"
+                              variant={
+                                selectedCategories.includes(category.id)
+                                  ? "default"
+                                  : "outline"
+                              }
+                              onClick={() => handleCategorySelect(category.id)}
+                            >
+                              {category.name}
+                            </Button>
+                          ))}
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
             )}
-            <CardFooter className="flex justify-between">
+            <CardFooter className="flex justify-between px-0">
               {step > 1 && (
                 <Button type="button" onClick={prevStep} variant="outline">
                   Previous
@@ -321,8 +359,8 @@ export default function AddNewProductDialog() {
               )}
             </CardFooter>
           </form>
-        </CardContent>
-      </Card>
-    </FormProvider>
+        </Form>
+      </CardContent>
+    </Card>
   );
 }
