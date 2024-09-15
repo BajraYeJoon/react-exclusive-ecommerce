@@ -194,9 +194,9 @@ export default function ProductsList() {
     deleteMutation.mutate(productId);
   };
 
-  if (isLoading) {
-    return <Loading />;
-  }
+  // if (isLoading) {
+  //   return <Loading />;
+  // }
 
   return (
     <div className="my-4 flex flex-col gap-4 px-2 md:px-4">

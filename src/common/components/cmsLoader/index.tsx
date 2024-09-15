@@ -44,7 +44,7 @@ export function EmployeeLoader() {
 
 export function ServiceLoader() {
   return (
-    <div className="flex w-full flex-wrap items-center justify-center gap-4">
+    <div className="flex w-full flex-wrap items-center justify-between gap-4">
       {[1, 2, 3].map((index) => (
         <div
           key={index}

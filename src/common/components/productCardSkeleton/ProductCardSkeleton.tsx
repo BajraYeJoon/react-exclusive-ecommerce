@@ -15,7 +15,7 @@ const ProductCardSkeleton = () => {
   }
 
   return (
-    <div className="mx-72 my-4 grid grid-cols-2 gap-4 max-2xl:mx-6 md:grid-cols-3 lg:grid-cols-4">
+    <div className="my-4 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
       {Array.from({ length: skeletonCount }).map(() => (
         <div
           className="w-full animate-pulse rounded border border-gray-200 p-4 shadow md:p-6"

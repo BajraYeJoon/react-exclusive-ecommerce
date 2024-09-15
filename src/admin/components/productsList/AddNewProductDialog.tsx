@@ -35,7 +35,7 @@ const createProductSchema = z.object({
   description: z.string().min(1, "Description is required"),
   brand: z.string().min(1, "Brand is required"),
   availability: z.boolean().optional(),
-  categories: z.string().optional(),
+  categories: z.array(z.number()).optional(),
 });
 
 type CreateProductFormData = z.infer<typeof createProductSchema>;
@@ -82,6 +82,8 @@ export default function AddNewProductDialog() {
 
   const onSubmit = async (data: CreateProductFormData) => {
     const formData = new FormData();
+
+    console.log(formData);
     Object.entries(data).forEach(([key, value]) => {
       if (key === "image") {
         productImages.forEach((image) => {
@@ -89,6 +91,8 @@ export default function AddNewProductDialog() {
             formData.append("image", image);
           }
         });
+      } else if (key === "categories") {
+        formData.append(key, JSON.stringify(value)); // Convert categories array to JSON if needed
       } else {
         formData.append(key, value as string);
       }
@@ -96,17 +100,16 @@ export default function AddNewProductDialog() {
 
     try {
       await Axios.post("/product/create", formData);
+      console.log(formData);
       reset();
       setProductImages([]);
-      // Handle success (e.g., redirect or show a success message)
     } catch (error) {
-      // Handle error
+      console.log(error, "heres the error on submmtting");
     }
   };
 
   useEffect(() => {
-    // Convert selected categories to a comma-separated string for the form
-    setValue("categories", selectedCategories.join(","));
+    setValue("categories", selectedCategories);
   }, [selectedCategories, setValue]);
 
   const handleImageDrop = (acceptedFiles: File[]) => {
@@ -297,7 +300,7 @@ export default function AddNewProductDialog() {
                   <input
                     type="hidden"
                     {...register("categories")}
-                    value={selectedCategories.join(",")}
+                    // value={selectedCategories.join(",")}
                   />
                 </div>
               </div>

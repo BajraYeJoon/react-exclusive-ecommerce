@@ -23,14 +23,16 @@ const messages = {
 //   api_host: "https://us.i.posthog.com",
 // };
 
-const query = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 0,
-      refetchOnWindowFocus: true,
-    },
-  },
-});
+const query = new QueryClient();
+
+// {
+//   defaultOptions: {
+//     queries: {
+//       staleTime: 0,
+//       refetchOnWindowFocus: true,
+//     },
+//   },
+// }
 const locale = "es";
 
 // Sentry.init({
