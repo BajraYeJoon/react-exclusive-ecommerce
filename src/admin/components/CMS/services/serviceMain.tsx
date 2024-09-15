@@ -41,11 +41,7 @@ export default function ServiceManagement() {
   const queryClient = useQueryClient();
   const { reset, setValue } = useForm<ServiceFormInputs>();
 
-  const {
-    data: servicesData,
-    isLoading,
-    error,
-  } = useQuery({
+  const { data: servicesData, isLoading } = useQuery({
     queryKey: ["services"],
     queryFn: fetchServices,
   });
@@ -109,9 +105,7 @@ export default function ServiceManagement() {
 
   // if (error)
   //   return <div>Error loading services: {(error as Error).message}</div>;
-  if (servicesData?.error) {
-    return <div>No Services Found</div>;
-  }
+
 
   return (
     <section>

@@ -29,7 +29,6 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { toast } from "sonner";
 import { fetchAllProducts } from "../../../common/api/productApi";
 import { Axios } from "../../../common/lib/axiosInstance";
-import { Loading } from "../../../user-portal/site";
 import { Button } from "../../../common/ui/button";
 import { useRecoilState } from "recoil";
 import { flashSaleState } from "../../../user-portal/atoms/flashSaleState";
@@ -41,7 +40,7 @@ import UpdateProductForm from "./UpdateP";
 
 export default function ProductsList() {
   const [flashItem, setFlashItem] = useRecoilState<number[]>(flashSaleState);
-  const { data: products, isLoading } = useQuery({
+  const { data: products } = useQuery({
     queryKey: ["products"],
     queryFn: fetchAllProducts,
   });

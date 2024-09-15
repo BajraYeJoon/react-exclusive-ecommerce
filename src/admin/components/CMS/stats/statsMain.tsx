@@ -31,11 +31,7 @@ export default function Stats() {
   const [currentStat, setCurrentStat] = useState<Stat | null>(null);
   const queryClient = useQueryClient();
 
-  const {
-    data: statsData,
-    error,
-    isLoading,
-  } = useQuery<{ data: Stat[] }>({
+  const { data: statsData, isLoading } = useQuery<{ data: Stat[] }>({
     queryKey: ["stats"],
     queryFn: fetchStats,
   });
@@ -98,10 +94,6 @@ export default function Stats() {
   const handleDelete = (id: number) => {
     deleteMutation.mutate(id);
   };
-
-  if (statsData?.statusCode === 404) {
-    return <div>Not found</div>;
-  }
 
   return (
     <section className="space-y-6">

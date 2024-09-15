@@ -80,7 +80,7 @@ const Cart = () => {
   }
 
   const validateCoupon = (code: string) => {
-    const coupon = coupons?.find((coupon) => coupon.code === code)
+    const coupon = coupons?.find((coupon: any) => coupon.code === code);
     if (coupon) {
       setDiscount({ type: coupon.type, value: coupon.value })
       return true

@@ -3,8 +3,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Axios } from "../../../common/lib/axiosInstance";
 
 const EmailVerification: React.FC = () => {
-  const [verificationStatus, setVerificationStatus] = useState;
-  "loading" | "success" | ("error" > "loading");
+  const [verificationStatus, setVerificationStatus] = useState<
+    "loading" | "success" | "error"
+  >("loading");
   const location = useLocation();
   const navigate = useNavigate();
 

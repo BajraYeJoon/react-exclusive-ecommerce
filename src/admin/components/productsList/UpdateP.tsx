@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Axios } from "../../../common/lib/axiosInstance";
 import { fetchCategories } from "../../../common/api/categoryApi";
 import { FileDropzone } from "./file";
+import { z } from "zod";
 import {
   Card,
   CardContent,
@@ -26,6 +26,7 @@ import { Input } from "../../../common/ui/input";
 import { Checkbox } from "../../../common/ui/checkbox";
 import { Button } from "../../../common/ui/button";
 
+// Define the schema for product update
 const updateProductSchema = z.object({
   title: z.string().optional(),
   price: z.number().positive().optional(),
@@ -42,11 +43,16 @@ const updateProductSchema = z.object({
 
 type UpdateProductFormData = z.infer<typeof updateProductSchema>;
 
+interface Category {
+  id: number;
+  name: string;
+}
+
 interface UpdateProductFormProps {
   initialData: Partial<UpdateProductFormData> & {
     id: string;
     images: string[];
-    categories: { id: number; name: string }[];
+    categories: Category[];
   };
 }
 
@@ -62,15 +68,17 @@ export default function UpdateProductForm({
   );
   const [imageChanged, setImageChanged] = useState(false);
 
+  console.log(imageChanged);
+
   const form = useForm<UpdateProductFormData>({
     resolver: zodResolver(updateProductSchema),
     defaultValues: initialData,
   });
 
-  console.log(form.formState.errors, 'formerrs')
-  console.log(form.formState.dirtyFields, 'dirty')
+  console.log(form.formState.errors, "formerrs");
+  console.log(form.formState.dirtyFields, "dirty");
 
-  const { data: categories = [] } = useQuery({
+  const { data: categories = [] } = useQuery<Category[], Error>({
     queryKey: ["categories"],
     queryFn: fetchCategories,
   });
@@ -110,7 +118,7 @@ export default function UpdateProductForm({
 
   const handleImageDrop = async (acceptedFiles: File[]) => {
     setImages((prevImages) => [...prevImages, ...acceptedFiles]);
-    setImageChanged(true); // Set to true when new images are added
+    setImageChanged(true);
     for (const file of acceptedFiles) {
       const formData = new FormData();
       formData.append("image", file);
@@ -123,7 +131,7 @@ export default function UpdateProductForm({
       await deleteImageMutation.mutateAsync(index);
       queryClient.invalidateQueries({ queryKey: ["products", initialData.id] });
       setImages((prevImages) => prevImages.filter((_, i) => i !== index));
-      setImageChanged(true); // Set to true when an image is deleted
+      setImageChanged(true);
     } catch (error) {
       console.error("Failed to delete image", error);
     }
@@ -136,32 +144,10 @@ export default function UpdateProductForm({
         : [...prev, categoryId],
     );
   };
+
   const onSubmit = async (data: UpdateProductFormData) => {
-    const changes: Partial<UpdateProductFormData> = {};
-    Object.keys(data).forEach((key) => {
-      if (data[key] !== initialData[key]) {
-        changes[key] = data[key];
-      }
-    });
-
-    if (
-      Object.keys(changes).length > 0 ||
-      selectedCategories.length !== initialData.categories?.length ||
-      imageChanged
-    ) {
-      const updatedData = {
-        ...changes,
-        categories: selectedCategories,
-      };
-
-      // Only include image data if it has changed
-      if (imageChanged) {
-        updatedData.image = data.image;
-      }
-
-      await updateProductMutation.mutateAsync(updatedData);
-      setImageChanged(false); // Reset the flag after successful update
-    }
+    await updateProductMutation.mutateAsync(data);
+    setImageChanged(false);
   };
 
   return (
@@ -176,7 +162,7 @@ export default function UpdateProductForm({
               <FormField
                 control={form.control}
                 name="title"
-                render={({ field }) => (
+                render={({ field }: any) => (
                   <FormItem>
                     <FormLabel>Title</FormLabel>
                     <FormControl>
@@ -190,7 +176,7 @@ export default function UpdateProductForm({
               <FormField
                 control={form.control}
                 name="price"
-                render={({ field }) => (
+                render={({ field }: any) => (
                   <FormItem>
                     <FormLabel>Price</FormLabel>
                     <FormControl>
@@ -199,7 +185,7 @@ export default function UpdateProductForm({
                         step="0.01"
                         placeholder="99.99"
                         {...field}
-                        onChange={(e) =>
+                        onChange={(e: any) =>
                           field.onChange(parseFloat(e.target.value))
                         }
                       />
@@ -212,7 +198,7 @@ export default function UpdateProductForm({
               <FormField
                 control={form.control}
                 name="discountprice"
-                render={({ field }) => (
+                render={({ field }: any) => (
                   <FormItem>
                     <FormLabel>Discount Price</FormLabel>
                     <FormControl>
@@ -221,7 +207,7 @@ export default function UpdateProductForm({
                         step="0.01"
                         placeholder="79.99"
                         {...field}
-                        onChange={(e) => {
+                        onChange={(e: any) => {
                           const value = e.target.value;
                           field.onChange(
                             value === "" ? null : parseFloat(value),
@@ -238,12 +224,12 @@ export default function UpdateProductForm({
               <FormField
                 control={form.control}
                 name="discounttag"
-                render={({ field }) => (
+                render={({ field }: any) => (
                   <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                     <FormControl>
                       <Checkbox
                         checked={field.value ?? false}
-                        onCheckedChange={(checked) =>
+                        onCheckedChange={(checked: any) =>
                           field.onChange(checked ?? null)
                         }
                       />
@@ -261,7 +247,7 @@ export default function UpdateProductForm({
               <FormField
                 control={form.control}
                 name="stock"
-                render={({ field }) => (
+                render={({ field }: any) => (
                   <FormItem>
                     <FormLabel>Stock</FormLabel>
                     <FormControl>
@@ -269,7 +255,7 @@ export default function UpdateProductForm({
                         type="number"
                         placeholder="1"
                         {...field}
-                        onChange={(e) =>
+                        onChange={(e: any) =>
                           field.onChange(parseInt(e.target.value))
                         }
                       />
@@ -282,7 +268,7 @@ export default function UpdateProductForm({
               <FormField
                 control={form.control}
                 name="sizes"
-                render={({ field }) => (
+                render={({ field }: any) => (
                   <FormItem>
                     <FormLabel>Sizes</FormLabel>
                     <FormControl>
@@ -300,7 +286,7 @@ export default function UpdateProductForm({
               <FormField
                 control={form.control}
                 name="returnpolicy"
-                render={({ field }) => (
+                render={({ field }: any) => (
                   <FormItem className="sm:col-span-2">
                     <FormLabel>Return Policy</FormLabel>
                     <FormControl>
@@ -314,13 +300,13 @@ export default function UpdateProductForm({
               <FormField
                 control={form.control}
                 name="description"
-                render={({ field }) => (
+                render={({ field }: any) => (
                   <FormItem className="sm:col-span-2">
                     <FormLabel>Description</FormLabel>
                     <FormControl>
                       <textarea
                         placeholder="Detailed product description"
-                        className="h-32"
+                        className="h-32 w-full rounded border p-2"
                         {...field}
                       />
                     </FormControl>
@@ -332,7 +318,7 @@ export default function UpdateProductForm({
               <FormField
                 control={form.control}
                 name="brand"
-                render={({ field }) => (
+                render={({ field }: any) => (
                   <FormItem>
                     <FormLabel>Brand</FormLabel>
                     <FormControl>
@@ -346,12 +332,12 @@ export default function UpdateProductForm({
               <FormField
                 control={form.control}
                 name="availability"
-                render={({ field }) => (
+                render={({ field }: any) => (
                   <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                     <FormControl>
                       <Checkbox
                         checked={field.value ?? false}
-                        onCheckedChange={(checked) =>
+                        onCheckedChange={(checked: any) =>
                           field.onChange(checked ?? null)
                         }
                       />
@@ -369,7 +355,7 @@ export default function UpdateProductForm({
               <FormField
                 control={form.control}
                 name="image"
-                render={({ field }) => (
+                render={({ field }: any) => (
                   <FormItem className="sm:col-span-2">
                     <FormLabel>Product Image</FormLabel>
                     <FormControl>
@@ -387,7 +373,7 @@ export default function UpdateProductForm({
               <FormItem className="sm:col-span-2">
                 <FormLabel>Categories</FormLabel>
                 <div className="flex flex-wrap gap-2">
-                  {categories.map((category: any) => (
+                  {categories.map((category: Category) => (
                     <Button
                       key={category.id}
                       type="button"

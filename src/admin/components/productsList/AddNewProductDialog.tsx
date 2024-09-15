@@ -267,7 +267,7 @@ export default function AddNewProductDialog() {
                 <FormField
                   control={form.control}
                   name="image"
-                  render={({ field }) => (
+                  render={() => (
                     <FormItem className="sm:col-span-2">
                       <FormLabel>Product Images</FormLabel>
                       <FormControl>

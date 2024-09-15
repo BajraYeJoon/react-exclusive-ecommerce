@@ -28,7 +28,6 @@ import {
 } from "../../../common/ui/dialog";
 import { Axios } from "../../../common/lib/axiosInstance";
 import { AxiosError } from "axios";
-import { Loading } from "../../../user-portal/site";
 
 export default function DiscountCRUD() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -37,7 +36,7 @@ export default function DiscountCRUD() {
 
   const { register, handleSubmit, reset, setValue } = useForm();
 
-  const { data: couponsData, isLoading } = useQuery({
+  const { data: couponsData } = useQuery({
     queryKey: ["coupons"],
     queryFn: () => Axios.get("/coupon").then((res) => res.data),
   });
