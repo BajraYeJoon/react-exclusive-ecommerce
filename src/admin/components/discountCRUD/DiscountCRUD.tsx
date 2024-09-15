@@ -109,7 +109,7 @@ export default function DiscountCRUD() {
     reset();
   };
 
-  if (isLoading) return <Loading />;
+  // if (isLoading) return <Loading />;
 
   return (
     <Card className="overflow-x-scroll">

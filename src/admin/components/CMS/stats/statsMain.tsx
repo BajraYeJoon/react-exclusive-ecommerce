@@ -99,8 +99,9 @@ export default function Stats() {
     deleteMutation.mutate(id);
   };
 
-  if (isLoading) return <StatsLoader />;
-  if (error) return <div>Error loading stats</div>;
+  if (statsData?.statusCode === 404) {
+    return <div>Not found</div>;
+  }
 
   return (
     <section className="space-y-6">
@@ -158,7 +159,15 @@ export default function Stats() {
         </DialogContent>
       </Dialog>
 
-      <StatsDisplay stats={stats} onEdit={handleEdit} onDelete={handleDelete} />
+      {isLoading ? (
+        <StatsLoader />
+      ) : (
+        <StatsDisplay
+          stats={stats}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
+      )}
     </section>
   );
 }

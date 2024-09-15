@@ -83,7 +83,6 @@ export default function AddNewProductDialog() {
   const onSubmit = async (data: CreateProductFormData) => {
     const formData = new FormData();
 
-    console.log(formData);
     Object.entries(data).forEach(([key, value]) => {
       if (key === "image") {
         productImages.forEach((image) => {
@@ -93,14 +92,16 @@ export default function AddNewProductDialog() {
         });
       } else if (key === "categories") {
         formData.append(key, JSON.stringify(value)); // Convert categories array to JSON if needed
-      } else {
-        formData.append(key, value as string);
+      } else if (value !== null) {
+        formData.append(key, value);
       }
     });
 
+    console.log(formData);
+
     try {
       await Axios.post("/product/create", formData);
-      console.log(formData);
+
       reset();
       setProductImages([]);
     } catch (error) {

@@ -22,14 +22,14 @@ import { Button } from "../../../common/ui/button";
 const updateProductSchema = z.object({
   title: z.string().optional(),
   price: z.number().positive().optional(),
-  discounttag: z.boolean().optional(),
+  discounttag: z.boolean().nullable().optional(),
   stock: z.number().min(0).optional(),
-  discountprice: z.number().positive().optional(),
+  discountprice: z.number().positive().optional().nullable(),
   sizes: z.string().nullable().optional(),
   returnpolicy: z.string().optional(),
   description: z.string().optional(),
   brand: z.string().optional(),
-  availability: z.boolean().optional(),
+  availability: z.boolean().nullable().optional(),
   image: z.array(z.any()).optional(),
 });
 
@@ -53,16 +53,21 @@ export default function UpdateProductForm({
   const [images, setImages] = useState<Array<string | File>>(
     initialData.images || [],
   );
+  const [originalData, setOriginalData] =
+    useState<UpdateProductFormData>(initialData);
+  const [imageChanged, setImageChanged] = useState(false);
 
   const {
     control,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm<UpdateProductFormData>({
     resolver: zodResolver(updateProductSchema),
     defaultValues: initialData,
   });
 
+  console.log(initialData, "EDIT PRODUCT");
   console.log(errors);
 
   const { data: categories = [] } = useQuery({
@@ -101,10 +106,12 @@ export default function UpdateProductForm({
 
   useEffect(() => {
     setImages(initialData.images || []);
+    setOriginalData(initialData);
   }, [initialData.images]);
 
   const handleImageDrop = async (acceptedFiles: File[]) => {
     setImages((prevImages) => [...prevImages, ...acceptedFiles]);
+    setImageChanged(true); // Mark image as changed
     for (const file of acceptedFiles) {
       const formData = new FormData();
       formData.append("image", file);
@@ -117,6 +124,7 @@ export default function UpdateProductForm({
       await deleteImageMutation.mutateAsync(index);
       queryClient.invalidateQueries({ queryKey: ["products", initialData.id] });
       setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+      setImageChanged(true); // Mark image as changed
     } catch (error) {
       console.error("Failed to delete image", error);
     }
@@ -129,14 +137,27 @@ export default function UpdateProductForm({
         : [...prev, categoryId],
     );
   };
-
   const onSubmit = async (data: UpdateProductFormData) => {
-    const updatedDat = {
-      ...data,
+    // Collect only the fields that have changed
+    const changes: Partial<UpdateProductFormData> = {};
+    for (const key in data) {
+      if (data[key] !== originalData[key]) {
+        changes[key] = data[key];
+      }
+    }
+  
+    // Conditionally add the image field if it has changed
+    if (imageChanged) {
+      changes.image = data.image;
+    }
+  
+    // Add selected categories to the changes
+    const updatedData = {
+      ...changes,
       categories: selectedCategories,
     };
-
-    await updateProductMutation.mutateAsync(updatedDat);
+  
+    await updateProductMutation.mutateAsync(updatedData);
   };
 
   return (
@@ -187,7 +208,11 @@ export default function UpdateProductForm({
                     type="number"
                     step="0.01"
                     {...field}
-                    onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      field.onChange(value === "" ? null : parseFloat(value));
+                    }}
+                    value={field.value ?? ""}
                     placeholder="79.99"
                   />
                 </div>
@@ -202,8 +227,10 @@ export default function UpdateProductForm({
                   <Label htmlFor="discounttag">Discount Tag</Label>
                   <Checkbox
                     id="discounttag"
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
+                    checked={field.value ?? false}
+                    onCheckedChange={(checked) =>
+                      field.onChange(checked ?? null)
+                    }
                   />
                 </div>
               )}
@@ -291,14 +318,15 @@ export default function UpdateProductForm({
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="availability"
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
+                    checked={field.value ?? false}
+                    onCheckedChange={(checked) =>
+                      field.onChange(checked ?? null)
+                    }
                   />
                   <Label htmlFor="availability">Available</Label>
                 </div>
               )}
             />
-
             <Controller
               name="image"
               control={control}
@@ -313,14 +341,6 @@ export default function UpdateProductForm({
                 </div>
               )}
             />
-            {/* <div className="space-y-2 sm:col-span-2">
-              <Label>Product Images</Label>
-              <FileDropzone
-                onDrop={handleImageDrop}
-                files={images}
-                onRemove={handleImageDelete}
-              />
-            </div> */}
 
             <div className="space-y-2 sm:col-span-2">
               <Label>Categories</Label>

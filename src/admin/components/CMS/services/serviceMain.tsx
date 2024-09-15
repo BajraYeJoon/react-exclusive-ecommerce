@@ -107,9 +107,11 @@ export default function ServiceManagement() {
     }
   };
 
-  if (isLoading) return <ServiceLoader />;
-  if (error)
-    return <div>Error loading services: {(error as Error).message}</div>;
+  // if (error)
+  //   return <div>Error loading services: {(error as Error).message}</div>;
+  if (servicesData?.error) {
+    return <div>No Services Found</div>;
+  }
 
   return (
     <section>
@@ -129,43 +131,48 @@ export default function ServiceManagement() {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="grid grid-cols-2 gap-6 lg:grid-cols-3">
-        {services?.map((service: Service) => (
-          <Card key={service.id} className="overflow-hidden">
-            <CardContent className="p-4">
-              <div className="mb-0 flex flex-col items-center gap-3 md:mb-4 md:flex-row">
-                <img
-                  src={service.icon}
-                  alt={service.title}
-                  className="mr-4 h-12 w-12 rounded-full object-cover"
-                />
-                <h2 className="text-sm font-medium md:text-xl">
-                  {service.title}
-                </h2>
-              </div>
-              <p className="text-xs text-gray-600 md:text-base">
-                {service.description}
-              </p>
-            </CardContent>
-            <CardFooter className="flex flex-col justify-end gap-2 bg-gray-50 p-4 md:flex-row md:space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleEdit(service)}
-              >
-                <Pencil className="mr-2 h-4 w-4" /> Edit
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleDelete(service.id)}
-              >
-                <Trash2 className="mr-2 h-4 w-4" /> Delete
-              </Button>
-            </CardFooter>
-          </Card>
-        ))}
-      </div>
+      {isLoading ? (
+        <ServiceLoader />
+      ) : (
+        <div className="grid grid-cols-2 gap-6 lg:grid-cols-3">
+          {services?.map((service: Service) => (
+            <Card key={service.id} className="overflow-hidden">
+              <CardContent className="p-4">
+                <div className="mb-0 flex flex-col items-center gap-3 md:mb-4 md:flex-row">
+                  <img
+                    src={service.icon}
+                    alt={service.title}
+                    className="mr-4 h-12 w-12 rounded-full object-cover"
+                  />
+                  <h2 className="text-sm font-medium md:text-xl">
+                    {service.title}
+                  </h2>
+                </div>
+                <p className="text-xs text-gray-600 md:text-base">
+                  {service.description}
+                </p>
+              </CardContent>
+              <CardFooter className="flex flex-col justify-end gap-2 bg-gray-50 p-4 md:flex-row md:space-x-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleEdit(service)}
+                >
+                  <Pencil className="mr-2 h-4 w-4" /> Edit
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleDelete(service.id)}
+                >
+                  <Trash2 className="mr-2 h-4 w-4" /> Delete
+                </Button>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+      )}
+
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent>
           <DialogHeader>
