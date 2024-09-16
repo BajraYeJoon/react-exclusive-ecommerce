@@ -206,6 +206,7 @@ export default function ProductsList() {
             <Button className="w-fit">Add new Product</Button>
           </DialogTrigger>
           <DialogContent>
+            {/* <AddNewProductDialog /> */}
             <AddNewProductDialog />
           </DialogContent>
         </Dialog>
