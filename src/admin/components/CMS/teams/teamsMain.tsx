@@ -22,7 +22,7 @@ import { Input } from "../../../../common/ui/input";
 import { EmployeeLoader } from "../../../../common/components/cmsLoader";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
-import { BsTwitter } from "react-icons/bs";
+
 export interface Employee {
   id: string;
   name: string;
@@ -160,6 +160,7 @@ export default function EmployeeManagement() {
                           <Twitter />
                         </Link>
                       )}
+                      \
                       {employee.linkedin && (
                         <Link to={employee.linkedin}>
                           <Linkedin />

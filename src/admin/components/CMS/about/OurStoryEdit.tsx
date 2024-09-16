@@ -7,7 +7,6 @@ import { updateAbout } from "../../../../common/api/cms/about";
 import { toast } from "sonner";
 import { Label } from "../../../../common/ui/label";
 import { Textarea } from "../../../../common/ui/textarea";
-import FileDropzone from "../../productsList/imageupload";
 import { useState } from "react";
 import { Upload } from "lucide-react";
 
@@ -26,9 +25,11 @@ export function OurStoryEdit({ content, onCancel }: OurStoryEditProps) {
   });
 
   const queryClient = useQueryClient();
-  const [preview, setPreview] = useState(content.image);
+  const [preview, setPreview] = useState<string | ArrayBuffer | null>(
+    content.image,
+  );
 
-  const handleImageChange = (e) => {
+  const handleImageChange = (e: any) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -107,7 +108,7 @@ export function OurStoryEdit({ content, onCancel }: OurStoryEditProps) {
         {content.image && (
           <div className="mt-1 max-w-44">
             <img
-              src={preview}
+              src={preview?.toString() ?? ""}
               alt="Current Image"
               className="mb-2 h-16 w-16 rounded-full object-cover md:h-32 md:w-32"
             />
