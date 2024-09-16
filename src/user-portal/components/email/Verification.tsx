@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Axios } from "../../../common/lib/axiosInstance";
 import { toast } from "sonner";
 import axios from "axios";
 
