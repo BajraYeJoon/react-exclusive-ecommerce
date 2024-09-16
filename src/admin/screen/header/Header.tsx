@@ -35,9 +35,12 @@ const Header = () => {
             <DropdownMenuContent>
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuLabel>
-                <DashboardButton />
-              </DropdownMenuLabel>
+              {dimension.width < 768 && (
+                <DropdownMenuLabel>
+                  <DashboardButton />
+                </DropdownMenuLabel>
+              )}
+
               <DropdownMenuItem>Profile</DropdownMenuItem>
               <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem>
             </DropdownMenuContent>

@@ -28,6 +28,7 @@ import {
 } from "../../../common/ui/dialog";
 import { Axios } from "../../../common/lib/axiosInstance";
 import { AxiosError } from "axios";
+import { Loading } from "../../../user-portal/site";
 
 export default function DiscountCRUD() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -36,7 +37,7 @@ export default function DiscountCRUD() {
 
   const { register, handleSubmit, reset, setValue } = useForm();
 
-  const { data: couponsData } = useQuery({
+  const { data: couponsData, isLoading } = useQuery({
     queryKey: ["coupons"],
     queryFn: () => Axios.get("/coupon").then((res) => res.data),
   });
@@ -230,34 +231,40 @@ export default function DiscountCRUD() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {coupons?.map((coupon: any) => (
-              <TableRow key={coupon.id}>
-                <TableCell>{coupon.name}</TableCell>
-                <TableCell>{coupon.code}</TableCell>
-                <TableCell>{coupon.type}</TableCell>
-                <TableCell>{coupon.value}</TableCell>
-                <TableCell>{coupon.startDate.split("T")[0]}</TableCell>
-                <TableCell>{coupon.expirationDate.split("T")[0]}</TableCell>
-                <TableCell>{coupon.maxUsageCount}</TableCell>
-                <TableCell>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="mr-2"
-                    onClick={() => handleEdit(coupon)}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={() => handleDelete(coupon.id)}
-                  >
-                    Delete
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {isLoading ? (
+              <Loading />
+            ) : (
+              <>
+                {coupons?.map((coupon: any) => (
+                  <TableRow key={coupon.id}>
+                    <TableCell>{coupon.name}</TableCell>
+                    <TableCell>{coupon.code}</TableCell>
+                    <TableCell>{coupon.type}</TableCell>
+                    <TableCell>{coupon.value}</TableCell>
+                    <TableCell>{coupon.startDate.split("T")[0]}</TableCell>
+                    <TableCell>{coupon.expirationDate.split("T")[0]}</TableCell>
+                    <TableCell>{coupon.maxUsageCount}</TableCell>
+                    <TableCell>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="mr-2"
+                        onClick={() => handleEdit(coupon)}
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => handleDelete(coupon.id)}
+                      >
+                        Delete
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </>
+            )}
           </TableBody>
         </Table>
       </CardContent>
