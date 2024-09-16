@@ -26,9 +26,7 @@ const EmailVerification: React.FC = () => {
       const numericToken = Number(token).toString();
 
       try {
-        const response = await Axios.post("/auth/verify-email", {
-          token: numericToken,
-        });
+        const response = await Axios.post(`/auth/verify-email/${numericToken}`);
         if (response.status === 200) {
           setVerificationStatus("success");
           toast.success("Email verified successfully!");
