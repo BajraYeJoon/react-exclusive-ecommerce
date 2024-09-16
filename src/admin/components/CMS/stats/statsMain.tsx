@@ -19,6 +19,7 @@ import {
 import { Input } from "../../../../common/ui/input";
 import { Label } from "../../../../common/ui/label";
 import { StatsLoader } from "../../../../common/components/cmsLoader";
+import { toast } from "sonner";
 
 export interface Stat {
   id?: number;
@@ -50,7 +51,11 @@ export default function Stats() {
     mutationFn: (newStat: Stat) => addStats(newStat),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["stats"] });
+      toast.success("Stats added successfully");
       handleDialogClose();
+    },
+    onError: () => {
+      toast.error("Please try again later");
     },
   });
 
@@ -58,7 +63,11 @@ export default function Stats() {
     mutationFn: (updatedStat: Stat) => updateStats(updatedStat),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["stats"] });
+      toast.success("Stats updated successfully");
       handleDialogClose();
+    },
+    onError: () => {
+      toast.error("Please try again later");
     },
   });
 
@@ -66,6 +75,7 @@ export default function Stats() {
     mutationFn: (id: number) => deleteStats(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["stats"] });
+      toast.success("Stats deleted successfully");
       handleDialogClose();
     },
   });

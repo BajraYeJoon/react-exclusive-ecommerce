@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Pencil, Trash2, Plus } from "lucide-react";
+import { Pencil, Trash2, Plus, Linkedin, Twitter } from "lucide-react";
 import {
   addEmployee,
   deleteEmployee,
@@ -20,6 +20,9 @@ import { Card, CardContent, CardFooter } from "../../../../common/ui/card";
 import { Label } from "../../../../common/ui/label";
 import { Input } from "../../../../common/ui/input";
 import { EmployeeLoader } from "../../../../common/components/cmsLoader";
+import { toast } from "sonner";
+import { Link } from "react-router-dom";
+import { BsTwitter } from "react-icons/bs";
 export interface Employee {
   id: string;
   name: string;
@@ -62,8 +65,12 @@ export default function EmployeeManagement() {
     mutationFn: updateEmployee,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["employees"] });
+      toast.success("Employee updated successfully");
       setIsEditDialogOpen(false);
       setEditingEmployee(null);
+    },
+    onError: () => {
+      toast.error("Please try again later");
     },
   });
 
@@ -71,12 +78,14 @@ export default function EmployeeManagement() {
     mutationFn: deleteEmployee,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["employees"] });
+      toast.success("Employee deleted successfully");
+    },
+    onError: () => {
+      toast.error(
+        "There was an error deleting the employee, please try again later",
+      );
     },
   });
-
-  if (isLoading) {
-    return <EmployeeLoader />;
-  }
 
   const onSubmit: SubmitHandler<EmployeeFormInputs> = (data) => {
     const formData = new FormData();
@@ -122,73 +131,77 @@ export default function EmployeeManagement() {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="grid grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-4">
-        {employees?.map((employee: Employee) => (
-          <Card key={employee.id} className="w-full overflow-hidden">
-            <CardContent className="flex flex-col p-4 sm:flex-row">
-              <div className="flex flex-col items-center">
-                <img
-                  src={employee.image}
-                  alt={employee.name}
-                  className="mr-4 h-12 w-12 rounded-full object-cover md:h-16 md:w-16"
-                />
-                <div className="my-2">
-                  <h2 className="text-sm font-semibold md:text-xl">
-                    {employee.name}
-                  </h2>
-                  <p className="text-gray-600">{employee.position}</p>
-                </div>
-                
-              </div>
+      {isLoading ? (
+        <EmployeeLoader />
+      ) : (
+        <>
+          <div className="grid grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-4">
+            {employees?.map((employee: Employee) => (
+              <Card key={employee.id} className="w-full overflow-hidden">
+                <CardContent className="flex flex-col p-4 sm:flex-row">
+                  <div className="flex flex-col items-start">
+                    <img
+                      src={employee.image}
+                      alt={employee.name}
+                      className="h-12 w-full object-cover md:h-auto md:w-auto"
+                    />
+                    <div className="my-2">
+                      <h2 className="text-sm font-medium md:text-base">
+                        {employee.name}
+                      </h2>
+                      <p className="text-sm font-light">{employee.position}</p>
+                    </div>
+                  </div>
 
-              <CardFooter className="flex flex-col justify-end space-y-2 p-4">
-              {employee.twitter && (
-                  <a
-                    href={employee.twitter}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mb-1 block text-blue-500"
-                  >
-                    Twitter
-                  </a>
-                )}
-                {employee.linkedin && (
-                  <a
-                    href={employee.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block text-blue-500"
-                  >
-                    LinkedIn
-                  </a>
-                )}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleEdit(employee)}
-                >
-                  <Pencil className="mr-2 h-4 w-4" /> Edit
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleDelete(employee.id)}
-                >
-                  <Trash2 className="mr-2 h-4 w-4" /> Delete
-                </Button>
-              </CardFooter>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Edit Employee</DialogTitle>
-          </DialogHeader>
-          <EmployeeForm onSubmit={onSubmit} editingEmployee={editingEmployee} />
-        </DialogContent>
-      </Dialog>
+                  <CardFooter className="flex flex-row justify-center gap-4 p-0 sm:flex-col md:gap-2">
+                    <div className="flex aspect-square h-fit flex-col items-center justify-center gap-2 object-cover sm:flex-row">
+                      {employee.twitter && (
+                        <Link to={employee.twitter}>
+                          <Twitter />
+                        </Link>
+                      )}
+                      {employee.linkedin && (
+                        <Link to={employee.linkedin}>
+                          <Linkedin />
+                        </Link>
+                      )}
+                    </div>
+                    <div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleEdit(employee)}
+                      >
+                        <Pencil className="mr-2 h-4 w-4" />
+                        <span className="hidden sm:block">Edit</span>
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDelete(employee.id)}
+                      >
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        <span className="hidden sm:block">Delete</span>
+                      </Button>
+                    </div>
+                  </CardFooter>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+          <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Edit Employee</DialogTitle>
+              </DialogHeader>
+              <EmployeeForm
+                onSubmit={onSubmit}
+                editingEmployee={editingEmployee}
+              />
+            </DialogContent>
+          </Dialog>
+        </>
+      )}
     </section>
   );
 }

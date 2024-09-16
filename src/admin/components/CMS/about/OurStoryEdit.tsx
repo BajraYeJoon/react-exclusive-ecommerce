@@ -4,6 +4,12 @@ import { Input } from "../../../../common/ui/input";
 import { Button } from "../../../../common/ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateAbout } from "../../../../common/api/cms/about";
+import { toast } from "sonner";
+import { Label } from "../../../../common/ui/label";
+import { Textarea } from "../../../../common/ui/textarea";
+import FileDropzone from "../../productsList/imageupload";
+import { useState } from "react";
+import { Upload } from "lucide-react";
 
 interface OurStoryEditProps {
   content: OurStoryContent;
@@ -20,13 +26,27 @@ export function OurStoryEdit({ content, onCancel }: OurStoryEditProps) {
   });
 
   const queryClient = useQueryClient();
+  const [preview, setPreview] = useState(content.image);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const mutation = useMutation({
     mutationFn: updateAbout,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["about"] });
-      onCancel(); // Close the edit form on success
+      toast.success("Content updated successfully");
+      onCancel();
     },
+    onError: () => toast.error("Please try again later"),
   });
 
   const onSubmit = (data: OurStoryContent) => {
@@ -43,12 +63,12 @@ export function OurStoryEdit({ content, onCancel }: OurStoryEditProps) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>
-        <label
+        <Label
           htmlFor="title"
           className="block text-sm font-medium text-gray-700"
         >
           Title
-        </label>
+        </Label>
         <Input
           id="title"
           {...register("title", { required: "Title is required" })}
@@ -60,16 +80,16 @@ export function OurStoryEdit({ content, onCancel }: OurStoryEditProps) {
       </div>
 
       <div>
-        <label
+        <Label
           htmlFor="paragraph"
           className="block text-sm font-medium text-gray-700"
         >
           Paragraph 2
-        </label>
-        <textarea
+        </Label>
+        <Textarea
           id="paragraph"
           {...register("body", { required: "Paragraph 2 is required" })}
-          className="mt-1 w-full border"
+          className="mt-1 h-fit w-full border"
           rows={4}
         />
         {errors.body && (
@@ -78,33 +98,36 @@ export function OurStoryEdit({ content, onCancel }: OurStoryEditProps) {
       </div>
 
       <div>
-        <label
+        <Label
           htmlFor="imageUrl"
           className="block text-sm font-medium text-gray-700"
         >
           Image URL
-        </label>
-        {content.image ? (
-          <div className="mt-1">
+        </Label>
+        {content.image && (
+          <div className="mt-1 max-w-44">
             <img
-              src={content.image}
+              src={preview}
               alt="Current Image"
-              className="mb-2 h-12 w-12"
+              className="mb-2 h-16 w-16 rounded-full object-cover md:h-32 md:w-32"
             />
-            <input
-              type="file"
-              id="imageUrl"
-              {...register("image")}
-              className="block w-full cursor-pointer rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 focus:outline-none"
-            />
+            <div className="mt-1">
+              <input
+                type="file"
+                id="imageUrl"
+                {...register("image")}
+                className="hidden"
+                onChange={handleImageChange}
+              />
+              <Label
+                htmlFor="imageUrl"
+                className="flex w-full cursor-pointer items-center justify-center rounded-lg border border-gray-300 py-3 hover:bg-gray-50"
+              >
+                <Upload className="size-6" />
+                <span className="ml-2">Upload Image</span>
+              </Label>
+            </div>
           </div>
-        ) : (
-          <input
-            type="file"
-            id="imageUrl"
-            {...register("image")}
-            className="mt-1 block w-full cursor-pointer rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 focus:outline-none"
-          />
         )}
         {errors.image && (
           <p className="mt-1 text-sm text-red-600">{errors.image.message}</p>

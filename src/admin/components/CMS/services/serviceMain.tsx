@@ -132,34 +132,36 @@ export default function ServiceManagement() {
           {services?.map((service: Service) => (
             <Card key={service.id} className="overflow-hidden">
               <CardContent className="p-4">
-                <div className="mb-0 flex flex-col items-center gap-3 md:mb-4 md:flex-row">
+                <div className="mb-2 flex flex-col items-center gap-3 md:mb-4 md:flex-row">
                   <img
                     src={service.icon}
                     alt={service.title}
                     className="mr-4 h-12 w-12 rounded-full object-cover"
                   />
-                  <h2 className="text-sm font-medium md:text-xl">
+                  <h2 className="text-xs font-medium md:text-xl">
                     {service.title}
                   </h2>
                 </div>
-                <p className="text-xs text-gray-600 md:text-base">
+                <p className="text-[11px] text-gray-600 md:text-base">
                   {service.description}
                 </p>
               </CardContent>
-              <CardFooter className="flex flex-col justify-end gap-2 bg-gray-50 p-4 md:flex-row md:space-x-2">
+              <CardFooter className="flex flex-row justify-end gap-2 bg-gray-50 p-4 md:space-x-2">
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => handleEdit(service)}
                 >
-                  <Pencil className="mr-2 h-4 w-4" /> Edit
+                  <Pencil className="mr-2 h-4 w-4" />
+                  <span className="hidden sm:block">Edit</span>
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => handleDelete(service.id)}
                 >
-                  <Trash2 className="mr-2 h-4 w-4" /> Delete
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  <span className="hidden sm:block">Delete</span>
                 </Button>
               </CardFooter>
             </Card>
