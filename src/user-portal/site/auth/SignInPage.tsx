@@ -2,7 +2,6 @@ import { useForm } from "react-hook-form";
 import { LoginFormData } from "../../schemas/types";
 import { LoginFormSchema } from "../../schemas/zodSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormInput } from "../../components";
 import { Button } from "../../../common/ui/button";
 import { GoogleSignInComponent } from "./GoogleSignIn";
 import { useAuthContext } from "../../context/useAuthContext";
@@ -21,7 +20,7 @@ const SignInPage = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    // formState: { errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(LoginFormSchema),
   });

@@ -186,11 +186,7 @@ const CouponDesign3: React.FC<CouponProps> = ({ coupon, onCopy, isCopied }) => (
 export default function EnhancedCoupons() {
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
-  const {
-    data: coupons,
-    isLoading,
-    error,
-  } = useQuery<Coupon[]>({
+  const { data: coupons, error } = useQuery<Coupon[]>({
     queryKey: ["coupons"],
     queryFn: fetchCoupons,
   });
@@ -201,8 +197,6 @@ export default function EnhancedCoupons() {
     setTimeout(() => setCopiedCode(null), 2000);
   };
 
-  if (isLoading)
-    return <div className="p-4 text-center">Loading coupons...</div>;
   if (error)
     return (
       <div className="p-4 text-center text-red-500">
@@ -227,7 +221,7 @@ export default function EnhancedCoupons() {
 
   return (
     <div>
-      <h1 className="mb-8 text-center text-3xl font-bold text-gray-800">
+      <h1 className="mb-8 text-center text-sm font-bold text-gray-800 md:text-xl lg:text-3xl">
         Available Coupons
       </h1>
       <AnimatePresence>

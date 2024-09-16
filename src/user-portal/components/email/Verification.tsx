@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Axios } from "../../../common/lib/axiosInstance";
+import { toast } from "sonner";
 
 const EmailVerification: React.FC = () => {
   const [verificationStatus, setVerificationStatus] = useState<
@@ -14,22 +15,32 @@ const EmailVerification: React.FC = () => {
       const searchParams = new URLSearchParams(location.search);
       const token = searchParams.get("token");
 
+      console.log(token, "token");
+
       if (!token) {
         setVerificationStatus("error");
+        toast.error("Token is missing or invalid.");
         return;
       }
 
+      const numericToken = Number(token).toString();
+
       try {
-        // Send the token to your backend for verification
-        const response = await Axios.post("/auth/verify-email", { token });
-        if (response.data.success) {
+        const response = await Axios.post("/auth/verify-email", {
+          token: numericToken,
+        });
+        if (response.status === 200) {
           setVerificationStatus("success");
+          toast.success("Email verified successfully!");
         } else {
           setVerificationStatus("error");
+          toast.error("Email verification failed.");
         }
       } catch (error) {
         console.error("Email verification failed:", error);
         setVerificationStatus("error");
+
+        toast.error("Validation failed: numeric string is expected.");
       }
     };
 

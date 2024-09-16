@@ -10,7 +10,7 @@ const Contact = () => {
   const { register, handleSubmit, reset } = useForm();
   const [isLoading, setIsLoading] = useState(false);
 
-  const onSubmit = (data: any) => {
+  const onSubmit = () => {
     setIsLoading(true);
     emailjs
       .sendForm(
@@ -23,7 +23,7 @@ const Contact = () => {
         reset();
         toast.success("Message sent successfully");
       })
-      .catch((error) => {
+      .catch(() => {
         toast.error("Failed to send message");
       })
       .finally(() => {

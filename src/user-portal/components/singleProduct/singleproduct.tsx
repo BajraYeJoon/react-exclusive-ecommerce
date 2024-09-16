@@ -82,7 +82,9 @@ const Singleproduct = () => {
   return (
     <section className="py-12 sm:py-16">
       <div className="container mx-auto px-4">
-        <CustomBreakcrumb breadcrumbTitle={`${details.brand}`} />
+        <CustomBreakcrumb
+          breadcrumbTitle={`${details?.brand && details?.brand}`}
+        />
 
         <div className="lg:col-gap-12 xl:col-gap-16 mt-8 grid grid-cols-1 gap-12 lg:mt-12 lg:grid-cols-5 lg:gap-16">
           <div className="col-auto lg:col-span-3 lg:row-end-1">
@@ -136,7 +138,9 @@ const Singleproduct = () => {
                 {details.availability === true ? " in stock" : " out of stock"}
               </span>
             </h1>
-            <p className="text-base text-gray-400">{details.brand}</p>
+            <p className="text-base text-gray-400">
+              {details?.brand && details?.brand}
+            </p>
             <div className="my-5 flex items-center">
               {Array.from({ length: Math.ceil(ratings?.totalRating) }).map(
                 () => (
