@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -32,14 +32,13 @@ const updateProductSchema = z.object({
   price: z.number().positive().optional(),
   discounttag: z.boolean().nullable().optional(),
   stock: z.number().min(0).optional(),
-  discountprice: z.number().optional().nullable(),
+  discountprice: z.number().positive().optional().nullable(),
   sizes: z.string().nullable().optional(),
   returnpolicy: z.string().optional(),
   description: z.string().optional(),
   brand: z.string().optional(),
   availability: z.boolean().nullable().optional(),
   image: z.array(z.any()).optional(),
-  categories: z.array(z.number()).optional(),
 });
 
 type UpdateProductFormData = z.infer<typeof updateProductSchema>;
@@ -68,6 +67,7 @@ export default function UpdateProductForm({
     initialData.images || [],
   );
   const [imageChanged, setImageChanged] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   console.log(imageChanged);
 
@@ -89,6 +89,7 @@ export default function UpdateProductForm({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
       toast.success("Product updated successfully");
+      setIsDialogOpen(true); // Open the dialog on success
     },
   });
 
@@ -147,15 +148,7 @@ export default function UpdateProductForm({
   };
 
   const onSubmit = async (data: UpdateProductFormData) => {
-    console.log("Submitting data:", {
-      ...data,
-      categories: selectedCategories,
-    });
-
-    await updateProductMutation.mutate({
-      ...data,
-      categories: selectedCategories, // Ensure categories are included in the payload
-    });
+    await updateProductMutation.mutate(data);
     setImageChanged(false);
   };
 
@@ -410,6 +403,26 @@ export default function UpdateProductForm({
           </Form>
         </CardContent>
       </Card>
+
+      {isDialogOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="rounded bg-white p-6 shadow-lg">
+            <h3 className="text-lg font-medium leading-6 text-gray-900">
+              Product Updated
+            </h3>
+            <div className="mt-2">
+              <p className="text-sm text-gray-500">
+                The product has been updated successfully.
+              </p>
+            </div>
+            <div className="mt-4">
+              <Button type="button" onClick={() => setIsDialogOpen(false)}>
+                Close
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

@@ -69,10 +69,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setIsLoading(true);
 
     try {
-      const response = await Axios.post("auth/signin", {
-        email: name,
-        password,
-      });
+      // const response = await Axios.post("auth/signin", {
+      //   email: name,
+      //   password,
+      // });
+      const response = await axios.post(
+        "http://192.168.88.45:3000/auth/signin",
+        {
+          email: name,
+          password,
+        },
+      );
       const data = response.data;
       await fetchUserDetails(data.token);
       setIsLoggedIn(true);

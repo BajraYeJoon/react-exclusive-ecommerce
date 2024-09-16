@@ -111,7 +111,7 @@ export default function DiscountCRUD() {
   // if (isLoading) return <Loading />;
 
   return (
-    <Card className="overflow-x-scroll">
+    <Card className="w-full overflow-x-scroll">
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           Coupon List
@@ -215,7 +215,7 @@ export default function DiscountCRUD() {
           </Dialog>
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="w-full">
         <Table>
           <TableHeader>
             <TableRow>
