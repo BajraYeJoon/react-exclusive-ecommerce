@@ -31,7 +31,7 @@ const EmailVerification: React.FC = () => {
         if (response.status === 200) {
           setVerificationStatus("success");
           toast.success("Email verified successfully!");
-        } else {
+        } else if (response.status === 400) {
           setVerificationStatus("error");
           toast.error("Email verification failed.");
         }
@@ -67,7 +67,7 @@ const EmailVerification: React.FC = () => {
   if (verificationStatus === "error") {
     return (
       <div>
-        <h1>Email Verification Failed</h1>
+        <h1>this is the error</h1>
         <p>
           There was an error verifying your email. The link may have expired or
           is invalid.
