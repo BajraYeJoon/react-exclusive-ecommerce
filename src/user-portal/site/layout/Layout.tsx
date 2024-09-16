@@ -1,7 +1,10 @@
 import { Outlet } from "react-router-dom";
 import { Suspense } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Banner, Navbar, Footer } from "../../pages";
 import { LoaderCircle } from "lucide-react";
+import { motion } from "framer-motion";
+import { fetchAllProducts } from "../../../common/api/productApi";
 
 export const Loading = () => {
   return (
@@ -12,13 +15,70 @@ export const Loading = () => {
   );
 };
 
-const Layout = () => {
+const EnhancedLoadingScreen = () => {
   return (
-    <Suspense fallback={<Loading />}>
-      <Banner />
-      <Navbar />
-      <Outlet />
-      <Footer />
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600"
+    >
+      <div className="text-center">
+        <motion.h3
+          className="mx-auto mb-8 h-24 w-24"
+          animate={{ scale: [1, 1.1, 1] }}
+          transition={{ repeat: Infinity, duration: 2 }}
+        >
+          Exclusive
+        </motion.h3>
+        <motion.h2
+          className="text-backgrund mb-4 text-3xl font-bold"
+          animate={{ opacity: [1, 0.5, 1] }}
+          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+        >
+          Loading Amazing Deals...
+        </motion.h2>
+        <motion.div className="mx-auto h-2 w-48 overflow-hidden rounded-full bg-background bg-opacity-20">
+          <motion.div
+            className="h-full bg-background"
+            animate={{ x: ["-100%", "100%"] }}
+            transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+          />
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+};
+
+const Layout = () => {
+  const { isLoading, isError, error } = useQuery({
+    queryKey: ["products"],
+    queryFn: fetchAllProducts,
+  });
+
+  if (isLoading) {
+    return <EnhancedLoadingScreen />;
+  }
+
+  if (isError) {
+    console.error("Error fetching data:", error);
+    return (
+      <div className="flex h-full items-center justify-center">
+        <h2 className="text-xl font-bold text-red-500">
+          Something went wrong. Please try again later.
+        </h2>
+      </div>
+    );
+  }
+
+  return (
+    <Suspense fallback={<EnhancedLoadingScreen />}>
+      <>
+        <Banner />
+        <Navbar />
+        <Outlet />
+        <Footer />
+      </>
     </Suspense>
   );
 };
