@@ -19,11 +19,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 import { Button } from "../../../common/ui/button"
 import { Input } from "../../../common/ui/input"
 
-// Define discountState atom
-const discountState = atom<{ type: 'fixed' | 'percentage', value: number }>({
+const discountState = atom<{
+  type: "fixed_amount" | "percentage";
+  value: number;
+}>({
   key: "discountState",
-  default: { type: 'fixed', value: 0 },
-})
+  default: { type: "fixed_amount", value: 0 },
+});
 
 const Cart = () => {
   const [, setCheckoutData] = useRecoilState(checkoutState)
@@ -31,13 +33,11 @@ const Cart = () => {
   const navigate = useNavigate()
   const [couponCode, setCouponCode] = useState("")
 
-  // Fetch cart items
   const { data: cartItems, isLoading } = useQuery({
     queryKey: ["cart"],
     queryFn: fetchCart,
-  })
+  });
 
-  // Fetch available coupons
   const { data: coupons, isLoading: loadingCoupons } = useQuery({
     queryKey: ["coupons"],
     queryFn: () => Axios.get("/coupon").then((res) => res.data),
@@ -46,7 +46,6 @@ const Cart = () => {
   console.log(coupons, 'coupons')
 
 
-  // Mutation hooks for cart operations
   const { mutate: increaseQuantity } = useIncreaseQuantity()
   const { mutate: decreaseQuantity } = useDecreaseQuantity()
   const { mutate: removeItem } = useRemoveItem()
@@ -110,10 +109,10 @@ const Cart = () => {
       const charge = 45
       let discountAmount = 0
       
-      if (discountInfo.type === 'fixed') {
-        discountAmount = discountInfo.value
-      } else if (discountInfo.type === 'percentage') {
-        discountAmount = subTotal * (discountInfo.value / 100)
+      if (discountInfo.type === "fixed_amount") {
+        discountAmount = discountInfo.value;
+      } else if (discountInfo.type === "percentage") {
+        discountAmount = subTotal * (discountInfo.value / 100);
       }
 
       return {
@@ -194,6 +193,7 @@ const Cart = () => {
                     onClick={() => handleQuantityChange(item.product.id, "sub")}
                     disabled={item.quantity <= 1}
                     aria-label="Decrease quantity"
+                    className="disabled:cursor-not-allowed"
                   >
                     <ChevronDown className="h-4 w-4" />
                   </Button>
@@ -210,6 +210,8 @@ const Cart = () => {
                     onClick={() => handleQuantityChange(item.product.id, "add")}
                     disabled={item.quantity >= item.product.stock}
                     aria-label="Increase quantity"
+                    className="disabled:cursor-not-allowed"
+
                   >
                     <ChevronUp className="h-4 w-4" />
                   </Button>

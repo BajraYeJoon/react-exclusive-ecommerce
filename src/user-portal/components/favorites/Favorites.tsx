@@ -42,9 +42,9 @@ const Favorites = () => {
           breadcrumbTitle="Favorites"
           breadcrumbValue={favorites as []}
         />
-        {isLoggedIn && !isAdmin && (
+        {isLoggedIn && isAdmin && favorites.length > 0 ? (
           <Button onClick={DeleteAllFavorites}>Clear All</Button>
-        )}
+        ) : null}
       </div>
 
       {favorites.length === 0 ? (

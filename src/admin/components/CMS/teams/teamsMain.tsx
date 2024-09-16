@@ -138,28 +138,30 @@ export default function EmployeeManagement() {
                   </h2>
                   <p className="text-gray-600">{employee.position}</p>
                 </div>
+                
               </div>
-              {employee.twitter && (
-                <a
-                  href={employee.twitter}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mb-1 block text-blue-500"
-                >
-                  Twitter
-                </a>
-              )}
-              {employee.linkedin && (
-                <a
-                  href={employee.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block text-blue-500"
-                >
-                  LinkedIn
-                </a>
-              )}
+
               <CardFooter className="flex flex-col justify-end space-y-2 p-4">
+              {employee.twitter && (
+                  <a
+                    href={employee.twitter}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mb-1 block text-blue-500"
+                  >
+                    Twitter
+                  </a>
+                )}
+                {employee.linkedin && (
+                  <a
+                    href={employee.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block text-blue-500"
+                  >
+                    LinkedIn
+                  </a>
+                )}
                 <Button
                   variant="outline"
                   size="sm"

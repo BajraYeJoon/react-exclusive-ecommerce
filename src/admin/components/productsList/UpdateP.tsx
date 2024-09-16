@@ -26,7 +26,6 @@ import { Input } from "../../../common/ui/input";
 import { Checkbox } from "../../../common/ui/checkbox";
 import { Button } from "../../../common/ui/button";
 
-// Define the schema for product update
 const updateProductSchema = z.object({
   title: z.string().optional(),
   price: z.number().positive().optional(),
@@ -122,7 +121,7 @@ export default function UpdateProductForm({
     for (const file of acceptedFiles) {
       const formData = new FormData();
       formData.append("image", file);
-      await addImageMutation.mutateAsync(formData);
+      await addImageMutation.mutate(formData);
     }
   };
 
@@ -146,7 +145,7 @@ export default function UpdateProductForm({
   };
 
   const onSubmit = async (data: UpdateProductFormData) => {
-    await updateProductMutation.mutateAsync(data);
+    await updateProductMutation.mutate(data);
     setImageChanged(false);
   };
 

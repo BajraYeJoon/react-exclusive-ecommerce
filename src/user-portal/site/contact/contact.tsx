@@ -4,25 +4,31 @@ import { useForm } from "react-hook-form";
 import emailjs from "@emailjs/browser";
 import { toast } from "sonner";
 import { Button } from "../../../common/ui/button";
+import { useState } from "react";
 
 const Contact = () => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const onSubmit = (e: any) => {
-    e.preventDefault();
-
-    const form = e.target;
-    emailjs.sendForm(
-      "service_bhxnafe",
-      "template_uwb60pg",
-      form,
-      "NdDh9yG_33K_69phh",
-    );
-
-    if (form) {
-      form.reset();
-      toast.success("Message sent successfully");
-    }
+  const onSubmit = (data: any) => {
+    setIsLoading(true);
+    emailjs
+      .sendForm(
+        "service_bhxnafe",
+        "template_uwb60pg",
+        "#contact-form",
+        "NdDh9yG_33K_69phh",
+      )
+      .then(() => {
+        reset();
+        toast.success("Message sent successfully");
+      })
+      .catch((error) => {
+        toast.error("Failed to send message");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   return (
@@ -62,6 +68,7 @@ const Contact = () => {
         </div>
 
         <form
+          id="contact-form"
           className="flex flex-col flex-wrap justify-between gap-10 p-5"
           onSubmit={handleSubmit(onSubmit)}
         >
@@ -96,7 +103,9 @@ const Contact = () => {
             {...register("message", { required: "Message is required" })}
           ></textarea>
 
-          <Button type="submit">Send Message</Button>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? "Sending..." : "Send Message"}
+          </Button>
         </form>
       </div>
     </section>

@@ -155,11 +155,18 @@ const Singleproduct = () => {
             <h1 className="text-3xl">${details.price}</h1>
             <p>{details.description}</p>
             <hr className="w-full bg-foreground/35" />
-            <h2 className="text-forerground mt-8 text-base">Available Sizes</h2>
-            <Button variant={"outline"} className="uppercase">
-              {" "}
-              {details.sizes}
-            </Button>
+            {details.sizes && (
+              <>
+                <h2 className="text-forerground mt-8 text-base">
+                  Available Sizes
+                </h2>
+                <Button variant={"outline"} className="uppercase">
+                  {" "}
+                  {details.sizes}
+                </Button>
+              </>
+            )}
+
             {!isAdmin && details.availability === true && (
               <Button className="mt-6" onClick={() => addToCart(details.id)}>
                 <ShoppingBasket className="mr-4" />
@@ -188,7 +195,7 @@ const Singleproduct = () => {
                             <button
                               key={star}
                               onClick={() => setRating(star)}
-                              className="rounded text-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              className="rounded text-2xl focus:outline-none"
                             >
                               {star <= rating ? (
                                 <StarIcon className="text-yellow-500" />
@@ -203,6 +210,7 @@ const Singleproduct = () => {
                           value={comment}
                           onChange={(e) => setComment(e.target.value)}
                           rows={4}
+                          className="w-full rounded border border-gray-300 p-2 focus:outline-none"
                         />
                       </div>
                       <div className="flex justify-end space-x-2">

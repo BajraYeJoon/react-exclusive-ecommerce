@@ -165,7 +165,7 @@ const Navbar = () => {
             </Link>
           )}
 
-          {!isAdmin && isLoggedIn ? (
+          {!isAdmin || isLoggedIn ? (
             <Link to="/cart" className="flex gap-1">
               <LucideShoppingCart size={20} />
               {cartquantity > 0 && (

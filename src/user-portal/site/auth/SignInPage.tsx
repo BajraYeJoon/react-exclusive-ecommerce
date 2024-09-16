@@ -12,6 +12,7 @@ import Cookies from "js-cookie";
 import { CgSpinner } from "react-icons/cg";
 import { Routes } from "../../../admin/lib/links";
 import { UserRoutes } from "../../utils/userLinks";
+import { Input } from "../../../common/ui/input";
 
 const SignInPage = () => {
   const { login, isLoading } = useAuthContext();
@@ -49,20 +50,12 @@ const SignInPage = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="w-full">
         {" "}
         <div className="flex w-full flex-col gap-4">
-          <FormInput
-            type="text"
-            placeholder="Email"
-            name="name"
-            register={register}
-            error={errors.name}
-          />
+          <Input type="text" placeholder="Email" {...register("name")} />
 
-          <FormInput
-            type="passsword"
+          <Input
+            type="password"
             placeholder="Password"
-            name="password"
-            register={register}
-            error={errors.password}
+            {...register("password")}
           />
           <Button type="submit" className="w-full">
             {isLoading ? (
