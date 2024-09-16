@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Axios } from "../../../common/lib/axiosInstance";
 import { toast } from "sonner";
+import axios from "axios";
 
 const EmailVerification: React.FC = () => {
   const [verificationStatus, setVerificationStatus] = useState<
@@ -26,7 +27,9 @@ const EmailVerification: React.FC = () => {
       // const numericToken = Number(token).toString();
 
       try {
-        const response = await Axios.post(`/auth/verify-email/${token}`);
+        const response = await axios.post(
+          `https://react-exclusive-ecommerce.vercel.app/auth/verify-email/${token}`,
+        );
         if (response.status === 200) {
           setVerificationStatus("success");
           toast.success("Email verified successfully!");
