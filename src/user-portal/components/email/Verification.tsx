@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Axios } from "../../../common/lib/axiosInstance";
+import Cookies from "js-cookie";
 
 const EmailVerification: React.FC = () => {
   const [verificationStatus, setVerificationStatus] = useState<
@@ -23,7 +24,7 @@ const EmailVerification: React.FC = () => {
         return;
       }
 
-      // const numericToken = Number(token).toString();
+      Cookies.set("email_verification_token", token);
 
       try {
         const response = await Axios.post(`/auth/verify-email/?token=${token}`);

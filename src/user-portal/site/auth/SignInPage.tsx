@@ -24,22 +24,31 @@ const SignInPage = () => {
   } = useForm<LoginFormData>({
     resolver: zodResolver(LoginFormSchema),
   });
+
   const onSubmit = async (data: LoginFormData) => {
     try {
       await login(data);
       const user = JSON.parse(Cookies.get("user") || "{}");
 
-      if (user === `${Routes.Admin}`) {
+      if (user === Routes.Admin) {
         navigate(`/${Routes.Admin}/${Routes.Dashboard}`);
         toast.success("Welcome to the admin panel");
       } else {
         navigate(`/${UserRoutes.Profile}`);
         toast.success("You are now logged in");
       }
-    } catch (error) {
-      toast.error("Login failed");
+    } catch (error: any) {
+      if (error.statusCode === 401) {
+        toast.error("Invalid credentials. Please try again.");
+      } else if (error.message === "User already exists") {
+        toast.error("User already exists. Please use a different email.");
+      } else {
+        console.log(error);
+        toast.error("An unexpected error occurred. Please try again later.");
+      }
     }
   };
+  
 
   return (
     <div className="sign-up-content space-y-8">
