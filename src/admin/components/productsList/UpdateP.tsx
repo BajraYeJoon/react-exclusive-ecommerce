@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -25,19 +25,21 @@ import {
 import { Input } from "../../../common/ui/input";
 import { Checkbox } from "../../../common/ui/checkbox";
 import { Button } from "../../../common/ui/button";
+import { toast } from "sonner";
 
 const updateProductSchema = z.object({
   title: z.string().optional(),
   price: z.number().positive().optional(),
   discounttag: z.boolean().nullable().optional(),
   stock: z.number().min(0).optional(),
-  discountprice: z.number().positive().optional().nullable(),
+  discountprice: z.number().optional().nullable(),
   sizes: z.string().nullable().optional(),
   returnpolicy: z.string().optional(),
   description: z.string().optional(),
   brand: z.string().optional(),
   availability: z.boolean().nullable().optional(),
   image: z.array(z.any()).optional(),
+  categories: z.array(z.number()).optional(),
 });
 
 type UpdateProductFormData = z.infer<typeof updateProductSchema>;
@@ -75,7 +77,6 @@ export default function UpdateProductForm({
   });
 
   console.log(form.formState.errors, "formerrs");
-  console.log(form.formState.dirtyFields, "dirty");
 
   const { data: categories = [] } = useQuery<Category[], Error>({
     queryKey: ["categories"],
@@ -87,6 +88,7 @@ export default function UpdateProductForm({
       Axios.patch(`/product/${initialData.id}`, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
+      toast.success("Product updated successfully");
     },
   });
 
@@ -145,259 +147,269 @@ export default function UpdateProductForm({
   };
 
   const onSubmit = async (data: UpdateProductFormData) => {
-    await updateProductMutation.mutate(data);
+    console.log("Submitting data:", {
+      ...data,
+      categories: selectedCategories,
+    });
+
+    await updateProductMutation.mutate({
+      ...data,
+      categories: selectedCategories, // Ensure categories are included in the payload
+    });
     setImageChanged(false);
   };
 
   return (
-    <Card className="h-[calc(100vh-4rem)] w-full overflow-y-auto">
-      <CardHeader>
-        <CardTitle>Update Product</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }: any) => (
-                  <FormItem>
-                    <FormLabel>Title</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Product title" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+    <>
+      <Card className="h-[calc(100vh-4rem)] w-full overflow-y-auto">
+        <CardHeader>
+          <CardTitle>Update Product</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="title"
+                  render={({ field }: any) => (
+                    <FormItem>
+                      <FormLabel>Title</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Product title" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="price"
-                render={({ field }: any) => (
-                  <FormItem>
-                    <FormLabel>Price</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        step="0.01"
-                        placeholder="99.99"
-                        {...field}
-                        onChange={(e: any) =>
-                          field.onChange(parseFloat(e.target.value))
+                <FormField
+                  control={form.control}
+                  name="price"
+                  render={({ field }: any) => (
+                    <FormItem>
+                      <FormLabel>Price</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          step="0.01"
+                          placeholder="99.99"
+                          {...field}
+                          onChange={(e: any) =>
+                            field.onChange(parseFloat(e.target.value))
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="discountprice"
+                  render={({ field }: any) => (
+                    <FormItem>
+                      <FormLabel>Discount Price</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          step="0.01"
+                          placeholder="79.99"
+                          {...field}
+                          onChange={(e: any) => {
+                            const value = e.target.value;
+                            field.onChange(
+                              value === "" ? null : parseFloat(value),
+                            );
+                          }}
+                          value={field.value ?? ""}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="discounttag"
+                  render={({ field }: any) => (
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value ?? false}
+                          onCheckedChange={(checked: any) =>
+                            field.onChange(checked ?? null)
+                          }
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel>Discount Tag</FormLabel>
+                        <FormDescription>
+                          Apply a discount tag to this product
+                        </FormDescription>
+                      </div>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="stock"
+                  render={({ field }: any) => (
+                    <FormItem>
+                      <FormLabel>Stock</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="1"
+                          {...field}
+                          onChange={(e: any) =>
+                            field.onChange(parseInt(e.target.value))
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="sizes"
+                  render={({ field }: any) => (
+                    <FormItem>
+                      <FormLabel>Sizes</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="S, M, L, XL"
+                          {...field}
+                          value={field.value || ""}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="returnpolicy"
+                  render={({ field }: any) => (
+                    <FormItem className="sm:col-span-2">
+                      <FormLabel>Return Policy</FormLabel>
+                      <FormControl>
+                        <Input placeholder="30-day return policy" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }: any) => (
+                    <FormItem className="sm:col-span-2">
+                      <FormLabel>Description</FormLabel>
+                      <FormControl>
+                        <textarea
+                          placeholder="Detailed product description"
+                          className="h-32 w-full rounded border p-2"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="brand"
+                  render={({ field }: any) => (
+                    <FormItem>
+                      <FormLabel>Brand</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Brand name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="availability"
+                  render={({ field }: any) => (
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value ?? false}
+                          onCheckedChange={(checked: any) =>
+                            field.onChange(checked ?? null)
+                          }
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel>Available</FormLabel>
+                        <FormDescription>
+                          Is this product currently available?
+                        </FormDescription>
+                      </div>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="image"
+                  render={({ field }: any) => (
+                    <FormItem className="sm:col-span-2">
+                      <FormLabel>Product Image</FormLabel>
+                      <FormControl>
+                        <FileDropzone
+                          onDrop={handleImageDrop}
+                          files={field.value || images}
+                          onRemove={handleImageDelete}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormItem className="sm:col-span-2">
+                  <FormLabel>Categories</FormLabel>
+                  <div className="flex flex-wrap gap-2">
+                    {categories.map((category: Category) => (
+                      <Button
+                        key={category.id}
+                        type="button"
+                        variant={
+                          selectedCategories.includes(category.id)
+                            ? "default"
+                            : "outline"
                         }
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                        onClick={() => handleCategoryToggle(category.id)}
+                      >
+                        {category.name}
+                      </Button>
+                    ))}
+                  </div>
+                </FormItem>
+              </div>
 
-              <FormField
-                control={form.control}
-                name="discountprice"
-                render={({ field }: any) => (
-                  <FormItem>
-                    <FormLabel>Discount Price</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        step="0.01"
-                        placeholder="79.99"
-                        {...field}
-                        onChange={(e: any) => {
-                          const value = e.target.value;
-                          field.onChange(
-                            value === "" ? null : parseFloat(value),
-                          );
-                        }}
-                        value={field.value ?? ""}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="discounttag"
-                render={({ field }: any) => (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value ?? false}
-                        onCheckedChange={(checked: any) =>
-                          field.onChange(checked ?? null)
-                        }
-                      />
-                    </FormControl>
-                    <div className="space-y-1 leading-none">
-                      <FormLabel>Discount Tag</FormLabel>
-                      <FormDescription>
-                        Apply a discount tag to this product
-                      </FormDescription>
-                    </div>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="stock"
-                render={({ field }: any) => (
-                  <FormItem>
-                    <FormLabel>Stock</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="1"
-                        {...field}
-                        onChange={(e: any) =>
-                          field.onChange(parseInt(e.target.value))
-                        }
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="sizes"
-                render={({ field }: any) => (
-                  <FormItem>
-                    <FormLabel>Sizes</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="S, M, L, XL"
-                        {...field}
-                        value={field.value || ""}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="returnpolicy"
-                render={({ field }: any) => (
-                  <FormItem className="sm:col-span-2">
-                    <FormLabel>Return Policy</FormLabel>
-                    <FormControl>
-                      <Input placeholder="30-day return policy" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }: any) => (
-                  <FormItem className="sm:col-span-2">
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <textarea
-                        placeholder="Detailed product description"
-                        className="h-32 w-full rounded border p-2"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="brand"
-                render={({ field }: any) => (
-                  <FormItem>
-                    <FormLabel>Brand</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Brand name" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="availability"
-                render={({ field }: any) => (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value ?? false}
-                        onCheckedChange={(checked: any) =>
-                          field.onChange(checked ?? null)
-                        }
-                      />
-                    </FormControl>
-                    <div className="space-y-1 leading-none">
-                      <FormLabel>Available</FormLabel>
-                      <FormDescription>
-                        Is this product currently available?
-                      </FormDescription>
-                    </div>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="image"
-                render={({ field }: any) => (
-                  <FormItem className="sm:col-span-2">
-                    <FormLabel>Product Image</FormLabel>
-                    <FormControl>
-                      <FileDropzone
-                        onDrop={handleImageDrop}
-                        files={field.value || images}
-                        onRemove={handleImageDelete}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormItem className="sm:col-span-2">
-                <FormLabel>Categories</FormLabel>
-                <div className="flex flex-wrap gap-2">
-                  {categories.map((category: Category) => (
-                    <Button
-                      key={category.id}
-                      type="button"
-                      variant={
-                        selectedCategories.includes(category.id)
-                          ? "default"
-                          : "outline"
-                      }
-                      onClick={() => handleCategoryToggle(category.id)}
-                    >
-                      {category.name}
-                    </Button>
-                  ))}
-                </div>
-              </FormItem>
-            </div>
-
-            <CardFooter className="px-0">
-              <Button type="submit" className="w-full">
-                Update Product
-              </Button>
-            </CardFooter>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+              <CardFooter className="px-0">
+                <Button type="submit" className="w-full">
+                  Update Product
+                </Button>
+              </CardFooter>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+    </>
   );
 }
