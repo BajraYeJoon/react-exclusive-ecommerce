@@ -9,7 +9,7 @@ export interface Coupon {
   id: string;
   name: string;
   code: string;
-  type: "fixed_Amount" | "percentage";
+  type: "fixed_amount" | "percentage";
   value: number;
   startDate: string;
   expirationDate: string;
@@ -72,7 +72,7 @@ export default function DiscountCard() {
         <motion.button
           whileHover={{ scale: 1.05 }}
           className="flex items-center space-x-2 rounded-full bg-primary px-4 py-2 text-white transition-colors hover:bg-primary/75 md:px-6 lg:px-8"
-          onClick={() => {}}
+          onClick={() => Axios.get("/coupon").then((res) => res.data)}
         >
           <RefreshCw size={20} />
           <span className="text-sm md:text-base lg:text-lg">Refresh</span>
@@ -82,7 +82,7 @@ export default function DiscountCard() {
 
   return (
     <div>
-      <h1 className="mb-8 text-center text-sm font-bold text-gray-800 md:text-xl lg:text-3xl">
+      <h1 className="mb-8 text-center text-sm font-medium text-gray-800 md:text-xl lg:text-3xl">
         Available Coupons
       </h1>
       <AnimatePresence>

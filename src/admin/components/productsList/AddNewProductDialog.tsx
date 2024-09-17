@@ -190,8 +190,7 @@ export default function AddNewProductDialog() {
         </div>
 
         {error && (
-          <div className="mb-4 flex items-center rounded-md bg-red-100 p-4 text-red-700">
-            {/* <AlertCircle className="h-5 w-5 mr-2" /> */}
+          <div className="mb-4 flex items-center rounded-md bg-red-100 p-4 text-primary">
             <p>{error}</p>
           </div>
         )}
@@ -207,7 +206,7 @@ export default function AddNewProductDialog() {
                   placeholder="Enter product title"
                 />
                 {errors.title && (
-                  <p className="mt-1 text-sm text-red-500">
+                  <p className="mt-1 text-sm text-primary">
                     {errors.title.message}
                   </p>
                 )}
@@ -220,7 +219,7 @@ export default function AddNewProductDialog() {
                   placeholder="Enter brand name"
                 />
                 {errors.brand && (
-                  <p className="mt-1 text-sm text-red-500">
+                  <p className="mt-1 text-sm text-primary">
                     {errors.brand.message}
                   </p>
                 )}
@@ -234,7 +233,7 @@ export default function AddNewProductDialog() {
                   placeholder="Enter price"
                 />
                 {errors.price && (
-                  <p className="mt-1 text-sm text-red-500">
+                  <p className="mt-1 text-sm text-primary">
                     {errors.price.message}
                   </p>
                 )}
@@ -248,7 +247,7 @@ export default function AddNewProductDialog() {
                   placeholder="Enter discount price (optional)"
                 />
                 {errors.discountprice && (
-                  <p className="mt-1 text-sm text-red-500">
+                  <p className="mt-1 text-sm text-primary">
                     {errors.discountprice.message}
                   </p>
                 )}
@@ -262,7 +261,7 @@ export default function AddNewProductDialog() {
                   placeholder="Enter stock quantity"
                 />
                 {errors.stock && (
-                  <p className="mt-1 text-sm text-red-500">
+                  <p className="mt-1 text-sm text-primary">
                     {errors.stock.message}
                   </p>
                 )}
@@ -280,13 +279,13 @@ export default function AddNewProductDialog() {
                   placeholder="xs, s, m, l, xl, xxl"
                 />
                 {errors.sizes && (
-                  <p className="mt-1 text-sm text-red-500">
+                  <p className="mt-1 text-sm text-primary">
                     {errors.sizes.message}
                   </p>
                 )}
               </div>
               <div>
-                <label className="mb-1 block font-medium">Return Policy</label>
+                <Label className="mb-1 block font-medium">Return Policy</Label>
                 <Textarea
                   {...register("returnpolicy")}
                   className="w-full rounded border p-2"
@@ -294,7 +293,7 @@ export default function AddNewProductDialog() {
                   rows={3}
                 />
                 {errors.returnpolicy && (
-                  <p className="mt-1 text-sm text-red-500">
+                  <p className="mt-1 text-sm text-primary">
                     {errors.returnpolicy.message}
                   </p>
                 )}
@@ -308,7 +307,7 @@ export default function AddNewProductDialog() {
                   rows={5}
                 />
                 {errors.description && (
-                  <p className="mt-1 text-sm text-red-500">
+                  <p className="mt-1 text-sm text-primary">
                     {errors.description.message}
                   </p>
                 )}
@@ -326,7 +325,7 @@ export default function AddNewProductDialog() {
                   onRemove={handleImageRemove}
                 />
                 {errors.image && (
-                  <p className="mt-1 text-sm text-red-500">
+                  <p className="mt-1 text-sm text-primary">
                     {errors.image.message}
                   </p>
                 )}
@@ -337,7 +336,7 @@ export default function AddNewProductDialog() {
                 onCategorySelect={handleCategorySelect}
               />
               {errors.categories && (
-                <p className="mt-1 text-sm text-red-500">
+                <p className="mt-1 text-sm text-primary">
                   {errors.categories.message}
                 </p>
               )}

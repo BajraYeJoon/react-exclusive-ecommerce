@@ -22,8 +22,17 @@ import {
 import { Axios } from "../../../common/lib/axiosInstance";
 import { AxiosError } from "axios";
 import ConfirmationDialog from "../confirmation/ConfirmationDialog";
-import { Calendar, Edit, Hash, Percent, PlusCircle, Tag, Trash2 } from "lucide-react";
+import {
+  Calendar,
+  Code,
+  Edit,
+  Hash,
+  Percent,
+  PlusCircle,
+  Trash2,
+} from "lucide-react";
 import { MdDataUsage } from "react-icons/md";
+import { BiPurchaseTag } from "react-icons/bi";
 
 export default function DiscountCRUD() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -32,9 +41,9 @@ export default function DiscountCRUD() {
     name: string;
     startDate: string;
     expirationDate: string;
-    [key: string]: string; 
+    [key: string]: string;
   }
-  
+
   const [editingCoupon, setEditingCoupon] = useState<Coupon | null>(null);
   const queryClient = useQueryClient();
 
@@ -191,6 +200,19 @@ export default function DiscountCRUD() {
                     })}
                   />
                 </div>
+                <div className="space-y-2">
+                  <Label htmlFor="maxUsageCount">Minium Purchase Amount</Label>
+                  <Input
+                    type="number"
+                    {...register("minPurchaseAmount", {
+                      required: true,
+                      min: 0,
+                      validate: (value) =>
+                        Number.isInteger(Number(value)) || "Must be an integer",
+                      valueAsNumber: true,
+                    })}
+                  />
+                </div>
               </div>
               <div className="flex justify-end space-x-2">
                 <Button type="submit">
@@ -212,7 +234,7 @@ export default function DiscountCRUD() {
       {isLoading ? (
         <div className="text-center">Loading...</div>
       ) : (
-        <div className="grid grid-cols-2 gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {coupons?.map((coupon: Coupon) => (
             <Card key={coupon.id} className="overflow-hidden">
               <CardHeader className="bg-primary text-primary-foreground">
@@ -220,7 +242,7 @@ export default function DiscountCRUD() {
                   <h2 className="text-sm font-medium tracking-wide md:text-base lg:text-xl">
                     {coupon.name}
                   </h2>
-                  <div className="flex flex-col items-center justify-center">
+                  <div className="flex flex-row items-center justify-center md:flex-col">
                     <Button
                       variant="ghost"
                       size="sm"
@@ -242,7 +264,7 @@ export default function DiscountCRUD() {
               </CardHeader>
               <CardContent className="space-y-2 p-4">
                 <div className="flex items-center">
-                  <Tag className="mr-2 h-4 w-4" />
+                  <Code className="mr-2 h-4 w-4" />
                   <span className="text-sm font-semibold md:text-base">
                     {coupon.code}
                   </span>
@@ -259,7 +281,7 @@ export default function DiscountCRUD() {
                 </div>
                 <div className="flex items-center">
                   <Calendar className="mr-2 h-4 w-4" />
-                  <span className="text-sm md:text-base">
+                  <span className="text-xs md:text-sm">
                     {new Date(coupon.startDate).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
@@ -274,10 +296,17 @@ export default function DiscountCRUD() {
                 </div>
                 <div className="flex items-center">
                   <MdDataUsage className="mr-2 h-4 w-4" />
-                  <span className="text-sm font-medium md:text-base">
+                  <span className="text-xs font-medium md:text-sm">
                     Max Usage:
                   </span>
                   <span className="ml-2">{coupon.maxUsageCount}</span>
+                </div>
+                <div className="flex items-center">
+                  <BiPurchaseTag className="mr-2 h-4 w-4" />
+                  <span className="text-xs font-medium md:text-sm">
+                    Minimum Purchase:
+                  </span>
+                  <span className="ml-2">${coupon.minPurchaseAmount}</span>
                 </div>
               </CardContent>
             </Card>
