@@ -13,6 +13,8 @@ export interface Coupon {
   value: number;
   startDate: string;
   expirationDate: string;
+  minPurchaseAmount: number;
+  maxUsageCount: number;
 }
 
 export interface CouponProps {
@@ -37,12 +39,6 @@ export default function DiscountCard() {
     setTimeout(() => setCopiedCode(null), 2000);
   };
 
-  // if (error)
-  //   return (
-  //     <div className="p-4 text-center text-red-500">
-  //       Error fetching coupon data
-  //     </div>
-  //   );
 
   if (!coupons || coupons.length === 0 || error)
     return (

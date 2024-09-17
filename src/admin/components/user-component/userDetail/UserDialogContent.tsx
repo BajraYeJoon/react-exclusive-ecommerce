@@ -38,7 +38,7 @@ export default function UserProfileCard({ info }: Props) {
             <h2 className="text-2xl font-bold">{info.name}</h2>
             <p className="text-sm text-muted-foreground">{info.jobTitle}</p>
           </div>
-          <Badge variant={info.isEmailVerified ? "default" : "destructive"}>
+          <Badge variant={info.isEmailVerified ? "secondary" : "destructive"}>
             {info.isEmailVerified ? "Verified" : "Unverified"}
           </Badge>
         </div>

@@ -14,19 +14,46 @@ import { toast } from "sonner";
 import { Label } from "../../../common/ui/label";
 import { Textarea } from "../../../common/ui/textarea";
 import { Input } from "../../../common/ui/input";
-
+import { Loading } from "../../../user-portal/site";
 
 const schema = z.object({
-  title: z.string().min(1, "Title is required").max(100, "Title must be 100 characters or less"),
-  brand: z.string().min(1, "Brand is required").max(50, "Brand must be 50 characters or less"),
-  price: z.number().positive("Price must be a positive number").max(1000000, "Price must be less than or equal to 1,000,000"),
-  stock: z.number().int("Stock must be an integer").nonnegative("Stock must be a non-negative number"),
-  discountPrice: z.number().positive("Discount price must be a positive number").max(1000000, "Discount price must be less than or equal to 1,000,000").optional(),
-  sizes: z.array(z.enum(["xs", "s", "m", "l", "xl", "xxl"])).min(1, "At least one size is required"),
-  returnPolicy: z.string().min(10, "Return policy must be at least 10 characters long").max(1000, "Return policy must be 1000 characters or less"),
-  description: z.string().min(20, "Description must be at least 20 characters long").max(2000, "Description must be 2000 characters or less"),
+  title: z
+    .string()
+    .min(1, "Title is required")
+    .max(100, "Title must be 100 characters or less"),
+  brand: z
+    .string()
+    .min(1, "Brand is required")
+    .max(50, "Brand must be 50 characters or less"),
+  price: z
+    .number()
+    .positive("Price must be a positive number")
+    .max(1000000, "Price must be less than or equal to 1,000,000"),
+  stock: z
+    .number()
+    .int("Stock must be an integer")
+    .nonnegative("Stock must be a non-negative number"),
+  discountPrice: z
+    .number()
+    .positive("Discount price must be a positive number")
+    .max(1000000, "Discount price must be less than or equal to 1,000,000")
+    .optional(),
+  sizes: z
+    .array(z.enum(["xs", "s", "m", "l", "xl", "xxl"]))
+    .min(1, "At least one size is required"),
+  returnPolicy: z
+    .string()
+    .min(10, "Return policy must be at least 10 characters long")
+    .max(1000, "Return policy must be 1000 characters or less"),
+  description: z
+    .string()
+    .min(20, "Description must be at least 20 characters long")
+    .max(2000, "Description must be 2000 characters or less"),
   categories: z.array(z.string()).min(1, "At least one category is required"),
-  images: z.array(z.string()).min(1, "At least one image is required").max(4, "Maximum 4 images allowed"),
+  images: z
+    .array(z.string())
+    .min(1, "At least one image is required")
+    .max(4, "Maximum 4 images allowed"),
 });
 
 const steps = [
@@ -163,8 +190,8 @@ export default function AddNewProductDialog() {
     setError("");
   };
 
-  if (isLoading) return <div>Loading categories...</div>;
-  if (categoriesError) return <div>Error loading categories</div>;
+  if (isLoading) return <Loading />;
+  if (categoriesError) return <div>Please reload the page</div>;
 
   return (
     <div className="mx-auto w-full max-w-4xl overflow-hidden rounded-lg bg-white shadow-lg">

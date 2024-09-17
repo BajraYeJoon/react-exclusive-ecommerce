@@ -4,6 +4,7 @@ import { fetchAllProducts } from "../../../../common/api/productApi";
 import ProductCard from "../productCard/ProductCard";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowDownAZ, ArrowUpAZ, ChevronDown } from "lucide-react";
+import { Label } from "../../../../common/ui/label";
 
 interface ProductType {
   id: number;
@@ -167,23 +168,20 @@ const AllProducts = () => {
                   {category as string}
                 </option>
               ))}
-              ``
             </select>
           </div>
 
-          {/* On Sale Filter */}
           <div className="flex items-center">
             <input
               type="checkbox"
               checked={filterOptions.onSale}
               onChange={(e) => handleFilterChange("onSale", e.target.checked)}
             />
-            <label className="ml-2">On Sale</label>
+            <Label className="ml-2">On Sale</Label>
           </div>
         </div>
       </div>
 
-      {/* Product Cards */}
       <div className="product-card-container grid w-full grid-cols-2 gap-4 overflow-hidden md:grid-cols-3 lg:grid-cols-4">
         {sortedAndFilteredProducts.map((product: ProductType) => (
           <ProductCard key={product.id} {...product} image={product.image[0]} />

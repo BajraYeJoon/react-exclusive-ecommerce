@@ -10,6 +10,7 @@ import { Input } from "../../../common/ui/input"; // Assuming Input, Label are d
 import { Label } from "../../../common/ui/label";
 import { Button } from "../../../common/ui/button";
 import { toast } from "sonner";
+import CategorySelector from "./CategorySelector";
 
 const updateProductSchema = z.object({
   title: z.string().optional(),
@@ -130,7 +131,7 @@ export default function UpdateProductForm({
   };
 
   return (
-    <div>
+    <div className="h-[700px] overflow-y-auto">
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
@@ -227,23 +228,12 @@ export default function UpdateProductForm({
           </div>
 
           <div className="sm:col-span-2">
-            <Label>Categories</Label>
-            <div className="flex flex-wrap gap-2">
-              {categories.map((category: Category) => (
-                <Button
-                  key={category.id}
-                  type="button"
-                  variant={
-                    selectedCategories.includes(category.id)
-                      ? "default"
-                      : "outline"
-                  }
-                  onClick={() => handleCategoryToggle(category.id)}
-                >
-                  {category.name}
-                </Button>
-              ))}
-            </div>
+
+            <CategorySelector
+              categories={categories}
+              onCategorySelect={handleCategoryToggle}
+              selectedCategories={selectedCategories}
+            />
           </div>
         </div>
 

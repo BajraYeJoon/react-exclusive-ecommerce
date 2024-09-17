@@ -1,7 +1,7 @@
 import { Calendar, Clock, DollarSign, Gift, Percent } from "lucide-react";
 import { Coupon, CouponProps } from "./DiscountCard";
 
-const CouponValue: React.FC<{ coupon: Coupon }> = ({ coupon }) => (
+const CouponValue = ({ coupon }: { coupon: Coupon }) => (
   <span className="text-3xl font-bold">
     {coupon.type === "fixed_amount"
       ? `${coupon.value.toFixed(2)} OFF`
@@ -9,20 +9,33 @@ const CouponValue: React.FC<{ coupon: Coupon }> = ({ coupon }) => (
   </span>
 );
 
-const CopyButton: React.FC<{ onClick: () => void; isCopied: boolean }> = ({
+const CopyButton = ({
   onClick,
   isCopied,
+  startDate,
+}: {
+  onClick: () => void;
+  isCopied: boolean;
+  startDate: string;
 }) => (
   <button
     onClick={onClick}
     className="rounded-full bg-primary px-4 py-2 text-sm font-bold text-background transition-colors hover:bg-red-500/75"
-    aria-label={isCopied ? "Copied" : "Copy code"}
   >
-    {isCopied ? "Copied!" : "Copy Code"}
+    {
+      <>
+        {new Date(startDate).toLocaleDateString() ===
+        new Date().toLocaleDateString() ? (
+          <span>Coming Soon!!</span>
+        ) : (
+          <>{isCopied ? "Copied!" : "Copy Code"}</>
+        )}
+      </>
+    }
   </button>
 );
 
-const ExpirationDate: React.FC<{ date: string }> = ({ date }) => (
+const ExpirationDate = ({ date }: { date: string }) => (
   <div className="flex items-center text-sm text-foreground/75">
     <Clock className="mr-1 h-4 w-4" />
     <span>Expires: {new Date(date).toLocaleDateString()}</span>
@@ -47,7 +60,11 @@ export const CouponDesign1 = ({ coupon, onCopy, isCopied }: CouponProps) => (
       <span className="rounded-full bg-yellow-300 px-3 py-1 text-sm font-semibold text-yellow-800">
         {coupon.code}
       </span>
-      <CopyButton onClick={() => onCopy(coupon.code)} isCopied={isCopied} />
+      <CopyButton
+        onClick={() => onCopy(coupon.code)}
+        isCopied={isCopied}
+        startDate={coupon.startDate}
+      />
     </div>
     <ExpirationDate date={coupon.expirationDate} />
   </div>
@@ -66,7 +83,11 @@ export const CouponDesign2 = ({ coupon, onCopy, isCopied }: CouponProps) => (
         <span className="rounded-md bg-gray-100 px-3 py-1 font-mono text-sm text-gray-800">
           {coupon.code}
         </span>
-        <CopyButton onClick={() => onCopy(coupon.code)} isCopied={isCopied} />
+        <CopyButton
+          onClick={() => onCopy(coupon.code)}
+          isCopied={isCopied}
+          startDate={coupon.startDate}
+        />
       </div>
       <div className="flex items-center justify-between text-xs text-gray-500">
         <div className="flex items-center">
@@ -95,7 +116,11 @@ export const CouponDesign3 = ({ coupon, onCopy, isCopied }: CouponProps) => (
         <span className="rounded-full bg-gray-100 px-4 py-2 font-mono text-lg font-semibold text-gray-800">
           {coupon.code}
         </span>
-        <CopyButton onClick={() => onCopy(coupon.code)} isCopied={isCopied} />
+        <CopyButton
+          onClick={() => onCopy(coupon.code)}
+          isCopied={isCopied}
+          startDate={coupon.startDate}
+        />
       </div>
       <div className="flex items-center justify-between text-sm text-gray-600">
         <div className="flex items-center">

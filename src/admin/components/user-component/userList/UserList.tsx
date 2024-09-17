@@ -116,7 +116,7 @@ export default function UserList() {
   return (
     <div className="w-full space-y-4 px-4">
       <h3 className="text-xl font-medium md:hidden">Users</h3>
-      <div className="overflow-x-scroll">
+      <div className="overflow-x-auto">
         <Table className="w-full">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -165,19 +165,6 @@ export default function UserList() {
           Page {table.getState().pagination.pageIndex + 1} of{" "}
           {table.getPageCount()}
         </span>
-        {/* <select
-          value={table.getState().pagination.pageSize}
-          onChange={(e) => {
-            table.setPageSize(Number(e.target.value));
-          }}
-          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 sm:w-auto"
-        >
-          {[10, 20, 30, 40, 50].map((pageSize) => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select> */}
       </div>
     </div>
   );
