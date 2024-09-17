@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ChevronsUpDown, Check, X } from "lucide-react";
 import { Input } from "../../../common/ui/input";
-import { Button } from "../../../common/ui/button";
 
 interface Category {
   id: number;

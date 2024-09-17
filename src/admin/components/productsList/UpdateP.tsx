@@ -99,6 +99,7 @@ export default function UpdateProductForm({ initialData }: any) {
 
   const [currentStep, setCurrentStep] = useState(0);
   const [imageChanged, setImageChanged] = useState(false);
+  console.log(imageChanged);
 
   const [error, setError] = useState("");
 

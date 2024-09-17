@@ -1,23 +1,33 @@
-'use client'
-
-import { useState } from "react"
-import { useQuery } from "@tanstack/react-query"
-import { atom, selector, useRecoilState, useRecoilValue } from "recoil"
-import { Link, useNavigate } from "react-router-dom"
-import Cookies from "js-cookie"
-import { v4 as uuid } from "uuid"
-import { ChevronDown, ChevronUp, Trash2 } from "lucide-react"
-import { CustomBreakcrumb } from "../../components"
-import { checkoutState } from "../../atoms/checkoutState"
-import { fetchCart } from "../../api/cartApi"
-import { useClearCart, useDecreaseQuantity, useIncreaseQuantity, useRemoveItem } from "../../utils/cartutils"
-import { ProductCardSkeleton } from "../../../common/components"
-import { ConfirmationDialog } from "../../../admin/components"
-import { Axios } from "../../../common/lib/axiosInstance"
-import { toast } from "sonner"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../common/ui/table"
-import { Button } from "../../../common/ui/button"
-import { Input } from "../../../common/ui/input"
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
+import { Link, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import { v4 as uuid } from "uuid";
+import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
+import { CustomBreakcrumb } from "../../components";
+import { checkoutState } from "../../atoms/checkoutState";
+import { fetchCart } from "../../api/cartApi";
+import {
+  useClearCart,
+  useDecreaseQuantity,
+  useIncreaseQuantity,
+  useRemoveItem,
+} from "../../utils/cartutils";
+import { ProductCardSkeleton } from "../../../common/components";
+import { ConfirmationDialog } from "../../../admin/components";
+import { Axios } from "../../../common/lib/axiosInstance";
+import { toast } from "sonner";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../../../common/ui/table";
+import { Button } from "../../../common/ui/button";
+import { Input } from "../../../common/ui/input";
 
 const discountState = atom<{
   type: "fixed_amount" | "percentage";
@@ -28,10 +38,10 @@ const discountState = atom<{
 });
 
 const Cart = () => {
-  const [, setCheckoutData] = useRecoilState(checkoutState)
-  const [discount, setDiscount] = useRecoilState(discountState)
-  const navigate = useNavigate()
-  const [couponCode, setCouponCode] = useState("")
+  const [, setCheckoutData] = useRecoilState(checkoutState);
+  const [discount, setDiscount] = useRecoilState(discountState);
+  const navigate = useNavigate();
+  const [couponCode, setCouponCode] = useState("");
 
   const { data: cartItems, isLoading } = useQuery({
     queryKey: ["cart"],
@@ -41,23 +51,22 @@ const Cart = () => {
   const { data: coupons, isLoading: loadingCoupons } = useQuery({
     queryKey: ["coupons"],
     queryFn: () => Axios.get("/coupon").then((res) => res.data),
-  })
+  });
 
-  console.log(coupons, 'coupons')
+  console.log(coupons, "coupons");
 
-
-  const { mutate: increaseQuantity } = useIncreaseQuantity()
-  const { mutate: decreaseQuantity } = useDecreaseQuantity()
-  const { mutate: removeItem } = useRemoveItem()
-  const { mutate: clearCart } = useClearCart()
+  const { mutate: increaseQuantity } = useIncreaseQuantity();
+  const { mutate: decreaseQuantity } = useDecreaseQuantity();
+  const { mutate: removeItem } = useRemoveItem();
+  const { mutate: clearCart } = useClearCart();
 
   const handleQuantityChange = (id: number, type: "add" | "sub") => {
     if (type === "add") {
-      increaseQuantity({ id, type })
+      increaseQuantity({ id, type });
     } else {
-      decreaseQuantity({ id, type })
+      decreaseQuantity({ id, type });
     }
-  }
+  };
 
   const navigateToCheckout = (cartItems: any, total: number) => {
     const checkoutData = {
@@ -66,49 +75,51 @@ const Cart = () => {
       total,
       couponCode,
       discount: discount.value,
-    }
+    };
 
-    setCheckoutData(checkoutData)
-    Cookies.set("checkoutData", checkoutData.id)
+    setCheckoutData(checkoutData);
+    Cookies.set("checkoutData", checkoutData.id);
 
-    navigate("/checkout")
-  }
+    navigate("/checkout");
+  };
 
   const handleCouponChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCouponCode(e.target.value)
-  }
+    setCouponCode(e.target.value);
+  };
 
   const validateCoupon = (code: string) => {
-    const coupon = coupons?.find((coupon: any) => coupon.code === code);
+    const coupon = coupons?.find((coupon: any) => {
+      const startDate = new Date(coupon.startDate);
+      return coupon.code === code && startDate <= new Date();
+    });
     if (coupon) {
-      setDiscount({ type: coupon.type, value: coupon.value })
-      return true
+      setDiscount({ type: coupon.type, value: coupon.value });
+      return true;
     }
-    return false
-  }
+    return false;
+  };
 
   const handleApplyCoupon = () => {
     if (validateCoupon(couponCode)) {
-      toast.success(
-        "Coupon applied successfully"
-      )
+      toast.success("Coupon applied successfully");
     } else {
-      toast.error(
-        "Invalid coupon code"
-      )
+      toast.error("Invalid coupon code");
     }
-  }
+  };
 
   const calculateTotal = selector({
     key: "CalculateTotal",
     get: ({ get }) => {
-      const discountInfo = get(discountState)
+      const discountInfo = get(discountState);
       const subTotal = Array.isArray(cartItems)
-        ? cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0)
-        : 0
-      const charge = 45
-      let discountAmount = 0
-      
+        ? cartItems.reduce(
+            (acc, item) => acc + item.product.price * item.quantity,
+            0,
+          )
+        : 0;
+      const charge = 45;
+      let discountAmount = 0;
+
       if (discountInfo.type === "fixed_amount") {
         discountAmount = discountInfo.value;
       } else if (discountInfo.type === "percentage") {
@@ -119,11 +130,11 @@ const Cart = () => {
         subTotal,
         discountAmount,
         total: subTotal + charge - discountAmount,
-      }
+      };
     },
-  })
+  });
 
-  const total = useRecoilValue(calculateTotal)
+  const total = useRecoilValue(calculateTotal);
 
   if (cartItems === undefined || cartItems.length === 0) {
     return (
@@ -135,11 +146,11 @@ const Cart = () => {
           Add some products from here...
         </Link>
       </div>
-    )
+    );
   }
 
   if (isLoading || loadingCoupons) {
-    return <ProductCardSkeleton />
+    return <ProductCardSkeleton />;
   }
 
   return (
@@ -211,7 +222,6 @@ const Cart = () => {
                     disabled={item.quantity >= item.product.stock}
                     aria-label="Increase quantity"
                     className="disabled:cursor-not-allowed"
-
                   >
                     <ChevronUp className="h-4 w-4" />
                   </Button>
@@ -244,10 +254,7 @@ const Cart = () => {
             placeholder="Enter Coupon Code"
             className="w-full"
           />
-          <Button
-            className="w-full"
-            onClick={handleApplyCoupon}
-          >
+          <Button className="w-full" onClick={handleApplyCoupon}>
             Apply Coupon
           </Button>
         </div>
@@ -296,7 +303,7 @@ const Cart = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export { Cart }
+export { Cart };
