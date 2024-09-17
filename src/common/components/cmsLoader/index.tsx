@@ -13,12 +13,12 @@ export function StatsLoader() {
 
 export function StoryLoader() {
   return (
-    <div className="flex items-center justify-between gap-16">
-      <div className="flex w-1/2 flex-col gap-8">
+    <div className="flex w-full flex-col items-center justify-between gap-1 md:flex-row">
+      <div className="flex w-full flex-auto flex-col gap-8">
         <div className="h-12 animate-pulse rounded bg-gray-200"></div>
         <div className="h-24 animate-pulse rounded bg-gray-200"></div>
       </div>
-      <div className="h-[600px] w-1/2 animate-pulse rounded bg-gray-200"></div>
+      <div className="h-[200px] w-full flex-auto animate-pulse rounded bg-gray-200 md:h-[300px]"></div>
     </div>
   );
 }

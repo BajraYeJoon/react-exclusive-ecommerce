@@ -15,15 +15,13 @@ const SignupPage = () => {
     formState: { errors },
     reset,
   } = useForm<SignUpFormData>({
-    mode: "onChange",
+    mode: "all",
     resolver: zodResolver(SignUpFormSchema),
   });
 
-  // const navigate = useNavigate();
   const { signup } = useAuthContext();
 
   const onSubmit = async (data: SignUpFormData) => {
-    
     const { email, password, name, phoneNumber } = data;
 
     try {
@@ -41,17 +39,10 @@ const SignupPage = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="w-full">
         <div className="flex w-full flex-col gap-4">
           <div>
-            <Input
-              type="text"
-              placeholder="Name"
-              {...register("name", {
-                pattern: /^[a-zA-Z0-9_.-]*$/,
-                required: "Name is required",
-              })}
-            />
-            {errors && (
+            <Input type="text" placeholder="Name" {...register("name")} />
+            {errors.name && (
               <span className="error text-xs text-primary">
-                {errors.name?.message}
+                {errors.name.message}
               </span>
             )}
           </div>
@@ -60,17 +51,11 @@ const SignupPage = () => {
               id="email"
               type="email"
               placeholder="Email"
-              {...register("email", {
-                required: "Email is required",
-                pattern: {
-                  value: /([a-zA-Z0-9]+)([.{1}])?([a-zA-Z0-9]+)@gmail([.])com/g,
-                  message: "Please enter a valid Gmail address",
-                },
-              })}
+              {...register("email")}
             />
-            {errors && (
+            {errors.email && (
               <span className="error text-xs text-primary">
-                {errors.email?.message}
+                {errors.email.message}
               </span>
             )}
           </div>
@@ -80,21 +65,21 @@ const SignupPage = () => {
               placeholder="Password"
               {...register("password")}
             />
-            {errors && (
+            {errors.password && (
               <span className="error text-xs text-primary">
-                {errors.password?.message}
+                {errors.password.message}
               </span>
             )}
           </div>
           <div>
             <Input
               type="text"
-              placeholder="phone"
+              placeholder="Phone Number"
               {...register("phoneNumber")}
             />
-            {errors && (
+            {errors.phoneNumber && (
               <span className="error text-xs text-primary">
-                {errors.phoneNumber?.message}
+                {errors.phoneNumber.message}
               </span>
             )}
           </div>
