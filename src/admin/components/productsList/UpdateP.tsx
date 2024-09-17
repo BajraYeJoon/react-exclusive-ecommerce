@@ -36,12 +36,10 @@ interface UpdateProductFormProps {
     images: string[];
     categories: Category[];
   };
-  onClose: () => void; // A function prop to close the form
 }
 
 export default function UpdateProductForm({
   initialData,
-  onClose, // Closing function passed in
 }: UpdateProductFormProps) {
   const queryClient = useQueryClient();
   const [selectedCategories, setSelectedCategories] = useState<number[]>(
@@ -51,6 +49,7 @@ export default function UpdateProductForm({
     initialData.images || [],
   );
   const [imageChanged, setImageChanged] = useState(false);
+  console.log(imageChanged);
 
   const form = useForm<UpdateProductFormData>({
     resolver: zodResolver(updateProductSchema),
@@ -68,7 +67,6 @@ export default function UpdateProductForm({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
       toast.success("Product updated successfully");
-      onClose(); // Close the form on success
     },
   });
 
@@ -137,7 +135,11 @@ export default function UpdateProductForm({
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <Label htmlFor="title">Title</Label>
-            <Input id="title" {...form.register("title")} placeholder="Product title" />
+            <Input
+              id="title"
+              {...form.register("title")}
+              placeholder="Product title"
+            />
           </div>
 
           <div>
@@ -180,12 +182,20 @@ export default function UpdateProductForm({
 
           <div>
             <Label htmlFor="sizes">Sizes</Label>
-            <Input id="sizes" {...form.register("sizes")} placeholder="S, M, L, XL" />
+            <Input
+              id="sizes"
+              {...form.register("sizes")}
+              placeholder="S, M, L, XL"
+            />
           </div>
 
           <div>
             <Label htmlFor="returnpolicy">Return Policy</Label>
-            <Input id="returnpolicy" {...form.register("returnpolicy")} placeholder="30-day return policy" />
+            <Input
+              id="returnpolicy"
+              {...form.register("returnpolicy")}
+              placeholder="30-day return policy"
+            />
           </div>
 
           <div className="sm:col-span-2">
@@ -200,7 +210,11 @@ export default function UpdateProductForm({
 
           <div>
             <Label htmlFor="brand">Brand</Label>
-            <Input id="brand" {...form.register("brand")} placeholder="Brand name" />
+            <Input
+              id="brand"
+              {...form.register("brand")}
+              placeholder="Brand name"
+            />
           </div>
 
           <div className="sm:col-span-2">

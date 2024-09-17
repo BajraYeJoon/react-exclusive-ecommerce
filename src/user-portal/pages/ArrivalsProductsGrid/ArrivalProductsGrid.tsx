@@ -4,7 +4,6 @@ import { NewArrivalsProductProps } from "./ArrivalsPage";
 import { useQuery } from "@tanstack/react-query";
 import { fetchNewArrivals } from "../../../common/api/productApi";
 import uuidv4 from "../../../common/lib/utils/uuid";
-import { cn } from "../../../common/lib/utils";
 import { Link } from "react-router-dom";
 
 type GridItemProps = {
@@ -89,9 +88,16 @@ const GridItem = ({ product, additionalClasses }: GridItemProps) => {
   return (
     <div
       key={product.id}
-      className={cn(
-        `flex h-full w-full items-end rounded-sm bg-foreground bg-[url('${product.image[0]}')] bg-contain bg-bottom bg-no-repeat p-4 md:p-6 lg:p-6 ${additionalClasses}`,
-      )}
+      // className={cn(
+      //   `flex h-full w-full items-end rounded-sm bg-foreground bg-[url('${product.image[0]}')] bg-contain bg-bottom bg-no-repeat p-4 md:p-6 lg:p-6 ${additionalClasses}`,
+      // )}
+      className={`flex h-full w-full items-end rounded-sm bg-foreground p-4 md:p-6 lg:p-6 ${additionalClasses}`}
+      style={{
+        backgroundImage: `url('${product.image[0]}')`,
+        backgroundSize: "contain",
+        backgroundPosition: "bottom",
+        backgroundRepeat: "no-repeat",
+      }}
     >
       <div className="space-y-2 md:space-y-4">
         <div className="space-y-2 text-background">

@@ -53,7 +53,7 @@ const AllProducts = () => {
 
   const handleFilterChange = (
     type: keyof FilterOptions,
-    value: string | boolean,
+    value: string | string[] | boolean,
   ) => {
     setFilterOptions((prev) => ({ ...prev, [type]: value }));
   };
@@ -144,8 +144,8 @@ const AllProducts = () => {
             >
               <option value="">All Brands</option>
               {uniqueBrands.map((brand) => (
-                <option key={brand} value={brand}>
-                  {brand}
+                <option key={brand as string} value={brand as string}>
+                  {brand as string}
                 </option>
               ))}
             </select>
@@ -163,10 +163,11 @@ const AllProducts = () => {
             >
               <option value="">All Categories</option>
               {uniqueCategories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
+                <option key={category as string} value={category as string}>
+                  {category as string}
                 </option>
               ))}
+              ``
             </select>
           </div>
 
@@ -185,7 +186,7 @@ const AllProducts = () => {
       {/* Product Cards */}
       <div className="product-card-container grid w-full grid-cols-2 gap-4 overflow-hidden md:grid-cols-3 lg:grid-cols-4">
         {sortedAndFilteredProducts.map((product: ProductType) => (
-          <ProductCard key={product.id} {...product} image={product.image} />
+          <ProductCard key={product.id} {...product} image={product.image[0]} />
         ))}
       </div>
     </section>

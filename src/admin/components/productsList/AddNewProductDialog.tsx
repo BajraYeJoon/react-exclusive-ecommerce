@@ -46,7 +46,7 @@ const steps = [
 
 export default function AddNewProductDialog() {
   const [currentStep, setCurrentStep] = useState(0);
-  const [productImages, setProductImages] = useState([]);
+  const [productImages, setProductImages] = useState<File[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   const [error, setError] = useState("");
   const queryClient = useQueryClient();
@@ -79,7 +79,7 @@ export default function AddNewProductDialog() {
       description: "",
       brand: "",
       categories: "",
-      image: [],
+      image: [] as File[],
     },
   });
 
@@ -93,9 +93,9 @@ export default function AddNewProductDialog() {
     });
   };
 
-  const handleImageDrop = (acceptedFiles: never[]) => {
-    setProductImages((prev: never[]) => [...prev, ...acceptedFiles]);
-    setValue("image", acceptedFiles as never[]);
+  const handleImageDrop = (acceptedFiles: File[]) => {
+    setProductImages((prev: File[]) => [...prev, ...acceptedFiles]);
+    setValue("image", acceptedFiles);
   };
 
   const handleImageRemove = (index: number) => {

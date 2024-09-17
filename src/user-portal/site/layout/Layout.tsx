@@ -1,10 +1,6 @@
 import { Outlet } from "react-router-dom";
-import { Suspense } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { Banner, Navbar, Footer } from "../../pages";
 import { LoaderCircle } from "lucide-react";
-import { motion } from "framer-motion";
-import { fetchAllProducts } from "../../../common/api/productApi";
 
 export const Loading = () => {
   return (
