@@ -101,17 +101,17 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
         {categories
           .filter((category) => selectedCategories.includes(category.id))
           .map((category) => (
-            <Button
+            <span
               key={category.id}
-              className="inline-flex items-center rounded-full bg-primary px-2 py-1 text-sm font-medium text-background"
+              className="items-center rounded-full bg-primary px-2 py-1 text-xs font-light text-background"
             >
               {category.name}
 
               <X
-                className="ml-1 inline-flex h-3 w-3 items-center rounded-full p-0.5"
+                className="ml-1 inline-flex h-3 w-3 items-center rounded-full"
                 onClick={() => onCategorySelect(category.id)}
               />
-            </Button>
+            </span>
           ))}
       </div>
       <p className="mt-1 text-sm text-gray-500">

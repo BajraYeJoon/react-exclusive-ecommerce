@@ -33,15 +33,13 @@ const schema = z.object({
     .number()
     .int("Stock must be an integer")
     .nonnegative("Stock must be a non-negative number"),
-  discountPrice: z
+  discountprice: z
     .number()
     .positive("Discount price must be a positive number")
     .max(1000000, "Discount price must be less than or equal to 1,000,000")
     .optional(),
-  sizes: z
-    .array(z.enum(["xs", "s", "m", "l", "xl", "xxl"]))
-    .min(1, "At least one size is required"),
-  returnPolicy: z
+  sizes: z.enum(["xs", "s", "m", "l", "xl", "xxl"]).optional(),
+  returnpolicy: z
     .string()
     .min(10, "Return policy must be at least 10 characters long")
     .max(1000, "Return policy must be 1000 characters or less"),
@@ -50,7 +48,7 @@ const schema = z.object({
     .min(20, "Description must be at least 20 characters long")
     .max(2000, "Description must be 2000 characters or less"),
   categories: z.array(z.string()).min(1, "At least one category is required"),
-  images: z
+  image: z
     .array(z.string())
     .min(1, "At least one image is required")
     .max(4, "Maximum 4 images allowed"),
@@ -254,7 +252,7 @@ export default function AddNewProductDialog() {
               <div>
                 <Label className="mb-1 block font-medium">Price</Label>
                 <Input
-                  {...register("price")}
+                  {...register("price", { valueAsNumber: true })}
                   type="number"
                   className="w-full rounded border p-2"
                   placeholder="Enter price"
@@ -268,7 +266,7 @@ export default function AddNewProductDialog() {
               <div>
                 <Label className="mb-1 block font-medium">Discount Price</Label>
                 <Input
-                  {...register("discountprice")}
+                  {...register("discountprice", { valueAsNumber: true })}
                   type="number"
                   className="w-full rounded border p-2"
                   placeholder="Enter discount price (optional)"
@@ -282,7 +280,7 @@ export default function AddNewProductDialog() {
               <div>
                 <Label className="mb-1 block font-medium">Stock</Label>
                 <Input
-                  {...register("stock")}
+                  {...register("stock", { valueAsNumber: true })}
                   type="number"
                   className="w-full rounded border p-2"
                   placeholder="Enter stock quantity"

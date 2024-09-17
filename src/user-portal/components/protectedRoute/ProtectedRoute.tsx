@@ -1,7 +1,7 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 import { useAuthContext } from "../../context/useAuthContext";
-import { Routes } from "../../../admin/lib/links";
+import { UserRoutes } from "../../utils/userLinks";
 // import Cookies from "js-cookie";
 
 interface ProtectedRouteProps {
@@ -15,7 +15,7 @@ const ProtectedRoute = ({ children, role }: ProtectedRouteProps) => {
   // const user = JSON.parse(Cookies.get("user") ?? "{}");
 
   if (!isLoggedIn) {
-    return <Navigate to={`${Routes.Admin}`} />;
+    return <Navigate to={`/${UserRoutes.SignUp}`} />;
   }
 
   // if (user === role) {

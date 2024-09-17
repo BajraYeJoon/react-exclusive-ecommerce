@@ -37,10 +37,11 @@ import ProductDetails from "./ProductDetails";
 import uuidv4 from "../../../common/lib/utils/uuid";
 import AddNewProductDialog from "./AddNewProductDialog";
 import UpdateProductForm from "./UpdateP";
+import { Loading } from "../../../user-portal/site";
 
 export default function ProductsList() {
   const [flashItem, setFlashItem] = useRecoilState<number[]>(flashSaleState);
-  const { data: products } = useQuery({
+  const { data: products, isLoading } = useQuery({
     queryKey: ["products"],
     queryFn: fetchAllProducts,
   });
@@ -193,12 +194,8 @@ export default function ProductsList() {
     deleteMutation.mutate(productId);
   };
 
-  // if (isLoading) {
-  //   return <Loading />;
-  // }
-
   return (
-    <div className="my-4 flex flex-col gap-4 px-2 md:px-4">
+    <div className="my-4 flex w-full flex-col gap-4 px-2 md:px-4">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold">Products List</h2>
         <Dialog>
@@ -250,17 +247,24 @@ export default function ProductsList() {
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} className="px-2 py-3">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <TableBody>
+              {table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id} className="px-2 py-3">
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          )}
         </Table>
       </div>
 

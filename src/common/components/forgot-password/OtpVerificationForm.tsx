@@ -29,7 +29,7 @@ const OtpVerificationForm = () => {
 
     const result = await verifyOtp(payload);
     if (result) {
-      navigate("/login");
+      navigate("/sign-in");
       Cookies.remove("key");
     }
   };
