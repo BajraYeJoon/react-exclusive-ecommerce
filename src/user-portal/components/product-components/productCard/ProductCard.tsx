@@ -105,8 +105,8 @@ const ProductCard = ({
           />
 
           {/* <object
-            data={image}
-            className="flex h-full w-full items-center justify-center object-contain p-4 transition-opacity duration-300 group-hover:opacity-40 md:p-8 lg:p-12"
+            data={image[0]}
+            className="h-full w-full object-contain p-4 transition-opacity duration-300 group-hover:opacity-40 md:p-8 lg:p-12"
             aria-label="This image should exist, but alas it does not"
           >
             <MdOutlineImageNotSupported size={100} />

@@ -84,33 +84,37 @@ const ArrivalProductsGrid = () => {
 };
 
 const GridItem = ({ product, additionalClasses }: GridItemProps) => {
-  // https://haaamsknsjjifhavpila.supabase.co/storage/v1/object/public/nest-ecommerce/public/9676642f-9075-41db-a8ba-302b83b2821b-nando-jpeg-quality-001.jpg
   return (
     <div
       key={product.id}
-      // className={cn(
-      //   `flex h-full w-full items-end rounded-sm bg-foreground bg-[url('${product.image[0]}')] bg-contain bg-bottom bg-no-repeat p-4 md:p-6 lg:p-6 ${additionalClasses}`,
-      // )}
-      className={`flex h-full w-full items-end rounded-sm bg-foreground p-4 md:p-6 lg:p-6 ${additionalClasses}`}
-      style={{
-        backgroundImage: `url('${product.image[0]}')`,
-        backgroundSize: "contain",
-        backgroundPosition: "bottom",
-        backgroundRepeat: "no-repeat",
-      }}
+      className={`relative flex h-full w-full items-end rounded-sm bg-foreground p-4 md:p-6 lg:p-6 ${additionalClasses}`}
     >
-      <div className="space-y-2 md:space-y-4">
-        <div className="space-y-2 text-background">
-          <h3 className="text-sm md:text-base lg:text-lg">{product.title}</h3>
-          <p className="text-[10px] tracking-wide text-background/60 md:text-[12px] lg:text-sm">
-            {product.description.slice(0, 40)}...
-          </p>
-          <ShopNowButton id={product.id} />
-        </div>
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{
+          backgroundImage: `url('${product.image[0]}')`,
+          backgroundSize: "contain",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          backgroundBlendMode: "lighten",
+        }}
+      />
+
+      <div className="absolute inset-0 bg-black opacity-50" />
+
+      <div className="relative z-10 space-y-2 text-white md:space-y-4">
+        <h3 className="text-sm font-bold md:text-base lg:text-lg">
+          {product.title}
+        </h3>
+        <p className="text-[10px] tracking-wide md:text-[12px] lg:text-sm">
+          {product.description.slice(0, 40)}...
+        </p>
+        <ShopNowButton id={product.id} />
       </div>
     </div>
   );
 };
+
 const ShopNowButton = ({ id }: any) => (
   <Link to={`/products/${id}`}>
     <Button variant={"ghost"} size={"ghostsize"}>
