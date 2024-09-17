@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ChevronsUpDown, Check, X } from "lucide-react";
+import { Input } from "../../../common/ui/input";
+import { Button } from "../../../common/ui/button";
 
 interface Category {
   id: number;
@@ -51,10 +53,8 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
       </label>
       <button
         type="button"
-        className="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-left shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full rounded-md border border-gray-300 bg-background px-4 py-2 text-left shadow-sm focus:outline-none focus:ring-2"
         onClick={() => setIsOpen(!isOpen)}
-        aria-haspopup="listbox"
-        aria-expanded={isOpen}
         id="category-selector"
       >
         {selectedCategories.length > 0
@@ -64,17 +64,15 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
       </button>
 
       {isOpen && (
-        <div className="absolute z-10 mt-1 w-full rounded-md border border-gray-300 bg-white shadow-lg">
-          <div className="p-2">
-            <input
-              type="text"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Search categories..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          <ul className="max-h-60 overflow-auto" role="listbox">
+        <div className="absolute z-10 mt-1 w-full rounded-md border border-gray-300 bg-background shadow-lg">
+          <Input
+            type="text"
+            className="w-full rounded-md border border-gray-300 px-3 py-2"
+            placeholder="Search categories..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <ul className="max-h-72 overflow-auto" role="listbox">
             {filteredCategories.length === 0 ? (
               <li className="px-4 py-2 text-gray-500">No category found.</li>
             ) : (
@@ -83,8 +81,6 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
                   key={category.id}
                   className="flex cursor-pointer items-center px-4 py-2 hover:bg-gray-100"
                   onClick={() => onCategorySelect(category.id)}
-                  role="option"
-                  aria-selected={selectedCategories.includes(category.id)}
                 >
                   <Check
                     className={`mr-2 h-4 w-4 ${
@@ -105,19 +101,17 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
         {categories
           .filter((category) => selectedCategories.includes(category.id))
           .map((category) => (
-            <span
+            <Button
               key={category.id}
-              className="inline-flex items-center rounded-full bg-blue-100 px-2 py-1 text-sm font-medium text-blue-800"
+              className="inline-flex items-center rounded-full bg-primary px-2 py-1 text-sm font-medium text-background"
             >
               {category.name}
-              <button
-                type="button"
-                className="ml-1 inline-flex items-center rounded-full p-0.5 text-blue-400 hover:bg-blue-200 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+
+              <X
+                className="ml-1 inline-flex h-3 w-3 items-center rounded-full p-0.5"
                 onClick={() => onCategorySelect(category.id)}
-              >
-                <X className="h-3 w-3" />
-              </button>
-            </span>
+              />
+            </Button>
           ))}
       </div>
       <p className="mt-1 text-sm text-gray-500">

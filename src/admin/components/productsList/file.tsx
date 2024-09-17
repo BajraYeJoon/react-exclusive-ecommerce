@@ -21,6 +21,7 @@ export function FileDropzone({ onDrop, files, onRemove }: FileDropzoneProps) {
       >
         <input {...getInputProps()} type="file" />
         <p>Drag 'n' drop images here, or click to select</p>
+        <span className="text-sm opacity-50">Select upto 4 images</span>
       </div>
       {files.length > 0 && (
         <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
