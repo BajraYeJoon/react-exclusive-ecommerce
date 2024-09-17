@@ -1,7 +1,6 @@
 import {
   Card,
   CardContent,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "../../../common/ui/card";
@@ -12,7 +11,6 @@ import {
   Code,
   DollarSign,
   Edit,
-  Hash,
   Percent,
   Trash2,
 } from "lucide-react";
@@ -32,20 +30,20 @@ export interface Coupon {
   minPurchaseAmount: number;
 }
 
-interface DiscountDisplayProps {
-  handleEdit: (coupon: Coupon) => void;
-  coupons: Coupon[] | undefined;
-  deleteCouponMutation: (id: string) => void;
-}
+// interface DiscountDisplayProps {
+//   handleEdit: (coupon: Coupon) => void;
+//   coupons: Coupon[] | undefined;
+//   deleteCouponMutation: (id: string) => void;
+// }
 
 export default function Component({
   handleEdit,
   coupons,
   deleteCouponMutation,
-}: DiscountDisplayProps) {
+}: any) {
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {coupons?.map((coupon) => (
+      {coupons?.map((coupon: any) => (
         <Card key={coupon.id} className="overflow-hidden">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 bg-red-400/35 pb-2">
             <CardTitle className="text-base font-medium tracking-wide md:text-xl">
