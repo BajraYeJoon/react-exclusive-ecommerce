@@ -1,3 +1,4 @@
 user-agent: *
 Allow: /
 Disallow: /private/
+Sitemap: http://exclusivenp.vercel.app/sitemap.xml

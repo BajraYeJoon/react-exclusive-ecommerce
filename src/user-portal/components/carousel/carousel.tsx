@@ -71,9 +71,9 @@ const Carousel = () => {
                     {content.title}
                     {/* </span> */}
                   </span>
-                  <h1 className="carousel-title my-2 text-balance text-sm font-medium tracking-wide sm:leading-5 md:text-2xl lg:text-5xl lg:leading-[4.2rem]">
+                  <h3 className="carousel-title my-2 text-balance text-sm font-medium tracking-wide sm:leading-5 md:text-2xl lg:text-5xl lg:leading-[4.2rem]">
                     {content.title}
-                  </h1>
+                  </h3>
                   <Link
                     to={`/product/${content.id}`}
                     className="shop-now-link inline-flex items-center gap-1 border-b border-background/25 text-xs text-background md:text-base lg:text-lg"

@@ -78,9 +78,9 @@ export default function DiscountCard() {
 
   return (
     <div>
-      <h1 className="mb-8 text-center text-sm font-medium text-gray-800 md:text-xl lg:text-3xl">
+      <h3 className="mb-8 text-center text-sm font-medium text-gray-800 md:text-xl lg:text-3xl">
         Available Coupons
-      </h1>
+      </h3>
       <AnimatePresence>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {coupons.map((coupon, index) => (
