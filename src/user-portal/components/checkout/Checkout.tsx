@@ -155,7 +155,7 @@ const Checkout = () => {
                 <div className="flex items-center gap-2 lg:gap-5">
                   <img
                     src={cartData.image[0]}
-                    alt=""
+                    alt="cart images"
                     className="h-10 w-10 md:h-12 md:w-12"
                   />
                   <h4 className="text-xs md:text-lg lg:text-base">
@@ -193,7 +193,11 @@ const Checkout = () => {
                 />
                 <label htmlFor="bank">Bank</label>
               </div>
-              <img src={"/card.png"} alt="" className="h-4 lg:h-6" />
+              <img
+                src={"/card.png"}
+                alt="payment card images"
+                className="h-4 lg:h-6"
+              />
             </div>
             <div className="space-x-3">
               <input type="radio" value="cash" {...register("paymentMethod")} />
