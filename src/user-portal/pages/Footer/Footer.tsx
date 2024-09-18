@@ -96,8 +96,16 @@ const FollowUsSection: React.FC = () => {
         <div className="items- flex w-full justify-between">
           <div className="h-20 w-20 bg-background">qr code</div>
           <div className="flex flex-col gap-2">
-            <img src="/footer-img/gplay.png" alt="" className="w-full" />
-            <img src="/footer-img/appstore.png" alt="" className="w-full" />
+            <img
+              src="/footer-img/gplay.png"
+              alt="Googe play"
+              className="w-full"
+            />
+            <img
+              src="/footer-img/appstore.png"
+              alt="Apple Store"
+              className="w-full"
+            />
           </div>
         </div>
       </div>

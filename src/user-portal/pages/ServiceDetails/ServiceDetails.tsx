@@ -31,7 +31,7 @@ const ServiceDetails = () => {
             <div className="flex h-24 w-24 items-center justify-center rounded-full border-[14px] border-background/80 bg-foreground md:h-16 md:w-16 lg:h-24 lg:w-24">
               <img
                 src={serviceDetail.icon}
-                alt=""
+                alt="Services provided by us"
                 className="rounded-full object-cover"
               />
             </div>

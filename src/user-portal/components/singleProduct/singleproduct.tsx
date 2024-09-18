@@ -94,7 +94,7 @@ const Singleproduct = () => {
                   <img
                     className="h-full w-full object-contain"
                     src={selectedImage}
-                    alt=""
+                    alt={`Product Details Image for ${details.title}`}
                   />
                 </div>
               </div>
@@ -102,9 +102,9 @@ const Singleproduct = () => {
               {details.image?.length > 1 && (
                 <div className="mt-2 w-full lg:order-1 lg:w-32 lg:flex-shrink-0">
                   <div className="flex flex-row items-start lg:flex-col">
-                    {details.image.map((image: string, index: number) => (
+                    {details.image.map((image: string) => (
                       <button
-                        key={index}
+                        key={`iamge-${uuidv4()}`}
                         type="button"
                         className={`flex-0 mb-3 aspect-square h-20 overflow-hidden rounded-lg border-2 ${
                           selectedImage === image
@@ -116,7 +116,7 @@ const Singleproduct = () => {
                         <img
                           className="h-full w-full object-cover"
                           src={image}
-                          alt=""
+                          alt={`${details.title} image ${uuidv4()}`}
                         />
                       </button>
                     ))}

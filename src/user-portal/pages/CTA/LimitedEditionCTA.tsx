@@ -32,7 +32,7 @@ const LimitedEditionCTA = () => {
       </div>
       <img
         src="/limitededitioncta.webp"
-        alt=""
+        alt="Limited edition Product"
         className="hidden h-12 w-auto object-contain drop-shadow-[0_0_100px_rgba(255,255,255,0.5)] md:block md:h-44 lg:h-72"
       />
     </section>
