@@ -36,14 +36,31 @@ const updateProductSchema = z.object({
     .nonnegative("Stock must be a non-negative number")
     .optional(),
   discountprice: z
-    .number()
-    .positive("Discount price must be a positive number")
-    .max(1000000, "Discount price must be less than or equal to 1,000,000")
+    .union([
+      z
+        .number()
+        .positive()
+        .max(1000000, "Discount price must be less than or equal to 1,000,000"),
+      z.string().transform((val) => (val === "" ? null : Number(val))),
+    ])
+    .nullable()
     .optional(),
   sizes: z
-    .array(z.enum(["xs", "s", "m", "l", "xl", "xxl"]))
-    .min(1, "At least one size is required")
-    .optional(),
+    .string()
+    .optional()
+    .nullable()
+    .refine(
+      (value) => {
+        const validSizes = ["xs", "s", "sm", "m", "lg", "xl"];
+        return (
+          value === null ||
+          (typeof value === "string" && validSizes.includes(value))
+        );
+      },
+      {
+        message: "Size must be one of the following: xs, s, sm, m, lg, xl",
+      },
+    ),
   returnpolicy: z
     .string()
     .min(10, "Return policy must be at least 10 characters long")
@@ -53,10 +70,7 @@ const updateProductSchema = z.object({
     .string()
     .min(20, "Description must be at least 20 characters long")
     .max(2000, "Description must be 2000 characters or less"),
-  categories: z
-    .array(z.number())
-    .min(1, "At least one category is required")
-    .optional(),
+  categories: z.string().min(1, "At least one category is required").optional(),
   image: z
     .array(z.string())
     .min(1, "At least one image is required")
@@ -131,6 +145,8 @@ export default function UpdateProductForm({ initialData }: any) {
     },
   });
 
+  console.log(errors);
+
   useEffect(() => {
     setImages(initialData.images || []);
     setSelectedCategories(
@@ -142,7 +158,7 @@ export default function UpdateProductForm({ initialData }: any) {
       price: initialData.price || "",
       discountprice: initialData.discountPrice || "",
       stock: initialData.stock || "",
-      sizes: initialData.sizes || [],
+      sizes: initialData.sizes || "",
       returnpolicy: initialData.returnpolicy || "",
       description: initialData.description || "",
       categories: initialData.categories?.map((cat: any) => cat.id) || "",
@@ -216,6 +232,7 @@ export default function UpdateProductForm({ initialData }: any) {
   };
 
   const onSubmit = async (data: any) => {
+    console.log(data);
     await updateProductMutation.mutate(data);
     setImageChanged(false);
   };
@@ -337,9 +354,12 @@ export default function UpdateProductForm({ initialData }: any) {
               <div>
                 <Label className="mb-1 block font-medium">Sizes</Label>
                 <Input
-                  {...register("sizes")}
+                  {...register("sizes", {
+                    setValueAs: (value) => (value === "" ? null : value),
+                  })}
+                  type="text"
                   className="w-full rounded border p-2"
-                  placeholder="xs, s, m, l, xl, xxl"
+                  placeholder="Enter size (optional)"
                 />
                 {errors.sizes && (
                   <p className="mt-1 text-sm text-primary">
