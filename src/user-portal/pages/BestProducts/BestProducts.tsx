@@ -1,13 +1,13 @@
-import { Swiper, SwiperSlide } from "swiper/react";
 import PagesHeader from "../../components/pagesHeader/PagesHeader";
 import ProductCard from "../../components/product-components/productCard/ProductCard";
-import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { fetchBestSellingProducts } from "../../../common/api/productApi";
 import uuidv4 from "../../../common/lib/utils/uuid";
 import ProductCardSkeleton from "../../../common/components/productCardSkeleton/ProductCardSkeleton";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
 
 const BestProducts = () => {
   const { data: bestSellingProducts, isLoading } = useQuery({
