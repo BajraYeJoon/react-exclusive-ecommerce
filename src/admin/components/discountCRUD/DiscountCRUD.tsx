@@ -17,17 +17,10 @@ import { Loading } from "../../../user-portal/site";
 import DiscountDisplay from "./DiscountDisplay";
 import { toast } from "sonner";
 import { PlusCircle } from "lucide-react";
-
+import { Coupon } from "../../../common/components/discount/DiscountCard";
 
 export default function DiscountCRUD() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  interface Coupon {
-    id: string;
-    name: string;
-    startDate: string;
-    expirationDate: string;
-    [key: string]: string;
-  }
 
   const [editingCoupon, setEditingCoupon] = useState<Coupon | null>(null);
   const queryClient = useQueryClient();
@@ -73,15 +66,20 @@ export default function DiscountCRUD() {
     }
   };
 
+  //for the typescript error fix to assert
   const handleEdit = (coupon: Coupon) => {
     setEditingCoupon(coupon);
+
     Object.keys(coupon).forEach((key) => {
-      if (key === "startDate" || key === "expirationDate") {
-        setValue(key, coupon[key].split("T")[0]);
+      const couponKey = key as keyof Coupon;
+
+      if (couponKey === "startDate" || couponKey === "expirationDate") {
+        setValue(couponKey, coupon[couponKey].split("T")[0]);
       } else {
-        setValue(key, coupon[key]);
+        setValue(couponKey, coupon[couponKey]);
       }
     });
+
     setIsDialogOpen(true);
   };
 

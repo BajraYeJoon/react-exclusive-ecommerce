@@ -10,13 +10,14 @@ import ConfirmationDialog from "../confirmation/ConfirmationDialog";
 export interface Coupon {
   id: string;
   name: string;
-  code: string;
-  type: "percentage" | "fixed";
-  value: number;
+  code: string; // From the second definition
+  type: "fixed_amount" | "percentage"; // From the second definition
+  value: number; // From the second definition
   startDate: string;
   expirationDate: string;
-  maxUsageCount: number;
-  minPurchaseAmount: number;
+  maxUsageCount: number; // From the second definition
+  minPurchaseAmount: number; // From the second definition
+  [key: string]: string | number; // Optional index signature if you want to allow additional properties
 }
 
 interface DiscountDisplayProps {
@@ -24,8 +25,12 @@ interface DiscountDisplayProps {
   handleEdit: (coupon: Coupon) => void;
 }
 
-const formatDate = (dateString) => {
-  return new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 };
 
 export default function DiscountDisplay({ handleEdit, coupons }: Readonly<DiscountDisplayProps>) {

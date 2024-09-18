@@ -73,26 +73,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         email: name,
         password,
       });
-
-      // If the response is successful, handle the token
       const data = response.data;
       await fetchUserDetails(data.token);
       setIsLoggedIn(true);
       Cookies.set("token", data.token, { expires: 7 });
 
-      // Update the Axios instance after setting the token
       Axios.defaults.headers.common["Authorization"] =
         `Bearer ${Cookies.get("token")}`;
     } catch (error) {
-      // If the error response is available, throw an error with status and message
-      if (error.response) {
-        throw {
-          statusCode: error.response.status,
-          message: error.response.data.message || "Login failed",
-        };
-      } else {
-        throw new Error("Network error or request failed");
-      }
+      toast.error("Login failed, Please check your credentials");
     } finally {
       setIsLoading(false);
     }

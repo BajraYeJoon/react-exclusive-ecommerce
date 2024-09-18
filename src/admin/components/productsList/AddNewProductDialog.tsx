@@ -176,14 +176,15 @@ export default function AddNewProductDialog() {
         toast.success("Product created successfully");
       }
     } catch (error) {
-      console.error("Error submitting form:", error.response || error);
+      const axiosError = error as {
+        response?: { data?: { message?: string } };
+      };
+      console.error("Error submitting form:", axiosError.response || error);
       setError(
-        error.response?.data?.message ||
-        "Failed to create product. Please try again."
+        axiosError.response?.data?.message ||
+          "Failed to create product. Please try again.",
       );
-      toast.error(
-        "Failed to create product. Please check the console for more details."
-      );
+      toast.error("Failed to create product. Please try again later.");
     }
   };
   

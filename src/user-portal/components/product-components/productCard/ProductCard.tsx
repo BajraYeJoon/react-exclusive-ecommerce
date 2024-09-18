@@ -97,7 +97,7 @@ const ProductCard = ({
           <img
             className="h-full w-full object-contain p-4 transition-opacity duration-300 group-hover:opacity-40 md:p-8 lg:p-12"
             src={image}
-            alt="product image"
+            alt={title}
             onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) =>
               ((e.target as HTMLImageElement).src =
                 "https://via.placeholder.com/300")
