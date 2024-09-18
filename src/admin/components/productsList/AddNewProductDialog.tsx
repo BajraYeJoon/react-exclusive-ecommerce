@@ -72,6 +72,7 @@ const schema = z.object({
     .array(z.instanceof(File))
     .min(1, "At least one image is required")
     .max(4, "Maximum 4 images allowed"),
+  availability: z.enum(["true", "false"]).default("true").optional(),
 });
 
 const steps = [
@@ -111,6 +112,7 @@ export default function AddNewProductDialog() {
     setValue,
     trigger,
     reset,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
@@ -125,6 +127,7 @@ export default function AddNewProductDialog() {
       brand: "",
       categories: "",
       image: [] as File[],
+      availability: "true",
     },
   });
 
@@ -142,10 +145,7 @@ export default function AddNewProductDialog() {
 
   const handleImageDrop = (acceptedFiles: File[]) => {
     setProductImages((prev: File[]) => [...prev, ...acceptedFiles]);
-    setValue(
-      "image",
-      acceptedFiles,
-    );
+    setValue("image", acceptedFiles);
   };
 
   const handleImageRemove = (index: number) => {
@@ -155,6 +155,7 @@ export default function AddNewProductDialog() {
       productImages.filter((_, i) => i !== index),
     );
   };
+  const availabilityValue = watch("availability");
 
   const onSubmit = async (data: any) => {
     const formData = new FormData();
@@ -167,10 +168,14 @@ export default function AddNewProductDialog() {
       }
     });
 
+    console.log("Form Data:", Object.fromEntries(formData)); // Log form data
+
     try {
       const response = await Axios.post("/product/create", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+      console.log(response);
+
       if (response.status === 201) {
         console.log("Product created successfully:", response.data);
         setCurrentStep(0);
@@ -384,6 +389,24 @@ export default function AddNewProductDialog() {
                   </p>
                 )}
               </div>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  id="availability"
+                  checked={availabilityValue === "true"} // Compare with string
+                  onChange={(e) => {
+                    // Update the availability value in the form
+                    setValue(
+                      "availability",
+                      e.target.checked ? "true" : "false",
+                    ); // Send as a string
+                  }}
+                />
+                <Label htmlFor="availability">
+                  {availabilityValue === "true" ? "Available" : "Unavailable"}
+                </Label>
+              </div>
+
               <CategorySelector
                 categories={categories}
                 selectedCategories={selectedCategories}

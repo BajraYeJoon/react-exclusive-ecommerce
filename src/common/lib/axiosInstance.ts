@@ -6,7 +6,7 @@ const token = Cookies.get("token");
 
 export const Axios = axios.create({
   baseURL: "https://nest-ecommerce-1fqk.onrender.com",
-  // baseURL: "http://192.168.88.45:3000",
+  // baseURL: "http://192.168.160.1:3000",
 
   headers: token ? { Authorization: `Bearer ${token}` } : {},
 });
