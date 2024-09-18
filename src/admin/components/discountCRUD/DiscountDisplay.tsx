@@ -1,25 +1,11 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "../../../common/ui/card";
-import { MdDataUsage } from "react-icons/md";
-import { BiPurchaseTag } from "react-icons/bi";
-import {
-  Calendar,
-  Code,
-  DollarSign,
-  Edit,
-  Percent,
-  Trash2,
-} from "lucide-react";
+
+import { Calendar, Code, DollarSign, Edit, Percent, Trash2, Tag, Users } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { Card, CardContent, CardHeader, CardTitle } from "../../../common/ui/card";
+import { Badge } from "../../../common/ui/badge";
 import { Button } from "../../../common/ui/button";
 import ConfirmationDialog from "../confirmation/ConfirmationDialog";
-import { Badge } from "../../../common/ui/badge";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Axios } from "../../../common/lib/axiosInstance";
-import { toast } from "sonner";
 
 export interface Coupon {
   id: string;
@@ -33,10 +19,19 @@ export interface Coupon {
   minPurchaseAmount: number;
 }
 
-export default function DiscountDisplay({ handleEdit, coupons }: any) {
+interface DiscountDisplayProps {
+  coupons: Coupon[];
+  handleEdit: (coupon: Coupon) => void;
+}
+
+const formatDate = (dateString) => {
+  return new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+};
+
+export default function DiscountDisplay({ handleEdit, coupons }: Readonly<DiscountDisplayProps>) {
   const queryClient = useQueryClient();
   const deleteCouponMutation = useMutation({
-    mutationFn: (id) => Axios.delete(`/coupon/${id}`),
+    mutationFn: (id: string) => fetch(`/api/coupon/${id}`, { method: 'DELETE' }).then(res => res.json()),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["coupons"] });
       toast.success("Coupon deleted successfully");
@@ -45,63 +40,59 @@ export default function DiscountDisplay({ handleEdit, coupons }: any) {
   });
 
   return (
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {coupons?.map((coupon: any) => (
-        <Card key={coupon.id} className="overflow-hidden">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 bg-red-400/35 pb-2">
-            <CardTitle className="text-base font-medium tracking-wide md:text-xl">
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {coupons?.map((coupon: Coupon) => (
+        <Card key={coupon.id} className="overflow-hidden transition-shadow hover:shadow-lg">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 bg-gradient-to-r from-red-400 to-red-600 pb-4">
+            <CardTitle className="text-lg font-bold tracking-wide text-white">
               {coupon.name}
             </CardTitle>
+            <Badge variant={coupon.type === "percentage" ? "secondary" : "default"} className="text-sm font-semibold">
+              {coupon.type === "percentage" ? (
+                <Percent className="mr-1 h-3 w-3" />
+              ) : (
+                <DollarSign className="mr-1 h-3 w-3" />
+              )}
+              {coupon.value} {coupon.type === "percentage" ? "%" : "off"}
+            </Badge>
           </CardHeader>
-          <CardContent className="space-y-2 p-4">
-            <div className="flex items-center justify-between">
+          <CardContent className="space-y-4 p-4">
+            <div className="flex items-center justify-between bg-gray-100 p-2 rounded-md">
               <div className="flex items-center space-x-2">
-                <Code className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-semibold">{coupon.code}</span>
+                <Code className="h-4 w-4 text-gray-600" />
+                <span className="text-sm font-mono font-semibold">{coupon.code}</span>
               </div>
-              <Badge
-                variant={coupon.type === "percentage" ? "default" : "secondary"}
-              >
-                {coupon.type === "percentage" ? (
-                  <Percent className="mr-1 h-3 w-3" />
-                ) : (
-                  <DollarSign className="mr-1 h-3 w-3" />
-                )}
-                {coupon.value} {coupon.type === "percentage" ? "%" : "off"}
-              </Badge>
             </div>
-            <div className="flex items-center text-sm">
-              <Calendar className="mr-2 h-4 w-4 text-muted-foreground" />
-              <span>
-                {new Date(coupon.startDate).toDateString()} -{" "}
-                {new Date(coupon.expirationDate).toDateString()}
-              </span>
+            <div className="flex flex-col space-y-2 text-sm">
+              <div className="flex items-center text-gray-600">
+                <Calendar className="mr-2 h-4 w-4" />
+                <span>{formatDate(coupon.startDate)} - {formatDate(coupon.expirationDate)}</span>
+              </div>
+              <div className="flex items-center text-gray-600">
+                <Users className="mr-2 h-4 w-4" />
+                <span>Max Usage: {coupon.maxUsageCount}</span>
+              </div>
+              <div className="flex items-center text-gray-600">
+                <Tag className="mr-2 h-4 w-4" />
+                <span>Min Purchase: ${coupon.minPurchaseAmount}</span>
+              </div>
             </div>
-            <div className="flex items-center text-sm">
-              <MdDataUsage className="mr-2 h-4 w-4 text-muted-foreground" />
-              <span className="font-medium">Max Usage:</span>
-              <span className="ml-2">{coupon.maxUsageCount}</span>
-            </div>
-            <div className="flex items-center text-sm">
-              <BiPurchaseTag className="mr-2 h-4 w-4 text-muted-foreground" />
-              <span className="font-medium">Minimum Purchase:</span>
-              <span className="ml-2">${coupon.minPurchaseAmount}</span>
-            </div>
-            <div className="flex items-center justify-between space-x-2">
+            <div className="flex items-center justify-end space-x-2 pt-2">
               <Button
-                variant="secondary"
-                size="icon"
+                variant="outline"
+                size="sm"
                 onClick={() => handleEdit(coupon)}
+                className="flex items-center"
               >
-                <Edit className="h-4 w-4" />
-                <span className="sr-only">Edit</span>
+                <Edit className="mr-1 h-4 w-4" />
+                Edit
               </Button>
               <ConfirmationDialog
                 triggerText={
-                  <>
-                    <Trash2 className="h-4 w-4" />
+                  <Button variant="destructive" size="sm" className="flex items-center">
+                    <Trash2 className="mr-1 h-4 w-4" />
                     Delete
-                  </>
+                  </Button>
                 }
                 title="Delete Coupon"
                 description={`Are you sure you want to delete the coupon "${coupon.name}"?`}
