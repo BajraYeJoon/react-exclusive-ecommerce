@@ -34,11 +34,31 @@ const schema = z.object({
     .int("Stock must be an integer")
     .nonnegative("Stock must be a non-negative number"),
   discountprice: z
-    .number()
-    .positive("Discount price must be a positive number")
-    .max(1000000, "Discount price must be less than or equal to 1,000,000")
+    .union([
+      z
+        .number()
+        .positive()
+        .max(1000000, "Discount price must be less than or equal to 1,000,000"),
+      z.string().transform((val) => (val === "" ? null : Number(val))),
+    ])
+    .nullable()
     .optional(),
-  sizes: z.enum(["xs", "s", "m", "l", "xl", "xxl"]).optional(),
+  sizes: z
+    .string()
+    .optional()
+    .nullable()
+    .refine(
+      (value) => {
+        const validSizes = ["xs", "s", "sm", "m", "lg", "xl"];
+        return (
+          value === null ||
+          (typeof value === "string" && validSizes.includes(value))
+        );
+      },
+      {
+        message: "Size must be one of the following: xs, s, sm, m, lg, xl",
+      },
+    ),
   returnpolicy: z
     .string()
     .min(10, "Return policy must be at least 10 characters long")
@@ -47,9 +67,9 @@ const schema = z.object({
     .string()
     .min(20, "Description must be at least 20 characters long")
     .max(2000, "Description must be 2000 characters or less"),
-  categories: z.array(z.string()).min(1, "At least one category is required"),
+  categories: z.string().min(1, "At least one category is required"),
   image: z
-    .array(z.string())
+    .array(z.instanceof(File))
     .min(1, "At least one image is required")
     .max(4, "Maximum 4 images allowed"),
 });
@@ -108,6 +128,8 @@ export default function AddNewProductDialog() {
     },
   });
 
+  console.log(errors);
+
   const handleCategorySelect = (categoryId: number) => {
     setSelectedCategories((prevSelected) => {
       const updatedCategories = prevSelected.includes(categoryId)
@@ -120,7 +142,10 @@ export default function AddNewProductDialog() {
 
   const handleImageDrop = (acceptedFiles: File[]) => {
     setProductImages((prev: File[]) => [...prev, ...acceptedFiles]);
-    setValue("image", acceptedFiles);
+    setValue(
+      "image",
+      acceptedFiles,
+    );
   };
 
   const handleImageRemove = (index: number) => {
@@ -184,7 +209,7 @@ export default function AddNewProductDialog() {
   };
 
   const prevStep = () => {
-    setCurrentStep((prev) => Math.max(prev - 1, 0));
+    setCurrentStep((prev) => prev - 1);
     setError("");
   };
 
@@ -266,11 +291,12 @@ export default function AddNewProductDialog() {
               <div>
                 <Label className="mb-1 block font-medium">Discount Price</Label>
                 <Input
-                  {...register("discountprice", { valueAsNumber: true })}
+                  {...register("discountprice")}
                   type="number"
                   className="w-full rounded border p-2"
                   placeholder="Enter discount price (optional)"
                 />
+
                 {errors.discountprice && (
                   <p className="mt-1 text-sm text-primary">
                     {errors.discountprice.message}
@@ -299,9 +325,12 @@ export default function AddNewProductDialog() {
               <div>
                 <Label className="mb-1 block font-medium">Sizes</Label>
                 <Input
-                  {...register("sizes")}
+                  {...register("sizes", {
+                    setValueAs: (value) => (value === "" ? null : value),
+                  })}
+                  type="text"
                   className="w-full rounded border p-2"
-                  placeholder="xs, s, m, l, xl, xxl"
+                  placeholder="Enter size (optional)"
                 />
                 {errors.sizes && (
                   <p className="mt-1 text-sm text-primary">
