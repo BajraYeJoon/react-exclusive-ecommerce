@@ -72,7 +72,6 @@ const schema = z.object({
     .array(z.instanceof(File))
     .min(1, "At least one image is required")
     .max(4, "Maximum 4 images allowed"),
-  availability: z.enum(["true", "false"]).default("true").optional(),
 });
 
 const steps = [
@@ -127,7 +126,7 @@ export default function AddNewProductDialog() {
       brand: "",
       categories: "",
       image: [] as File[],
-      availability: "true",
+      availability: true,
     },
   });
 
@@ -155,7 +154,6 @@ export default function AddNewProductDialog() {
       productImages.filter((_, i) => i !== index),
     );
   };
-  const availabilityValue = watch("availability");
 
   const onSubmit = async (data: any) => {
     const formData = new FormData();
@@ -388,23 +386,6 @@ export default function AddNewProductDialog() {
                     {errors.image.message}
                   </p>
                 )}
-              </div>
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  id="availability"
-                  checked={availabilityValue === "true"} // Compare with string
-                  onChange={(e) => {
-                    // Update the availability value in the form
-                    setValue(
-                      "availability",
-                      e.target.checked ? "true" : "false",
-                    ); // Send as a string
-                  }}
-                />
-                <Label htmlFor="availability">
-                  {availabilityValue === "true" ? "Available" : "Unavailable"}
-                </Label>
               </div>
 
               <CategorySelector

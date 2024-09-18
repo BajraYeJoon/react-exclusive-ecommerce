@@ -27,9 +27,10 @@ const SignInPage = () => {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      await login(data);
+      await login(data); // This should throw if login fails
       const user = JSON.parse(Cookies.get("user") || "{}");
 
+      // Check user role
       if (user === Routes.Admin) {
         navigate(`/${Routes.Admin}/${Routes.Dashboard}`);
         toast.success("Welcome to the admin panel");
@@ -38,16 +39,21 @@ const SignInPage = () => {
         toast.success("You are now logged in");
       }
     } catch (error: any) {
+      // Ensure error handling catches thrown errors
       if (error.statusCode === 401) {
-        toast.error("Invalid credentials. Please try again.");
+        toast.error(
+          "Invalid credentials. Please check your email and password.",
+        );
       } else if (error.message === "User already exists") {
         toast.error("User already exists. Please use a different email.");
       } else {
-        console.log(error);
+        console.error(error);
         toast.error("An unexpected error occurred. Please try again later.");
       }
     }
   };
+  
+  
   
 
   return (

@@ -69,27 +69,35 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setIsLoading(true);
 
     try {
-      // const response = await Axios.post("auth/signin", {
-      //   email: name,
-      //   password,
-      // });
       const response = await Axios.post("/auth/signin", {
         email: name,
         password,
       });
+
+      // If the response is successful, handle the token
       const data = response.data;
       await fetchUserDetails(data.token);
       setIsLoggedIn(true);
       Cookies.set("token", data.token, { expires: 7 });
+
       // Update the Axios instance after setting the token
       Axios.defaults.headers.common["Authorization"] =
         `Bearer ${Cookies.get("token")}`;
     } catch (error) {
-      console.error("Login failed", error);
+      // If the error response is available, throw an error with status and message
+      if (error.response) {
+        throw {
+          statusCode: error.response.status,
+          message: error.response.data.message || "Login failed",
+        };
+      } else {
+        throw new Error("Network error or request failed");
+      }
     } finally {
       setIsLoading(false);
     }
   };
+  
 
   const signup = async ({
     name,

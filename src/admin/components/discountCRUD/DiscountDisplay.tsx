@@ -17,6 +17,9 @@ import {
 import { Button } from "../../../common/ui/button";
 import ConfirmationDialog from "../confirmation/ConfirmationDialog";
 import { Badge } from "../../../common/ui/badge";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Axios } from "../../../common/lib/axiosInstance";
+import { toast } from "sonner";
 
 export interface Coupon {
   id: string;
@@ -30,17 +33,17 @@ export interface Coupon {
   minPurchaseAmount: number;
 }
 
-// interface DiscountDisplayProps {
-//   handleEdit: (coupon: Coupon) => void;
-//   coupons: Coupon[] | undefined;
-//   deleteCouponMutation: (id: string) => void;
-// }
+export default function DiscountDisplay({ handleEdit, coupons }: any) {
+  const queryClient = useQueryClient();
+  const deleteCouponMutation = useMutation({
+    mutationFn: (id) => Axios.delete(`/coupon/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["coupons"] });
+      toast.success("Coupon deleted successfully");
+    },
+    onError: () => toast.error("Failed to delete coupon"),
+  });
 
-export default function Component({
-  handleEdit,
-  coupons,
-  deleteCouponMutation,
-}: any) {
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {coupons?.map((coupon: any) => (
@@ -102,7 +105,7 @@ export default function Component({
                 }
                 title="Delete Coupon"
                 description={`Are you sure you want to delete the coupon "${coupon.name}"?`}
-                onConfirm={() => deleteCouponMutation(coupon.id)}
+                onConfirm={() => deleteCouponMutation.mutate(coupon.id)}
                 confirmText="Delete"
                 cancelText="Cancel"
               />
