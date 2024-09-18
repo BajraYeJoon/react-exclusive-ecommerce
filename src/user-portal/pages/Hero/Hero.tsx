@@ -38,7 +38,7 @@ const Hero = () => {
               <li key={category?.id} className="group relative cursor-pointer">
                 <div className="flex items-center justify-between">
                   <Link to={`/category/${category?.name}/${category?.id}`}>
-                    {category?.name}
+                    <h3>{category?.name}</h3>
                   </Link>
                   {category?.subcategories && <ChevronRight />}
                 </div>

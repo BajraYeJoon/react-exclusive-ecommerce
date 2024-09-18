@@ -1,20 +1,20 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { Axios } from "../../../common/lib/axiosInstance";
-import { fetchCategories } from "../../../common/api/categoryApi";
 
-import { FileDropzone } from "./file";
 import CategorySelector from "./CategorySelector";
-import { Button } from "../../../common/ui/button";
 import { CheckCircle2 } from "lucide-react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { Label } from "../../../common/ui/label";
-import { Textarea } from "../../../common/ui/textarea";
-import { Input } from "../../../common/ui/input";
+import { fetchCategories } from "../../../common/api/categoryApi";
+import { Axios } from "../../../common/lib/axiosInstance";
 import { Loading } from "../../../user-portal/site";
+import { Label } from "../../../common/ui/label";
+import { Input } from "../../../common/ui/input";
+import { Textarea } from "../../../common/ui/textarea";
+import { FileDropzone } from "./file";
+import { Button } from "../../../common/ui/button";
 
 const schema = z.object({
   title: z
@@ -55,9 +55,7 @@ const schema = z.object({
           (typeof value === "string" && validSizes.includes(value))
         );
       },
-      {
-        message: "Size must be one of the following: xs, s, sm, m, lg, xl",
-      },
+      { message: "Size must be one of the following: xs, s, sm, m, lg, xl" },
     ),
   returnpolicy: z
     .string()
@@ -80,7 +78,6 @@ const steps = [
     title: "Basic Info",
     fields: ["title", "brand", "price", "discountprice", "stock"],
   },
-
   {
     id: "details",
     title: "Details",
@@ -111,7 +108,6 @@ export default function AddNewProductDialog() {
     setValue,
     trigger,
     reset,
-    watch,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
@@ -126,11 +122,8 @@ export default function AddNewProductDialog() {
       brand: "",
       categories: "",
       image: [] as File[],
-      availability: true,
     },
   });
-
-  console.log(errors);
 
   const handleCategorySelect = (categoryId: number) => {
     setSelectedCategories((prevSelected) => {
@@ -142,8 +135,8 @@ export default function AddNewProductDialog() {
     });
   };
 
-  const handleImageDrop = (acceptedFiles: File[]) => {
-    setProductImages((prev: File[]) => [...prev, ...acceptedFiles]);
+  const handleImageDrop = (acceptedFiles: any) => {
+    setProductImages((prev) => [...prev, ...acceptedFiles]);
     setValue("image", acceptedFiles);
   };
 
@@ -157,23 +150,24 @@ export default function AddNewProductDialog() {
 
   const onSubmit = async (data: any) => {
     const formData = new FormData();
-
+  
     Object.entries(data).forEach(([key, value]) => {
       if (key === "image") {
         productImages.forEach((image) => formData.append("image", image));
       } else if (value !== undefined && value !== null) {
+        // Ensure to convert numeric fields to strings explicitly if needed
         formData.append(key, String(value));
       }
     });
-
-    console.log("Form Data:", Object.fromEntries(formData)); // Log form data
-
+  
+    console.log("Form Data:", Object.fromEntries(formData));
+  
     try {
       const response = await Axios.post("/product/create", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      console.log(response);
-
+  
+      console.log("API Response:", response);
       if (response.status === 201) {
         console.log("Product created successfully:", response.data);
         setCurrentStep(0);
@@ -182,10 +176,17 @@ export default function AddNewProductDialog() {
         toast.success("Product created successfully");
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
-      setError("Failed to create product. Please try again.");
+      console.error("Error submitting form:", error.response || error);
+      setError(
+        error.response?.data?.message ||
+        "Failed to create product. Please try again."
+      );
+      toast.error(
+        "Failed to create product. Please check the console for more details."
+      );
     }
   };
+  
 
   const nextStep = async () => {
     const currentFields = steps[currentStep].fields;
@@ -217,7 +218,8 @@ export default function AddNewProductDialog() {
   };
 
   if (isLoading) return <Loading />;
-  if (categoriesError) return <div>Please reload the page</div>;
+  if (categoriesError)
+    return <div>Error loading categories. Please reload the page.</div>;
 
   return (
     <div className="mx-auto w-full max-w-4xl overflow-hidden rounded-lg bg-white shadow-lg">
@@ -299,7 +301,6 @@ export default function AddNewProductDialog() {
                   className="w-full rounded border p-2"
                   placeholder="Enter discount price (optional)"
                 />
-
                 {errors.discountprice && (
                   <p className="mt-1 text-sm text-primary">
                     {errors.discountprice.message}
@@ -406,7 +407,7 @@ export default function AddNewProductDialog() {
         <Button
           onClick={prevStep}
           disabled={currentStep === 0}
-          variant={"outline"}
+          variant="outline"
         >
           Previous
         </Button>
