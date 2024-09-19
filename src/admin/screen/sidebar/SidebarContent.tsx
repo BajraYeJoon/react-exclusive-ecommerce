@@ -80,7 +80,9 @@ const SidebarContent = () => {
                 }
               >
                 <Icon className="h-6 w-6" />
-                <span className="ms-3 flex-1 whitespace-nowrap text-sm md:text-base">
+                <span
+                  className={`ms-3 flex-1 whitespace-nowrap text-sm md:text-base ${item.label.replace(/\s+/g, "-")}`}
+                >
                   {item.label}
                 </span>
                 {item.badge && (
