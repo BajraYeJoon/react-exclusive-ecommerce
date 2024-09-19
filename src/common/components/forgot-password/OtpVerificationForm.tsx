@@ -66,7 +66,7 @@ const OtpVerificationForm = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col space-y-16">
               <div className="mx-auto flex w-full max-w-xs flex-row items-center justify-between">
-                {["code1", "code2", "code3", "code4"].map((code, index) => (
+                {["code1", "code2", "code3", "code4"].map((code) => (
                   <div className="h-16 w-16" key={code}>
                     <Input
                       type="text"
