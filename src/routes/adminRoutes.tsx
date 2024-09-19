@@ -7,6 +7,7 @@ import {
   StaticContent,
 } from "../admin/components";
 import DiscountCRUD from "../admin/components/discountCRUD/DiscountCRUD";
+import RatingDisplayAdmin from "../admin/components/ratings/RatingDisplayAdmin";
 import { Routes } from "../admin/lib/links";
 import { Dashboard } from "../admin/screen";
 
@@ -51,5 +52,9 @@ export const adminRoutes = [
     path: Routes.Discount,
     // element: <DiscountCreator />,
     element: <DiscountCRUD />,
+  },
+  {
+    path: Routes.Ratings,
+    element: <RatingDisplayAdmin />,
   },
 ];

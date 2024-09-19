@@ -188,7 +188,11 @@ export default function UpdateProductForm({ initialData, setDialogOpen }: any) {
       Axios.patch(`/product/addimage/${initialData.id}`, formData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
+      toast.success("Image has been uploaded successfully");
     },
+    onError: () => {
+      toast.error("Failed to upload image. Please check format and try again");
+    }
   });
 
   const deleteImageMutation = useMutation({
@@ -226,6 +230,7 @@ export default function UpdateProductForm({ initialData, setDialogOpen }: any) {
     try {
       await deleteImageMutation.mutateAsync(index);
       queryClient.invalidateQueries({ queryKey: ["products", initialData.id] });
+      toast.success("Image has been deleted");
       setImages((prevImages) => prevImages.filter((_, i) => i !== index));
       setImageChanged(true);
     } catch (error) {

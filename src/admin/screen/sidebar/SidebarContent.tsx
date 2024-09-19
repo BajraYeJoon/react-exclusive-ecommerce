@@ -7,6 +7,7 @@ import { Routes } from "../../lib/links";
 import { GrDocumentImage } from "react-icons/gr";
 import { MdEditNote } from "react-icons/md";
 import { CiDiscount1 } from "react-icons/ci";
+import { FcRatings } from "react-icons/fc";
 
 const sidebarItems = [
   {
@@ -54,6 +55,11 @@ const sidebarItems = [
     href: Routes.Discount,
     icon: CiDiscount1,
     label: "Discount",
+  },
+  {
+    href: Routes.Ratings,
+    icon: FcRatings,
+    label: "Ratings",
   },
 ];
 

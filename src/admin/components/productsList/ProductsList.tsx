@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   useReactTable,
@@ -8,6 +8,7 @@ import {
   getSortedRowModel,
   getFilteredRowModel,
   flexRender,
+  FilterFn,
 } from "@tanstack/react-table";
 import {
   Table,
@@ -38,6 +39,7 @@ import uuidv4 from "../../../common/lib/utils/uuid";
 import AddNewProductDialog from "./AddNewProductDialog";
 import UpdateProductForm from "./UpdateP";
 import { Loading } from "../../../user-portal/site";
+// import { useSearchParams } from "react-router-dom";
 
 export default function ProductsList() {
   const [flashItem, setFlashItem] = useRecoilState<number[]>(flashSaleState);
@@ -51,6 +53,9 @@ export default function ProductsList() {
   });
   const [dialogOpen, setDialogOpen] = useState();
 
+  // const [searchParams] = useSearchParams();
+  // const categoryName = searchParams.get("category") || "";
+
   const queryClient = useQueryClient();
 
   const deleteProduct = async (productId: number) => {
@@ -61,6 +66,8 @@ export default function ProductsList() {
       console.error(error);
     }
   };
+  
+
 
   const deleteMutation = useMutation({
     mutationFn: (productId: number) => deleteProduct(productId),
@@ -77,6 +84,13 @@ export default function ProductsList() {
         return [...prev, productId];
       }
     });
+  };
+
+  const categoryFilter: FilterFn<any> = (row, columnId, filterValue) => {
+    const categoryNames = (row.getValue(columnId) as { name: string }[]).map((category: any) => category.name);
+    return categoryNames.some((name: string) =>
+      name.toLowerCase().includes(filterValue.toLowerCase())
+    );
   };
 
   const columns = useMemo<ColumnDef<any>[]>(
@@ -132,6 +146,7 @@ export default function ProductsList() {
               .join(", ")}
           </div>
         ),
+        filterFn: categoryFilter
       },
       {
         id: "actions",
@@ -186,6 +201,7 @@ export default function ProductsList() {
     pageCount: Math.ceil((products?.length || 0) / pagination.pageSize),
     state: {
       pagination,
+      // columnFilters: [{id: "categories", value: categoryName}]
     },
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -329,7 +345,6 @@ export default function ProductsList() {
     </div>
   );
 }
-
 export function Filter({ column, table }: { column: any; table: any }) {
   const firstValue = table
     .getPreFilteredRowModel()

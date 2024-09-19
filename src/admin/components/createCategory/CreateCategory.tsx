@@ -34,6 +34,8 @@ import { Button } from "../../../common/ui/button";
 import { Label } from "../../../common/ui/label";
 import { Skeleton } from "../../../common/ui/skeleton";
 import uuidv4 from "../../../common/lib/utils/uuid";
+import ConfirmationDialog from "../confirmation/ConfirmationDialog";
+import { Link } from "react-router-dom";
 
 interface FormValues {
   categoryName: string;
@@ -137,33 +139,33 @@ const AddCategoryForm = () => {
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="categoryName">Category Name</Label>
-                  <Input
-                    type="text"
-                    id="categoryName"
-                    placeholder="Enter category name"
-                    {...register("categoryName", {
-                      required: "Category name is required",
-                      maxLength: {
-                        value: 50,
-                        message: "Category name must be 50 characters or less",
-                      },
-                    })}
-                    className="transition-all duration-200 ease-in-out focus:ring-2 focus:ring-blue-500"
-                  />
-                  {errors.categoryName && (
-                    <p className="text-sm text-red-500">
-                      {errors.categoryName.message}
-                    </p>
-                  )}
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    {categoryName.length}/50 characters
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="categoryName">Category Name</Label>
+                <Input
+                  type="text"
+                  id="categoryName"
+                  placeholder="Enter category name"
+                  {...register("categoryName", {
+                    required: "Category name is required",
+                    maxLength: {
+                      value: 50,
+                      message: "Category name must be 50 characters or less",
+                    },
+                  })}
+                  className="transition-all duration-200 ease-in-out focus:ring-2 focus:ring-blue-500"
+                />
+                {errors.categoryName && (
+                  <p className="text-sm text-red-500">
+                    {errors.categoryName.message}
                   </p>
-                </div>
+                )}
+                <p className="mt-2 text-sm text-muted-foreground">
+                  {categoryName.length}/50 characters
+                </p>
               </div>
-              <DialogFooter className="flex justify-between">
+            </div>
+            <DialogFooter className="flex justify-between">
               <Button
                 type="button"
                 variant="outline"
@@ -179,7 +181,6 @@ const AddCategoryForm = () => {
                 Add Category
               </Button>
             </DialogFooter>
-        
           </form>
         </DialogContent>
       </Dialog>
@@ -201,7 +202,9 @@ const AddCategoryForm = () => {
                   variant={"outline"}
                   className="group relative"
                 >
-                  {category.name}
+                  <Link to={`/admin/products?category=${category.name}`}>
+                    {category.name}
+                  </Link>
                   <div className="absolute right-0 top-0 hidden flex-col text-lg group-hover:flex">
                     <Dialog>
                       <DialogTrigger>

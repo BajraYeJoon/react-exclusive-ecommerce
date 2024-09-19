@@ -10,4 +10,5 @@ export enum Routes {
   CMS = "change-content",
   Profile = "profile",
   Discount = "discount",
+  Ratings = "ratings",
 }
