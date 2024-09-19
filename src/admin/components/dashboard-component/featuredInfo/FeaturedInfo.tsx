@@ -15,6 +15,7 @@ import { fetchAllUsers } from "../../../api/fetchUser";
 import { fetchAllProducts } from "../../../../common/api/productApi";
 import { v4 as uuidv4 } from "uuid";
 import { Skeleton } from "../../../../common/ui/skeleton";
+import { cn } from "../../../../common/lib/utils";
 
 const FeaturedInfo = () => {
   const results = useQueries({
@@ -56,7 +57,7 @@ const FeaturedInfo = () => {
   ];
 
   return (
-    <div className="grid gap-6 sm:grid-cols-3 lg:grid-cols-3">
+    <div className="featured grid gap-6 sm:grid-cols-3 lg:grid-cols-3">
       {loader ? (
         <>
           {Array.from({ length: 3 }).map(() => (
@@ -75,7 +76,12 @@ const FeaturedInfo = () => {
               >
                 <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg">
                   <CardHeader className="space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">
+                    <CardTitle
+                      className={cn(
+                        "text-sm font-medium text-muted-foreground",
+                        { label },
+                      )}
+                    >
                       {label}
                     </CardTitle>
                   </CardHeader>

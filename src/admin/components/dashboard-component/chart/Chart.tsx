@@ -19,7 +19,7 @@ export default function EcommerceAdminDashboard() {
   const [activeTab, setActiveTab] = useState("sales");
 
   return (
-    <Card className="mx-auto w-full">
+    <Card className="charts mx-auto w-full">
       <CardHeader>
         <CardTitle>Charts</CardTitle>
       </CardHeader>
