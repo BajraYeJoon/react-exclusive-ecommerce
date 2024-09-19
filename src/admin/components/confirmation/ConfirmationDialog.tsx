@@ -18,7 +18,7 @@ interface ConfirmationDialogProps {
   confirmText?: string;
   cancelText?: string;
   isOpen?: boolean;
-  // onOpenChange?: (isOpen: boolean) => void;
+  onOpenChange?: (isOpen: boolean) => void;
 }
 
 const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
@@ -29,9 +29,10 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   confirmText = "Yes",
   cancelText = "No",
   isOpen,
+  onOpenChange,
 }) => {
   return (
-    <Dialog open={isOpen}>
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         <Button>{triggerText}</Button>
       </DialogTrigger>

@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   ColumnDef,
   flexRender,
@@ -27,6 +27,9 @@ import {
 } from "../../../../common/ui/dialog";
 import { EyeIcon } from "lucide-react";
 import UserDialogContent from "../userDetail/UserDialogContent";
+import { Axios } from "../../../../common/lib/axiosInstance";
+import { toast } from "sonner";
+import ConfirmationDialog from "../../confirmation/ConfirmationDialog";
 
 export default function UserList() {
   const { data: usersData, isLoading } = useQuery({
@@ -34,7 +37,25 @@ export default function UserList() {
     queryFn: fetchAllUsers,
   });
 
+  const queryClient = useQueryClient();
+
   const users = usersData?.data;
+
+  const deleteUserMutation = useMutation({
+    mutationFn: (id: number) =>
+      Axios.delete(`/profile/${id}`).then((res) => res.data),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["users"],
+      });
+
+      toast.success("User deleted successfully");
+    },
+    onError: () => {
+      toast.error("Something went wrong deleting the user. Please try again");
+    },
+  });
 
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -42,7 +63,9 @@ export default function UserList() {
   });
 
   const removeUser = async (userId: number) => {
-    console.log("Remove user with id: ", userId);
+    deleteUserMutation.mutate(userId);
+
+    console.log("rererere");
   };
 
   const columns = useMemo<ColumnDef<any>[]>(
@@ -83,11 +106,15 @@ export default function UserList() {
                 <UserDialogContent info={row.original} />
               </DialogContent>
             </Dialog>
-            {row.original.role !== "admin" && (
-              <Button onClick={() => removeUser(row.original.id)} size="sm">
-                Remove
-              </Button>
-            )}
+            {/* <ConfirmationDialog
+              triggerText="Remove"
+              title="Are you sure you want to remove this user?"
+              description="This action cannot be undone."
+              onConfirm={() => removeUser(row.original.id)}
+              confirmText="Yes"
+              cancelText="No"
+            /> */}
+            <Button onClick={() => removeUser(row.original.id)}>Remove</Button>
           </div>
         ),
       },

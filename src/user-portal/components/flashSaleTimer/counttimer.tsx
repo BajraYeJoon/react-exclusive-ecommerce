@@ -16,12 +16,12 @@ const DateTimeDisplay = ({
   type: string;
 }) => {
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-xs font-medium text-foreground md:text-base">
-        {value}
-      </span>
+    <div className="flex flex-col items-center gap-2">
       <span className="text-xs font-bold text-foreground md:text-sm">
         {type}
+      </span>
+      <span className="text-xs font-medium text-foreground md:text-base">
+        {value}
       </span>
     </div>
   );

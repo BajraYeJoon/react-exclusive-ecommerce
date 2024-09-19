@@ -32,7 +32,7 @@ const ServiceDetails = () => {
               <img
                 src={serviceDetail.icon}
                 alt="Services provided by us"
-                className="rounded-full object-cover"
+                className="h-full w-full rounded-full object-cover"
               />
             </div>
             <div className="space-y-1">

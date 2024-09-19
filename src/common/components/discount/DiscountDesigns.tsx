@@ -2,10 +2,10 @@ import { Calendar, Clock, DollarSign, Gift, Percent } from "lucide-react";
 import { Coupon, CouponProps } from "./DiscountCard";
 
 const CouponValue = ({ coupon }: { coupon: Coupon }) => (
-  <span className="text-3xl font-bold">
+  <span className="text-3xl font-medium">
     {coupon.type === "fixed_amount"
-      ? `${coupon.value.toFixed(2)} OFF`
-      : `${coupon.value} OFF`}
+      ? `$${coupon.value.toFixed(2)} OFF`
+      : `${coupon.value}% OFF`}
   </span>
 );
 
@@ -49,11 +49,6 @@ export const CouponDesign1 = ({ coupon, onCopy, isCopied }: CouponProps) => (
       {coupon.name}
     </h2>
     <div className="mb-4 flex items-center">
-      {coupon.type === "fixed_amount" ? (
-        <DollarSign className="mr-1 h-6 w-6 text-green-600" />
-      ) : (
-        <Percent className="mr-1 h-6 w-6 text-green-600" />
-      )}
       <CouponValue coupon={coupon} />
     </div>
     <div className="mb-4 flex items-center justify-between">

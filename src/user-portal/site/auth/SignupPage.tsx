@@ -39,7 +39,13 @@ const SignupPage = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="w-full">
         <div className="flex w-full flex-col gap-4">
           <div>
-            <Input type="text" placeholder="Name" {...register("name")} />
+            <Input
+              type="text"
+              placeholder="Name"
+              {...register("name", {
+                setValueAs: (value: string) => value.trim(),
+              })}
+            />
             {errors.name && (
               <span className="error text-xs text-primary">
                 {errors.name.message}
@@ -63,7 +69,10 @@ const SignupPage = () => {
             <Input
               type="password"
               placeholder="Password"
-              {...register("password")}
+              {...register("password", {
+                setValueAs: (value: string) =>
+                  value.trim().replace(/\s+/g, " "),
+              })}
             />
             {errors.password && (
               <span className="error text-xs text-primary">
