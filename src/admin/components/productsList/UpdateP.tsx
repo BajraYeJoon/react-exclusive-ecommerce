@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import CategorySelector from "./CategorySelector";
 import { CheckCircle2 } from "lucide-react";
 import { Textarea } from "../../../common/ui/textarea";
+import { Loading } from "../../../user-portal/site";
 
 const updateProductSchema = z.object({
   title: z
@@ -51,14 +52,14 @@ const updateProductSchema = z.object({
     .nullable()
     .refine(
       (value) => {
-        const validSizes = ["xs", "s", "sm", "m", "lg", "xl"];
+        const validSizes = ["xs", "s", "sm", "m", "l", "xl"];
         return (
           value === null ||
           (typeof value === "string" && validSizes.includes(value))
         );
       },
       {
-        message: "Size must be one of the following: xs, s, sm, m, lg, xl",
+        message: "Size must be one of the following: xs, s, sm, m, l, xl",
       },
     ),
   returnpolicy: z
@@ -70,7 +71,10 @@ const updateProductSchema = z.object({
     .string()
     .min(20, "Description must be at least 20 characters long")
     .max(2000, "Description must be 2000 characters or less"),
-  categories: z.string().min(1, "At least one category is required").optional(),
+  categories: z
+    .array(z.string())
+    .min(1, "At least one category is required")
+    .transform((categories) => categories.join(",")),
   image: z
     .array(z.string())
     .min(1, "At least one image is required")
@@ -100,7 +104,7 @@ const steps = [
   { id: "images", title: "Images", fields: ["image", "categories"] },
 ];
 
-export default function UpdateProductForm({ initialData }: any) {
+export default function UpdateProductForm({ initialData, setDialogOpen }: any) {
   const queryClient = useQueryClient();
   const [selectedCategories, setSelectedCategories] = useState<number[]>(
     initialData.categories?.map((cat: any) => cat.id) || [],
@@ -117,7 +121,10 @@ export default function UpdateProductForm({ initialData }: any) {
 
   const [error, setError] = useState("");
 
-  const { data: categories = [] } = useQuery<Category[], Error>({
+  const { data: categories = [], isLoading: categoriesLoading } = useQuery<
+    Category[],
+    Error
+  >({
     queryKey: ["categories"],
     queryFn: fetchCategories,
   });
@@ -126,7 +133,7 @@ export default function UpdateProductForm({ initialData }: any) {
     register,
     handleSubmit,
     setValue,
-    // trigger,
+    watch,
     reset,
     formState: { errors },
   } = useForm({
@@ -140,12 +147,12 @@ export default function UpdateProductForm({ initialData }: any) {
       returnpolicy: "",
       description: "",
       brand: "",
-      categories: "",
+      categories: [] as string[],
       image: [] as File[],
     },
   });
 
-  console.log(errors);
+  const watchedValues = watch();
 
   useEffect(() => {
     setImages(initialData.images || []);
@@ -161,7 +168,8 @@ export default function UpdateProductForm({ initialData }: any) {
       sizes: initialData.sizes || "",
       returnpolicy: initialData.returnpolicy || "",
       description: initialData.description || "",
-      categories: initialData.categories?.map((cat: any) => cat.id) || "",
+      categories:
+        initialData.categories?.map((cat: any) => String(cat.id)) || [], // Convert numbers to strings
       image: initialData.image || [],
     });
   }, [initialData, reset]);
@@ -200,6 +208,10 @@ export default function UpdateProductForm({ initialData }: any) {
     setImages(initialData.image || []);
   }, [initialData.image]);
 
+  if (categoriesLoading) {
+    return <Loading />;
+  }
+
   const handleImageDrop = async (acceptedFiles: File[]) => {
     setImages((prevImages) => [...prevImages, ...acceptedFiles]);
     setImageChanged(true);
@@ -226,7 +238,7 @@ export default function UpdateProductForm({ initialData }: any) {
       const updatedCategories = prevSelected.includes(categoryId)
         ? prevSelected.filter((id) => id !== categoryId)
         : [...prevSelected, categoryId];
-      setValue("categories", updatedCategories.join(","));
+      setValue("categories", updatedCategories.map(String)); // Convert numbers to strings
       return updatedCategories;
     });
   };
@@ -235,15 +247,34 @@ export default function UpdateProductForm({ initialData }: any) {
     console.log(data);
     await updateProductMutation.mutate(data);
     setImageChanged(false);
+    setDialogOpen(false);
   };
 
   const prevStep = () => {
-    setCurrentStep((prev) => Math.max(prev - 1, 0));
+    setCurrentStep((prev) => prev - 1);
     setError("");
   };
   const nextStep = async () => {
     setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
     setError("");
+  };
+
+  const isFormChanged = () => {
+    const initialValues = {
+      title: initialData.title || "",
+      brand: initialData.brand || "",
+      price: initialData.price || "",
+      discountprice: initialData.discountPrice || "",
+      stock: initialData.stock || "",
+      sizes: initialData.sizes || "",
+      returnpolicy: initialData.returnpolicy || "",
+      description: initialData.description || "",
+      categories:
+        initialData.categories?.map((cat: any) => String(cat.id)) || [], // Convert numbers to strings
+      image: initialData.image || [],
+    };
+
+    return JSON.stringify(watchedValues) !== JSON.stringify(initialValues);
   };
 
   return (
@@ -431,12 +462,14 @@ export default function UpdateProductForm({ initialData }: any) {
         <Button
           onClick={prevStep}
           disabled={currentStep === 0}
-          variant={"outline"}
+          variant="outline"
         >
           Previous
         </Button>
         {currentStep === steps.length - 1 ? (
-          <Button onClick={handleSubmit(onSubmit)}>Submit</Button>
+          <Button onClick={handleSubmit(onSubmit)} disabled={!isFormChanged()}>
+            Submit
+          </Button>
         ) : (
           <Button onClick={nextStep}>Next</Button>
         )}

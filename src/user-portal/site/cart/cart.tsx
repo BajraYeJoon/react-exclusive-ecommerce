@@ -42,6 +42,7 @@ const Cart = () => {
   const [discount, setDiscount] = useRecoilState(discountState);
   const navigate = useNavigate();
   const [couponCode, setCouponCode] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState();
 
   const { data: cartItems, isLoading } = useQuery({
     queryKey: ["cart"],
@@ -57,8 +58,8 @@ const Cart = () => {
 
   const { mutate: increaseQuantity } = useIncreaseQuantity();
   const { mutate: decreaseQuantity } = useDecreaseQuantity();
-  const { mutate: removeItem } = useRemoveItem();
-  const { mutate: clearCart } = useClearCart();
+  const { mutate: removeItem } = useRemoveItem({ setIsDialogOpen });
+  const { mutate: clearCart } = useClearCart({ setIsDialogOpen });
 
   const handleQuantityChange = (id: number, type: "add" | "sub") => {
     if (type === "add") {
@@ -167,6 +168,7 @@ const Cart = () => {
           onConfirm={() => clearCart()}
           confirmText="Yes, Clear All"
           cancelText="No"
+          isOpen={isDialogOpen}
         />
       </div>
 
@@ -238,6 +240,7 @@ const Cart = () => {
                   onConfirm={() => removeItem(item.product.id)}
                   confirmText="Remove"
                   cancelText="Cancel"
+                  isOpen={isDialogOpen}
                 />
               </TableCell>
             </TableRow>

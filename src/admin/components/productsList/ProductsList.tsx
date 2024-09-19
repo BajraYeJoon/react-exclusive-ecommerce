@@ -49,6 +49,7 @@ export default function ProductsList() {
     pageIndex: 0,
     pageSize: 10,
   });
+  const [dialogOpen, setDialogOpen] = useState();
 
   const queryClient = useQueryClient();
 
@@ -137,12 +138,15 @@ export default function ProductsList() {
         header: "Actions",
         cell: ({ row }) => (
           <div className="flex space-x-2">
-            <Dialog>
+            <Dialog open={dialogOpen} onOpenChange={dialogOpen}>
               <DialogTrigger>
                 <FaEdit className="text-blue-500" />
               </DialogTrigger>
               <DialogContent>
-                <UpdateProductForm initialData={row.original} />
+                <UpdateProductForm
+                  initialData={row.original}
+                  setDialogOpen={setDialogOpen}
+                />
               </DialogContent>
             </Dialog>
             <Dialog>

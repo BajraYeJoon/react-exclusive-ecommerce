@@ -1,4 +1,3 @@
-// ConfirmationDialog.tsx
 import React from "react";
 import {
   Dialog,
@@ -10,6 +9,7 @@ import {
   DialogClose,
 } from "../../../common/ui/dialog";
 import { Button } from "../../../common/ui/button";
+
 interface ConfirmationDialogProps {
   triggerText: React.ReactNode;
   title: string;
@@ -17,6 +17,8 @@ interface ConfirmationDialogProps {
   onConfirm: () => void;
   confirmText?: string;
   cancelText?: string;
+  isOpen?: boolean;
+  // onOpenChange?: (isOpen: boolean) => void;
 }
 
 const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
@@ -26,9 +28,10 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   onConfirm,
   confirmText = "Yes",
   cancelText = "No",
+  isOpen,
 }) => {
   return (
-    <Dialog>
+    <Dialog open={isOpen}>
       <DialogTrigger asChild>
         <Button>{triggerText}</Button>
       </DialogTrigger>

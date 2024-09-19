@@ -47,12 +47,18 @@ export default function DiscountDisplay({ handleEdit, coupons }: Readonly<Discou
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {coupons?.map((coupon: Coupon) => (
-        <Card key={coupon.id} className="overflow-hidden transition-shadow hover:shadow-lg">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 bg-gradient-to-r from-red-400 to-red-600 pb-4">
-            <CardTitle className="text-lg font-bold tracking-wide text-white">
+        <Card
+          key={coupon.id}
+          className="overflow-hidden transition-shadow hover:shadow-lg"
+        >
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 bg-gradient-to-r from-red-400/90 to-red-600 pb-4">
+            <CardTitle className="text-lg font-medium tracking-wide text-white">
               {coupon.name}
             </CardTitle>
-            <Badge variant={coupon.type === "percentage" ? "secondary" : "default"} className="text-sm font-semibold">
+            <Badge
+              variant={coupon.type === "percentage" ? "secondary" : "default"}
+              className="text-sm font-semibold"
+            >
               {coupon.type === "percentage" ? (
                 <Percent className="mr-1 h-3 w-3" />
               ) : (
@@ -62,16 +68,17 @@ export default function DiscountDisplay({ handleEdit, coupons }: Readonly<Discou
             </Badge>
           </CardHeader>
           <CardContent className="space-y-4 p-4">
-            <div className="flex items-center justify-between bg-gray-100 p-2 rounded-md">
+            <div className="flex flex-col space-y-2 text-sm">
               <div className="flex items-center space-x-2">
                 <Code className="h-4 w-4 text-gray-600" />
-                <span className="text-sm font-mono font-semibold">{coupon.code}</span>
+                <span className="text-sm font-medium">{coupon.code}</span>
               </div>
-            </div>
-            <div className="flex flex-col space-y-2 text-sm">
               <div className="flex items-center text-gray-600">
                 <Calendar className="mr-2 h-4 w-4" />
-                <span>{formatDate(coupon.startDate)} - {formatDate(coupon.expirationDate)}</span>
+                <span>
+                  {formatDate(coupon.startDate)} -{" "}
+                  {formatDate(coupon.expirationDate)}
+                </span>
               </div>
               <div className="flex items-center text-gray-600">
                 <Users className="mr-2 h-4 w-4" />
@@ -85,7 +92,6 @@ export default function DiscountDisplay({ handleEdit, coupons }: Readonly<Discou
             <div className="flex items-center justify-end space-x-2 pt-2">
               <Button
                 variant="outline"
-                size="sm"
                 onClick={() => handleEdit(coupon)}
                 className="flex items-center"
               >
@@ -94,10 +100,10 @@ export default function DiscountDisplay({ handleEdit, coupons }: Readonly<Discou
               </Button>
               <ConfirmationDialog
                 triggerText={
-                  <Button variant="destructive" size="sm" className="flex items-center">
+                  <>
                     <Trash2 className="mr-1 h-4 w-4" />
                     Delete
-                  </Button>
+                  </>
                 }
                 title="Delete Coupon"
                 description={`Are you sure you want to delete the coupon "${coupon.name}"?`}

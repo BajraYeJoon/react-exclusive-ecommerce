@@ -20,6 +20,7 @@ import { Card, CardContent, CardFooter } from "../../../../common/ui/card";
 import { Label } from "../../../../common/ui/label";
 import { Input } from "../../../../common/ui/input";
 import { ServiceLoader } from "../../../../common/components/cmsLoader";
+import { toast } from "sonner";
 
 interface Service {
   id: string;
@@ -52,6 +53,7 @@ export default function ServiceManagement() {
     mutationFn: addService,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["services"] });
+      toast.success("Service added successfully");
       setIsAddDialogOpen(false);
       reset();
     },
@@ -71,6 +73,7 @@ export default function ServiceManagement() {
     mutationFn: deleteService,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["services"] });
+      toast.success("Service deleted successfully");
     },
   });
 
@@ -105,7 +108,6 @@ export default function ServiceManagement() {
 
   // if (error)
   //   return <div>Error loading services: {(error as Error).message}</div>;
-
 
   return (
     <section>

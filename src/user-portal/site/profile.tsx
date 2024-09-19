@@ -67,40 +67,50 @@ function ProfilePage() {
         </div>
       </aside>
       <main className="min-h-[500px] flex-1 p-6">
-        <ProfileHeader
-          userdetail={userdetail}
-          setIsSidebarOpen={setIsSidebarOpen}
-          isSidebarOpen={isSidebarOpen}
-        />
-        <div>
-          <h2 className="mb-4 text-2xl font-medium">Profile Information</h2>
-          <p className="mb-4">
-            Here you can view and edit your profile information.
-          </p>
-          <Card className="border-none shadow-none">
-            <CardContent className="mb-2 space-y-2 p-0">
-              <div className="space-y-1">
-                <Label htmlFor="name">Name</Label>
-                <Input id="name" disabled defaultValue={userdetail?.name} />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="phone">Username</Label>
-                <Input id="phone" disabled defaultValue={userdetail?.phone} />
-              </div>
-            </CardContent>
-          </Card>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button>Edit Profile</Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>Edit Your Profile</DialogTitle>
-              </DialogHeader>
-              <GeneralInfo userdetail={userdetail} />
-            </DialogContent>
-          </Dialog>
-        </div>{" "}
+        {activeTab === "profile" && (
+          <>
+            {" "}
+            <ProfileHeader
+              userdetail={userdetail}
+              setIsSidebarOpen={setIsSidebarOpen}
+              isSidebarOpen={isSidebarOpen}
+            />
+            <div>
+              <h2 className="mb-4 text-2xl font-medium">Profile Information</h2>
+              <p className="mb-4">
+                Here you can view and edit your profile information.
+              </p>
+              <Card className="border-none shadow-none">
+                <CardContent className="mb-2 space-y-2 p-0">
+                  <div className="space-y-1">
+                    <Label htmlFor="name">Name</Label>
+                    <Input id="name" disabled defaultValue={userdetail?.name} />
+                  </div>
+                  <div className="space-y-1">
+                    <Label htmlFor="phone">Username</Label>
+                    <Input
+                      id="phone"
+                      disabled
+                      defaultValue={userdetail?.phone}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button>Edit Profile</Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Edit Your Profile</DialogTitle>
+                  </DialogHeader>
+                  <GeneralInfo userdetail={userdetail} />
+                </DialogContent>
+              </Dialog>
+            </div>{" "}
+          </>
+        )}
+
         {activeTab === "address" && <PaymentInfo />}
         {activeTab === "orders" && <Orders />}
         {activeTab === "returns" && <div>My Returns Content</div>}

@@ -95,7 +95,7 @@ export default function AddNewProductDialog() {
 
   const {
     data: categories = [],
-    isLoading,
+    isLoading: categoriesLoading,
     error: categoriesError,
   } = useQuery({
     queryKey: ["categories"],
@@ -150,7 +150,7 @@ export default function AddNewProductDialog() {
 
   const onSubmit = async (data: any) => {
     const formData = new FormData();
-  
+
     Object.entries(data).forEach(([key, value]) => {
       if (key === "image") {
         productImages.forEach((image) => formData.append("image", image));
@@ -159,14 +159,14 @@ export default function AddNewProductDialog() {
         formData.append(key, String(value));
       }
     });
-  
+
     console.log("Form Data:", Object.fromEntries(formData));
-  
+
     try {
       const response = await Axios.post("/product/create", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-  
+
       console.log("API Response:", response);
       if (response.status === 201) {
         console.log("Product created successfully:", response.data);
@@ -187,7 +187,6 @@ export default function AddNewProductDialog() {
       toast.error("Failed to create product. Please try again later.");
     }
   };
-  
 
   const nextStep = async () => {
     const currentFields = steps[currentStep].fields;
@@ -218,7 +217,7 @@ export default function AddNewProductDialog() {
     setError("");
   };
 
-  if (isLoading) return <Loading />;
+  if (categoriesLoading) return <Loading />;
   if (categoriesError)
     return <div>Error loading categories. Please reload the page.</div>;
 
