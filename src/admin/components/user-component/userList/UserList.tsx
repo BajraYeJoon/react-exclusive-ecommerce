@@ -29,7 +29,6 @@ import { EyeIcon } from "lucide-react";
 import UserDialogContent from "../userDetail/UserDialogContent";
 import { Axios } from "../../../../common/lib/axiosInstance";
 import { toast } from "sonner";
-import ConfirmationDialog from "../../confirmation/ConfirmationDialog";
 
 export default function UserList() {
   const { data: usersData, isLoading } = useQuery({

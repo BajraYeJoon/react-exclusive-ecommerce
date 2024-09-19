@@ -5,13 +5,14 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchAllProducts } from "../../../common/api/productApi";
 
 const RatingDisplayAdmin = () => {
-  const { data: productRatingsData, isLoading } = useQuery({
+  const { data: productRatingsData } = useQuery({
     queryKey: ["productRatings"],
     queryFn: fetchAllProducts,
   });
 
   console.log(
-    productRatingsData && productRatingsData.map((product) => product.ratings),
+    productRatingsData &&
+      productRatingsData.map((product: any) => product.ratings),
   );
 
   const productRatings = [

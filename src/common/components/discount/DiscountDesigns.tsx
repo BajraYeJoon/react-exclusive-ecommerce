@@ -1,4 +1,4 @@
-import { Calendar, Clock, DollarSign, Gift, Percent } from "lucide-react";
+import { Calendar, Clock, Gift } from "lucide-react";
 import { Coupon, CouponProps } from "./DiscountCard";
 
 const CouponValue = ({ coupon }: { coupon: Coupon }) => (

@@ -74,9 +74,18 @@ const SignInPage = () => {
             )}
           </Button>
           <GoogleSignInComponent text="Sign in with Google" />
-          <Link to={"/forgot-password"}>
-            <p className="text-red-400 underline">Forgot your password</p>
-          </Link>
+          <div className="flex gap-5">
+            <Link to={"/forgot-password"}>
+              <p className="text-sm text-red-400 underline">
+                Forgot your password
+              </p>
+            </Link>
+            <Link to={"/sign-up"}>
+              <p className="text-sm text-red-400 underline">
+                Don't have an account?
+              </p>
+            </Link>
+          </div>
         </div>
       </form>
     </div>

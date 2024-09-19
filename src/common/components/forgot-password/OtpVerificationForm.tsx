@@ -66,58 +66,30 @@ const OtpVerificationForm = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col space-y-16">
               <div className="mx-auto flex w-full max-w-xs flex-row items-center justify-between">
-                <div className="h-16 w-16">
-                  <Input
-                    type="text"
-                    {...register("code1", {
-                      required: "This field is required",
-                    })}
-                  />
-                  {errors.code1 && (
-                    <p className="text-sm text-red-500">
-                      {errors.code1?.message?.toString()}
-                    </p>
-                  )}
-                </div>
-                <div className="h-16 w-16">
-                  <Input
-                    type="text"
-                    {...register("code2", {
-                      required: "This field is required",
-                    })}
-                  />
-                  {errors.code2 && (
-                    <p className="text-sm text-red-500">
-                      {errors.code2.message?.toString()}
-                    </p>
-                  )}
-                </div>
-                <div className="h-16 w-16">
-                  <Input
-                    type="text"
-                    {...register("code3", {
-                      required: "This field is required",
-                    })}
-                  />
-                  {errors.code3 && (
-                    <p className="text-sm text-red-500">
-                      {errors.code3.message?.toString()}
-                    </p>
-                  )}
-                </div>
-                <div className="h-16 w-16">
-                  <Input
-                    type="text"
-                    {...register("code4", {
-                      required: "This field is required",
-                    })}
-                  />
-                  {errors.code4 && (
-                    <p className="text-sm text-red-500">
-                      {errors.code4.message?.toString()}
-                    </p>
-                  )}
-                </div>
+                {["code1", "code2", "code3", "code4"].map((code, index) => (
+                  <div className="h-16 w-16" key={code}>
+                    <Input
+                      type="text"
+                      maxLength={1}
+                      pattern="\d*"
+                      inputMode="numeric"
+                      onInput={(e) => {
+                        e.currentTarget.value = e.currentTarget.value.replace(
+                          /[^0-9]/g,
+                          "",
+                        );
+                      }}
+                      {...register(code, {
+                        required: "This field is required",
+                      })}
+                    />
+                    {errors[code] && (
+                      <p className="text-sm text-red-500">
+                        {errors[code].message?.toString()}
+                      </p>
+                    )}
+                  </div>
+                ))}
               </div>
 
               <div className="h-16 w-full">
@@ -127,13 +99,14 @@ const OtpVerificationForm = () => {
                     required: "This field is required",
                   })}
                 />
-                {errors.code4 && (
+                {errors.newpassword && (
                   <p className="text-sm text-red-500">
-                    {errors.code4.message?.toString()}
+                    {errors.newpassword.message?.toString()}
                   </p>
                 )}
               </div>
             </div>
+
             <Button type="submit">Reset Password</Button>
           </form>
 

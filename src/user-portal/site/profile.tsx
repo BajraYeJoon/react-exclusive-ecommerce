@@ -43,7 +43,12 @@ function ProfilePage() {
     }
   }, [activeTab, navigate]);
 
-  if (isLoading) return <Loading />;
+  if (isLoading)
+    return (
+      <div className="flex h-72 items-center justify-center md:h-[90vh]">
+        <Loading />
+      </div>
+    );
   if (error) {
     toast.error(error.message);
     return <div>Error loading user details</div>;

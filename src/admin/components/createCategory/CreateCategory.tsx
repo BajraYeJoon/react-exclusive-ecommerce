@@ -34,7 +34,6 @@ import { Button } from "../../../common/ui/button";
 import { Label } from "../../../common/ui/label";
 import { Skeleton } from "../../../common/ui/skeleton";
 import uuidv4 from "../../../common/lib/utils/uuid";
-import ConfirmationDialog from "../confirmation/ConfirmationDialog";
 import { Link } from "react-router-dom";
 
 interface FormValues {

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   useReactTable,
@@ -66,8 +66,6 @@ export default function ProductsList() {
       console.error(error);
     }
   };
-  
-
 
   const deleteMutation = useMutation({
     mutationFn: (productId: number) => deleteProduct(productId),
@@ -87,9 +85,11 @@ export default function ProductsList() {
   };
 
   const categoryFilter: FilterFn<any> = (row, columnId, filterValue) => {
-    const categoryNames = (row.getValue(columnId) as { name: string }[]).map((category: any) => category.name);
+    const categoryNames = (row.getValue(columnId) as { name: string }[]).map(
+      (category: any) => category.name,
+    );
     return categoryNames.some((name: string) =>
-      name.toLowerCase().includes(filterValue.toLowerCase())
+      name.toLowerCase().includes(filterValue.toLowerCase()),
     );
   };
 
@@ -146,7 +146,7 @@ export default function ProductsList() {
               .join(", ")}
           </div>
         ),
-        filterFn: categoryFilter
+        filterFn: categoryFilter,
       },
       {
         id: "actions",
