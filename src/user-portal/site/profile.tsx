@@ -1,132 +1,93 @@
-import React from "react";
-import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { useAuthContext } from "../context/useAuthContext";
+import { fetchUserDetails } from "../api/userApi";
+import { Loading } from "./layout/Layout";
 
-type FormData = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  address: string;
-  currentPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-};
+import { Button } from "../../common/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "../../common/ui/avatar";
+import { GeneralInfo, TabNavigation } from "../components";
+import { FaBars, FaSignOutAlt, FaTimes } from "react-icons/fa";
 
-export default function Component() {
-  const { register, handleSubmit } = useForm<FormData>();
+function ProfilePage() {
+  const [activeTab, setActiveTab] = useState("profile");
+  const { logout } = useAuthContext();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
-    // Handle form submission
-  };
+  const {
+    data: userdetail,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["userDetail"],
+    queryFn: fetchUserDetails,
+  });
+
+  if (isLoading) return <Loading />;
+  if (error) {
+    toast.error(error.message);
+    return <div>Error loading user details</div>;
+  }
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      <aside className="w-64 bg-white p-6 shadow">
-        <h2 className="mb-6 text-lg font-semibold">Manage My Account</h2>
-        <nav>
-          <ul className="space-y-2">
-            <li className="font-medium text-red-500">My Profile</li>
-            <li>Address Book</li>
-            <li>My Payment Options</li>
-          </ul>
-          <h2 className="mb-2 mt-6 font-semibold">My Orders</h2>
-          <ul className="space-y-2">
-            <li>My Returns</li>
-            <li>My Cancellations</li>
-          </ul>
-          <h2 className="mb-2 mt-6 font-semibold">My WishList</h2>
-        </nav>
+    <div className="relative mx-72 my-4 flex h-fit flex-col bg-foreground/5 max-2xl:mx-6 lg:my-10 lg:flex-row">
+      <aside
+        className={`w-full bg-white p-6 lg:w-64 ${isSidebarOpen ? "block" : "hidden"} lg:block`}
+      >
+        <div className="absolute left-0 top-0 z-30 mt-36 h-fit w-full border-b bg-gray-100 md:mt-0 md:block md:w-fit md:bg-background">
+          <h2 className="mb-4 text-lg font-semibold">Manage My Account</h2>
+          <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
+          <Button onClick={logout} className="mt-6 w-full">
+            <FaSignOutAlt className="mr-2" />
+            Logout
+          </Button>
+        </div>
       </aside>
-      <main className="flex-1 p-6">
-        <h1 className="mb-6 text-2xl font-bold">Edit Your Profile</h1>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="firstName" className="mb-1 block">
-                First Name
-              </label>
-              <Input
-                id="firstName"
-                {...register("firstName")}
-                defaultValue="Md"
+      <main className="min-h-[500px] flex-1 p-6">
+        <div className="mb-6 flex items-center justify-between gap-4 sm:items-center">
+          <div className="flex gap-2">
+            <Avatar>
+              <AvatarImage
+                src="https://github.com/shadcn.png"
+                alt="Profile picture"
               />
-            </div>
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
             <div>
-              <label htmlFor="lastName" className="mb-1 block">
-                Last Name
-              </label>
-              <Input
-                id="lastName"
-                {...register("lastName")}
-                defaultValue="Rimel"
-              />
+              <span>Welcome</span>
+              <h1 className="text-2xl font-bold">{userdetail?.name}</h1>
+              <p className="text-gray-600">{userdetail?.email}</p>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="email" className="mb-1 block">
-                Email
-              </label>
-              <Input
-                id="email"
-                {...register("email")}
-                defaultValue="rimel1111@gmail.com"
-              />
-            </div>
-            <div>
-              <label htmlFor="address" className="mb-1 block">
-                Address
-              </label>
-              <Input
-                id="address"
-                {...register("address")}
-                defaultValue="Kingston, 5236, United State"
-              />
-            </div>
-          </div>
-          <h2 className="mb-4 mt-6 text-xl font-semibold">Password Changes</h2>
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="currentPassword" className="mb-1 block">
-                Current Password
-              </label>
-              <Input
-                id="currentPassword"
-                type="password"
-                {...register("currentPassword")}
-              />
-            </div>
-            <div>
-              <label htmlFor="newPassword" className="mb-1 block">
-                New Password
-              </label>
-              <Input
-                id="newPassword"
-                type="password"
-                {...register("newPassword")}
-              />
-            </div>
-            <div>
-              <label htmlFor="confirmPassword" className="mb-1 block">
-                Confirm New Password
-              </label>
-              <Input
-                id="confirmPassword"
-                type="password"
-                {...register("confirmPassword")}
-              />
-            </div>
-          </div>
-          <div className="flex justify-end space-x-4">
-            <Button type="button" variant="outline">
-              Cancel
-            </Button>
-            <Button type="submit">Save Changes</Button>
-          </div>
-        </form>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            className="z-50 lg:hidden"
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            aria-label={isSidebarOpen ? "Close menu" : "Open menu"}
+          >
+            {isSidebarOpen ? (
+              <FaTimes size={24} className="text-primary" />
+            ) : (
+              <FaBars size={24} className="text-primary" />
+            )}
+            <span className="sr-only">
+              {isSidebarOpen ? "Close menu" : "Open menu"}
+            </span>
+          </Button>
+        </div>
+        {activeTab === "profile" && <GeneralInfo userdetail={userdetail} />}
+        {activeTab === "address" && <div>Address Book Content</div>}
+        {activeTab === "payment" && <div>Payment Information Content</div>}
+        {activeTab === "orders" && <div>My Orders Content</div>}
+        {activeTab === "returns" && <div>My Returns Content</div>}
+        {activeTab === "cancellations" && <div>My Cancellations Content</div>}
+        {activeTab === "wishlist" && <div>My WishList Content</div>}
       </main>
     </div>
   );
 }
+
+export { ProfilePage };
