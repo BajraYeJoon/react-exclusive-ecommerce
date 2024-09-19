@@ -24,7 +24,8 @@ import {
   DialogTrigger,
 } from "../../../common/ui/dialog";
 import { toast } from "sonner";
-
+import { marked } from "marked";
+import "./styles.css";
 interface FeatureItemProps {
   icon: React.ReactNode;
   title: string;
@@ -78,6 +79,8 @@ const Singleproduct = () => {
       toast.error("Failed to submit rating. Please try again.");
     }
   };
+
+  const htmlContent = marked(details?.description);
 
   return (
     <section className="py-12 sm:py-16">
@@ -157,7 +160,14 @@ const Singleproduct = () => {
               </p>
             </div>
             <h1 className="text-3xl">${details.price}</h1>
-            <p>{details.description}</p>
+            <div className="mt-6 max-w-fit overflow-ellipsis break-normal">
+              <h3 className="sr-only">Description</h3>
+              <div
+                className="prose prose-sm max-w-none overflow-hidden text-gray-700"
+                dangerouslySetInnerHTML={{ __html: details.description }}
+              />
+            </div>
+
             <hr className="w-full bg-foreground/35" />
             {details.sizes && (
               <>

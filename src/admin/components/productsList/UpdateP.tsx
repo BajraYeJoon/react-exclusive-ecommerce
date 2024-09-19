@@ -14,6 +14,7 @@ import CategorySelector from "./CategorySelector";
 import { CheckCircle2 } from "lucide-react";
 import { Textarea } from "../../../common/ui/textarea";
 import { Loading } from "../../../user-portal/site";
+import ProductDescriptionEditor from "./TextEditor";
 
 const updateProductSchema = z.object({
   title: z
@@ -417,7 +418,7 @@ export default function UpdateProductForm({ initialData, setDialogOpen }: any) {
                   </p>
                 )}
               </div>
-              <div>
+              {/* <div>
                 <Label className="mb-1 block font-medium">Description</Label>
                 <Textarea
                   {...register("description")}
@@ -430,7 +431,12 @@ export default function UpdateProductForm({ initialData, setDialogOpen }: any) {
                     {errors.description.message}
                   </p>
                 )}
-              </div>
+              </div> */}
+              <ProductDescriptionEditor
+                register={register}
+                setValue={setValue}
+                errors={errors}
+              />
             </>
           )}
 
