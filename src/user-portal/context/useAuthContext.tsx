@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const userDetails = response.data;
 
       Cookies.set("user", JSON.stringify(userDetails.user.role), {
-        expires: 7,
+        expires: 1,
       });
     } catch (error) {
       console.error("Failed to fetch user details", error);
