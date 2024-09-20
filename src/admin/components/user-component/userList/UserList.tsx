@@ -29,6 +29,7 @@ import { EyeIcon } from "lucide-react";
 import UserDialogContent from "../userDetail/UserDialogContent";
 import { Axios } from "../../../../common/lib/axiosInstance";
 import { toast } from "sonner";
+import ConfirmationDialog from "../../confirmation/ConfirmationDialog";
 
 export default function UserList() {
   const { data: usersData, isLoading } = useQuery({
@@ -105,15 +106,15 @@ export default function UserList() {
                 <UserDialogContent info={row.original} />
               </DialogContent>
             </Dialog>
-            {/* <ConfirmationDialog
+            <ConfirmationDialog
               triggerText="Remove"
               title="Are you sure you want to remove this user?"
               description="This action cannot be undone."
               onConfirm={() => removeUser(row.original.id)}
               confirmText="Yes"
               cancelText="No"
-            /> */}
-            <Button onClick={() => removeUser(row.original.id)}>Remove</Button>
+            />
+            {/* <Button onClick={() => removeUser(row.original.id)}>Remove</Button> */}
           </div>
         ),
       },
