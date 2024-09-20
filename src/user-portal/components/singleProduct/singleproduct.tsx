@@ -163,7 +163,7 @@ const Singleproduct = () => {
             <div className="mt-6 max-w-fit overflow-ellipsis break-normal">
               <h3 className="sr-only">Description</h3>
               <div
-                className="prose prose-sm max-w-none overflow-hidden text-gray-700"
+                className="prose prose-sm markdown-content max-w-none overflow-hidden text-gray-700"
                 dangerouslySetInnerHTML={{ __html: htmlContent }}
               />
             </div>
