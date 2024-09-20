@@ -1,7 +1,16 @@
 import { useEffect, useRef, useState } from "react";
-import { HeartIcon, LucideShoppingCart, Search } from "lucide-react";
-import { RxHamburgerMenu, RxCross2 } from "react-icons/rx";
+import {
+  HeartIcon,
+  ShoppingCart,
+  Search,
+  Menu,
+  X,
+  Home,
+  User,
+  LogIn,
+} from "lucide-react";
 import { NavLink, Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "../../../common/lib/utils";
 import { navLinks } from "../../constants/data";
 import { useAuthContext } from "../../context/useAuthContext";
@@ -26,10 +35,6 @@ const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [results, setResults] = useState<SearchResultProps[]>([]);
   const resultsRef = useRef<HTMLDivElement>(null);
-
-  
-
-  console.log(isAdmin, "am i admin????");
 
   useEffect(() => {
     const debouncedFetchResults = debounce(async (query: string) => {
@@ -79,9 +84,9 @@ const Navbar = () => {
   const cartquantity = cart?.length || 0;
 
   return (
-    <nav className="navbar border-b">
-      <div className="navbar-container mx-72 flex items-center justify-between pb-4 pt-4 max-2xl:mx-8 md:pt-9">
-        <div className="logo-container flex items-center gap-16">
+    <nav className="navbar overflow-hidden border-b">
+      <div className="navbar-container mx-auto flex items-center justify-between px-4 py-4 md:px-8 lg:px-16 xl:px-24">
+        <div className="logo-container flex items-center">
           <Link to="/" className="flex items-center">
             <span className="self-center text-2xl font-semibold">
               Exclusive
@@ -104,13 +109,11 @@ const Navbar = () => {
                   <NavLink
                     to={link.href}
                     className={({ isActive, isPending }) =>
-                      `nav-link block px-3 py-1 font-normal text-foreground ${
-                        isPending
-                          ? "pending"
-                          : isActive
-                            ? "active-link border-b-2 border-foreground"
-                            : ""
-                      }`
+                      cn(
+                        "nav-link block px-3 py-1 font-normal text-foreground transition-colors duration-200",
+                        isPending && "pending",
+                        isActive && "active-link border-b-2 border-foreground",
+                      )
                     }
                   >
                     {link.label}
@@ -124,9 +127,7 @@ const Navbar = () => {
           <div className="group relative hidden items-center justify-center md:flex">
             <Input
               type="search"
-              className={cn(
-                "w-full rounded-sm p-4 text-sm font-light tracking-wider placeholder:text-[10px] placeholder:text-muted-foreground/50 focus:border-[1px] md:block",
-              )}
+              className="w-full rounded-sm p-4 text-sm font-light tracking-wider placeholder:text-[10px] placeholder:text-muted-foreground/50 focus:border-[1px] md:block"
               placeholder="What are you looking for?"
               onChange={(e) => {
                 setSearchQuery(e.target.value);
@@ -156,25 +157,29 @@ const Navbar = () => {
           </div>
 
           {!isAdmin && (
-            <Link to="/favorites">
-              {favoritesquantity > 0 ? (
-                <HeartIcon size={20} fill="red" />
-              ) : (
-                <HeartIcon size={20} fill="none" />
+            <Link to="/favorites" className="relative">
+              <HeartIcon
+                size={20}
+                fill={favoritesquantity > 0 ? "red" : "none"}
+              />
+              {favoritesquantity > 0 && (
+                <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
+                  {favoritesquantity}
+                </span>
               )}
             </Link>
           )}
 
-          {!isAdmin && isLoggedIn ? (
-            <Link to="/cart" className="flex gap-1">
-              <LucideShoppingCart size={20} />
+          {!isAdmin && isLoggedIn && (
+            <Link to="/cart" className="relative">
+              <ShoppingCart size={20} />
               {cartquantity > 0 && (
-                <span className="cart-quantity rounded-full bg-primary px-2 py-1 text-xs font-light text-background">
+                <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
                   {cartquantity}
                 </span>
               )}
             </Link>
-          ) : null}
+          )}
 
           {isAdmin && isLoggedIn && (
             <Link to={`/${Routes.Admin}/${Routes.Dashboard}`}>
@@ -184,50 +189,62 @@ const Navbar = () => {
 
           {isLoggedIn && !isAdmin && (
             <Link to={`/profile`}>
-              <div className="profile-badge h-6 w-6 cursor-pointer overflow-hidden rounded-full bg-foreground/35"></div>
+              <div className="profile-badge h-8 w-8 cursor-pointer overflow-hidden rounded-full bg-foreground/35"></div>
             </Link>
           )}
-          <div className="mobile-nav-toggle flex items-center lg:hidden">
-            <button
-              onClick={() => setToggleMenu(!toggleMenu)}
-              className="menu-toggle"
-            >
-              {!toggleMenu ? (
-                <RxHamburgerMenu className="close-icon h-6" />
-              ) : (
-                <RxCross2 className="menu-icon h-6" />
-              )}
-            </button>
-          </div>
+          <button
+            onClick={() => setToggleMenu(!toggleMenu)}
+            className="menu-toggle z-50 lg:hidden"
+            aria-label={toggleMenu ? "Close menu" : "Open menu"}
+          >
+            {toggleMenu ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
+          </button>
         </div>
       </div>
 
-      <div
-        className={cn(
-          "mobile-nav fixed z-40 flex w-full origin-top flex-col gap-12 overflow-hidden bg-foreground duration-700 lg:hidden",
-          !toggleMenu ? "h-0" : "h-full",
+      <AnimatePresence>
+        {toggleMenu && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 top-[150px] z-40 flex w-full flex-col overflow-hidden bg-foreground lg:hidden"
+          >
+            <ul className="nav-menu mobile-nav-menu flex flex-col gap-4 space-y-2 px-4 py-4 font-bold tracking-wider">
+              {navLinks.map((link) => {
+                if (isLoggedIn && link.label === "Sign Up") {
+                  return null;
+                }
+                return (
+                  <motion.li
+                    key={`mobile-nav-link-${uuidv4()}`}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="nav-item"
+                  >
+                    <Link
+                      to={link.href}
+                      onClick={handleLinkClick}
+                      className="flex items-center gap-3 rounded-lg p-2 text-background hover:bg-background/10"
+                    >
+                      {link.label === "Home" && <Home size={20} />}
+                      {link.label === "Sign Up" && <User size={20} />}
+                      {link.label === "Login" && <LogIn size={20} />}
+                      <span>{link.label}</span>
+                    </Link>
+                  </motion.li>
+                );
+              })}
+            </ul>
+          </motion.div>
         )}
-      >
-        <div className="mobile-nav-menu flex flex-col gap-8 px-4 py-4 font-bold tracking-wider">
-          <ul className="nav-menu flex flex-col font-medium md:mt-0 md:flex-row md:space-x-4">
-            {navLinks.map((link) => {
-              if (isLoggedIn && link.label === "Sign Up") {
-                return null;
-              }
-              return (
-                <li
-                  key={`mobile-nav-link-${uuidv4()}`}
-                  className="nav-item nav-link my-2 block font-normal text-background"
-                >
-                  <Link to={link.href} onClick={handleLinkClick}>
-                    {link.label}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </div>
+      </AnimatePresence>
     </nav>
   );
 };

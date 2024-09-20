@@ -25,20 +25,12 @@ const ProfileHeader = ({
       </div>
 
       <Button
-        variant="ghost"
-        size="icon"
-        className="z-50 lg:hidden"
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        aria-label={isSidebarOpen ? "Close menu" : "Open menu"}
+        className="z-50 lg:hidden"
+        size="icon"
       >
-        {isSidebarOpen ? (
-          <FaTimes size={24} className="text-primary" />
-        ) : (
-          <FaBars size={24} className="text-primary" />
-        )}
-        <span className="sr-only">
-          {isSidebarOpen ? "Close menu" : "Open menu"}
-        </span>
+        <FaBars className="h-5 w-5" />
+        <span className="sr-only">Toggle menu</span>
       </Button>
     </div>
   );

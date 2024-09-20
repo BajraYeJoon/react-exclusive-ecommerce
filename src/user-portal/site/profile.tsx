@@ -4,10 +4,9 @@ import { toast } from "sonner";
 import { useAuthContext } from "../context/useAuthContext";
 import { fetchUserDetails } from "../api/userApi";
 import { Loading } from "./layout/Layout";
-
 import { Button } from "../../common/ui/button";
 import { GeneralInfo, Orders, PaymentInfo, TabNavigation } from "../components";
-import { FaSignOutAlt } from "react-icons/fa";
+import { FaSignOutAlt, FaBars } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { cn } from "../../common/lib/utils";
 import {
@@ -22,7 +21,7 @@ import { Label } from "../../common/ui/label";
 import { Input } from "../../common/ui/input";
 import ProfileHeader from "../components/profile/profileHeader";
 
-function ProfilePage() {
+export function ProfilePage() {
   const [activeTab, setActiveTab] = useState("profile");
   const { logout } = useAuthContext();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -43,6 +42,10 @@ function ProfilePage() {
     }
   }, [activeTab, navigate]);
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   if (isLoading)
     return (
       <div className="flex h-72 items-center justify-center md:h-[90vh]">
@@ -55,14 +58,14 @@ function ProfilePage() {
   }
 
   return (
-    <div className="relative mx-72 my-4 flex h-fit flex-col bg-foreground/5 max-2xl:mx-6 lg:my-10 lg:flex-row">
+    <div className="relative mx-auto my-4 flex h-fit w-full max-w-7xl flex-col bg-foreground/5 px-4 lg:my-10 lg:flex-row lg:px-6">
       <aside
         className={cn(
-          `w-full bg-background p-6 lg:block lg:w-64`,
-          isSidebarOpen ? "block" : "hidden",
+          "fixed inset-y-0 left-0 z-40 w-64 transform bg-background p-6 transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0",
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full",
         )}
       >
-        <div className="absolute left-0 top-0 z-30 mt-36 h-fit w-full border-b bg-gray-100 md:mt-0 md:block md:w-fit md:bg-background">
+        <div className="mt-16 lg:mt-0">
           <h2 className="mb-4 text-lg font-semibold">Manage My Account</h2>
           <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
           <Button onClick={logout} className="mt-6 w-full">
@@ -71,49 +74,44 @@ function ProfilePage() {
           </Button>
         </div>
       </aside>
-      <main className="min-h-[500px] flex-1 p-6">
+
+      <main className="flex-1 p-6 lg:ml-6">
+        <ProfileHeader
+          userdetail={userdetail}
+          setIsSidebarOpen={setIsSidebarOpen}
+          isSidebarOpen={isSidebarOpen}
+        />
+
         {activeTab === "profile" && (
-          <>
-            {" "}
-            <ProfileHeader
-              userdetail={userdetail}
-              setIsSidebarOpen={setIsSidebarOpen}
-              isSidebarOpen={isSidebarOpen}
-            />
-            <div>
-              <h2 className="mb-4 text-2xl font-medium">Profile Information</h2>
-              <p className="mb-4">
-                Here you can view and edit your profile information.
-              </p>
-              <Card className="border-none shadow-none">
-                <CardContent className="mb-2 space-y-2 p-0">
-                  <div className="space-y-1">
-                    <Label htmlFor="name">Name</Label>
-                    <Input id="name" disabled defaultValue={userdetail?.name} />
-                  </div>
-                  <div className="space-y-1">
-                    <Label htmlFor="phone">Username</Label>
-                    <Input
-                      id="phone"
-                      disabled
-                      defaultValue={userdetail?.phone}
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button>Edit Profile</Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
-                  <DialogHeader>
-                    <DialogTitle>Edit Your Profile</DialogTitle>
-                  </DialogHeader>
-                  <GeneralInfo userdetail={userdetail} />
-                </DialogContent>
-              </Dialog>
-            </div>{" "}
-          </>
+          <div>
+            <h2 className="mb-4 text-2xl font-medium">Profile Information</h2>
+            <p className="mb-4">
+              Here you can view and edit your profile information.
+            </p>
+            <Card className="border-none shadow-none">
+              <CardContent className="mb-2 space-y-2 p-0">
+                <div className="space-y-1">
+                  <Label htmlFor="name">Name</Label>
+                  <Input id="name" disabled defaultValue={userdetail?.name} />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="phone">Username</Label>
+                  <Input id="phone" disabled defaultValue={userdetail?.phone} />
+                </div>
+              </CardContent>
+            </Card>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="mt-4">Edit Profile</Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Edit Your Profile</DialogTitle>
+                </DialogHeader>
+                <GeneralInfo userdetail={userdetail} />
+              </DialogContent>
+            </Dialog>
+          </div>
         )}
 
         {activeTab === "address" && <PaymentInfo />}
@@ -124,5 +122,3 @@ function ProfilePage() {
     </div>
   );
 }
-
-export { ProfilePage };

@@ -7,12 +7,13 @@ import { Link } from "react-router-dom";
 import { useAuthContext } from "../../context/useAuthContext";
 import { Input } from "../../../common/ui/input";
 import { Button } from "../../../common/ui/button";
+import { CgSpinner } from "react-icons/cg";
 
 const SignupPage = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     reset,
   } = useForm<SignUpFormData>({
     mode: "all",
@@ -93,8 +94,12 @@ const SignupPage = () => {
             )}
           </div>
 
-          <Button type="submit" className="w-full">
-            Create Account
+          <Button type="submit" className="w-full" disabled={isSubmitting}>
+            {isSubmitting ? (
+              <CgSpinner className="animate-spin" size={20} />
+            ) : (
+              "Create Account"
+            )}
           </Button>
         </div>
       </form>
