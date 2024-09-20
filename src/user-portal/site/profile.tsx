@@ -20,6 +20,7 @@ import { Card, CardContent } from "../../common/ui/card";
 import { Label } from "../../common/ui/label";
 import { Input } from "../../common/ui/input";
 import ProfileHeader from "../components/profile/profileHeader";
+import { AlertCircle } from "lucide-react";
 
 export function ProfilePage() {
   const [activeTab, setActiveTab] = useState("profile");
@@ -42,9 +43,9 @@ export function ProfilePage() {
     }
   }, [activeTab, navigate]);
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
+  // const toggleSidebar = () => {
+  //   setIsSidebarOpen(!isSidebarOpen);
+  // };
 
   if (isLoading)
     return (
@@ -58,7 +59,7 @@ export function ProfilePage() {
   }
 
   return (
-    <div className="relative mx-auto my-4 flex h-fit w-full max-w-7xl flex-col bg-foreground/5 px-4 lg:my-10 lg:flex-row lg:px-6">
+    <div className="relative mx-auto my-4 flex h-[70vh] w-full max-w-7xl flex-col px-4 lg:my-10 lg:flex-row lg:px-6">
       <aside
         className={cn(
           "fixed inset-y-0 left-0 z-40 w-64 transform bg-background p-6 transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0",
@@ -75,7 +76,7 @@ export function ProfilePage() {
         </div>
       </aside>
 
-      <main className="flex-1 p-6 lg:ml-6">
+      <main className="flex-1 bg-foreground/5 p-6 lg:ml-6">
         <ProfileHeader
           userdetail={userdetail}
           setIsSidebarOpen={setIsSidebarOpen}
@@ -83,7 +84,21 @@ export function ProfilePage() {
         />
 
         {activeTab === "profile" && (
-          <div>
+          <div className="flex flex-col gap-3">
+            <div
+              className="flex items-center gap-3 rounded-lg border border-primary p-4 text-primary"
+              role="alert"
+            >
+              <AlertCircle className="h-5 w-5 flex-shrink-0" />
+              <div>
+                <p className="font-medium">Please verify your email</p>
+                <p className="text-sm">
+                  We've sent a verification link to{" "}
+                  <strong>{userdetail?.email}</strong>. Please check your inbox
+                  and click the link to verify your account.
+                </p>
+              </div>
+            </div>
             <h2 className="mb-4 text-2xl font-medium">Profile Information</h2>
             <p className="mb-4">
               Here you can view and edit your profile information.

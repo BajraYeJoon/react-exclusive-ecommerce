@@ -76,14 +76,12 @@ const SignInPage = () => {
           <GoogleSignInComponent text="Sign in with Google" />
           <div className="flex gap-5">
             <Link to={"/forgot-password"}>
-              <p className="text-sm text-red-400 underline">
+              <p className="text-sm text-primary underline">
                 Forgot your password
               </p>
             </Link>
             <Link to={"/sign-up"}>
-              <p className="text-sm text-red-400 underline">
-                Don't have an account?
-              </p>
+              <p className="text-sm underline">Don't have an account?</p>
             </Link>
           </div>
         </div>

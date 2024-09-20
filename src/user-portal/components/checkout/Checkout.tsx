@@ -10,8 +10,10 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { cartState } from "../../atoms/cartState";
 import Cookies from "js-cookie";
-import axios from "axios";
 import { v4 as uuid } from "uuid";
+import jsPDF from "jspdf";
+// Add this line to import the 'autoTable' function
+import autoTable from "jspdf-autotable";
 
 const Checkout = () => {
   const {
@@ -22,41 +24,48 @@ const Checkout = () => {
   } = useForm();
 
   const checkoutValues = useRecoilValue(checkoutState);
-  const resetCartAfterORderPlace = useSetRecoilState(cartState);
+  const resetCartAfterOrderPlace = useSetRecoilState(cartState);
   const resetCheckoutCartAfterOrderPlace = useSetRecoilState(checkoutState);
   const Navigate = useNavigate();
   const [, setOrderPlaceData] = useRecoilState(orderplaceState);
 
+  const generateInvoice = (orderData: any) => {
+    const doc = new jsPDF();
+    doc.setFontSize(18);
+    doc.text("Invoice", 10, 10);
+
+    // Add order details
+    doc.setFontSize(12);
+    doc.text(`Order ID: ${orderData.id}`, 10, 20);
+    doc.text(`Total: $${orderData.total}`, 10, 30);
+    doc.text(`Shipping: $${orderData.shipping}`, 10, 40);
+    doc.text(`Payment Method: ${orderData.paymentMethod}`, 10, 50);
+
+    // Add products table
+    const products = orderData.products.map((item: any) => [
+      item.title,
+      `$${item.price}`,
+    ]);
+
+    autoTable(doc,{
+      head: [["Product", "Price"]],
+      body: products,
+      startY: 60,
+    });
+
+    // Save PDF
+    doc.save(`invoice_${orderData.id}.pdf`);
+  };
+
   const onSubmit = (data: FieldValues) => {
-    if (data.paymentMethod === "khalti") {
-      const payload = {
-        return_url: "http://localhost:5173/order-placed",
-        website_url: "http://localhost:5173",
-        amount: checkoutValues.total,
-        purchase_order_id: uuid().toString().substring(2, 15),
-        purchase_order_name: "Order",
-        customer_info: {
-          name: data.fullName,
-          email: data.email,
-          phone: data.phoneNumber,
-        },
-      };
-
-      const sendData = async () => {
-        const res = await axios.post("/epayment/initiate/", payload, {
-          headers: {
-            Authorization: "Key c41315ed137f4f29be00330b856b3cf7",
-          },
-        });
-        console.log(res);
-      };
-      sendData();
-    }
-
     const orderData = {
       id: uuid().toString().substring(2, 15),
       billingInfo: data,
-      products: productData.map((item) => item.id),
+      products: productData.map((item) => ({
+        id: item.id,
+        title: item.title,
+        price: item.price,
+      })),
       shipping: 45,
       total: checkoutValues.total,
       paymentMethod: data.paymentMethod,
@@ -66,17 +75,15 @@ const Checkout = () => {
     setOrderPlaceData(orderData);
     reset();
     resetCheckoutCartAfterOrderPlace({ cartItems: [], total: 0 });
-    console.log("orderData", orderData);
     Cookies.remove("checkoutData");
-    resetCartAfterORderPlace([]);
+    resetCartAfterOrderPlace([]);
     Cookies.set("order-placed", "true");
     Navigate("/order-placed");
+
+    // Generate PDF invoice
+    generateInvoice(orderData);
   };
 
-  console.log(
-    checkoutValues.cartItems.map((item: any) => item.product.id),
-    "checkoutasdfasdfsa",
-  );
   const productData = checkoutValues.cartItems.map((item: any) => item.product);
 
   return (
@@ -89,7 +96,6 @@ const Checkout = () => {
           <h2 className="text-sm md:text-lg lg:text-3xl">Billing Details</h2>
 
           <div className="checkout-info-content flex flex-col space-y-4">
-            {" "}
             <div className="flex w-full flex-col gap-12">
               <FormInput
                 type="text"
@@ -126,7 +132,6 @@ const Checkout = () => {
                 register={register}
                 error={errors.city}
               />
-
               <FormInput
                 type="number"
                 placeholder="Phone Number"
@@ -148,6 +153,7 @@ const Checkout = () => {
             </div>
           </div>
         </div>
+
         <div className="flex flex-col gap-4 md:gap-7 lg:gap-8">
           {productData.map((cartData, index) => (
             <Fragment key={index}>
@@ -162,7 +168,6 @@ const Checkout = () => {
                     {cartData.title}
                   </h4>
                 </div>
-
                 <p className="text-sm md:text-lg lg:text-xl">
                   ${cartData.price}
                 </p>
