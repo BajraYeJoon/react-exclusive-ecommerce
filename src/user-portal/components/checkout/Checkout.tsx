@@ -1,11 +1,10 @@
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState, useRecoilState } from "recoil";
 import { checkoutState } from "../../atoms/checkoutState";
 import { Button } from "../../../common/ui/button";
 import { Fragment } from "react/jsx-runtime";
 import { FieldValues, useForm } from "react-hook-form";
 import FormInput from "../formInput/FormInput";
 import { orderplaceState } from "../../atoms/orderplaceState";
-import { useRecoilState } from "recoil";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { cartState } from "../../atoms/cartState";
@@ -14,6 +13,8 @@ import { v4 as uuid } from "uuid";
 import jsPDF from "jspdf";
 // Add this line to import the 'autoTable' function
 import autoTable from "jspdf-autotable";
+import { couponState } from "../../site";
+import { Axios } from "../../../common/lib/axiosInstance";
 
 const Checkout = () => {
   const {
@@ -28,6 +29,7 @@ const Checkout = () => {
   const resetCheckoutCartAfterOrderPlace = useSetRecoilState(checkoutState);
   const Navigate = useNavigate();
   const [, setOrderPlaceData] = useRecoilState(orderplaceState);
+  const couponCode = useRecoilValue(couponState);
 
   const generateInvoice = (orderData: any) => {
     const doc = new jsPDF();
@@ -47,7 +49,7 @@ const Checkout = () => {
       `$${item.price}`,
     ]);
 
-    autoTable(doc,{
+    autoTable(doc, {
       head: [["Product", "Price"]],
       body: products,
       startY: 60,
@@ -57,7 +59,7 @@ const Checkout = () => {
     doc.save(`invoice_${orderData.id}.pdf`);
   };
 
-  const onSubmit = (data: FieldValues) => {
+  const onSubmit = async (data: FieldValues) => {
     const orderData = {
       id: uuid().toString().substring(2, 15),
       billingInfo: data,
@@ -66,10 +68,15 @@ const Checkout = () => {
         title: item.title,
         price: item.price,
       })),
+      coupon: couponCode,
       shipping: 45,
       total: checkoutValues.total,
       paymentMethod: data.paymentMethod,
     };
+
+    if (couponCode) {
+      await Axios.post("/coupon/apply", { couponCode: couponCode });
+    }
 
     toast.success("Order placed successfully");
     setOrderPlaceData(orderData);

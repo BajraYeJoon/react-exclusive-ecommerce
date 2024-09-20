@@ -37,11 +37,16 @@ const discountState = atom<{
   default: { type: "fixed_amount", value: 0 },
 });
 
+export const couponState = atom<string>({
+  key: "couponState",
+  default: "",
+});
+
 const Cart = () => {
   const [, setCheckoutData] = useRecoilState(checkoutState);
   const [discount, setDiscount] = useRecoilState(discountState);
   const navigate = useNavigate();
-  const [couponCode, setCouponCode] = useState("");
+  const [couponCode, setCouponCode] = useRecoilState(couponState);
   const [isDialogOpen, setIsDialogOpen] = useState();
 
   const { data: cartItems, isLoading } = useQuery({
@@ -80,7 +85,7 @@ const Cart = () => {
 
     setCheckoutData(checkoutData);
     Cookies.set("checkoutData", checkoutData.id);
-
+    console.log(checkoutData);
     navigate("/checkout");
   };
 
