@@ -65,18 +65,25 @@
   }
 }
 
+@font-face {
+  font-family: 'Ember';
+  src: url('/public/fonts/Helvetica.woff') format('woff');
+  font-weight: normal; 
+  font-style: normal;  
+}
+
 @layer base {
   * {
-    @apply border-border;
+    @apply font-ember tracking-wide  border-border;
  
   }
   body {
     @apply bg-background text-foreground;
     
   }
-  html {
+  /* html {
     font-family: 'Poppins', sans-serif;
-  }
+  } */
 
  
 }

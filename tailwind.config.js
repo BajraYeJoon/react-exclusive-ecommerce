@@ -1,11 +1,11 @@
 /** @type {import('tailwindcss').Config} */
-export default  {
+export default {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
   ],
   prefix: "",
   theme: {
@@ -17,6 +17,9 @@ export default  {
       },
     },
     extend: {
+      fontFamily: {
+        ember: ["Ember", "Poppins", "sans-serif", "sans"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -73,5 +76,5 @@ export default  {
       },
     },
   },
-  plugins: [("tailwindcss-animate")],
-}
+  plugins: ["tailwindcss-animate"],
+};

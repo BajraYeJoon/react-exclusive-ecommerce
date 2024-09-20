@@ -192,6 +192,20 @@ const Singleproduct = () => {
               </>
             )}
 
+            <ul className="mt-8 space-y-2 border p-4">
+              <FeatureItem
+                icon={<CgGlobeAlt size={50} />}
+                title="Free shipping worldwide"
+                description="Enter your postal code for product availability"
+              />
+              <hr className="w-full bg-foreground" />
+              <FeatureItem
+                icon={<FcCancel size={50} />}
+                title="Cancel Anytime"
+                description={details.returnpolicy}
+              />
+            </ul>
+
             {ratings?.totalRating === 0 ? (
               <div className="flex items-center justify-center rounded-lg border border-gray-300 bg-gray-50 p-4">
                 <MdAddCircleOutline size={24} className="mr-2 text-gray-500" />
@@ -252,20 +266,6 @@ const Singleproduct = () => {
                 <Reviews values={ratings} key={`${uuidv4()}`} />;{/* })} */}
               </>
             )}
-
-            <ul className="mt-8 space-y-2 border p-4">
-              <FeatureItem
-                icon={<CgGlobeAlt size={50} />}
-                title="Free shipping worldwide"
-                description="Enter your postal code for product availability"
-              />
-              <hr className="w-full bg-foreground" />
-              <FeatureItem
-                icon={<FcCancel size={50} />}
-                title="Cancel Anytime"
-                description={details.returnpolicy}
-              />
-            </ul>
           </div>
         </div>
       </div>

@@ -21,6 +21,7 @@ import { Label } from "../../common/ui/label";
 import { Input } from "../../common/ui/input";
 import ProfileHeader from "../components/profile/profileHeader";
 import { AlertCircle } from "lucide-react";
+import { Badge } from "../../common/ui/badge";
 
 export function ProfilePage() {
   const [activeTab, setActiveTab] = useState("profile");
@@ -44,7 +45,6 @@ export function ProfilePage() {
       navigate("/favorites");
     }
   }, [activeTab, navigate]);
-
 
   if (isLoading)
     return (
@@ -84,20 +84,7 @@ export function ProfilePage() {
 
         {activeTab === "profile" && (
           <div className="flex flex-col gap-3">
-            <div
-              className="flex items-center gap-3 rounded-lg border border-primary p-4 text-primary"
-              role="alert"
-            >
-              <AlertCircle className="h-5 w-5 flex-shrink-0" />
-              <div>
-                <p className="font-medium">Please verify your email</p>
-                <p className="text-sm">
-                  We've sent a verification link to{" "}
-                  <strong>{userdetail?.email}</strong>. Please check your inbox
-                  and click the link to verify your account.
-                </p>
-              </div>
-            </div>
+            <VerifiedUser isEmailVerified={userdetail?.isEmailVerified} />
             <h2 className="mb-4 text-2xl font-medium">Profile Information</h2>
             <p className="mb-4">
               Here you can view and edit your profile information.
@@ -134,5 +121,33 @@ export function ProfilePage() {
         {activeTab === "cancellations" && <div>My Cancellations Content</div>}
       </main>
     </div>
+  );
+}
+
+function VerifiedUser({
+  isEmailVerified,
+}: Readonly<{ isEmailVerified: boolean }>) {
+  return (
+    <>
+      {isEmailVerified ? (
+        <Badge className="w-fit" variant={"default"}>
+          Verified
+        </Badge>
+      ) : (
+        <div
+          className="flex items-center gap-3 rounded-lg border border-primary p-4 text-primary"
+          role="alert"
+        >
+          <AlertCircle className="h-5 w-5 flex-shrink-0" />
+          <div>
+            <p className="font-medium">Please verify your email</p>
+            <p className="text-sm">
+              We've sent a verification link to your registered mail. Please
+              check your inbox and click the link to verify your account.
+            </p>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

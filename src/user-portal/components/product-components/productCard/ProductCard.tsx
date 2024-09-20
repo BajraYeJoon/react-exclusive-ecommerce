@@ -91,7 +91,7 @@ const ProductCard = ({
   };
 
   return (
-    <section className="mt-10 w-full max-w-72 md:mt-16">
+    <section className="mt-4 w-full">
       <div className="group relative h-32 w-full overflow-hidden rounded-b-md bg-card md:h-56">
         <Link to={`/${title?.toLowerCase().split(" ").join("-")}/${id}`}>
           <img
@@ -155,9 +155,9 @@ const ProductCard = ({
         )}
       </div>
 
-      <div className="my-4 space-y-3 pb-5">
-        <h5 className="text-xs font-semibold tracking-tight text-foreground/80">
-          {title}
+      <div className="my-4 space-y-3">
+        <h5 className="text-wrap text-xs font-semibold tracking-tight text-foreground/80">
+          {title.slice(0, 20)}
         </h5>
 
         <div className="flex items-center justify-start gap-3 text-sm font-medium">

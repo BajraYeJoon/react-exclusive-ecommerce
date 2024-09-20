@@ -10,7 +10,7 @@ const NavigationArrows = ({ direction }: NavigationArrowsProps) => {
   return (
     <div
       className={cn(
-        "group flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-card hover:bg-primary md:h-10 md:w-10",
+        "group flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-card hover:bg-primary md:h-10 md:w-10",
       )}
     >
       {direction === "prev" ? (

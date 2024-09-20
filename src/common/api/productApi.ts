@@ -10,7 +10,7 @@ export const fetchSalesProduct = async () => {
 
 export const fetchAllProducts = async () => {
   return handleRequest(
-    () => Axios.get(`/product/all`).then((res) => res.data.data),
+    () => Axios.get(`/product/all`).then((res) => res.data),
     "Error fetching all products",
   );
 };

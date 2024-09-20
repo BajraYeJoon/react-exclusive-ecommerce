@@ -28,6 +28,7 @@ import {
 } from "../../../common/ui/table";
 import { Button } from "../../../common/ui/button";
 import { Input } from "../../../common/ui/input";
+import { Loading } from "../layout/Layout";
 
 const discountState = atom<{
   type: "fixed_amount" | "percentage";
@@ -117,12 +118,22 @@ const Cart = () => {
     key: "CalculateTotal",
     get: ({ get }) => {
       const discountInfo = get(discountState);
+
       const subTotal = Array.isArray(cartItems)
-        ? cartItems.reduce(
-            (acc, item) => acc + item.product.price * item.quantity,
-            0,
-          )
+        ? cartItems.reduce((acc, item) => {
+            // Log each item to verify its structure
+            console.log(item);
+            if (item.product && item.product.price && item.quantity) {
+              return acc + item.product.price * item.quantity;
+            } else {
+              // Log a warning if the item structure is not as expected
+              console.warn("Item structure is not as expected:", item);
+              return acc;
+            }
+          }, 0)
         : 0;
+
+      console.log("Subtotal:", subTotal);
       const charge = 45;
       let discountAmount = 0;
 
@@ -156,7 +167,11 @@ const Cart = () => {
   }
 
   if (isLoading || loadingCoupons) {
-    return <ProductCardSkeleton />;
+    return (
+      <div className="flex h-[30vh] items-center justify-center lg:h-[60vh]">
+        <Loading />
+      </div>
+    );
   }
 
   return (
@@ -173,7 +188,6 @@ const Cart = () => {
           onConfirm={() => clearCart()}
           confirmText="Yes, Clear All"
           cancelText="No"
-          isOpen={isDialogOpen}
         />
       </div>
 

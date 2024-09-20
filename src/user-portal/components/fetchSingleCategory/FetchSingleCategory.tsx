@@ -69,7 +69,7 @@ const FetchSingleCategory = () => {
           uniqueCategories={uniqueCategories}
         />
       )} */}
-      <div className="product-card-container grid w-full grid-cols-2 items-center justify-between gap-4 overflow-hidden md:grid-cols-3 lg:grid-cols-4">
+      <div className="product-card-container grid h-fit w-full grid-cols-2 items-center justify-between gap-4 overflow-hidden md:grid-cols-3 lg:grid-cols-4">
         {productsByCategory?.map((category: any) => (
           <ProductCard
             key={category?.id}

@@ -111,7 +111,7 @@ const Navbar = () => {
                     to={link.href}
                     className={({ isActive, isPending }) =>
                       cn(
-                        "nav-link block px-3 py-1 font-normal text-foreground transition-colors duration-200",
+                        "nav-link block px-3 py-1 font-medium text-foreground transition-colors duration-200",
                         isPending && "pending",
                         isActive && "active-link border-b-2 border-foreground",
                       )

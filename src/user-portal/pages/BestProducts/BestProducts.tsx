@@ -13,6 +13,7 @@ const BestProducts = () => {
   const { data: bestSellingProducts, isLoading } = useQuery({
     queryKey: ["bestSellingProducts"],
     queryFn: fetchBestSellingProducts,
+    select: (data) => data.slice(0, 5),
   });
 
   return (
@@ -26,7 +27,7 @@ const BestProducts = () => {
       <Swiper
         spaceBetween={20}
         pagination={{ clickable: true }}
-        className="mySwiper w-full"
+        className="mySwiper h-64 w-full"
         modules={[Navigation]}
         navigation={{
           enabled: true,

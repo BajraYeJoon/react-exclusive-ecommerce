@@ -17,10 +17,10 @@ const DateTimeDisplay = ({
 }) => {
   return (
     <div className="flex flex-col items-center gap-2">
-      <span className="text-xs font-bold text-foreground md:text-sm">
+      <span className="text-xs font-medium text-foreground md:text-sm">
         {type}
       </span>
-      <span className="text-xs font-medium text-foreground md:text-base">
+      <span className="text-xs font-bold text-foreground md:text-2xl">
         {value}
       </span>
     </div>
