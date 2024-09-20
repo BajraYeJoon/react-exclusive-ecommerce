@@ -27,7 +27,7 @@ const BestProducts = () => {
       <Swiper
         spaceBetween={20}
         pagination={{ clickable: true }}
-        className="mySwiper h-64 w-full"
+        className="mySwiper w-full"
         modules={[Navigation]}
         navigation={{
           enabled: true,

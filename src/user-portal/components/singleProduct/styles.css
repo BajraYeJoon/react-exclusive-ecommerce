@@ -10,6 +10,8 @@
   
   .markdown-content li {
     margin-bottom: 10px; /* Space between list items */
+    font-size: 14px;
+
   }
   
   .markdown-content h1,

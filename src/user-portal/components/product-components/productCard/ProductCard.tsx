@@ -89,28 +89,17 @@ const ProductCard = ({
     }
     isFavorite(id) ? handleRemoveFavorite() : handleAddFavorite();
   };
+  
 
   return (
-    <section className="mt-4 w-full">
+    <section className="mt-4 w-full max-w-72">
       <div className="group relative h-32 w-full overflow-hidden rounded-b-md bg-card md:h-56">
         <Link to={`/${title?.toLowerCase().split(" ").join("-")}/${id}`}>
           <img
             className="h-full w-full object-contain p-4 transition-opacity duration-300 group-hover:opacity-40 md:p-8 lg:p-12"
-            src={image}
+            src={image && image[0]}
             alt={title}
-            onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) =>
-              ((e.target as HTMLImageElement).src =
-                "https://via.placeholder.com/300")
-            }
           />
-
-          {/* <object
-            data={image[0]}
-            className="h-full w-full object-contain p-4 transition-opacity duration-300 group-hover:opacity-40 md:p-8 lg:p-12"
-            aria-label="This image should exist, but alas it does not"
-          >
-            <MdOutlineImageNotSupported size={100} />
-          </object> */}
         </Link>
 
         {discountTag && (
@@ -156,7 +145,7 @@ const ProductCard = ({
       </div>
 
       <div className="my-4 space-y-3">
-        <h5 className="text-wrap text-xs font-semibold tracking-tight text-foreground/80">
+        <h5 className="text-wrap text-sm font-semibold tracking-wide text-foreground/80">
           {title.slice(0, 20)}
         </h5>
 

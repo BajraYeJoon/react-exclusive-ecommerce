@@ -5,8 +5,9 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchNewArrivals } from "../../../common/api/productApi";
 import uuidv4 from "../../../common/lib/utils/uuid";
 import { Link } from "react-router-dom";
-import { marked } from "marked";
-import DOMPurify from "dompurify";
+// import { marked } from "marked";
+// import DOMPurify from "dompurify";
+import { ArrowRightIcon } from "lucide-react";
 
 type GridItemProps = {
   product: NewArrivalsProductProps;
@@ -86,51 +87,54 @@ const ArrivalProductsGrid = () => {
 };
 
 const GridItem = ({ product, additionalClasses }: GridItemProps) => {
-  const productContent = marked(product?.description);
-  const sanitizedContent = DOMPurify.sanitize(String(productContent)).replace(
-    /(<([^>]+)>)/gi,
-    "",
-  );
+  // const productContent = marked(product?.description);
+  // const sanitizedContent = DOMPurify.sanitize(String(productContent)).replace(
+  //   /(<([^>]+)>)/gi,
+  //   "",
+  // );
 
   return (
     <div
-      key={product.id}
-      className={`relative flex h-full w-full items-end rounded-sm bg-foreground p-4 md:p-6 lg:p-6 ${additionalClasses}`}
+    key={product.id}
+    className={`relative flex h-full w-full items-end rounded-sm bg-foreground p-4 md:p-6 lg:p-6 ${additionalClasses}`}
+  >
+    <div
+      className="absolute inset-0 bg-cover bg-center"
+      style={{
+        backgroundImage: `url('${product.image[0]}')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundBlendMode: "lighten",
+      }}
+    />
+  
+    {/* Gradient Overlay for Better Text Visibility */}
+    <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60" />
+  
+    <Link
+      to={`/${product.title}/${product.id}`}
+      className="relative z-10 space-y-2 text-white md:space-y-4"
     >
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{
-          backgroundImage: `url('${product.image[0]}')`,
-          backgroundSize: "contain",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          backgroundBlendMode: "lighten",
-        }}
-      />
-
-      <div className="absolute inset-0 bg-black opacity-50" />
-
-      <Link
-        to={`/${product.title}/${product.id}`}
-        className="relative z-10 space-y-2 text-white md:space-y-4"
-      >
-        <h3 className="text-sm font-bold md:text-base lg:text-lg">
-          {product.title}
-        </h3>
-        <p
-          className="max-w-4xl overflow-hidden text-[10px] tracking-wide text-gray-400 md:text-[12px] lg:text-sm"
-          dangerouslySetInnerHTML={{ __html: sanitizedContent.slice(0, 50) }}
-        />
-        <ShopNowButton id={product.id} />
-      </Link>
-    </div>
+      <h3 className="text-sm font-bold md:text-lg lg:text-lg">
+        {product.title.slice(0, 30)}...
+      </h3>
+      {/* Uncomment if you want to display additional content */}
+      {/* <p
+        className="max-w-4xl overflow-hidden text-[10px] tracking-wide text-gray-400 md:text-[12px] lg:text-sm"
+        dangerouslySetInnerHTML={{ __html: sanitizedContent.slice(0, 50) }}
+      /> */}
+      <ShopNowButton id={product.id} />
+    </Link>
+  </div>
+  
   );
 };
 
 const ShopNowButton = ({ id }: any) => (
   <Link to={`/products/${id}`}>
     <Button variant={"ghost"} size={"ghostsize"} className="mt-2">
-      Shop Now
+      Shop Now <ArrowRightIcon className="ml-2 h-4 w-4" />
     </Button>
   </Link>
 );

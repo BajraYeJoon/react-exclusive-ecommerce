@@ -38,7 +38,7 @@ const PagesHeader = ({
       </div>
       <div className="flex items-center justify-between">
         <div className="flex flex-col items-start gap-2 md:flex-row md:items-center md:gap-20">
-          <h2 className="text-lg font-medium capitalize tracking-wide text-foreground lg:text-4xl">
+          <h2 className="text-lg font-medium capitalize tracking-wide text-foreground md:text-3xl lg:text-4xl">
             {Heading}
           </h2>
           {flashTimer && salesData && (

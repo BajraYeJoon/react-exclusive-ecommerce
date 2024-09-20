@@ -60,7 +60,7 @@ const schema = z.object({
     ),
   returnpolicy: z
     .string()
-    .min(10, "Return policy must be at least 10 characters long")
+    .min(1, "Return policy must be at least 1 characters long")
     .max(1000, "Return policy must be 1000 characters or less"),
   description: z
     .string()
@@ -116,7 +116,7 @@ export default function AddNewProductDialog() {
       stock: "",
       discountprice: "",
       sizes: "",
-      returnpolicy: "",
+      returnpolicy: "N/A",
       description: "",
       brand: "",
       categories: "",
@@ -171,6 +171,8 @@ export default function AddNewProductDialog() {
         console.log("Product created successfully:", response.data);
         setCurrentStep(0);
         reset();
+        setProductImages([]);
+        setSelectedCategories([]);
         queryClient.invalidateQueries({ queryKey: ["products"] });
         toast.success("Product created successfully");
       }

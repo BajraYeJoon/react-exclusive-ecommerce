@@ -82,7 +82,7 @@ export default function DiscountCard() {
         Available Coupons
       </h3>
       <AnimatePresence>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-3">
           {coupons.map((coupon, index) => (
             <CouponComponent
               key={coupon.id}

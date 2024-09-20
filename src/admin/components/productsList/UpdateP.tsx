@@ -65,7 +65,7 @@ const updateProductSchema = z.object({
     ),
   returnpolicy: z
     .string()
-    .min(10, "Return policy must be at least 10 characters long")
+    .min(1, "Return policy must be at least 1 characters long")
     .max(1000, "Return policy must be 1000 characters or less")
     .optional(),
   description: z
@@ -113,7 +113,6 @@ export default function UpdateProductForm({ initialData, setDialogOpen }: any) {
   const [images, setImages] = useState<Array<string | File>>(
     initialData.image || [],
   );
-
 
   const [currentStep, setCurrentStep] = useState(0);
 
@@ -164,7 +163,7 @@ export default function UpdateProductForm({ initialData, setDialogOpen }: any) {
       discountprice: initialData.discountPrice || "",
       stock: initialData.stock || "",
       sizes: initialData.sizes || "",
-      returnpolicy: initialData.returnpolicy || "",
+      returnpolicy: initialData.returnpolicy || "N/A",
       description: initialData.description || "",
       categories:
         initialData.categories?.map((cat: any) => String(cat.id)) || [], // Convert numbers to strings
@@ -270,7 +269,7 @@ export default function UpdateProductForm({ initialData, setDialogOpen }: any) {
       returnpolicy: initialData.returnpolicy || "",
       description: initialData.description || "",
       categories:
-        initialData.categories?.map((cat: any) => String(cat.id)) || [], 
+        initialData.categories?.map((cat: any) => String(cat.id)) || [],
       image: initialData.image || [],
     };
 

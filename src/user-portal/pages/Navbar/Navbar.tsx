@@ -86,7 +86,7 @@ const Navbar = () => {
 
   return (
     <nav className="navbar overflow-hidden border-b">
-      <div className="navbar-container mx-64 flex items-center justify-between py-4 max-2xl:mx-6">
+      <div className="navbar-container mx-72 flex items-center justify-between py-4 max-2xl:mx-6">
         <div className="logo-container flex items-center">
           <Link to="/" className="flex items-center">
             <span className="self-center text-2xl font-semibold">

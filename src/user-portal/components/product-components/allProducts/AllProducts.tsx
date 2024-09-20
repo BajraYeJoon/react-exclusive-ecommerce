@@ -64,7 +64,7 @@ const AllProducts: React.FC = () => {
       )}
 
       <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {filteredAndSortedProducts.map((product: ProductType) => (
+        {filteredAndSortedProducts?.map((product: ProductType) => (
           <ProductCard key={product.id} {...product} image={product.image[0]} />
         ))}
       </div>

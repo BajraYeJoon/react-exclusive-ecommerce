@@ -45,7 +45,7 @@ const FetchSingleCategory = () => {
   // const uniqueCategories = getUniqueCategories();
 
   return (
-    <section className="mx-6 mb-28 gap-24 lg:mx-44">
+    <section className="mx-64 mb-28 gap-24 max-2xl:mx-6">
       <div className="my-8 flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
         <h1 className="text-2xl font-medium text-gray-900">
           {category?.data?.name}

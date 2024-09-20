@@ -175,7 +175,7 @@ const Cart = () => {
   }
 
   return (
-    <section className="relative mx-8 my-6 h-fit md:mx-12 md:my-12 lg:mx-auto lg:max-w-7xl">
+    <section className="relative mx-72 my-6 h-fit max-2xl:mx-6 md:my-12">
       <div className="flex items-center justify-between">
         <CustomBreakcrumb
           breadcrumbTitle="Cart"
@@ -268,7 +268,7 @@ const Cart = () => {
       </Table>
 
       <div className="mt-8 flex flex-col items-center justify-between gap-12 md:flex-row md:items-start">
-        <div className="flex flex-col items-center justify-center gap-3">
+        <div className="flex min-w-72 flex-col items-center justify-center gap-3">
           <Input
             type="text"
             value={couponCode}

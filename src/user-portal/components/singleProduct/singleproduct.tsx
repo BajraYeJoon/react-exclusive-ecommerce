@@ -147,7 +147,7 @@ const Singleproduct = () => {
             <p className="text-base text-gray-400">
               {details?.brand && details?.brand}
             </p>
-            <div className="my-5 flex items-center">
+            <div className="flex items-center text-yellow-300 underline">
               {Array.from({ length: Math.ceil(ratings?.totalRating) }).map(
                 () => (
                   <BiStar
@@ -158,11 +158,14 @@ const Singleproduct = () => {
                 ),
               )}
 
-              <p className="ml-2 text-sm font-medium text-gray-500">
+              <p className="ml-2 text-sm font-medium text-yellow-600">
                 {ratings ? ratings.allRatings[0].ratings.length : 0} Reviews
               </p>
             </div>
-            <h1 className="text-3xl">${details.price}</h1>
+            <h1 className="text-lg">
+              Price:{" "}
+              <span className="text-2xl text-red-700">${details.price}</span>
+            </h1>
             {!isAdmin && details.availability === true && (
               <Button className="mt-6" onClick={() => addToCart(details.id)}>
                 <ShoppingBasket className="mr-4" />
