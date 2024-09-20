@@ -114,11 +114,8 @@ export default function UpdateProductForm({ initialData, setDialogOpen }: any) {
     initialData.image || [],
   );
 
-  console.log(initialData, "edit product");
 
   const [currentStep, setCurrentStep] = useState(0);
-  const [imageChanged, setImageChanged] = useState(false);
-  console.log(imageChanged);
 
   const [error, setError] = useState("");
 
@@ -219,7 +216,6 @@ export default function UpdateProductForm({ initialData, setDialogOpen }: any) {
 
   const handleImageDrop = async (acceptedFiles: File[]) => {
     setImages((prevImages) => [...prevImages, ...acceptedFiles]);
-    setImageChanged(true);
     for (const file of acceptedFiles) {
       const formData = new FormData();
       formData.append("image", file);
@@ -233,7 +229,6 @@ export default function UpdateProductForm({ initialData, setDialogOpen }: any) {
       queryClient.invalidateQueries({ queryKey: ["products", initialData.id] });
       toast.success("Image has been deleted");
       setImages((prevImages) => prevImages.filter((_, i) => i !== index));
-      setImageChanged(true);
     } catch (error) {
       console.error("Failed to delete image", error);
     }
@@ -252,7 +247,6 @@ export default function UpdateProductForm({ initialData, setDialogOpen }: any) {
   const onSubmit = async (data: any) => {
     console.log(data);
     await updateProductMutation.mutate(data);
-    setImageChanged(false);
     setDialogOpen(false);
   };
 
@@ -276,7 +270,7 @@ export default function UpdateProductForm({ initialData, setDialogOpen }: any) {
       returnpolicy: initialData.returnpolicy || "",
       description: initialData.description || "",
       categories:
-        initialData.categories?.map((cat: any) => String(cat.id)) || [], // Convert numbers to strings
+        initialData.categories?.map((cat: any) => String(cat.id)) || [], 
       image: initialData.image || [],
     };
 

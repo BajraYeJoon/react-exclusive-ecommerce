@@ -5,6 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchNewArrivals } from "../../../common/api/productApi";
 import uuidv4 from "../../../common/lib/utils/uuid";
 import { Link } from "react-router-dom";
+import { marked } from "marked";
+import DOMPurify from "dompurify";
 
 type GridItemProps = {
   product: NewArrivalsProductProps;
@@ -84,6 +86,12 @@ const ArrivalProductsGrid = () => {
 };
 
 const GridItem = ({ product, additionalClasses }: GridItemProps) => {
+  const productContent = marked(product?.description);
+  const sanitizedContent = DOMPurify.sanitize(String(productContent)).replace(
+    /(<([^>]+)>)/gi,
+    "",
+  );
+
   return (
     <div
       key={product.id}
@@ -102,22 +110,26 @@ const GridItem = ({ product, additionalClasses }: GridItemProps) => {
 
       <div className="absolute inset-0 bg-black opacity-50" />
 
-      <div className="relative z-10 space-y-2 text-white md:space-y-4">
+      <Link
+        to={`/${product.title}/${product.id}`}
+        className="relative z-10 space-y-2 text-white md:space-y-4"
+      >
         <h3 className="text-sm font-bold md:text-base lg:text-lg">
           {product.title}
         </h3>
-        <p className="text-[10px] tracking-wide md:text-[12px] lg:text-sm">
-          {product.description.slice(0, 40)}...
-        </p>
+        <p
+          className="max-w-4xl overflow-hidden text-[10px] tracking-wide text-gray-400 md:text-[12px] lg:text-sm"
+          dangerouslySetInnerHTML={{ __html: sanitizedContent.slice(0, 50) }}
+        />
         <ShopNowButton id={product.id} />
-      </div>
+      </Link>
     </div>
   );
 };
 
 const ShopNowButton = ({ id }: any) => (
   <Link to={`/products/${id}`}>
-    <Button variant={"ghost"} size={"ghostsize"}>
+    <Button variant={"ghost"} size={"ghostsize"} className="mt-2">
       Shop Now
     </Button>
   </Link>

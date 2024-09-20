@@ -26,6 +26,8 @@ import {
 import { toast } from "sonner";
 import { marked } from "marked";
 import "./styles.css";
+import DOMPurify from "dompurify";
+
 interface FeatureItemProps {
   icon: React.ReactNode;
   title: string;
@@ -45,6 +47,9 @@ const Singleproduct = () => {
     queryKey: ["productdetails"],
     queryFn: () => fetchProductDetails(productId ?? ""),
   });
+
+  const htmlContent = details?.description ? marked(details.description) : "";
+  const sanitizedContent = DOMPurify.sanitize(String(htmlContent));
 
   const { data: ratingsData } = useQuery({
     queryKey: ["ratings"],
@@ -79,8 +84,6 @@ const Singleproduct = () => {
       toast.error("Failed to submit rating. Please try again.");
     }
   };
-
-  const htmlContent = marked(details?.description);
 
   return (
     <section className="py-12 sm:py-16">
@@ -160,11 +163,19 @@ const Singleproduct = () => {
               </p>
             </div>
             <h1 className="text-3xl">${details.price}</h1>
+            {!isAdmin && details.availability === true && (
+              <Button className="mt-6" onClick={() => addToCart(details.id)}>
+                <ShoppingBasket className="mr-4" />
+                Add to cart
+              </Button>
+            )}
             <div className="mt-6 max-w-fit overflow-ellipsis break-normal">
-              <h3 className="sr-only">Description</h3>
+              <h3 className="mb-4 text-base font-medium lg:text-lg">
+                Description:
+              </h3>
               <div
                 className="prose prose-sm markdown-content max-w-none overflow-hidden text-gray-700"
-                dangerouslySetInnerHTML={{ __html: htmlContent }}
+                dangerouslySetInnerHTML={{ __html: sanitizedContent }}
               />
             </div>
 
@@ -179,13 +190,6 @@ const Singleproduct = () => {
                   {details.sizes}
                 </Button>
               </>
-            )}
-
-            {!isAdmin && details.availability === true && (
-              <Button className="mt-6" onClick={() => addToCart(details.id)}>
-                <ShoppingBasket className="mr-4" />
-                Add to cart
-              </Button>
             )}
 
             {ratings?.totalRating === 0 ? (

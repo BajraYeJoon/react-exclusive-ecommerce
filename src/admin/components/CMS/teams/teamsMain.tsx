@@ -138,12 +138,12 @@ export default function EmployeeManagement() {
           <div className="grid grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-4">
             {employees?.map((employee: Employee) => (
               <Card key={employee.id} className="w-full overflow-hidden">
-                <CardContent className="flex flex-col p-4 sm:flex-row">
+                <CardContent className="flex flex-col gap-2 p-4 sm:flex-row">
                   <div className="flex flex-col items-start">
                     <img
                       src={employee.image}
                       alt={employee.name}
-                      className="h-12 w-full object-cover md:h-auto md:w-auto"
+                      className="h-24 w-full object-cover md:h-24 md:w-auto"
                     />
                     <div className="my-2">
                       <h2 className="text-sm font-medium md:text-base">
@@ -160,18 +160,19 @@ export default function EmployeeManagement() {
                           <Twitter />
                         </Link>
                       )}
-                      \
+
                       {employee.linkedin && (
                         <Link to={employee.linkedin}>
                           <Linkedin />
                         </Link>
                       )}
                     </div>
-                    <div>
+                    <div className="flex flex-col gap-2">
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => handleEdit(employee)}
+                        className="w-full"
                       >
                         <Pencil className="mr-2 h-4 w-4" />
                         <span className="hidden sm:block">Edit</span>
@@ -180,6 +181,7 @@ export default function EmployeeManagement() {
                         variant="outline"
                         size="sm"
                         onClick={() => handleDelete(employee.id)}
+                        className="w-full"
                       >
                         <Trash2 className="mr-2 h-4 w-4" />
                         <span className="hidden sm:block">Delete</span>

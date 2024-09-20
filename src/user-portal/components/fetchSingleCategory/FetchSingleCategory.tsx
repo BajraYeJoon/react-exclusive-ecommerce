@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { fetchProductByCategory } from "../../../common/api/categoryApi";
 import ProductCard from "../product-components/productCard/ProductCard";
 import { ProductCardSkeleton } from "../../../common/components";
+import CategoryNotFound from "./404category";
 // import { useProductFilters } from "../../hooks/useProductFilter";
 // import { useState } from "react";
 // import ProductFilters from "../filters/ProductFilters";
@@ -36,7 +37,7 @@ const FetchSingleCategory = () => {
     return <ProductCardSkeleton />;
   }
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <CategoryNotFound />;
   }
 
   // const filteredAndSortedProducts = getFilteredAndSortedProducts();

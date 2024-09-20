@@ -81,7 +81,7 @@ const About = () => {
           <div className="grid grid-cols-2 justify-center gap-4 md:grid-cols-3 lg:grid-cols-4">
             {stats?.map(({ description, value, id }: any) => (
               <div
-                className="group flex flex-col items-center gap-9 rounded-md border border-foreground/25 px-9 py-5 hover:bg-primary md:flex-row lg:px-12"
+                className="group flex flex-col items-center justify-center gap-9 rounded-md border border-foreground/25 px-9 py-5 hover:bg-primary md:flex-row lg:px-12"
                 key={id}
               >
                 <div className="space-y-3 text-center">
@@ -127,14 +127,11 @@ const About = () => {
                 <img
                   alt={employee.name}
                   loading="lazy"
-                  width="200"
-                  height="200"
                   decoding="async"
-                  data-nimg="1"
-                  className="max-3xl:h-64 max-3xl:mx-10 mx-14 mt-5 h-80 object-contain object-bottom max-2xl:mx-8 max-2xl:h-48"
+                  className="mt-5 h-44 object-cover object-center md:h-[250px] lg:h-[300px]"
                   src={employee.image}
                 />
-                <div className="max-3xl:gap-2 flex flex-col items-start gap-4">
+                <div className="max-3xl:gap-2 mt-2 flex flex-col items-start gap-4">
                   <div className="max-3xl:gap-1 flex flex-col items-start gap-2 capitalize">
                     <p className="max-3xl:text-3xl text-4xl max-2xl:text-2xl">
                       {employee.name}

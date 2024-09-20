@@ -15,6 +15,8 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { couponState } from "../../site";
 import { Axios } from "../../../common/lib/axiosInstance";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteAllCartItems } from "../../api/cartApi";
 
 const Checkout = () => {
   const {
@@ -30,6 +32,18 @@ const Checkout = () => {
   const Navigate = useNavigate();
   const [, setOrderPlaceData] = useRecoilState(orderplaceState);
   const couponCode = useRecoilValue(couponState);
+  const queryClient = useQueryClient()
+
+  const removeCartAferOrderPlace = useMutation({
+    
+    mutationFn: deleteAllCartItems,
+    onSuccess: () => {
+        queryClient.invalidateQueries({queryKey: ["cart"]})
+    },
+    onError: () => {
+        toast.error("Something went wrong. Please try again later.")
+    }
+  })
 
   const generateInvoice = (orderData: any) => {
     const doc = new jsPDF();
@@ -78,11 +92,13 @@ const Checkout = () => {
       await Axios.post("/coupon/apply", { couponCode: couponCode });
     }
 
+    
     toast.success("Order placed successfully");
     setOrderPlaceData(orderData);
     reset();
     resetCheckoutCartAfterOrderPlace({ cartItems: [], total: 0 });
     Cookies.remove("checkoutData");
+    removeCartAferOrderPlace.mutate()
     resetCartAfterOrderPlace([]);
     Cookies.set("order-placed", "true");
     Navigate("/order-placed");

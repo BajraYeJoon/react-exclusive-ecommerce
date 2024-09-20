@@ -37,15 +37,14 @@ export function ProfilePage() {
     queryFn: fetchUserDetails,
   });
 
+  console.log(userdetail, "usedetails");
+
   useEffect(() => {
     if (activeTab === "wishlist") {
       navigate("/favorites");
     }
   }, [activeTab, navigate]);
 
-  // const toggleSidebar = () => {
-  //   setIsSidebarOpen(!isSidebarOpen);
-  // };
 
   if (isLoading)
     return (

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { toast } from "sonner";
@@ -38,12 +38,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     Cookies.get("token") ? true : false,
   );
   const [isLoading, setIsLoading] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  const [isAdmin] = useState(
-    JSON.parse(Cookies.get("user") || "{}") === "admin",
-  );
-
-  console.log(isAdmin, "isAdmin");
+  useEffect(() => {
+    const userRole = JSON.parse(Cookies.get("user") || "{}");
+    setIsAdmin(userRole === "admin");
+  }, [isLoggedIn]);
 
   const fetchUserDetails = async (token: string) => {
     try {
@@ -60,6 +60,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       Cookies.set("user", JSON.stringify(userDetails.user.role), {
         expires: 1,
       });
+      setIsAdmin(userDetails.user.role === "admin");
     } catch (error) {
       console.error("Failed to fetch user details", error);
     }
@@ -86,7 +87,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setIsLoading(false);
     }
   };
-  
 
   const signup = async ({
     name,
@@ -110,7 +110,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           "Signup successful. Please check your email to verify your account.",
         );
       } else if (response.status === 400) {
-        toast.error("You are already registerd. Please Login");
+        toast.error("You are already registered. Please Login");
       } else {
         console.error("Signup failed", response.data);
         toast.error("Signup failed");
@@ -125,6 +125,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logout = async () => {
     setIsLoggedIn(false);
+    setIsAdmin(false);
     toast.success("You are now logged out");
     Cookies.remove("token");
     Cookies.remove("user");
