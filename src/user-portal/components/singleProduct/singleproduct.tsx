@@ -24,7 +24,8 @@ import {
   DialogTrigger,
 } from "../../../common/ui/dialog";
 import { toast } from "sonner";
-
+import { marked } from "marked";
+import "./styles.css";
 interface FeatureItemProps {
   icon: React.ReactNode;
   title: string;
@@ -79,6 +80,8 @@ const Singleproduct = () => {
     }
   };
 
+  const htmlContent = marked(details?.description);
+
   return (
     <section className="py-12 sm:py-16">
       <div className="container mx-auto px-4">
@@ -132,10 +135,10 @@ const Singleproduct = () => {
               <span
                 className={cn(
                   `ml-3 inline-flex w-fit flex-wrap justify-center rounded-full bg-foreground/10 px-2 py-1 text-xs font-medium text-foreground/70`,
-                  details.stock > 0 ? "bg-green-400" : "bg-red-400",
+                  details.availability === true ? "bg-green-400" : "bg-red-400",
                 )}
               >
-                {details.stock > 0 ? " in stock" : " out of stock"}
+                {details.availability === true ? " in stock" : " out of stock"}
               </span>
             </h1>
             <p className="text-base text-gray-400">
@@ -157,7 +160,14 @@ const Singleproduct = () => {
               </p>
             </div>
             <h1 className="text-3xl">${details.price}</h1>
-            <p>{details.description}</p>
+            <div className="mt-6 max-w-fit overflow-ellipsis break-normal">
+              <h3 className="sr-only">Description</h3>
+              <div
+                className="prose prose-sm max-w-none overflow-hidden text-gray-700"
+                dangerouslySetInnerHTML={{ __html: htmlContent }}
+              />
+            </div>
+
             <hr className="w-full bg-foreground/35" />
             {details.sizes && (
               <>

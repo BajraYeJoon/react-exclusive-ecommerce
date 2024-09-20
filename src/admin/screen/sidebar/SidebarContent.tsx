@@ -14,54 +14,65 @@ const sidebarItems = [
     href: Routes.Dashboard,
     icon: BsMenuButton,
     label: "Dashboard",
+    color: "#3498db", // Blue
   },
   {
     href: Routes.Orders,
     icon: Mail,
     label: "Orders",
     badge: "3",
+    color: "#e74c3c", // Red
   },
   {
     href: Routes.Users,
     icon: User2,
     label: "Users",
+    color: "#2ecc71", // Green
   },
   {
     href: Routes.Products,
     icon: FaProductHunt,
     label: "Products",
+    color: "#f39c12", // Orange
   },
   {
     href: Routes.AddCategory,
     icon: CgAdd,
     label: "Add Category",
+    color: "#9b59b6", // Purple
   },
   {
     href: Routes.FlashSales,
     icon: FaSellsy,
     label: "Flash Sales",
+    color: "#e67e22", // Orange
   },
   {
     href: Routes.Banners,
     icon: GrDocumentImage,
     label: "Banners",
+    color: "#1abc9c", // Turquoise
   },
   {
     href: Routes.CMS,
     icon: MdEditNote,
     label: "Change Content",
+    color: "#34495e", // Dark Blue
   },
   {
     href: Routes.Discount,
     icon: CiDiscount1,
     label: "Discount",
+    color: "#d35400", // Dark Orange
   },
   {
     href: Routes.Ratings,
     icon: FcRatings,
     label: "Ratings",
+    color: "#f1c40f", // Yellow
   },
 ];
+
 
 const SidebarContent = () => {
   return (
@@ -79,9 +90,12 @@ const SidebarContent = () => {
                   }`
                 }
               >
-                <Icon className="h-6 w-6" />
+                <Icon className="h-6 w-6" color={item.color} /> {/* Apply the color */}
                 <span
-                  className={`ms-3 flex-1 whitespace-nowrap text-sm md:text-base ${item.label.replace(/\s+/g, "-")}`}
+                  className={`ms-3 flex-1 whitespace-nowrap text-sm md:text-base ${item.label.replace(
+                    /\s+/g,
+                    "-"
+                  )}`}
                 >
                   {item.label}
                 </span>
@@ -98,5 +112,6 @@ const SidebarContent = () => {
     </div>
   );
 };
+
 
 export default SidebarContent;

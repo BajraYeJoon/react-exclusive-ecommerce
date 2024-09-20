@@ -15,6 +15,7 @@ import { Input } from "../../../common/ui/input";
 import { Textarea } from "../../../common/ui/textarea";
 import { FileDropzone } from "./file";
 import { Button } from "../../../common/ui/button";
+import ProductDescriptionEditor from "./TextEditor";
 
 const schema = z.object({
   title: z
@@ -63,15 +64,13 @@ const schema = z.object({
     .max(1000, "Return policy must be 1000 characters or less"),
   description: z
     .string()
-    .min(20, "Description must be at least 20 characters long")
-    .max(2000, "Description must be 2000 characters or less"),
+    .min(20, "Description must be at least 20 characters long"),
   categories: z.string().min(1, "At least one category is required"),
   image: z
     .array(z.instanceof(File))
     .min(1, "At least one image is required")
     .max(4, "Maximum 4 images allowed"),
 });
-
 const steps = [
   {
     id: "basic-info",
@@ -108,7 +107,7 @@ export default function AddNewProductDialog() {
     setValue,
     trigger,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -356,7 +355,7 @@ export default function AddNewProductDialog() {
                   </p>
                 )}
               </div>
-              <div>
+              {/* <div>
                 <Label className="mb-1 block font-medium">Description</Label>
                 <Textarea
                   {...register("description")}
@@ -369,7 +368,12 @@ export default function AddNewProductDialog() {
                     {errors.description.message}
                   </p>
                 )}
-              </div>
+              </div> */}
+              <ProductDescriptionEditor
+                register={register}
+                setValue={setValue}
+                errors={errors}
+              />
             </>
           )}
 
@@ -412,7 +416,9 @@ export default function AddNewProductDialog() {
           Previous
         </Button>
         {currentStep === steps.length - 1 ? (
-          <Button onClick={handleSubmit(onSubmit)}>Submit</Button>
+          <Button disabled={isSubmitting} onClick={handleSubmit(onSubmit)}>
+            Submit
+          </Button>
         ) : (
           <Button onClick={nextStep}>Next</Button>
         )}
