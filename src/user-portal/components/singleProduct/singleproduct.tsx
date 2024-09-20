@@ -132,10 +132,10 @@ const Singleproduct = () => {
               <span
                 className={cn(
                   `ml-3 inline-flex w-fit flex-wrap justify-center rounded-full bg-foreground/10 px-2 py-1 text-xs font-medium text-foreground/70`,
-                  details.availability === true ? "bg-green-400" : "bg-red-400",
+                  details.stock > 0 ? "bg-green-400" : "bg-red-400",
                 )}
               >
-                {details.availability === true ? " in stock" : " out of stock"}
+                {details.stock > 0 ? " in stock" : " out of stock"}
               </span>
             </h1>
             <p className="text-base text-gray-400">
