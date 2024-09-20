@@ -1,9 +1,7 @@
-import { Swiper, SwiperSlide } from "swiper/react";
 import { PagesHeader, ProductCard } from "../../components";
 import { Button } from "../../../common/ui/button";
 // import "swiper/css";
 // import "swiper/css/navigation";
-import { Navigation } from "swiper/modules";
 import { useQuery } from "@tanstack/react-query";
 import { fetchAllProducts } from "../../../common/api/productApi";
 import ProductCardSkeleton from "../../../common/components/productCardSkeleton/ProductCardSkeleton";

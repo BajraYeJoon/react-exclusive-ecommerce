@@ -14,7 +14,6 @@ import {
   useIncreaseQuantity,
   useRemoveItem,
 } from "../../utils/cartutils";
-import { ProductCardSkeleton } from "../../../common/components";
 import { ConfirmationDialog } from "../../../admin/components";
 import { Axios } from "../../../common/lib/axiosInstance";
 import { toast } from "sonner";
