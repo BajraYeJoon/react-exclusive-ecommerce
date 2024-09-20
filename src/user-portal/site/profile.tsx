@@ -6,7 +6,7 @@ import { fetchUserDetails } from "../api/userApi";
 import { Loading } from "./layout/Layout";
 import { Button } from "../../common/ui/button";
 import { GeneralInfo, Orders, PaymentInfo, TabNavigation } from "../components";
-import { FaSignOutAlt, FaBars } from "react-icons/fa";
+import { FaSignOutAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { cn } from "../../common/lib/utils";
 import {

@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "../../../common/ui/avatar";
 import { Button } from "../../../common/ui/button";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { FaBars } from "react-icons/fa";
 
 const ProfileHeader = ({
   userdetail,
