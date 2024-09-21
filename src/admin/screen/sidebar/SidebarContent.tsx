@@ -76,7 +76,7 @@ const sidebarItems = [
 
 const SidebarContent = () => {
   return (
-    <div className="h-full w-fit overflow-y-auto bg-gray-50 px-3 py-4 dark:bg-gray-800">
+    <div className="z-50 h-full overflow-y-auto px-3 py-4">
       <ul className="space-y-2 font-medium">
         {sidebarItems.map((item, index) => {
           const Icon = item.icon;
@@ -90,11 +90,12 @@ const SidebarContent = () => {
                   }`
                 }
               >
-                <Icon className="h-6 w-6" color={item.color} /> {/* Apply the color */}
+                <Icon className="h-6 w-6" color={item.color} />{" "}
+                {/* Apply the color */}
                 <span
                   className={`ms-3 flex-1 whitespace-nowrap text-sm md:text-base ${item.label.replace(
                     /\s+/g,
-                    "-"
+                    "-",
                   )}`}
                 >
                   {item.label}

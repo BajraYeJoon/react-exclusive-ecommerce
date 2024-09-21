@@ -66,19 +66,17 @@ const steps = [
 ];
 
 const AdminLayout = () => {
-  const [runTour, setRunTour] = useState(false); // Controls if the tour is running
+  const [runTour, setRunTour] = useState(false);
 
-  // Check if the admin has seen the tour before
   useEffect(() => {
     const hasSeenTour = localStorage.getItem("hasSeenTour");
 
     if (!hasSeenTour) {
-      setRunTour(true); // Start the tour if they haven't seen it
-      localStorage.setItem("hasSeenTour", "true"); // Mark the tour as seen
+      setRunTour(true);
+      localStorage.setItem("hasSeenTour", "true");
     }
   }, []);
 
-  // Function to manually start the tour
   const startTour = () => {
     setRunTour(true);
   };
@@ -90,9 +88,8 @@ const AdminLayout = () => {
         continuous={true}
         showProgress={true}
         showSkipButton={true}
-        run={runTour} // Start the tour based on state
+        run={runTour}
         callback={(data) => {
-          // Stop the tour when it's finished or skipped
           const { status } = data;
           const finishedStatuses = ["finished", "skipped"];
           if (finishedStatuses.includes(status)) {
@@ -101,23 +98,23 @@ const AdminLayout = () => {
         }}
         styles={{
           options: {
-            arrowColor: "#3498db", // Updated to a more vibrant blue for contrast
-            backgroundColor: "#3498db", // Matching background with arrow for consistency
-            overlayColor: "rgba(0, 0, 0, 0.5)", // Darkened overlay for better focus on the content
-            textColor: "#fff", // White text for readability against the blue background
-            primaryColor: "#f39c12", // Bright orange for primary buttons and focus color
-            zIndex: 1000, // Ensuring the tour appears on top of most elements
+            arrowColor: "#3498db",
+            backgroundColor: "#3498db",
+            overlayColor: "rgba(0, 0, 0, 0.5)",
+            textColor: "#fff",
+            primaryColor: "#f39c12",
+            zIndex: 1000,
           },
           buttonNext: {
-            backgroundColor: "#f39c12", // Bright orange for the "Next" button
-            color: "#fff", // White text for contrast
-            borderRadius: "4px", // Subtle rounded corners for a modern look
-            padding: "6px 12px", // Added padding for a more clickable area
-            boxShadow: "0px 2px 10px rgba(0,0,0,0.15)", // Light shadow for depth
+            backgroundColor: "#f39c12",
+            color: "#fff",
+            borderRadius: "4px",
+            padding: "6px 12px",
+            boxShadow: "0px 2px 10px rgba(0,0,0,0.15)",
           },
           buttonBack: {
-            color: "#2c3e50", // Dark grey for "Back" button
-            marginRight: 10, // Add spacing between "Back" and "Next" buttons
+            color: "#2c3e50",
+            marginRight: 10,
           },
           buttonClose: {
             color: "#fff",
@@ -139,13 +136,14 @@ const AdminLayout = () => {
 
       <MaxWidthWrapper>
         <Header />
-        <div className="mt-2 flex gap-4">
+        <div className="flex h-full w-full flex-1">
           <SidebarPanel />
 
-          <Outlet />
+          <div className="flex-1 lg:ml-64">
+            <Outlet />
+          </div>
         </div>
 
-        {/* Button to manually start the tour */}
         <div className="fixed bottom-5 right-5">
           <button
             onClick={startTour}

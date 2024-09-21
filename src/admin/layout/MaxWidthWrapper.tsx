@@ -7,6 +7,6 @@ export const MaxWidthWrapper = ({
   children: ReactNode;
 }) => {
   return (
-    <div className="mx-auto w-full max-w-screen-2xl px-2.5 ">{children}</div>
+    <div className="mx-auto h-screen max-w-screen-2xl px-4">{children}</div>
   );
 };

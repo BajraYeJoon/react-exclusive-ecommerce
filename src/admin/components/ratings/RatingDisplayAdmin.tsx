@@ -1,8 +1,15 @@
 import { Button } from "../../../common/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../../../common/ui/avatar";
-import { ChevronDown, Star } from "lucide-react";
+import { ChevronDown, ChevronUp, Star } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchAllProducts } from "../../../common/api/productApi";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../../common/ui/card";
+import { useState } from "react";
 
 const RatingDisplayAdmin = () => {
   const { data: productRatingsData } = useQuery({
@@ -10,94 +17,85 @@ const RatingDisplayAdmin = () => {
     queryFn: fetchAllProducts,
   });
 
-  console.log(
-    productRatingsData &&
-      productRatingsData.map((product: any) => product.ratings),
-  );
-
-  const productRatings = [
-    {
-      id: 1,
-      productName: "Wireless Earbuds",
-      rating: 4,
-      user: "Alice Smith",
-      comment: "Great sound quality!",
-      avatar: "/placeholder.svg",
-    },
-    {
-      id: 2,
-      productName: "Smart Watch",
-      rating: 5,
-      user: "Bob Johnson",
-      comment: "Love the features!",
-      avatar: "/placeholder.svg",
-    },
-    {
-      id: 3,
-      productName: "Laptop Stand",
-      rating: 3,
-      user: "Charlie Brown",
-      comment: "Decent, but could be sturdier.",
-      avatar: "/placeholder.svg",
-    },
-    {
-      id: 4,
-      productName: "Bluetooth Speaker",
-      rating: 4,
-      user: "Diana Prince",
-      comment: "Impressive bass for its size.",
-      avatar: "/placeholder.svg",
-    },
-    {
-      id: 5,
-      productName: "Ergonomic Mouse",
-      rating: 5,
-      user: "Ethan Hunt",
-      comment: "Comfortable for long use!",
-      avatar: "/placeholder.svg",
-    },
-  ];
-
   return (
-    <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
-      <div className="rounded-lg border shadow-sm">
-        <div className="flex items-center justify-between border-b px-4 py-3">
-          <h2 className="font-semibold">Recent Product Ratings</h2>
-          <Button variant="outline" size="sm">
-            View all
-          </Button>
-        </div>
-        <div className="divide-y">
-          {productRatings.map((rating) => (
-            <div key={rating.id} className="flex items-start gap-4 p-4">
-              <Avatar className="h-10 w-10">
-                <AvatarImage alt={rating.user} src={rating.avatar} />
-                <AvatarFallback>{rating.user.charAt(0)}</AvatarFallback>
-              </Avatar>
-              <div className="grid gap-1">
-                <div className="font-semibold">{rating.productName}</div>
-                <div className="text-sm text-gray-500 dark:text-gray-400">
-                  Rated by {rating.user}
-                </div>
-                <div className="flex items-center gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`h-4 w-4 ${i < rating.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
-                    />
-                  ))}
-                </div>
-                <p className="text-sm">{rating.comment}</p>
-              </div>
-              <Button size="sm" variant="ghost" className="ml-auto">
-                <ChevronDown className="h-4 w-4" />
-              </Button>
-            </div>
-          ))}
-        </div>
-      </div>
-    </main>
+    <div className="container mx-auto p-4">
+      <h1 className="mb-6 text-2xl font-bold">Product Ratings Overview</h1>
+      {productRatingsData?.map(
+        (product) =>
+          product.ratings?.length > 0 && (
+            <ProductRatings key={product.id} product={product} />
+          ),
+      )}
+    </div>
   );
 };
 
 export default RatingDisplayAdmin;
+
+function ProductRatings({ product }) {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <Card className="mb-6">
+      <CardHeader>
+        <CardTitle className="flex items-center justify-between">
+          <span>{product.title}</span>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setExpanded(!expanded)}
+          >
+            {expanded ? (
+              <ChevronUp className="h-4 w-4" />
+            ) : (
+              <ChevronDown className="h-4 w-4" />
+            )}
+          </Button>
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        {(expanded ? product.ratings : product.ratings.slice(0, 1)).map(
+          (rating) => (
+            <RatingItem key={rating.id} rating={rating} />
+          ),
+        )}
+        {!expanded && product.ratings.length > 1 && (
+          <Button variant="link" onClick={() => setExpanded(true)}>
+            Show {product.ratings.length - 1} more ratings
+          </Button>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+function RatingItem({ rating }) {
+  return (
+    <div className="mb-4 flex items-start space-x-4">
+      <Avatar className="h-10 w-10">
+        <AvatarImage
+          src={`/placeholder.svg?height=40&width=40`}
+          alt={rating.user}
+        />
+        <AvatarFallback>CN</AvatarFallback>
+      </Avatar>
+      <div className="flex-1">
+        <div className="flex items-center justify-between">
+          <h3 className="font-semibold">{rating.user}</h3>
+          <span className="text-sm text-gray-500">
+            {new Date(rating.createdAt).toLocaleString()}
+          </span>
+        </div>
+        <div className="mt-1 flex items-center">
+          {[...Array(5)].map((_, i) => (
+            <Star
+              key={i}
+              className={`h-4 w-4 ${i < rating.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
+            />
+          ))}
+        </div>
+        <p className="mt-2 text-sm text-gray-700">{rating.comment}</p>
+      </div>
+    </div>
+  );
+}

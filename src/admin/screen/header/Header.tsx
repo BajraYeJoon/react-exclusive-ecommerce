@@ -1,5 +1,8 @@
-import { LinkIcon, MenuIcon, X } from "lucide-react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
+import { LinkIcon, MenuIcon, X } from "lucide-react";
+import { FcLandscape } from "react-icons/fc";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,10 +12,8 @@ import {
   DropdownMenuTrigger,
 } from "../../../common/ui/dropdown-menu";
 import { useAuthContext } from "../../../user-portal/context/useAuthContext";
-import { useState } from "react";
 import SidebarContent from "../sidebar/SidebarContent";
 import { Button } from "../../../common/ui/button";
-import { Link } from "react-router-dom";
 import useWindow from "../../../common/lib/useWindow";
 
 const Header = () => {
@@ -21,9 +22,14 @@ const Header = () => {
   const { logout } = useAuthContext();
 
   return (
-    <header className="mx-auto mt-4 bg-white px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 w-full bg-white px-4 sm:px-6 lg:px-8">
       <div className="flex h-16 items-center justify-between">
-        <h2 className="text-base font-medium sm:text-xl">Exclusive Admin</h2>
+        <div className="flex items-center justify-center gap-3">
+          <FcLandscape size={30} />
+          <h2 className="hidden font-ember text-base font-medium sm:block sm:text-xl">
+            Exclusive Admin
+          </h2>
+        </div>
 
         <div className="flex items-center gap-4">
           {dimension.width > 768 && <DashboardButton />}
@@ -40,7 +46,6 @@ const Header = () => {
                   <DashboardButton />
                 </DropdownMenuLabel>
               )}
-
               <DropdownMenuItem>Profile</DropdownMenuItem>
               <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem>
             </DropdownMenuContent>
@@ -56,28 +61,37 @@ const Header = () => {
               />
             )}
           </div>
-
-          <AnimatePresence>
-            {open && (
-              <motion.div
-                initial={{ opacity: 0, x: "-100%" }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: "-100%" }}
-                transition={{ duration: 0.5 }}
-                className=":hidden absolute left-0 top-0 z-10 mt-20 h-full w-full backdrop-blur-sm"
-                onClick={() => setOpen(!open)}
-              >
-                <SidebarContent />
-              </motion.div>
-            )}
-          </AnimatePresence>
         </div>
       </div>
+
+      <MobileSidebar open={open} setOpen={setOpen} />
     </header>
   );
 };
 
-export default Header;
+const MobileSidebar = ({ open, setOpen }) => (
+  <AnimatePresence>
+    {open && (
+      <>
+        <div
+          className="fixed inset-0 top-16 z-40 bg-black bg-opacity-50 lg:hidden"
+          onClick={() => setOpen(false)}
+        />
+        <motion.div
+          initial={{ x: "-100%" }}
+          animate={{ x: 0 }}
+          exit={{ x: "-100%" }}
+          transition={{ duration: 0.3 }}
+          className="fixed left-0 top-16 z-50 h-[calc(100vh-4rem)] w-64 overflow-y-auto bg-white shadow-lg lg:hidden"
+        >
+          <div className="p-4">
+            <SidebarContent />
+          </div>
+        </motion.div>
+      </>
+    )}
+  </AnimatePresence>
+);
 
 function DashboardButton() {
   return (
@@ -88,3 +102,5 @@ function DashboardButton() {
     </Link>
   );
 }
+
+export default Header;
