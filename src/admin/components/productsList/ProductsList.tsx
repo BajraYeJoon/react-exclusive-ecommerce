@@ -20,10 +20,7 @@ import {
 } from "../../../common/ui/table";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
-  DialogDescription,
-  DialogHeader,
   DialogTrigger,
 } from "../../../common/ui/dialog";
 import { FaEdit, FaTrash } from "react-icons/fa";
@@ -39,6 +36,7 @@ import uuidv4 from "../../../common/lib/utils/uuid";
 import AddNewProductDialog from "./AddNewProductDialog";
 import UpdateProductForm from "./UpdateP";
 import { Loading } from "../../../user-portal/site";
+import ConfirmationDialog from "../confirmation/ConfirmationDialog";
 // import { useSearchParams } from "react-router-dom";
 
 export default function ProductsList() {
@@ -164,24 +162,15 @@ export default function ProductsList() {
                 />
               </DialogContent>
             </Dialog>
-            <Dialog>
-              <DialogTrigger>
-                <FaTrash className="text-red-500" />
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  Are you sure you want to delete this product?
-                </DialogHeader>
-                <DialogDescription>
-                  <Button onClick={() => handleDelete(row.original.id)}>
-                    Yes
-                  </Button>
-                  <Button variant={"secondary"}>
-                    <DialogClose>No</DialogClose>
-                  </Button>
-                </DialogDescription>
-              </DialogContent>
-            </Dialog>
+
+            <ConfirmationDialog
+              triggerComponent={<FaTrash className="text-primary" />}
+              title="Are you sure you want to delete this product?"
+              description="This action cannot be undone."
+              onConfirm={() => handleDelete(row.original.id)}
+              confirmText="Yes"
+              cancelText="No"
+            />
             <input
               type="checkbox"
               disabled={row.original.onSale}

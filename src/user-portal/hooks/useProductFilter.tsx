@@ -5,7 +5,7 @@ export interface ProductType {
   title: string;
   price: number;
   rating: number;
-  image: string[];
+  image: string;
   availability: boolean;
   brand: string;
   categories: { id: number; name: string }[];

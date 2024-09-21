@@ -151,6 +151,7 @@ const AddCategoryForm = () => {
                       value: 50,
                       message: "Category name must be 50 characters or less",
                     },
+                    setValueAs: (value) => value.trim(),
                   })}
                   className="transition-all duration-200 ease-in-out focus:ring-2 focus:ring-blue-500"
                 />

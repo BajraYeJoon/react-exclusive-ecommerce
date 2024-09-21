@@ -154,7 +154,6 @@ export default function AddNewProductDialog() {
       if (key === "image") {
         productImages.forEach((image) => formData.append("image", image));
       } else if (value !== undefined && value !== null) {
-        // Ensure to convert numeric fields to strings explicitly if needed
         formData.append(key, String(value));
       }
     });
@@ -357,20 +356,7 @@ export default function AddNewProductDialog() {
                   </p>
                 )}
               </div>
-              {/* <div>
-                <Label className="mb-1 block font-medium">Description</Label>
-                <Textarea
-                  {...register("description")}
-                  className="w-full rounded border p-2"
-                  placeholder="Enter product description"
-                  rows={5}
-                />
-                {errors.description && (
-                  <p className="mt-1 text-sm text-primary">
-                    {errors.description.message}
-                  </p>
-                )}
-              </div> */}
+
               <ProductDescriptionEditor
                 register={register}
                 setValue={setValue}

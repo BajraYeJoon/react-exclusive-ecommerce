@@ -89,7 +89,6 @@ const ProductCard = ({
     }
     isFavorite(id) ? handleRemoveFavorite() : handleAddFavorite();
   };
-  
 
   return (
     <section className="mt-4 w-full max-w-72">
@@ -97,8 +96,11 @@ const ProductCard = ({
         <Link to={`/${title?.toLowerCase().split(" ").join("-")}/${id}`}>
           <img
             className="h-full w-full object-contain p-4 transition-opacity duration-300 group-hover:opacity-40 md:p-8 lg:p-12"
-            src={image && image[0]}
+            src={
+              image && image[0] ? image[0] : "https://via.placeholder.com/150"
+            }
             alt={title}
+            loading="lazy"
           />
         </Link>
 

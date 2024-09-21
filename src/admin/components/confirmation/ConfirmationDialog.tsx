@@ -11,7 +11,8 @@ import {
 import { Button } from "../../../common/ui/button";
 
 interface ConfirmationDialogProps {
-  triggerText: React.ReactNode;
+  triggerComponent: React.ReactNode;
+  triggerText?: string;
   title: string;
   description: React.ReactNode;
   onConfirm: () => void;
@@ -23,6 +24,7 @@ interface ConfirmationDialogProps {
 
 const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   triggerText,
+  triggerComponent,
   title,
   description,
   onConfirm,
@@ -34,7 +36,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button>{triggerText}</Button>
+        {triggerComponent || <Button>{triggerText}</Button>}
       </DialogTrigger>
       <DialogContent className="flex flex-col items-center justify-center gap-4 py-12">
         <DialogHeader>

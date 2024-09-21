@@ -12,7 +12,7 @@ const Analytics = () => {
   //
 
   return (
-    <div className="mb-5 flex w-full flex-col gap-5 px-4 lg:mx-8">
+    <div className="mb-5 flex w-full flex-col gap-5 px-4">
       <FeaturedInfo />
       <Chart
       // data={userData}

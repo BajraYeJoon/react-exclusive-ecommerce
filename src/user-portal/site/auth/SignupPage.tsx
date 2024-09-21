@@ -34,7 +34,7 @@ const SignupPage = () => {
   };
 
   return (
-    <div className="sign-up-content flex flex-col space-y-4">
+    <div className="sign-up-content flex w-[400px] flex-col space-y-4">
       <h2 className="text-lg lg:text-3xl">Create an account</h2>
       <p className="text-sm lg:text-base">Enter your details below</p>
       <form onSubmit={handleSubmit(onSubmit)} className="w-full">
@@ -103,7 +103,7 @@ const SignupPage = () => {
           </Button>
         </div>
       </form>
-      <GoogleSignInComponent text={"Sign up with Google"} />
+      {/* <GoogleSignInComponent text={"Sign up with Google"} /> */}
       <div className="inline-flex gap-3 text-sm">
         Already have an account?{" "}
         <Link to="/sign-in" className="text-primary underline">

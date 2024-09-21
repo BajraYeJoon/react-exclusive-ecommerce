@@ -52,7 +52,7 @@ const SignInPage = () => {
   
 
   return (
-    <div className="sign-up-content space-y-8">
+    <div className="sign-up-content w-[400px] space-y-8">
       {" "}
       <h2 className="text-lg lg:text-3xl">Login to your account</h2>
       <p className="text-sm lg:text-base">Provide your details below</p>
@@ -73,8 +73,8 @@ const SignInPage = () => {
               "Login"
             )}
           </Button>
-          <GoogleSignInComponent text="Sign in with Google" />
-          <div className="flex gap-5">
+          {/* <GoogleSignInComponent text="Sign in with Google" /> */}
+          <div className="flex justify-between gap-5">
             <Link to={"/forgot-password"}>
               <p className="text-sm text-primary underline">
                 Forgot your password

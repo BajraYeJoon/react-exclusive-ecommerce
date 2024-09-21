@@ -136,7 +136,7 @@ const AdminLayout = () => {
 
       <MaxWidthWrapper>
         <Header />
-        <div className="flex h-full w-full flex-1">
+        <div className="mt-5 flex h-full w-full">
           <SidebarPanel />
 
           <div className="flex-1 lg:ml-64">

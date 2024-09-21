@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { fetchAllProducts } from "../../../../common/api/productApi";
 import {
   ProductType,
@@ -9,9 +9,14 @@ import { ProductCardSkeleton } from "../../../../common/components";
 import ProductFilters from "../../filters/ProductFilters";
 import ProductCard from "../productCard/ProductCard";
 import { Filter } from "lucide-react";
+import { Button } from "../../../../common/ui/button";
 
-const AllProducts: React.FC = () => {
+const AllProducts = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 8,
+  });
 
   const {
     data: allProducts,
@@ -32,12 +37,18 @@ const AllProducts: React.FC = () => {
     getUniqueCategories,
   } = useProductFilters(allProducts || []);
 
-  if (isLoading) return <ProductCardSkeleton />;
-  if (error) return <div>An error occurred: {error.message}</div>;
+  const filteredAndSortedProducts = useMemo(() => {
+    return getFilteredAndSortedProducts();
+  }, [getFilteredAndSortedProducts]);
 
-  const filteredAndSortedProducts = getFilteredAndSortedProducts();
-  const uniqueBrands = getUniqueBrands();
-  const uniqueCategories = getUniqueCategories();
+  const paginatedProducts = useMemo(() => {
+    const start = pagination.pageIndex * pagination.pageSize;
+    const end = start + pagination.pageSize;
+    return filteredAndSortedProducts.slice(start, end);
+  }, [filteredAndSortedProducts, pagination.pageIndex, pagination.pageSize]);
+
+  if (isLoading) return <ProductCardSkeleton />;
+  if (error) return <div>An error occurred: {(error as Error).message}</div>;
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -58,18 +69,55 @@ const AllProducts: React.FC = () => {
           sortOption={sortOption}
           handleFilterChange={handleFilterChange}
           handleSortChange={handleSortChange}
-          uniqueBrands={uniqueBrands}
-          uniqueCategories={uniqueCategories}
+          uniqueBrands={getUniqueBrands()}
+          uniqueCategories={getUniqueCategories()}
         />
       )}
 
       <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {filteredAndSortedProducts?.map((product: ProductType) => (
-          <ProductCard key={product.id} {...product} image={product.image[0]} />
+        {paginatedProducts.map((product: ProductType) => (
+          <ProductCard key={product.id} {...product}  />
         ))}
+      </div>
+
+      <div className="mt-8 flex items-center justify-between">
+        <Button
+          onClick={() =>
+            setPagination((prev) => ({
+              ...prev,
+              pageIndex: prev.pageIndex - 1,
+            }))
+          }
+          disabled={pagination.pageIndex === 0}
+        >
+          Previous
+        </Button>
+        <span>
+          Page {pagination.pageIndex + 1} of{" "}
+          {Math.ceil(filteredAndSortedProducts.length / pagination.pageSize)}
+        </span>
+        <Button
+          onClick={() =>
+            setPagination((prev) => ({
+              ...prev,
+              pageIndex: prev.pageIndex + 1,
+            }))
+          }
+          disabled={
+            pagination.pageIndex >=
+            Math.ceil(filteredAndSortedProducts.length / pagination.pageSize) -
+              1
+          }
+        >
+          Next
+        </Button>
       </div>
     </section>
   );
 };
 
 export default AllProducts;
+
+
+
+
