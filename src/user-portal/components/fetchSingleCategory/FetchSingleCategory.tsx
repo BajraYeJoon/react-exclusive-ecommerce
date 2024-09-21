@@ -71,11 +71,7 @@ const FetchSingleCategory = () => {
       )} */}
       <div className="product-card-container grid h-fit w-full grid-cols-2 items-center justify-between gap-4 overflow-hidden md:grid-cols-3 lg:grid-cols-4">
         {productsByCategory?.map((category: any) => (
-          <ProductCard
-            key={category?.id}
-            {...category}
-            images={category.image[0]}
-          />
+          <ProductCard key={category?.id} {...category} />
         ))}
       </div>
     </section>

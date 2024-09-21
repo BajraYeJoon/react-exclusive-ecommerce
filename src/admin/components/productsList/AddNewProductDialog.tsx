@@ -124,13 +124,10 @@ export default function AddNewProductDialog() {
     },
   });
 
-  const handleCategorySelect = (categoryId: number) => {
-    setSelectedCategories((prevSelected) => {
-      const updatedCategories = prevSelected.includes(categoryId)
-        ? prevSelected.filter((id) => id !== categoryId)
-        : [...prevSelected, categoryId];
-      setValue("categories", updatedCategories.join(","));
-      return updatedCategories;
+  const handleCategorySelect = (selectedCategories: number[]) => {
+    setSelectedCategories(selectedCategories);
+    setValue("categories", selectedCategories.map(String).join(","), {
+      shouldDirty: true,
     });
   };
 
@@ -385,6 +382,7 @@ export default function AddNewProductDialog() {
                 categories={categories}
                 selectedCategories={selectedCategories}
                 onCategorySelect={handleCategorySelect}
+                register={register}
               />
               {errors.categories && (
                 <p className="mt-1 text-sm text-primary">

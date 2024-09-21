@@ -10,13 +10,15 @@ interface Category {
 interface CategorySelectorProps {
   categories: Category[];
   selectedCategories: number[];
-  onCategorySelect: (categoryId: number) => void;
+  onCategorySelect: (categoryIds: number[]) => void;
+  register: any;
 }
 
 const CategorySelector: React.FC<CategorySelectorProps> = ({
   categories,
   selectedCategories,
   onCategorySelect,
+  register,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -41,6 +43,14 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
   const filteredCategories = categories.filter((category) =>
     category.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
+
+  const handleCategoryToggle = (categoryId: number) => {
+    const updatedCategories = selectedCategories.includes(categoryId)
+      ? selectedCategories.filter((id) => id !== categoryId)
+      : [...selectedCategories, categoryId];
+
+    onCategorySelect(updatedCategories);
+  };
 
   return (
     <div className="relative w-full" ref={dropdownRef}>
@@ -79,7 +89,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
                 <li
                   key={category.id}
                   className="flex cursor-pointer items-center px-4 py-2 hover:bg-gray-100"
-                  onClick={() => onCategorySelect(category.id)}
+                  onClick={() => handleCategoryToggle(category.id)}
                 >
                   <Check
                     className={`mr-2 h-4 w-4 ${
@@ -105,10 +115,9 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
               className="items-center rounded-full bg-primary px-2 py-1 text-xs font-light text-background"
             >
               {category.name}
-
               <X
                 className="ml-1 inline-flex h-3 w-3 items-center rounded-full"
-                onClick={() => onCategorySelect(category.id)}
+                onClick={() => handleCategoryToggle(category.id)}
               />
             </span>
           ))}
@@ -116,6 +125,12 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
       <p className="mt-1 text-sm text-gray-500">
         You can select multiple categories.
       </p>
+
+      <input
+        type="hidden"
+        {...register("categories")}
+        value={selectedCategories.join(",")}
+      />
     </div>
   );
 };

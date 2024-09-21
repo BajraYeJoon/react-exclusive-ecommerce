@@ -132,7 +132,8 @@ export default function UpdateProductForm({ initialData, setDialogOpen }: any) {
     setValue,
     watch,
     reset,
-    formState: { errors },
+    trigger,
+    formState: { errors, isDirty },
   } = useForm({
     resolver: zodResolver(updateProductSchema),
     defaultValues: {
@@ -152,10 +153,10 @@ export default function UpdateProductForm({ initialData, setDialogOpen }: any) {
   const watchedValues = watch();
 
   useEffect(() => {
-    setImages(initialData.images || []);
-    setSelectedCategories(
-      initialData.categories?.map((cat: any) => cat.id) || [],
-    );
+    // setImages(initialData.images || []);
+    // setSelectedCategories(
+    //   initialData.categories?.map((cat: any) => cat.id) || [],
+    // );
     reset({
       title: initialData.title || "",
       brand: initialData.brand || "",
@@ -232,14 +233,9 @@ export default function UpdateProductForm({ initialData, setDialogOpen }: any) {
       console.error("Failed to delete image", error);
     }
   };
-
-  const handleCategoryToggle = (categoryId: number) => {
-    setSelectedCategories((prevSelected) => {
-      const updatedCategories = prevSelected.includes(categoryId)
-        ? prevSelected.filter((id) => id !== categoryId)
-        : [...prevSelected, categoryId];
-      setValue("categories", updatedCategories.map(String)); // Convert numbers to strings
-      return updatedCategories;
+  const handleCategoryChange = (selectedCategories: number[]) => {
+    setValue("categories", selectedCategories.map(String), {
+      shouldDirty: true,
     });
   };
 
@@ -450,8 +446,9 @@ export default function UpdateProductForm({ initialData, setDialogOpen }: any) {
               </div>
               <CategorySelector
                 categories={categories}
-                selectedCategories={selectedCategories}
-                onCategorySelect={handleCategoryToggle}
+                selectedCategories={watchedValues.categories.map(Number)}
+                onCategorySelect={handleCategoryChange}
+                register={register}
               />
               {errors.categories && (
                 <p className="mt-1 text-sm text-primary">
@@ -471,7 +468,7 @@ export default function UpdateProductForm({ initialData, setDialogOpen }: any) {
           Previous
         </Button>
         {currentStep === steps.length - 1 ? (
-          <Button onClick={handleSubmit(onSubmit)} disabled={!isFormChanged()}>
+          <Button onClick={handleSubmit(onSubmit)} disabled={!isDirty}>
             Submit
           </Button>
         ) : (

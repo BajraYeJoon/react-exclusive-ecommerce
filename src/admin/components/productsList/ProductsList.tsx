@@ -256,24 +256,27 @@ export default function ProductsList() {
               </TableRow>
             ))}
           </TableHeader>
-          {isLoading ? (
-            <Loading />
-          ) : (
-            <TableBody>
-              {table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="px-2 py-3">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
-          )}
+
+          <TableBody>
+            {isLoading ? (
+              <Loading />
+            ) : (
+              <>
+                {table.getRowModel().rows.map((row) => (
+                  <TableRow key={row.id}>
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id} className="px-2 py-3">
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </>
+            )}
+          </TableBody>
         </Table>
       </div>
 

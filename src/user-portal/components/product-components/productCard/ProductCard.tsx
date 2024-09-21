@@ -20,6 +20,7 @@ interface ProductCardProps {
   image: string;
   discountTag?: boolean;
   id: number;
+  discountprice: number;
 }
 
 const ProductCard = ({
@@ -28,6 +29,7 @@ const ProductCard = ({
   image,
   discountTag,
   id,
+  discountprice,
 }: ProductCardProps) => {
   const { dimension } = useWindow();
   const { isLoggedIn, isAdmin } = useAuthContext();
@@ -95,7 +97,7 @@ const ProductCard = ({
       <div className="group relative h-32 w-full overflow-hidden rounded-b-md bg-card md:h-56">
         <Link to={`/${title?.toLowerCase().split(" ").join("-")}/${id}`}>
           <img
-            className="h-full w-full object-contain p-4 transition-opacity duration-300 group-hover:opacity-40 md:p-8 lg:p-12"
+            className="h-full w-full object-contain p-4 transition-opacity duration-300 group-hover:opacity-40 md:p-8 lg:p-8"
             src={
               image && image[0] ? image[0] : "https://via.placeholder.com/150"
             }
@@ -146,21 +148,26 @@ const ProductCard = ({
         )}
       </div>
 
-      <div className="my-4 space-y-3">
-        <h5 className="text-wrap text-sm font-semibold tracking-wide text-foreground/80">
+      <div className="my-4 space-y-2">
+        <h5 className="text-wrap text-sm font-semibold tracking-wide text-foreground/80 md:text-base">
           {title.slice(0, 20)}
         </h5>
 
-        <div className="flex items-center justify-start gap-3 text-sm font-medium">
-          <span className="text-primary">${price}</span>
-          <span className="text-foreground/40 line-through">100</span>
+        <div className="flex items-center justify-start gap-3 font-medium">
+          <span className="text-base text-primary">${price}</span>
+          {discountprice && (
+            <span className="text-foreground/40 line-through">
+              {discountprice}
+            </span>
+          )}
         </div>
         <div className="flex items-center text-xs">
-          <div className="flex items-center space-x-1">
-            {Array.from({ length: 5 }).map(() => (
-              <FaStar key={`star-${uuidv4()}`} className="text-accent md:h-8" />
-            ))}
-          </div>
+          {Array.from({ length: 5 }).map(() => (
+            <FaStar
+              key={`star-${uuidv4()}`}
+              className="mr-0.5 text-accent md:h-8"
+            />
+          ))}
         </div>
       </div>
     </section>

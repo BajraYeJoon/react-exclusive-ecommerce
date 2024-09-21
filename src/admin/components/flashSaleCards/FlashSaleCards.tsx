@@ -96,7 +96,7 @@ export default function FlashSaleAdmin() {
       </div>
 
       <div className="my-4">
-        {flashSaleProductsData && (
+        {flashSaleProducts.length ? (
           <div className="text-base font-medium">
             <p>
               Sale Start:{" "}
@@ -106,7 +106,7 @@ export default function FlashSaleAdmin() {
               Sale End: <span className="text-sm font-light">{startEnd}</span>
             </p>
           </div>
-        )}
+        ) : null}
       </div>
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
@@ -153,7 +153,7 @@ export default function FlashSaleAdmin() {
                 </Dialog>
                 <CardFooter className="justify-center overflow-hidden p-0">
                   <ConfirmationDialog
-                    triggerText={
+                    triggerComponent={
                       <>
                         <X className="mr-2 h-4 w-4" /> Remove from Sale
                       </>

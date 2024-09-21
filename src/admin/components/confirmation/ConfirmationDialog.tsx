@@ -11,7 +11,7 @@ import {
 import { Button } from "../../../common/ui/button";
 
 interface ConfirmationDialogProps {
-  triggerComponent: React.ReactNode;
+  triggerComponent?: React.ReactNode;
   triggerText?: string;
   title: string;
   description: React.ReactNode;
