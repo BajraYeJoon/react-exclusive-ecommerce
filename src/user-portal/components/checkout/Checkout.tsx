@@ -145,7 +145,7 @@ export default function Checkout() {
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const orderData = {
-      itemId: checkoutValues.cartItems.map((item: any) => item.product.id),
+      itemId: checkoutValues.cartItems.map((item: any) => item.id),
       totalPrice: checkoutValues.total,
       billingInfo: {
         firstname: data.fullName.split(" ")[0],
@@ -158,6 +158,8 @@ export default function Checkout() {
       },
       paymentMethod: data.paymentMethod,
     };
+
+    console.log(orderData);
 
     try {
       if (data.paymentMethod === "khalti") {
@@ -211,13 +213,18 @@ export default function Checkout() {
         await Axios.post("/coupon/apply", { couponCode: couponCode });
       }
 
-      toast.success("Order placed successfully");
       setOrderPlaceData(orderData);
       reset();
       resetCheckoutCartAfterOrderPlace({ cartItems: [], total: 0 });
       Cookies.remove("checkoutData");
+
+      // try {
       await removeCartAfterOrderPlace.mutateAsync();
       resetCartAfterOrderPlace([]);
+      // toast.success("Thank you for shopping with us!");
+      // } catch (error) {
+      // toast.error("Failed to remove cart items");
+      // }
       Cookies.set("order-placed", "true");
       navigate("/order-placed", {
         replace: true,
