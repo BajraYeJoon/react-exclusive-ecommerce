@@ -106,7 +106,7 @@ function NoSalesCard() {
           </p>
         </div>
         <img
-          src="/public/sale.png"
+          src="/sale.png"
           alt="Upcoming Sales"
           className="w-full max-w-44 lg:max-w-xs"
         />

@@ -120,12 +120,10 @@ const Cart = () => {
 
       const subTotal = Array.isArray(cartItems)
         ? cartItems.reduce((acc, item) => {
-            // Log each item to verify its structure
             console.log(item);
             if (item.product && item.product.price && item.quantity) {
               return acc + item.product.price * item.quantity;
             } else {
-              // Log a warning if the item structure is not as expected
               console.warn("Item structure is not as expected:", item);
               return acc;
             }
