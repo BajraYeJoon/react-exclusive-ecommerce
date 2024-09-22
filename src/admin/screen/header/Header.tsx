@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { LinkIcon, MenuIcon, X } from "lucide-react";
@@ -69,7 +69,7 @@ const Header = () => {
   );
 };
 
-const MobileSidebar = ({ open, setOpen }) => (
+const MobileSidebar = ({ open, setOpen }: any) => (
   <AnimatePresence>
     {open && (
       <>

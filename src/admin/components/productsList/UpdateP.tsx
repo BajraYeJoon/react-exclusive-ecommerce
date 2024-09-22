@@ -107,9 +107,9 @@ const steps = [
 
 export default function UpdateProductForm({ initialData, setDialogOpen }: any) {
   const queryClient = useQueryClient();
-  const [selectedCategories, setSelectedCategories] = useState<number[]>(
-    initialData.categories?.map((cat: any) => cat.id) || [],
-  );
+  // const [selectedCategories, setSelectedCategories] = useState<number[]>(
+  //   initialData.categories?.map((cat: any) => cat.id) || [],
+  // );
   const [images, setImages] = useState<Array<string | File>>(
     initialData.image || [],
   );
@@ -132,7 +132,6 @@ export default function UpdateProductForm({ initialData, setDialogOpen }: any) {
     setValue,
     watch,
     reset,
-    trigger,
     formState: { errors, isDirty },
   } = useForm({
     resolver: zodResolver(updateProductSchema),
@@ -167,7 +166,7 @@ export default function UpdateProductForm({ initialData, setDialogOpen }: any) {
       returnpolicy: initialData.returnpolicy || "N/A",
       description: initialData.description || "",
       categories:
-        initialData.categories?.map((cat: any) => String(cat.id)) || [], // Convert numbers to strings
+        initialData.categories?.map((cat: any) => String(cat.id)) || [], 
       image: initialData.image || [],
     });
   }, [initialData, reset]);
@@ -254,23 +253,6 @@ export default function UpdateProductForm({ initialData, setDialogOpen }: any) {
     setError("");
   };
 
-  const isFormChanged = () => {
-    const initialValues = {
-      title: initialData.title || "",
-      brand: initialData.brand || "",
-      price: initialData.price || "",
-      discountprice: initialData.discountPrice || "",
-      stock: initialData.stock || "",
-      sizes: initialData.sizes || "",
-      returnpolicy: initialData.returnpolicy || "",
-      description: initialData.description || "",
-      categories:
-        initialData.categories?.map((cat: any) => String(cat.id)) || [],
-      image: initialData.image || [],
-    };
-
-    return JSON.stringify(watchedValues) !== JSON.stringify(initialValues);
-  };
 
   return (
     <div className="mx-auto w-full max-w-4xl overflow-hidden rounded-lg bg-white shadow-lg">

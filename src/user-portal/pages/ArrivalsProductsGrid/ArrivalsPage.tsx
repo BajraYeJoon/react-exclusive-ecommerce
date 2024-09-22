@@ -18,6 +18,7 @@ export interface NewArrivalsProductProps {
   description: string;
   image: string[];
   price: number;
+  discountprice: number;
 }
 
 const ArrivalsPage = () => {

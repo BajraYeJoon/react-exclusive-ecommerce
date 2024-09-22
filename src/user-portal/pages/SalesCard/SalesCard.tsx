@@ -19,6 +19,7 @@ interface SalesCardProps {
   image: string;
   discountTag?: boolean;
   id: number;
+  discountprice: number;
 }
 
 const SalesCard = () => {
@@ -33,19 +34,7 @@ const SalesCard = () => {
 
   const salesValue = salesData ? salesData[0].products : [];
 
-  // if (!salesData || salesData.length === 0)
-  //   return (
-  //     <div className="px-6 py-12 font-sans">
-  //       <div className="container mx-auto flex flex-col items-center justify-center text-center">
-  //         <h2 className="mb-4 text-3xl font-bold sm:text-4xl">Stay tuned</h2>
-  //         <p className="mb-8 text-center text-base">
-  //           We're working on adding more SALE to our store. Stay tuned!
-  //         </p>
-
-  //         <Button>Explore More</Button>
-  //       </div>
-  //     </div>
-  //   );
+  if (salesValue.length === 0) return <NoSalesCard />;
 
   return (
     <section className="sales-card-container flex flex-col gap-5 border-b border-foreground/30 pb-8 md:gap-7 md:pb-14">
@@ -102,3 +91,29 @@ const SalesCard = () => {
 };
 
 export default SalesCard;
+
+function NoSalesCard() {
+  return (
+    <section className="relative overflow-hidden rounded-sm bg-gradient-to-r from-indigo-600 to-indigo-800 px-6 py-8 sm:px-8 lg:py-0">
+      <div className="flex flex-col items-center lg:flex-row lg:items-center lg:justify-center">
+        <div className="max-w-xl text-center lg:text-left">
+          <h2 className="mb-2 text-xl font-bold leading-tight text-background sm:leading-tight md:text-3xl md:leading-tight">
+            Stay Tuned for Upcoming Sales
+          </h2>
+          <p className="mb-8 text-sm font-medium leading-relaxed text-background/50 sm:text-xl">
+            Don't miss out on our exclusive offers! Sign up now to receive
+            notifications about our upcoming sales and special promotions.
+          </p>
+        </div>
+        <img
+          src="/public/sale.png"
+          alt="Upcoming Sales"
+          className="w-full max-w-44 lg:max-w-xs"
+        />
+      </div>
+      <div className="absolute -left-24 -top-24 h-64 w-64 rounded-full bg-indigo-500 opacity-20"></div>
+
+      <div className="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-indigo-500 opacity-20"></div>
+    </section>
+  );
+}

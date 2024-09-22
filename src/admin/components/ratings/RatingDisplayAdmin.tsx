@@ -21,7 +21,7 @@ const RatingDisplayAdmin = () => {
     <div className="container mx-auto p-4">
       <h1 className="mb-6 text-2xl font-bold">Product Ratings Overview</h1>
       {productRatingsData?.map(
-        (product) =>
+        (product: any) =>
           product.ratings?.length > 0 && (
             <ProductRatings key={product.id} product={product} />
           ),
@@ -32,7 +32,7 @@ const RatingDisplayAdmin = () => {
 
 export default RatingDisplayAdmin;
 
-function ProductRatings({ product }) {
+function ProductRatings({ product }: any) {
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -55,7 +55,7 @@ function ProductRatings({ product }) {
       </CardHeader>
       <CardContent>
         {(expanded ? product.ratings : product.ratings.slice(0, 1)).map(
-          (rating) => (
+          (rating: any) => (
             <RatingItem key={rating.id} rating={rating} />
           ),
         )}
@@ -69,7 +69,7 @@ function ProductRatings({ product }) {
   );
 }
 
-function RatingItem({ rating }) {
+function RatingItem({ rating }: any) {
   return (
     <div className="mb-4 flex items-start space-x-4">
       <Avatar className="h-10 w-10">

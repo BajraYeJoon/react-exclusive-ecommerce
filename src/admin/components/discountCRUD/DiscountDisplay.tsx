@@ -10,14 +10,14 @@ import ConfirmationDialog from "../confirmation/ConfirmationDialog";
 export interface Coupon {
   id: string;
   name: string;
-  code: string; // From the second definition
-  type: "fixed_amount" | "percentage"; // From the second definition
-  value: number; // From the second definition
+  code: string; 
+  type: "fixed_amount" | "percentage"; 
+  value: number; 
   startDate: string;
   expirationDate: string;
-  maxUsageCount: number; // From the second definition
-  minPurchaseAmount: number; // From the second definition
-  [key: string]: string | number; // Optional index signature if you want to allow additional properties
+  maxUsageCount: number;
+  minPurchaseAmount: number;
+  [key: string]: string | number; 
 }
 
 interface DiscountDisplayProps {
@@ -99,7 +99,7 @@ export default function DiscountDisplay({ handleEdit, coupons }: Readonly<Discou
                 Edit
               </Button>
               <ConfirmationDialog
-                triggerText={
+                triggerComponent={
                   <>
                     <Trash2 className="mr-1 h-4 w-4" />
                     Delete

@@ -1,4 +1,3 @@
-import React from "react";
 import { useRecoilValue, useSetRecoilState, useRecoilState } from "recoil";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -8,26 +7,34 @@ import Cookies from "js-cookie";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
-import { Button } from "../../../common/ui/button";
 import { Axios } from "../../../common/lib/axiosInstance";
 import { checkoutState } from "../../atoms/checkoutState";
 import { orderplaceState } from "../../atoms/orderplaceState";
 import { cartState } from "../../atoms/cartState";
 import { couponState } from "../../site";
 import { deleteAllCartItems } from "../../api/cartApi";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../../common/ui/card";
+import { Label } from "../../../common/ui/label";
 import { Input } from "../../../common/ui/input";
+import { Separator } from "@radix-ui/react-dropdown-menu";
+import { Button } from "../../../common/ui/button";
 
 type FormValues = {
   fullName: string;
-  streetaddress: string;
+  streetAddress: string;
   country: string;
-  postalcode: string;
+  postalCode: string;
   phone: string;
   email: string;
   paymentMethod: "bank" | "cash" | "khalti";
 };
 
-const Checkout: React.FC = () => {
+export default function Checkout() {
   const { register, handleSubmit, reset } = useForm<FormValues>();
 
   const checkoutValues = useRecoilValue(checkoutState);
@@ -61,42 +68,93 @@ const Checkout: React.FC = () => {
 
   const generateInvoice = (orderData: any) => {
     const doc = new jsPDF();
-    doc.setFontSize(18);
-    doc.text("Invoice", 10, 10);
+    doc.setFontSize(20);
+    doc.setTextColor(44, 62, 80);
+    doc.text("Invoice", 105, 15, { align: "center" });
 
     doc.setFontSize(12);
-    doc.text(`Order ID: ${orderData.id}`, 10, 20);
-    doc.text(`Total: $${orderData.total}`, 10, 30);
-    doc.text(`Shipping: $${orderData.shipping}`, 10, 40);
-    doc.text(`Payment Method: ${orderData.paymentMethod}`, 10, 50);
+    doc.setTextColor(52, 73, 94);
+    doc.text(`Order ID: ${orderData.id}`, 20, 30);
+    doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 37);
 
-    const products = orderData.products.map((item: any) => [
+    doc.setFontSize(14);
+    doc.text("Bill To:", 20, 50);
+    doc.setFontSize(12);
+    doc.text(
+      `${orderData.billingInfo.firstname} ${orderData.billingInfo.lastname}`,
+      20,
+      57,
+    );
+    doc.text(orderData.billingInfo.streetaddress, 20, 64);
+    doc.text(
+      `${orderData.billingInfo.country}, ${orderData.billingInfo.postalcode}`,
+      20,
+      71,
+    );
+    doc.text(`Phone: ${orderData.billingInfo.phone}`, 20, 78);
+    doc.text(`Email: ${orderData.billingInfo.email}`, 20, 85);
+
+    const tableData = orderData.itemId.map((item: any) => [
       item.title,
-      `$${item.price}`,
+      item.quantity,
+      `$${item.price.toFixed(2)}`,
+      `$${(item.quantity * item.price).toFixed(2)}`,
     ]);
 
     autoTable(doc, {
-      head: [["Product", "Price"]],
-      body: products,
-      startY: 60,
+      startY: 95,
+      head: [["Item", "Quantity", "Price", "Total"]],
+      body: tableData,
+      theme: "striped",
+      headStyles: { fillColor: [41, 128, 185], textColor: 255 },
+      styles: { textColor: 52, fontSize: 10 },
     });
+
+    const finalY = (doc as any).lastAutoTable.finalY || 95;
+    doc.setFontSize(12);
+    doc.text(`Subtotal: $${orderData.totalPrice.toFixed(2)}`, 140, finalY + 15);
+    doc.text(`Shipping: $45.00`, 140, finalY + 22);
+    doc.text(
+      `Discount: $${(orderData.discount || 0).toFixed(2)}`,
+      140,
+      finalY + 29,
+    );
+    doc.setFontSize(14);
+    doc.setFont(undefined, "bold");
+    doc.text(
+      `Total: $${(orderData.totalPrice + 45 - (orderData.discount || 0)).toFixed(2)}`,
+      140,
+      finalY + 38,
+    );
+
+    doc.setFontSize(10);
+    doc.setFont(undefined, "normal");
+    doc.text("Thank you for your business!", 105, 280, { align: "center" });
 
     doc.save(`invoice_${orderData.id}.pdf`);
   };
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const orderData = {
-      itemId: productData.map((item) => item.id),
+      id: Math.random().toString(36).substr(2, 9),
+      itemId: checkoutValues.cartItems.map((item: any) => ({
+        id: item.product.id,
+        title: item.product.title,
+        price: item.product.price,
+        quantity: item.quantity,
+      })),
       totalPrice: checkoutValues.total,
       billingInfo: {
         firstname: data.fullName.split(" ")[0],
         lastname: data.fullName.split(" ")[1] || "",
         country: data.country || "Nepal",
-        streetaddress: data.streetaddress,
-        postalcode: data.postalcode,
+        streetaddress: data.streetAddress,
+        postalcode: data.postalCode,
         phone: data.phone,
         email: data.email,
       },
+      paymentMethod: data.paymentMethod,
+      discount: couponCode ? 10 : 0, // Assuming a fixed discount for simplicity
     };
 
     try {
@@ -126,132 +184,152 @@ const Checkout: React.FC = () => {
     }
   };
 
-  const productData = checkoutValues.cartItems.map((item: any) => item.product);
-
   return (
-    <section className="mx-64 mb-28 mt-12 max-2xl:mx-6 lg:mt-32">
+    <section className="container mx-auto my-12 px-4 md:px-6">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex w-full flex-col-reverse justify-between gap-12 md:flex-row md:gap-8"
+        className="grid gap-8 md:grid-cols-2"
       >
-        <div className="flex w-full flex-col gap-8">
-          <h2 className="text-sm md:text-lg lg:text-3xl">Billing Details</h2>
-
-          <div className="checkout-info-content flex flex-col space-y-4">
-            <div className="flex w-full flex-col gap-12">
+        <Card>
+          <CardHeader>
+            <CardTitle>Billing Details</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="fullName">Full Name</Label>
               <Input
-                type="text"
-                placeholder="Full Name"
+                id="fullName"
                 {...register("fullName", { required: "Full Name is required" })}
               />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="streetAddress">Street Address</Label>
               <Input
-                type="text"
-                placeholder="Street Address"
-                {...register("streetaddress", {
+                id="streetAddress"
+                {...register("streetAddress", {
                   required: "Street Address is required",
                 })}
               />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="country">Country</Label>
               <Input
-                type="text"
-                placeholder="Country"
+                id="country"
                 {...register("country", { required: "Country is required" })}
               />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="postalCode">Postal Code</Label>
               <Input
-                type="text"
-                placeholder="Postal Code"
-                {...register("postalcode", {
+                id="postalCode"
+                {...register("postalCode", {
                   required: "Postal Code is required",
                 })}
               />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="phone">Phone Number</Label>
               <Input
+                id="phone"
                 type="tel"
-                placeholder="Phone Number"
                 {...register("phone", { required: "Phone Number is required" })}
               />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="email">Email Address</Label>
               <Input
+                id="email"
                 type="email"
-                placeholder="Email Address"
                 {...register("email", {
                   required: "Email is required",
                   pattern: /^\S+@\S+$/i,
                 })}
               />
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
-        <div className="flex w-full flex-col gap-4 md:gap-7 lg:gap-8">
-          {/* Product list rendering */}
-          {productData.map((cartData, index) => (
-            <div key={index} className="flex items-center justify-between">
-              <div className="flex items-center gap-2 lg:gap-5">
-                <img
-                  src={cartData.image[0]}
-                  alt="cart images"
-                  className="h-10 w-10 md:h-12 md:w-12"
-                />
-                <h4 className="text-xs md:text-lg lg:text-base">
-                  {cartData.title}
-                </h4>
+        <Card>
+          <CardHeader>
+            <CardTitle>Order Summary</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {checkoutValues.cartItems.map((item: any, index: number) => (
+              <div key={index} className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <img
+                    src={item.product.image[0]}
+                    alt={item.product.title}
+                    className="h-12 w-12 object-cover"
+                  />
+                  <div>
+                    <p className="font-medium">{item.product.title}</p>
+                    <p className="text-sm text-gray-500">
+                      Qty: {item.quantity}
+                    </p>
+                  </div>
+                </div>
+                <p className="font-medium">${item.product.price.toFixed(2)}</p>
               </div>
-              <p className="text-sm md:text-lg lg:text-xl">${cartData.price}</p>
+            ))}
+            <Separator />
+            <div className="flex justify-between">
+              <p>Subtotal:</p>
+              <p className="font-medium">${checkoutValues.total.toFixed(2)}</p>
             </div>
-          ))}
-
-          <div className="flex items-center justify-between border-b pb-3 text-sm lg:text-base">
-            <h3>Shipping:</h3>
-            <p>$45</p>
-          </div>
-
-          <div className="flex items-center justify-between text-sm lg:text-base">
-            <h4>Total:</h4>
-            <p>${checkoutValues.total}</p>
-          </div>
-
-          <div
-            className="flex flex-col gap-4 text-sm lg:gap-4 lg:text-xl"
-            id="group"
-          >
-            <div className="flex items-center justify-between">
-              <div className="space-x-3">
+            <div className="flex justify-between">
+              <p>Shipping:</p>
+              <p className="font-medium">$45.00</p>
+            </div>
+            {couponCode && (
+              <div className="flex justify-between">
+                <p>Discount:</p>
+                <p className="font-medium text-green-600">-$10.00</p>
+              </div>
+            )}
+            <Separator />
+            <div className="flex justify-between">
+              <p className="text-lg font-bold">Total:</p>
+              <p className="text-lg font-bold">
+                $
+                {(checkoutValues.total + 45 - (couponCode ? 10 : 0)).toFixed(2)}
+              </p>
+            </div>
+            <div>
+              <div className="flex items-center space-x-2">
                 <input
                   type="radio"
                   value="bank"
+                  id="bank"
                   {...register("paymentMethod", { required: true })}
                 />
-                <label htmlFor="bank">Bank</label>
+                <label htmlFor="bank">Bank Transfer</label>
               </div>
-              <img
-                src="/card.png"
-                alt="payment card images"
-                className="h-4 lg:h-6"
-              />
+              <div className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  value="cash"
+                  id="cash"
+                  {...register("paymentMethod", { required: true })}
+                />
+                <label htmlFor="cash">Cash on Delivery</label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  value="khalti"
+                  id="khalti"
+                  {...register("paymentMethod", { required: true })}
+                />
+                <label htmlFor="khalti">Pay with Khalti</label>
+              </div>
             </div>
-            <div className="space-x-3">
-              <input
-                type="radio"
-                value="cash"
-                {...register("paymentMethod", { required: true })}
-              />
-              <label htmlFor="cash">Cash on Delivery</label>
-            </div>
-            <div className="space-x-3">
-              <input
-                type="radio"
-                value="khalti"
-                {...register("paymentMethod", { required: true })}
-              />
-              <label htmlFor="khalti">Pay with Khalti</label>
-            </div>
-          </div>
-
-          <Button type="submit" className="w-full md:w-fit">
-            Place Order
-          </Button>
-        </div>
+            <Button type="submit" className="w-full">
+              Place Order
+            </Button>
+          </CardContent>
+        </Card>
       </form>
     </section>
   );
-};
-
-export default Checkout;
+}

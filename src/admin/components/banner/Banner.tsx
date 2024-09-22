@@ -330,7 +330,7 @@ export default function Banner() {
                 </div>
                 <div className="flex flex-col justify-between gap-2 p-2 md:flex-row">
                   <ConfirmationDialog
-                    triggerText={
+                    triggerComponent={
                       <>
                         <Trash2Icon className="mr-2" size={14} /> Delete
                       </>

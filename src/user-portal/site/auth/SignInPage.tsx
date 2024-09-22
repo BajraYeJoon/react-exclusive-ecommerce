@@ -3,7 +3,6 @@ import { LoginFormData } from "../../schemas/types";
 import { LoginFormSchema } from "../../schemas/zodSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../../../common/ui/button";
-import { GoogleSignInComponent } from "./GoogleSignIn";
 import { useAuthContext } from "../../context/useAuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";

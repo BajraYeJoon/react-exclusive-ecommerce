@@ -11,6 +11,7 @@ export interface ProductType {
   categories: { id: number; name: string }[];
   onSale: boolean;
   stock: number;
+  discountprice: number,
 }
 
 export interface FilterOptions {
