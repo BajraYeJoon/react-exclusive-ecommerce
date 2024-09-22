@@ -39,13 +39,15 @@ export const userRoutes = [
     children: [
       { path: UserRoutes.SignUp, element: <SignupPage /> },
       { path: UserRoutes.SignIn, element: <SignInPage /> },
-      { path: UserRoutes.EmailVerification, element: <EmailVerification />},
+      { path: UserRoutes.EmailVerification, element: <EmailVerification /> },
       { path: UserRoutes.ForgotPassword, element: <ForgotPassword /> },
       {
         path: UserRoutes.VerifyOtp,
         element: <OtpVerificationForm />,
         loader: () =>
-          !Cookies.get("key") ? redirect(UserRoutes.ForgotPassword) : null,
+          !Cookies.get("key")
+            ? redirect(`/${UserRoutes.ForgotPassword}`)
+            : null,
       },
     ],
   },
@@ -63,15 +65,19 @@ export const userRoutes = [
   { path: UserRoutes.Favorites, element: <Favorites /> },
   {
     path: UserRoutes.Checkout,
-    element: <Checkout />,
+    element: (
+      <ProtectedRoute role="user">
+        <Checkout />
+      </ProtectedRoute>
+    ),
     loader: () =>
-      !Cookies.get("checkoutData") ? redirect(UserRoutes.Products) : null,
+      !Cookies.get("checkoutData") ? redirect(`/${UserRoutes.Products}`) : null,
   },
   {
     path: UserRoutes.OrderPlaced,
     element: <OrderPlaced />,
     loader: () =>
-      !Cookies.get("order-placed") ? redirect(UserRoutes.Products) : null,
+      !Cookies.get("order-placed") ? redirect(`/${UserRoutes.Products}`) : null,
   },
   { path: UserRoutes.SingleProduct, element: <Singleproduct /> },
   {

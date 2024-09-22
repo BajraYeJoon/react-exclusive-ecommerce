@@ -19,9 +19,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../common/ui/card";
-import { Label } from "../../../common/ui/label";
 import { Input } from "../../../common/ui/input";
-import { Separator } from "@radix-ui/react-dropdown-menu";
 import { Button } from "../../../common/ui/button";
 
 type FormValues = {
@@ -190,53 +188,52 @@ export default function Checkout() {
         onSubmit={handleSubmit(onSubmit)}
         className="grid gap-8 md:grid-cols-2"
       >
-        <Card>
+        <Card className="border-none bg-background shadow-none">
           <CardHeader>
             <CardTitle>Billing Details</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="fullName">Full Name</Label>
               <Input
                 id="fullName"
                 {...register("fullName", { required: "Full Name is required" })}
+                placeholder="Full Name"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="streetAddress">Street Address</Label>
               <Input
                 id="streetAddress"
                 {...register("streetAddress", {
                   required: "Street Address is required",
                 })}
+                placeholder="Street Address"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="country">Country</Label>
               <Input
                 id="country"
                 {...register("country", { required: "Country is required" })}
+                placeholder="Country"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="postalCode">Postal Code</Label>
               <Input
                 id="postalCode"
                 {...register("postalCode", {
                   required: "Postal Code is required",
                 })}
+                placeholder="Postal Code"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="phone">Phone Number</Label>
               <Input
                 id="phone"
                 type="tel"
                 {...register("phone", { required: "Phone Number is required" })}
+                placeholder="Phone Number"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">Email Address</Label>
               <Input
                 id="email"
                 type="email"
@@ -244,12 +241,13 @@ export default function Checkout() {
                   required: "Email is required",
                   pattern: /^\S+@\S+$/i,
                 })}
+                placeholder="Email"
               />
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-none bg-background shadow-none">
           <CardHeader>
             <CardTitle>Order Summary</CardTitle>
           </CardHeader>
@@ -272,7 +270,7 @@ export default function Checkout() {
                 <p className="font-medium">${item.product.price.toFixed(2)}</p>
               </div>
             ))}
-            <Separator />
+            <hr />
             <div className="flex justify-between">
               <p>Subtotal:</p>
               <p className="font-medium">${checkoutValues.total.toFixed(2)}</p>
@@ -287,7 +285,7 @@ export default function Checkout() {
                 <p className="font-medium text-green-600">-$10.00</p>
               </div>
             )}
-            <Separator />
+            <hr />
             <div className="flex justify-between">
               <p className="text-lg font-bold">Total:</p>
               <p className="text-lg font-bold">
@@ -296,14 +294,18 @@ export default function Checkout() {
               </p>
             </div>
             <div>
-              <div className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  value="bank"
-                  id="bank"
-                  {...register("paymentMethod", { required: true })}
-                />
-                <label htmlFor="bank">Bank Transfer</label>
+              <div className="flex items-center justify-between space-x-2">
+                <div className="space-x-2">
+                  <input
+                    type="radio"
+                    value="bank"
+                    id="bank"
+                    {...register("paymentMethod", { required: true })}
+                  />
+                  <label htmlFor="bank">Bank Transfer</label>
+                </div>
+
+                <img src="/public/card.png" alt="" />
               </div>
               <div className="flex items-center space-x-2">
                 <input
