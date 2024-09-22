@@ -118,7 +118,7 @@ export default function Checkout() {
       finalY + 29,
     );
     doc.setFontSize(14);
-    doc.setFont(undefined, "bold");
+    doc.setFont("helvetica", "bold");
     doc.text(
       `Total: $${(orderData.totalPrice + 45 - (orderData.discount || 0)).toFixed(2)}`,
       140,
@@ -126,7 +126,7 @@ export default function Checkout() {
     );
 
     doc.setFontSize(10);
-    doc.setFont(undefined, "normal");
+    doc.setFont("helvetica", "normal");
     doc.text("Thank you for your business!", 105, 280, { align: "center" });
 
     doc.save(`invoice_${orderData.id}.pdf`);
