@@ -174,7 +174,7 @@ export default function Checkout() {
             product_code: "EPAYTEST",
             product_service_charge: "0",
             product_delivery_charge: "0",
-            success_url: "https://localhost:5173/payment/verify",
+            success_url: "https://exclusivenp.vercel.app/payment/verify",
             failure_url: "https://developer.esewa.com.np/failure",
             signed_field_names: signed_field_names,
             signature: signature,
