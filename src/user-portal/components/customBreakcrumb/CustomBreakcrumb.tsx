@@ -21,7 +21,7 @@ const CustomBreakcrumb = ({
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbLink href="/components">
+          <BreadcrumbLink href={`/${breadcrumbTitle.toLowerCase()}`}>
             {breadcrumbTitle}{" "}
             {breadcrumbValue?.length ? `(${breadcrumbValue.length})` : null}
           </BreadcrumbLink>

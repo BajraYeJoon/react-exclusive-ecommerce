@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
+import React, { useState, useMemo } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { atom, useRecoilState } from "recoil";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { v4 as uuid } from "uuid";
@@ -47,7 +47,7 @@ const Cart = () => {
   const [discount, setDiscount] = useRecoilState(discountState);
   const navigate = useNavigate();
   const [couponCode, setCouponCode] = useRecoilState(couponState);
-  const [isDialogOpen, setIsDialogOpen] = useState();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { data: cartItems, isLoading } = useQuery({
     queryKey: ["cart"],
@@ -58,8 +58,6 @@ const Cart = () => {
     queryKey: ["coupons"],
     queryFn: () => Axios.get("/coupon").then((res) => res.data),
   });
-
-  console.log(coupons, "coupons");
 
   const { mutate: increaseQuantity } = useIncreaseQuantity();
   const { mutate: decreaseQuantity } = useDecreaseQuantity();
@@ -74,18 +72,49 @@ const Cart = () => {
     }
   };
 
-  const navigateToCheckout = (cartItems: any, total: number) => {
+  const { subTotal, total, discountAmount } = useMemo(() => {
+    if (!Array.isArray(cartItems))
+      return { subTotal: 0, total: 0, discountAmount: 0 };
+
+    const subTotal = cartItems.reduce((acc, item) => {
+      if (item.product && item.product.price && item.quantity) {
+        return acc + item.product.price * item.quantity;
+      }
+      return acc;
+    }, 0);
+
+    const charge = 45;
+    let discountAmount = 0;
+
+    if (discount.type === "fixed_amount") {
+      discountAmount = discount.value;
+    } else if (discount.type === "percentage") {
+      discountAmount = subTotal * (discount.value / 100);
+    }
+
+    const total = subTotal + charge - discountAmount;
+
+    return { subTotal, total, discountAmount };
+  }, [cartItems, discount]);
+
+  const navigateToCheckout = () => {
     const checkoutData = {
       id: uuid().toString().substring(2, 15),
-      cartItems,
+      cartItems: cartItems.map((item: any) => ({
+        id: item.product.id,
+        title: item.product.title,
+        image: item.product.image[0],
+        total: item.product.price * item.quantity,
+        quantity: item.quantity,
+      })),
       total,
       couponCode,
       discount: discount.value,
     };
 
     setCheckoutData(checkoutData);
-    Cookies.set("checkoutData", checkoutData.id);
-    console.log(checkoutData);
+    Cookies.set("checkoutData", JSON.stringify(checkoutData), { expires: 1 });
+
     navigate("/checkout");
   };
 
@@ -113,44 +142,7 @@ const Cart = () => {
     }
   };
 
-  const calculateTotal = selector({
-    key: "CalculateTotal",
-    get: ({ get }) => {
-      const discountInfo = get(discountState);
-
-      const subTotal = Array.isArray(cartItems)
-        ? cartItems.reduce((acc, item) => {
-            console.log(item);
-            if (item.product && item.product.price && item.quantity) {
-              return acc + item.product.price * item.quantity;
-            } else {
-              console.warn("Item structure is not as expected:", item);
-              return acc;
-            }
-          }, 0)
-        : 0;
-
-      console.log("Subtotal:", subTotal);
-      const charge = 45;
-      let discountAmount = 0;
-
-      if (discountInfo.type === "fixed_amount") {
-        discountAmount = discountInfo.value;
-      } else if (discountInfo.type === "percentage") {
-        discountAmount = subTotal * (discountInfo.value / 100);
-      }
-
-      return {
-        subTotal,
-        discountAmount,
-        total: subTotal + charge - discountAmount,
-      };
-    },
-  });
-
-  const total = useRecoilValue(calculateTotal);
-
-  if (cartItems === undefined || cartItems.length === 0) {
+  if (!cartItems || cartItems.length === 0) {
     return (
       <div className="flex h-[50vh] flex-col items-center justify-center gap-4 lg:h-[90vh]">
         <h1 className="flex flex-col text-3xl font-semibold text-gray-400">
@@ -284,7 +276,7 @@ const Cart = () => {
               Sub Total
             </p>
             <h6 className="text-base font-semibold leading-8 text-gray-900 md:text-xl">
-              ${total.subTotal.toFixed(2)}
+              ${subTotal.toFixed(2)}
             </h6>
           </div>
 
@@ -296,13 +288,13 @@ const Cart = () => {
               $45.00
             </h6>
           </div>
-          {total.discountAmount > 0 && (
+          {discountAmount > 0 && (
             <div className="flex w-full items-center justify-between py-6">
               <p className="text-base font-normal leading-8 text-green-500 md:text-xl">
                 Discount Applied
               </p>
               <h6 className="text-base font-semibold leading-8 text-green-500 md:text-xl">
-                -${total.discountAmount.toFixed(2)}
+                -${discountAmount.toFixed(2)}
               </h6>
             </div>
           )}
@@ -311,13 +303,10 @@ const Cart = () => {
               Total
             </p>
             <h6 className="text-lg font-medium leading-9 md:text-2xl">
-              ${total.total.toFixed(2)}
+              ${total.toFixed(2)}
             </h6>
           </div>
-          <Button
-            className="w-full"
-            onClick={() => navigateToCheckout(cartItems, total.total)}
-          >
+          <Button className="w-full" onClick={navigateToCheckout}>
             Proceed to Checkout
           </Button>
         </div>

@@ -22,6 +22,7 @@ import {
 import { Input } from "../../../common/ui/input";
 import { Button } from "../../../common/ui/button";
 import { Label } from "../../../common/ui/label";
+import { useEffect } from "react";
 
 type FormValues = {
   fullName: string;
@@ -43,6 +44,15 @@ export default function Checkout() {
   const [, setOrderPlaceData] = useRecoilState(orderplaceState);
   const couponCode = useRecoilValue(couponState);
   const queryClient = useQueryClient();
+
+  const setCheckoutData = useSetRecoilState(checkoutState);
+
+  useEffect(() => {
+    const storedData = Cookies.get("checkoutData");
+    if (storedData) {
+      setCheckoutData(JSON.parse(storedData));
+    }
+  }, [setCheckoutData]);
 
   const removeCartAfterOrderPlace = useMutation({
     mutationFn: deleteAllCartItems,
@@ -175,7 +185,7 @@ export default function Checkout() {
             product_service_charge: "0",
             product_delivery_charge: "0",
             success_url:
-              "https://nest-ecommerce-1fqk.onrender.com/nest-/payment/verify",
+              "https://nest-ecommerce-1fqk.onrender.com/payment/verify",
             failure_url: "https://developer.esewa.com.np/failure",
             signed_field_names: signed_field_names,
             signature: signature,
@@ -329,22 +339,21 @@ export default function Checkout() {
               <div key={index} className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <img
-                    src={item.product.image[0]}
-                    alt={item.product.title}
+                    src={item.image}
+                    alt={`Product ${item.id}`}
                     className="h-12 w-12 object-cover"
                   />
                   <div>
-                    <p className="font-medium">{item.product.title}</p>
+                    <p className="text-sm font-normal">{item.title}</p>
                     <p className="text-sm text-gray-500">
                       Qty: {item.quantity}
                     </p>
                   </div>
                 </div>
-                <p className="font-medium">
-                  ${item.product.price.toFixed(2) * item.quantity}
-                </p>
+                <p className="font-medium">${item.total}</p>
               </div>
             ))}
+
             <hr />
             <div className="flex justify-between">
               <p>Subtotal:</p>
