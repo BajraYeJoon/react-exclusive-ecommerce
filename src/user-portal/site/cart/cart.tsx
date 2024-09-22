@@ -29,7 +29,7 @@ import { Button } from "../../../common/ui/button";
 import { Input } from "../../../common/ui/input";
 import { Loading } from "../layout/Layout";
 
-const discountState = atom<{
+export const discountState = atom<{
   type: "fixed_amount" | "percentage";
   value: number;
 }>({
@@ -202,13 +202,15 @@ const Cart = () => {
           {cartItems.map((item: any) => (
             <TableRow key={item.product.id}>
               <TableCell>
-                <div className="flex items-center space-x-4">
+                <div className="flex flex-col items-start md:flex-row md:space-x-4">
                   <img
                     src={item.product.image[0]}
                     alt={item.product.title}
                     className="h-16 w-16 rounded-md object-cover"
                   />
-                  <span className="font-medium">{item.product.title}</span>
+                  <span className="text-xs font-medium md:text-base">
+                    {item.product.title}
+                  </span>
                 </div>
               </TableCell>
               <TableCell className="text-right">
@@ -216,33 +218,32 @@ const Cart = () => {
               </TableCell>
               <TableCell>
                 <div className="flex items-center justify-center space-x-2">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => handleQuantityChange(item.product.id, "sub")}
-                    disabled={item.quantity <= 1}
-                    aria-label="Decrease quantity"
-                    className="disabled:cursor-not-allowed"
-                  >
-                    <ChevronDown className="h-4 w-4" />
-                  </Button>
                   <Input
                     type="text"
                     value={item.quantity}
                     readOnly
                     className="w-12 text-center"
-                    aria-label={`Quantity of ${item.product.title}`}
                   />
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => handleQuantityChange(item.product.id, "add")}
-                    disabled={item.quantity >= item.product.stock}
-                    aria-label="Increase quantity"
-                    className="disabled:cursor-not-allowed"
-                  >
-                    <ChevronUp className="h-4 w-4" />
-                  </Button>
+                  <div className="flex flex-col">
+                    <button
+                      onClick={() =>
+                        handleQuantityChange(item.product.id, "add")
+                      }
+                      disabled={item.quantity >= item.product.stock}
+                      className="disabled:cursor-not-allowed"
+                    >
+                      <ChevronUp className="h-4 w-4" />
+                    </button>
+                    <button
+                      onClick={() =>
+                        handleQuantityChange(item.product.id, "sub")
+                      }
+                      disabled={item.quantity <= 1}
+                      className="disabled:cursor-not-allowed"
+                    >
+                      <ChevronDown className="h-4 w-4" />
+                    </button>
+                  </div>
                 </div>
               </TableCell>
               <TableCell className="text-right font-medium">

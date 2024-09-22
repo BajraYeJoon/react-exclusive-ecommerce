@@ -21,6 +21,7 @@ import {
 } from "../../../common/ui/card";
 import { Input } from "../../../common/ui/input";
 import { Button } from "../../../common/ui/button";
+import { Label } from "../../../common/ui/label";
 
 type FormValues = {
   fullName: string;
@@ -55,7 +56,7 @@ export default function Checkout() {
 
   const paymentMutation = useMutation({
     mutationFn: (orderData: any) =>
-      Axios.post("/payment/intialize-payment", orderData),
+      Axios.post("/payment/initialize-payment", orderData),
     onSuccess: () => {
       toast.success("Payment successful");
     },
@@ -134,13 +135,7 @@ export default function Checkout() {
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const orderData = {
-      id: Math.random().toString(36).substr(2, 9),
-      itemId: checkoutValues.cartItems.map((item: any) => ({
-        id: item.product.id,
-        title: item.product.title,
-        price: item.product.price,
-        quantity: item.quantity,
-      })),
+      itemId: checkoutValues.cartItems.map((item: any) => item.product.id),
       totalPrice: checkoutValues.total,
       billingInfo: {
         firstname: data.fullName.split(" ")[0],
@@ -152,12 +147,53 @@ export default function Checkout() {
         email: data.email,
       },
       paymentMethod: data.paymentMethod,
-      discount: couponCode ? 10 : 0, // Assuming a fixed discount for simplicity
     };
 
     try {
       if (data.paymentMethod === "khalti") {
-        await paymentMutation.mutateAsync(orderData);
+        const initializePaymentResponse =
+          await paymentMutation.mutateAsync(orderData);
+
+        if (initializePaymentResponse.data) {
+          const { signature, signed_field_names } =
+            initializePaymentResponse.data.paymentInitiate;
+          const { transaction_uuid } = initializePaymentResponse.data;
+          const total_amount =
+            initializePaymentResponse.data.purchasedProduct.totalPrice;
+
+          const form = document.createElement("form");
+          form.method = "POST";
+          form.action = "https://rc-epay.esewa.com.np/api/epay/main/v2/form";
+          form.style.display = "none";
+
+          const fields = {
+            amount: total_amount.toString(),
+            tax_amount: "0",
+            total_amount: total_amount.toString(),
+            transaction_uuid: transaction_uuid,
+            product_code: "EPAYTEST",
+            product_service_charge: "0",
+            product_delivery_charge: "0",
+            success_url: "https://localhost:5173/payment/verify",
+            failure_url: "https://developer.esewa.com.np/failure",
+            signed_field_names: signed_field_names,
+            signature: signature,
+          };
+
+          Object.entries(fields).forEach(([key, value]) => {
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = key;
+            input.value = value;
+            form.appendChild(input);
+          });
+
+          document.body.appendChild(form);
+          form.submit();
+          document.body.removeChild(form);
+
+          return;
+        }
       }
 
       if (couponCode) {
@@ -178,62 +214,101 @@ export default function Checkout() {
 
       generateInvoice(orderData);
     } catch (error) {
+      console.error("Checkout error:", error);
       toast.error("Failed to place order. Please try again.");
     }
   };
 
   return (
-    <section className="container mx-auto my-12 px-4 md:px-6">
+    <section className="mx-64 my-12 max-2xl:mx-6">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="grid gap-8 md:grid-cols-2"
       >
-        <Card className="border-none bg-background shadow-none">
-          <CardHeader>
-            <CardTitle>Billing Details</CardTitle>
+        <Card className="order-2 grid border-none bg-background shadow-none md:order-1">
+          <CardHeader className="p-0 px-6 pb-4">
+            <CardTitle className="font-light tracking-wider">
+              Billing Details
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
+              <Label
+                htmlFor="fullName"
+                className="font-ember text-sm text-foreground/40"
+              >
+                Full Name <span className="text-red-500">*</span>
+              </Label>
               <Input
                 id="fullName"
                 {...register("fullName", { required: "Full Name is required" })}
-                placeholder="Full Name"
+                className="bg-gray-50"
               />
             </div>
             <div className="space-y-2">
+              <Label
+                htmlFor="streetAddress"
+                className="font-ember text-sm text-foreground/40"
+              >
+                Street Address <span className="text-red-500">*</span>
+              </Label>
               <Input
                 id="streetAddress"
                 {...register("streetAddress", {
                   required: "Street Address is required",
                 })}
-                placeholder="Street Address"
+                className="bg-gray-50"
               />
             </div>
             <div className="space-y-2">
+              <Label
+                htmlFor="country"
+                className="font-ember text-sm text-foreground/40"
+              >
+                Country <span className="text-red-500">*</span>
+              </Label>
               <Input
                 id="country"
                 {...register("country", { required: "Country is required" })}
-                placeholder="Country"
+                className="bg-gray-50"
               />
             </div>
             <div className="space-y-2">
+              <Label
+                htmlFor="postalCode"
+                className="font-ember text-sm text-foreground/40"
+              >
+                Postal Code <span className="text-red-500">*</span>
+              </Label>
               <Input
                 id="postalCode"
                 {...register("postalCode", {
                   required: "Postal Code is required",
                 })}
-                placeholder="Postal Code"
+                className="bg-gray-50"
               />
             </div>
             <div className="space-y-2">
+              <Label
+                htmlFor="phone"
+                className="font-ember text-sm text-foreground/40"
+              >
+                Phone Number <span className="text-red-500">*</span>
+              </Label>
               <Input
                 id="phone"
                 type="tel"
                 {...register("phone", { required: "Phone Number is required" })}
-                placeholder="Phone Number"
+                className="bg-gray-50"
               />
             </div>
             <div className="space-y-2">
+              <Label
+                htmlFor="email"
+                className="font-ember text-sm text-foreground/40"
+              >
+                Email Address <span className="text-red-500">*</span>
+              </Label>
               <Input
                 id="email"
                 type="email"
@@ -241,16 +316,13 @@ export default function Checkout() {
                   required: "Email is required",
                   pattern: /^\S+@\S+$/i,
                 })}
-                placeholder="Email"
+                className="bg-gray-50"
               />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-none bg-background shadow-none">
-          <CardHeader>
-            <CardTitle>Order Summary</CardTitle>
-          </CardHeader>
+        <Card className="order-1 border-none bg-background shadow-none md:order-2">
           <CardContent className="space-y-4">
             {checkoutValues.cartItems.map((item: any, index: number) => (
               <div key={index} className="flex items-center justify-between">
@@ -267,7 +339,9 @@ export default function Checkout() {
                     </p>
                   </div>
                 </div>
-                <p className="font-medium">${item.product.price.toFixed(2)}</p>
+                <p className="font-medium">
+                  ${item.product.price.toFixed(2) * item.quantity}
+                </p>
               </div>
             ))}
             <hr />
@@ -293,7 +367,7 @@ export default function Checkout() {
                 {(checkoutValues.total + 45 - (couponCode ? 10 : 0)).toFixed(2)}
               </p>
             </div>
-            <div>
+            <div className="*:text-sm">
               <div className="flex items-center justify-between space-x-2">
                 <div className="space-x-2">
                   <input
