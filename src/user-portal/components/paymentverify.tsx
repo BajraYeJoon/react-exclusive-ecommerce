@@ -24,7 +24,6 @@ const orderplaceState = atom({
 const PaymentVerification: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  a;
   const [isLoading, setIsLoading] = useState(true);
   const setOrderPlaceData = useSetRecoilState(orderplaceState);
 
