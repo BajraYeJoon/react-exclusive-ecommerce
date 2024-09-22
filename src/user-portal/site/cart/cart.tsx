@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { atom, useRecoilState } from "recoil";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
