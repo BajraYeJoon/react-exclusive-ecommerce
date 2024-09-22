@@ -98,6 +98,8 @@ const Cart = () => {
   }, [cartItems, discount]);
 
   const navigateToCheckout = () => {
+    const cartTotal = total;
+
     const checkoutData = {
       id: uuid().toString().substring(2, 15),
       cartItems: cartItems.map((item: any) => ({
@@ -107,7 +109,8 @@ const Cart = () => {
         total: item.product.price * item.quantity,
         quantity: item.quantity,
       })),
-      total,
+      subTotal,
+      cartTotal,
       couponCode,
       discount: discount.value,
     };

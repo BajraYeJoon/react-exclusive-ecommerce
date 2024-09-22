@@ -11,7 +11,8 @@ export const checkoutState = atom({
   key: "checkoutState",
   default: {
     cartItems: [],
-    total: 0,
+    cartTotal: 0,
+    subTotal: 0,
     // effects_UNSTABLE: [persistAtom],
   },
 });

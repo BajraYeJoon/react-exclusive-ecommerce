@@ -107,7 +107,7 @@ export default function Checkout() {
       item.title,
       item.quantity,
       `$${item.price.toFixed(2)}`,
-      `$${(item.quantity * item.price).toFixed(2)}`,
+      `$${(item.quantity * item.price)}`,
     ]);
 
     autoTable(doc, {
@@ -121,17 +121,17 @@ export default function Checkout() {
 
     const finalY = (doc as any).lastAutoTable.finalY || 95;
     doc.setFontSize(12);
-    doc.text(`Subtotal: $${orderData.totalPrice.toFixed(2)}`, 140, finalY + 15);
+    doc.text(`Subtotal: $${orderData.totalPrice}`, 140, finalY + 15);
     doc.text(`Shipping: $45.00`, 140, finalY + 22);
     doc.text(
-      `Discount: $${(orderData.discount || 0).toFixed(2)}`,
+      `Discount: $${(orderData.discount || 0)}`,
       140,
       finalY + 29,
     );
     doc.setFontSize(14);
     doc.setFont("helvetica", "bold");
     doc.text(
-      `Total: $${(orderData.totalPrice + 45 - (orderData.discount || 0)).toFixed(2)}`,
+      `Total: $${(orderData.totalPrice + 45 - (orderData.discount || 0))}`,
       140,
       finalY + 38,
     );
@@ -146,7 +146,7 @@ export default function Checkout() {
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const orderData = {
       itemId: checkoutValues.cartItems.map((item: any) => item.id),
-      totalPrice: checkoutValues.total,
+      totalPrice: checkoutValues.cartTotal,
       billingInfo: {
         firstname: data.fullName.split(" ")[0],
         lastname: data.fullName.split(" ")[1] || "",
@@ -215,7 +215,11 @@ export default function Checkout() {
 
       setOrderPlaceData(orderData);
       reset();
-      resetCheckoutCartAfterOrderPlace({ cartItems: [], total: 0 });
+      resetCheckoutCartAfterOrderPlace({
+        cartItems: [],
+        cartTotal: 0,
+        subTotal: 0,
+      });
       Cookies.remove("checkoutData");
 
       // try {
@@ -226,16 +230,18 @@ export default function Checkout() {
       // toast.error("Failed to remove cart items");
       // }
       Cookies.set("order-placed", "true");
+      generateInvoice(orderData);
       navigate("/order-placed", {
         replace: true,
       });
-
-      generateInvoice(orderData);
     } catch (error) {
       console.error("Checkout error:", error);
       toast.error("Failed to place order. Please try again.");
     }
   };
+
+  console.log(checkoutValues.subTotal, "asdfasdfsa");
+  console.log(checkoutValues.cartItems.map((item: any) => item.total));
 
   return (
     <section className="mx-64 my-12 max-2xl:mx-6">
@@ -364,7 +370,9 @@ export default function Checkout() {
             <hr />
             <div className="flex justify-between">
               <p>Subtotal:</p>
-              <p className="font-medium">${checkoutValues.total.toFixed(2)}</p>
+              <p className="font-medium">
+                ${checkoutValues.subTotal.toFixed(2)}
+              </p>
             </div>
             <div className="flex justify-between">
               <p>Shipping:</p>
@@ -381,7 +389,9 @@ export default function Checkout() {
               <p className="text-lg font-bold">Total:</p>
               <p className="text-lg font-bold">
                 $
-                {(checkoutValues.total + 45 - (couponCode ? 10 : 0)).toFixed(2)}
+                {(checkoutValues.subTotal + 45 - (couponCode ? 10 : 0)).toFixed(
+                  2,
+                )}
               </p>
             </div>
             <div className="*:text-sm">
