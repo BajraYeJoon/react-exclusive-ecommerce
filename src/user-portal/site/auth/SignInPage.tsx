@@ -28,7 +28,7 @@ const SignInPage = () => {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    const { name, password } = data;
+    const { email, password } = data;
     const captchaValue = recaptcha?.current?.getValue();
 
     if (!captchaValue) {
@@ -37,7 +37,7 @@ const SignInPage = () => {
     }
 
     try {
-      await login({ name: email, password, loginFormReset });
+      await login({ email, password, loginFormReset });
       const user = JSON.parse(Cookies.get("user") || "{}");
 
       if (user === Routes.Admin) {

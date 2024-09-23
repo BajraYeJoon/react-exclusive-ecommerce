@@ -22,7 +22,12 @@ const SignUpFormSchema: ZodType<SignUpFormData> = z.object({
     .regex(/^[0-9]+$/, { message: "Phone number must only contain digits" }),
 });
 const LoginFormSchema: ZodType<LoginFormData> = z.object({
-  name: z.string().min(2),
+  email: z
+    .string()
+    .email({ message: "Invalid email address" })
+    .regex(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, {
+      message: "Only Gmail addresses are supported",
+    }),
   password: z
     .string()
 
