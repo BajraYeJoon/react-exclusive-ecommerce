@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+// import jsPDF from "jspdf";
+// import autoTable from "jspdf-autotable";
 
 import { Axios } from "../../../common/lib/axiosInstance";
 import { checkoutState } from "../../atoms/checkoutState";
