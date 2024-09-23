@@ -48,6 +48,7 @@ const Singleproduct = () => {
     queryFn: () => fetchProductDetails(productId ?? ""),
   });
 
+
   const htmlContent = details?.description ? marked(details.description) : "";
   const sanitizedContent = DOMPurify.sanitize(String(htmlContent));
 
@@ -167,7 +168,10 @@ const Singleproduct = () => {
               <span className="text-2xl text-red-700">${details.price}</span>
             </h1>
             {!isAdmin && details.availability === true && (
-              <Button className="mt-6" onClick={() => addToCart(details.id)}>
+              <Button
+                className="mt-6"
+                onClick={() => addToCart({ id: details?.id, type: "add" })}
+              >
                 <ShoppingBasket className="mr-4" />
                 Add to cart
               </Button>

@@ -246,13 +246,14 @@ const Cart = () => {
               </TableCell>
               <TableCell>
                 <ConfirmationDialog
-                  triggerComponent={<Trash2 className="h-4 w-4" />}
+                  triggerComponent={
+                    <Trash2 className="h-4 w-4 cursor-pointer text-primary" />
+                  }
                   title="Remove Item"
                   description="Are you sure you want to remove this item from your cart?"
                   onConfirm={() => removeItem(item.product.id)}
                   confirmText="Remove"
                   cancelText="Cancel"
-                  isOpen={isDialogOpen}
                 />
               </TableCell>
             </TableRow>

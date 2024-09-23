@@ -16,8 +16,8 @@ export interface NewArrivalsProductProps {
   id: number;
   title: string;
   description: string;
-  image: string[];
   price: number;
+  image: string;
   discountprice: number;
 }
 
@@ -58,11 +58,7 @@ const ArrivalsPage = () => {
         ) : (
           <>
             {newArrivals.map((allproducts: NewArrivalsProductProps) => (
-              <ProductCard
-                key={allproducts.id}
-                {...allproducts}
-                image={allproducts.image[0]}
-              />
+              <ProductCard key={allproducts.id} {...allproducts} />
             ))}
           </>
         )}
