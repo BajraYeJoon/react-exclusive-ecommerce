@@ -47,7 +47,7 @@ const Cart = () => {
   const [discount, setDiscount] = useRecoilState(discountState);
   const navigate = useNavigate();
   const [couponCode, setCouponCode] = useRecoilState(couponState);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [, setIsDialogOpen] = useState(false);
 
   const { data: cartItems, isLoading } = useQuery({
     queryKey: ["cart"],

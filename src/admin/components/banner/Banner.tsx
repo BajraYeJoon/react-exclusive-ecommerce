@@ -43,10 +43,21 @@ interface Product {
   price: number;
 }
 
+interface Banner {
+  id: number;
+  title: string;
+  brand: string;
+  image: string[];
+}
+
+interface BannerApiResponse {
+  bannerData: Banner[];
+}
+
 const BannerManagement: React.FC = () => {
   const queryClient = useQueryClient();
 
-  const { data: bannerData, isLoading: isBannersLoading } = useQuery({
+  const { data: bannerData, isLoading: isBannersLoading } = useQuery<BannerApiResponse, Error>({
     queryKey: ["banners"],
     queryFn: fetchHeroBanner,
   });
@@ -56,7 +67,7 @@ const BannerManagement: React.FC = () => {
     pageSize: 10,
   });
 
-  const { data: products } = useQuery({
+  const { data: products } = useQuery<Product[], Error>({
     queryKey: ["products"],
     queryFn: fetchAllProducts,
   });
@@ -71,25 +82,25 @@ const BannerManagement: React.FC = () => {
     );
   };
 
-  const bannerMutation = useMutation({
+  const bannerMutation = useMutation<void, Error, void>({
     mutationFn: () => createBanner(selectedBannerItems),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["banners"] });
       toast.success("Banner created successfully");
     },
     onError: (error) => {
-      toast.error(error?.message);
+      toast.error(error.message);
     },
   });
 
-  const deleteBannerMutation = useMutation({
+  const deleteBannerMutation = useMutation<void, Error, number>({
     mutationFn: (bannerId: number) => deleteBanner(bannerId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["banners"] });
       toast.success("Banner deleted successfully");
     },
     onError: (error) => {
-      toast.error(error?.message);
+      toast.error(error.message);
     },
   });
 
@@ -172,7 +183,11 @@ const BannerManagement: React.FC = () => {
   );
 };
 
-const ProductTable = ({ table }: { table: any }) => (
+interface ProductTableProps {
+  table: ReturnType<typeof useReactTable<Product>>;
+}
+
+const ProductTable: React.FC<ProductTableProps> = ({ table }) => (
   <div className="rounded-md border">
     <Table>
       <TableHeader>
@@ -232,14 +247,16 @@ const ProductTable = ({ table }: { table: any }) => (
   </div>
 );
 
-const BannerGrid = ({
+interface BannerGridProps {
+  banners: Banner[] | undefined;
+  isLoading: boolean;
+  deleteBannerMutation: ReturnType<typeof useMutation<void, Error, number>>;
+}
+
+const BannerGrid: React.FC<BannerGridProps> = ({
   banners,
   isLoading,
   deleteBannerMutation,
-}: {
-  banners: any;
-  isLoading: boolean;
-  deleteBannerMutation: any;
 }) => {
   if (banners?.length === 0) {
     return (
@@ -259,7 +276,7 @@ const BannerGrid = ({
         </>
       ) : (
         <>
-          {banners.map((banner: any) => (
+          {banners?.map((banner) => (
             <BannerCard
               key={banner.id}
               banner={banner}
@@ -272,12 +289,14 @@ const BannerGrid = ({
   );
 };
 
-const BannerCard = ({
+interface BannerCardProps {
+  banner: Banner;
+  deleteBannerMutation: ReturnType<typeof useMutation<void, Error, number>>;
+}
+
+const BannerCard: React.FC<BannerCardProps> = ({
   banner,
   deleteBannerMutation,
-}: {
-  banner: any;
-  deleteBannerMutation: any;
 }) => (
   <div className="flex flex-col justify-between overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:shadow-lg">
     <img
