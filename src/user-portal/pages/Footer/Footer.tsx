@@ -1,7 +1,5 @@
 import React from "react";
-import { Linkedin, MailCheck } from "lucide-react";
-import { BsInstagram } from "react-icons/bs";
-import { FaFacebook } from "react-icons/fa";
+import { Facebook, Instagram, Linkedin, MailCheck, QrCode } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const footerData = {
@@ -9,9 +7,9 @@ const footerData = {
     {
       title: "Support",
       items: [
-        "111 Bijoy sarani, Dhaka, DH 1515, Bangladesh.",
-        "exclusive@gmail.com",
-        "+880 123 456 7890",
+        "Bhaktapur, DH 1515, Bhaktapur.",
+        "binaya.bajrashakya@gmail.com",
+        "+977 9860 756619",
       ],
     },
     {
@@ -94,7 +92,7 @@ const FollowUsSection: React.FC = () => {
       <div className="flex flex-col items-center justify-center gap-2">
         <span className="text-xs">Save 3$ with App New User Only</span>
         <div className="items- flex w-full justify-between">
-          <div className="h-20 w-20 bg-background">qr code</div>
+          <QrCode className="h-20 w-20" />
           <div className="flex flex-col gap-2">
             <img
               src="/footer-img/gplay.png"
@@ -109,9 +107,9 @@ const FollowUsSection: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="flex w-full items-center justify-between px-4">
-        <FaFacebook />
-        <BsInstagram />
+      <div className="flex aspect-auto w-full items-center justify-between px-4">
+        <Facebook />
+        <Instagram />
         <Linkedin />
         <MailCheck />
       </div>

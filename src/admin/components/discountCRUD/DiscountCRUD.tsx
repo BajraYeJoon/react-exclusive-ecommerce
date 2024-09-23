@@ -21,10 +21,8 @@ import { Coupon } from "../../../common/components/discount/DiscountCard";
 
 export default function DiscountCRUD() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-
   const [editingCoupon, setEditingCoupon] = useState<Coupon | null>(null);
   const queryClient = useQueryClient();
-
   const { register, handleSubmit, reset, setValue } = useForm<Coupon>();
 
   const { data: couponsData, isLoading } = useQuery({
@@ -32,6 +30,7 @@ export default function DiscountCRUD() {
     queryFn: () => Axios.get("/coupon").then((res) => res.data),
   });
 
+  console.log(couponsData,'fedfd')
   const coupons = couponsData?.data || couponsData;
 
   const addCouponMutation = useMutation<void, AxiosError, Coupon>({
@@ -66,10 +65,8 @@ export default function DiscountCRUD() {
     }
   };
 
-  //for the typescript error fix to assert
   const handleEdit = (coupon: Coupon) => {
     setEditingCoupon(coupon);
-
     Object.keys(coupon).forEach((key) => {
       const couponKey = key as keyof Coupon;
 
@@ -175,7 +172,9 @@ export default function DiscountCRUD() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="maxUsageCount">Minium Purchase Amount</Label>
+                  <Label htmlFor="minPurchaseAmount">
+                    Minimum Purchase Amount
+                  </Label>
                   <Input
                     type="number"
                     {...register("minPurchaseAmount", {
@@ -213,3 +212,7 @@ export default function DiscountCRUD() {
     </div>
   );
 }
+
+// : coupons.length === 0 ? (
+//   <div className="text-center text-gray-600">No coupons available.</div>
+// ) :

@@ -62,16 +62,16 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         apiKey="phc_fQcn9SW8lEM635UzO6NIJQwS4OPo2tsakZJriWF44Nx"
         options={options}
       > */}
-        <RecoilRoot>
-          <IntlProvider locale={locale} messages={messages[locale]}>
-            <AuthProvider>
-              <App />
-              <Analytics />
-              <ReactQueryDevtools initialIsOpen={false} />
-              <Toaster />
-            </AuthProvider>
-          </IntlProvider>
-        </RecoilRoot>
+      <RecoilRoot>
+        <IntlProvider locale={locale} messages={messages[locale]}>
+          <AuthProvider>
+            <App />
+            <Analytics />
+            <ReactQueryDevtools initialIsOpen={false} />
+            <Toaster />
+          </AuthProvider>
+        </IntlProvider>
+      </RecoilRoot>
       {/* </PostHogProvider> */}
     </QueryClientProvider>
   </React.StrictMode>,

@@ -27,6 +27,7 @@ import { Button } from "../../../common/ui/button";
 type SearchResultProps = {
   id: number;
   title: string;
+  image: string;
 };
 
 const Navbar = () => {
@@ -35,6 +36,7 @@ const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [results, setResults] = useState<SearchResultProps[]>([]);
   const resultsRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const debouncedFetchResults = debounce(async (query: string) => {
@@ -69,7 +71,6 @@ const Navbar = () => {
     };
   }, []);
 
-
   const { data: cart } = useQuery({
     queryKey: ["cart"],
     queryFn: fetchCart,
@@ -84,8 +85,16 @@ const Navbar = () => {
   const favoritesquantity = favorites?.data.length || 0;
   const cartquantity = cart?.length || 0;
 
+  const clearSearch = () => {
+    console.log("Clear search clicked");
+    setSearchQuery("");
+    if (searchInputRef.current) {
+      searchInputRef.current.value = "";
+    }
+  };
+
   return (
-    <nav className="navbar overflow-hidden border-b">
+    <nav className="navbar z-50 border-b">
       <div className="navbar-container mx-72 flex items-center justify-between py-4 max-2xl:mx-6">
         <div className="logo-container flex items-center">
           <Link to="/" className="flex items-center">
@@ -127,30 +136,48 @@ const Navbar = () => {
         <div className="flex items-center gap-6">
           <div className="group relative hidden items-center justify-center md:flex">
             <Input
-              type="search"
+              type="text"
+              ref={searchInputRef}
               className="w-full rounded-sm p-4 text-sm font-light tracking-wider placeholder:text-[10px] placeholder:text-muted-foreground/50 focus:border-[1px] md:block"
               placeholder="What are you looking for?"
               onChange={(e) => {
                 setSearchQuery(e.target.value);
               }}
+              value={searchQuery}
             />
-            <Search
-              size={30}
-              className="pointer-events-none absolute end-2 flex items-center ps-3"
-            />
-
+            {searchQuery ? (
+              <button
+                onClick={clearSearch}
+                className="absolute end-2 flex cursor-pointer items-center"
+                aria-label="Clear search"
+              >
+                <X size={20} />
+              </button>
+            ) : (
+              <Search
+                size={30}
+                className="pointer-events-none absolute end-2 flex items-center ps-3"
+              />
+            )}
             {results.length > 0 && (
               <div
                 ref={resultsRef}
-                className="absolute top-12 z-10 flex w-full flex-col rounded-md border border-foreground bg-white shadow-lg"
+                className="absolute top-12 z-10 flex min-w-96 flex-col rounded-md border border-foreground bg-white shadow-lg"
               >
                 {results.map((product: SearchResultProps) => (
                   <Link
                     to={`/product/${product.id}`}
                     key={product.id}
-                    className="px-4 py-2 hover:bg-accent"
+                    className="flex gap-2 px-4 py-2 hover:bg-accent"
                   >
-                    {product.title}
+                    <img
+                      src={product.image[0]}
+                      alt=""
+                      className="inline-block aspect-square h-10 w-10 object-cover"
+                    />
+                    <span className="text-xs">
+                      {product.title.slice(0, 100)}
+                    </span>
                   </Link>
                 ))}
               </div>
