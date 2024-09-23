@@ -7,13 +7,18 @@ import { useAuthContext } from "../../context/useAuthContext";
 import { Input } from "../../../common/ui/input";
 import { Button } from "../../../common/ui/button";
 import { CgSpinner } from "react-icons/cg";
+import ReCAPTCHA from "react-google-recaptcha";
+import { useRef } from "react";
+import { toast } from "sonner";
 
 const SignupPage = () => {
+  const recaptcha = useRef<ReCAPTCHA>(null);
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    reset,
+    reset: formReset,
   } = useForm<SignUpFormData>({
     mode: "all",
     resolver: zodResolver(SignUpFormSchema),
@@ -24,11 +29,19 @@ const SignupPage = () => {
   const onSubmit = async (data: SignUpFormData) => {
     const { email, password, name, phoneNumber } = data;
 
+    const captchaValue = recaptcha?.current?.getValue();
+
+    if (!captchaValue) {
+      toast.error("Please complete the reCAPTCHA.");
+      return;
+    }
+
     try {
-      await signup({ name, email, password, phoneNumber });
-      reset();
+      await signup({ name, email, password, phoneNumber, formReset });
+      recaptcha?.current?.reset();
     } catch (err) {
       console.error("Signup error", err);
+      toast.error("An error occurred during signup. Please try again.");
     }
   };
 
@@ -92,7 +105,10 @@ const SignupPage = () => {
               </span>
             )}
           </div>
-
+          <ReCAPTCHA
+            ref={recaptcha}
+            sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY ?? ""}
+          />
           <Button type="submit" className="w-full" disabled={isSubmitting}>
             {isSubmitting ? (
               <CgSpinner className="animate-spin" size={20} />

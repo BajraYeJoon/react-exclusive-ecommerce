@@ -5,8 +5,9 @@ import { toast } from "sonner";
 import { Axios } from "../../common/lib/axiosInstance";
 
 type LoginProps = {
-  name: string;
+  email: string;
   password: string;
+  loginFormReset: () => void;
 };
 
 interface SignupProps {
@@ -14,6 +15,7 @@ interface SignupProps {
   email: string;
   password: string;
   phoneNumber: string;
+  formReset: () => void;
 }
 
 interface SignupResponse {
@@ -25,7 +27,7 @@ interface SignupResponse {
 type AuthContextType = {
   isAdmin: boolean;
   isLoggedIn: boolean;
-  login: ({ name, password }: LoginProps) => void;
+  login: ({ email, password, loginFormReset }: LoginProps) => void;
   logout: () => void;
   isLoading: boolean;
   signup: (data: SignupProps) => void;
@@ -66,19 +68,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const login = async ({ name, password }: LoginProps) => {
+  const login = async ({ email, password, loginFormReset }: LoginProps) => {
     setIsLoading(true);
 
     try {
       const response = await Axios.post("/auth/signin", {
-        email: name,
+        email,
         password,
       });
       const data = response.data;
       await fetchUserDetails(data.token);
       setIsLoggedIn(true);
       Cookies.set("token", data.token, { expires: 7 });
-
+      loginFormReset();
       Axios.defaults.headers.common["Authorization"] =
         `Bearer ${Cookies.get("token")}`;
     } catch (error) {
@@ -93,6 +95,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     email,
     password,
     phoneNumber,
+    formReset,
   }: SignupProps) => {
     setIsLoading(true);
     try {
@@ -109,8 +112,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         toast.success(
           "Signup successful. Please check your email to verify your account.",
         );
+        formReset();
       } else if (response.status === 400) {
         toast.error("You are already registered. Please Login");
+        formReset();
       } else {
         console.error("Signup failed", response.data);
         toast.error("Signup failed");

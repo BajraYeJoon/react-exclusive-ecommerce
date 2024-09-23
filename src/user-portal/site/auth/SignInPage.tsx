@@ -11,22 +11,33 @@ import { CgSpinner } from "react-icons/cg";
 import { Routes } from "../../../admin/lib/links";
 import { UserRoutes } from "../../utils/userLinks";
 import { Input } from "../../../common/ui/input";
+import ReCAPTCHA from "react-google-recaptcha";
+import { useRef } from "react";
 
 const SignInPage = () => {
   const { login, isLoading } = useAuthContext();
   const navigate = useNavigate();
+  const recaptcha = useRef<ReCAPTCHA>(null);
 
   const {
     register,
     handleSubmit,
-    // formState: { errors },
+    reset: loginFormReset,
   } = useForm<LoginFormData>({
     resolver: zodResolver(LoginFormSchema),
   });
 
   const onSubmit = async (data: LoginFormData) => {
+    const { name, password } = data;
+    const captchaValue = recaptcha?.current?.getValue();
+
+    if (!captchaValue) {
+      toast.error("Please complete the reCAPTCHA");
+      return;
+    }
+
     try {
-      await login(data);
+      await login({ name: email, password, loginFormReset });
       const user = JSON.parse(Cookies.get("user") || "{}");
 
       if (user === Routes.Admin) {
@@ -41,14 +52,13 @@ const SignInPage = () => {
         toast.error(
           "Invalid credentials. Please check your email and password.",
         );
+        recaptcha?.current?.reset();
       } else {
         toast.error(error?.message);
+        recaptcha?.current?.reset();
       }
     }
   };
-  
-  
-  
 
   return (
     <div className="sign-up-content w-[400px] space-y-8">
@@ -58,13 +68,19 @@ const SignInPage = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="w-full">
         {" "}
         <div className="flex w-full flex-col gap-4">
-          <Input type="text" placeholder="Email" {...register("name")} />
+          <Input type="text" placeholder="Email" {...register("email")} />
 
           <Input
             type="password"
             placeholder="Password"
             {...register("password")}
           />
+
+          <ReCAPTCHA
+            ref={recaptcha}
+            sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY || ""}
+          />
+
           <Button type="submit" className="w-full">
             {isLoading ? (
               <CgSpinner className="animate-spin" size={20} />
