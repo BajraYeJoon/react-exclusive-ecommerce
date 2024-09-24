@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { Axios } from "../../lib/axiosInstance";
 import { CouponDesign1, CouponDesign2, CouponDesign3 } from "./DiscountDesigns";
-import { RefreshCw, ShoppingBag } from "lucide-react";
+import { ShoppingBag } from "lucide-react";
 
 export interface Coupon {
   id: string;
