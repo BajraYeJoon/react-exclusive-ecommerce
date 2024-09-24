@@ -6,6 +6,11 @@ import { toast } from "sonner";
 import { Skeleton } from "../../../../common/ui/skeleton";
 import uuidv4 from "../../../../common/lib/utils/uuid";
 
+interface User {
+  id: string;
+  createdAt: string;
+}
+
 export default function WidgetLeft() {
   const {
     data: newUsers,
@@ -16,9 +21,9 @@ export default function WidgetLeft() {
     queryFn: fetchAllUsers,
     select: (data) => {
       return data?.data
-        ?.map((user: any) => user)
+        ?.map((user: User) => user)
         .slice(0, 5)
-        .sort((a: any, b: any) => {
+        .sort((a: User, b: User) => {
           return +new Date(b.createdAt) - +new Date(a.createdAt);
         });
     },
@@ -61,7 +66,7 @@ export default function WidgetLeft() {
             </>
           ) : (
             <>
-              {newUsers?.map((values: any) => (
+              {newUsers?.map((values: User) => (
                 <NewUsers key={values.id} values={values} />
               ))}
             </>

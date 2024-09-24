@@ -1,94 +1,101 @@
-import { useFieldArray, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { Employee, EmployeeFormInputs } from "./teamsMain";
+import { Label } from "../../../../common/ui/label";
 import { Input } from "../../../../common/ui/input";
 import { Button } from "../../../../common/ui/button";
 
-export function TeamsEdit({ employees, onSave, onCancel }: any) {
+interface EmployeeFormProps {
+  onSubmit: SubmitHandler<EmployeeFormInputs>;
+  editingEmployee?: Employee | null;
+}
+
+export default function EmployeeForm({ onSubmit, editingEmployee }: Readonly<EmployeeFormProps>) {
   const {
     register,
-    control,
     handleSubmit,
     formState: { errors },
-  } = useForm({
-    defaultValues: { employees },
-  });
+    watch,
+  } = useForm<EmployeeFormInputs>();
+  const imageFile = watch("image");
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "employees",
-  });
-
-  const onSubmit = (data: any) => {
-    onSave(data.employees);
-  };
 
   return (
-    <div className="flex flex-col">
-      {" "}
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-wrap gap-2">
-        {fields.map((field, index) => (
-          <div
-            key={field.id}
-            className="max-w-fit space-y-2 rounded-md border p-4"
-          >
-            <Input
-              {...register(`employees.${index}.name`, {
-                required: "Name is required",
-              })}
-              placeholder="Name"
-            />
-            <Input
-              {...register(`employees.${index}.position`, {
-                required: "Position is required",
-              })}
-              placeholder="Position"
-            />
-            <Input
-              {...register(`employees.${index}.imgSrc`, {
-                required: "Image source is required",
-              })}
-              placeholder="Image Source"
-            />
-            <Input
-              {...register(`employees.${index}.twitter`)}
-              placeholder="Twitter URL"
-            />
-            <Input
-              {...register(`employees.${index}.linkedin`)}
-              placeholder="LinkedIn URL"
-            />
-            <Button
-              type="button"
-              variant="destructive"
-              onClick={() => remove(index)}
-            >
-              Remove Employee
-            </Button>
-          </div>
-        ))}
-        {errors.employees && (
-          <p className="text-red-500">All required fields must be filled</p>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <div>
+        <Label htmlFor="name">Name</Label>
+        <Input
+          id="name"
+          defaultValue={editingEmployee?.name}
+          {...register("name", { required: "Name is required" })}
+        />
+        {errors.name && (
+          <p className="text-sm text-red-500">{errors.name.message}</p>
         )}
-        <div className="mt-4 space-x-2">
-          <Button type="button" variant="outline" onClick={onCancel}>
-            Cancel
-          </Button>
-          <Button type="submit">Save Changes</Button>
+      </div>
+      <div>
+        <Label htmlFor="position">Position</Label>
+        <Input
+          id="position"
+          defaultValue={editingEmployee?.position}
+          {...register("position", { required: "Position is required" })}
+        />
+        {errors.position && (
+          <p className="text-sm text-red-500">{errors.position.message}</p>
+        )}
+      </div>
+      <div>
+        <Label htmlFor="image">Image</Label>
+        <Input
+          id="image"
+          type="file"
+          accept="image/*"
+          {...register("image", {
+            required: editingEmployee ? false : "Image is required",
+          })}
+        />
+        {errors.image && (
+          <p className="text-sm text-red-500">{errors.image.message}</p>
+        )}
+      </div>
+      {editingEmployee && !imageFile?.[0] && (
+        <div className="mt-2">
+          <Label>Current Image</Label>
+          <img
+            src={editingEmployee.image}
+            alt="Current Image"
+            className="mt-1 h-20 w-20 rounded-full object-cover"
+          />
         </div>
-      </form>
-      <Button
-        type="button"
-        onClick={() =>
-          append({
-            id: Date.now().toString(),
-            name: "",
-            position: "",
-            imgSrc: "",
-          })
-        }
-        className="mt-2"
-      >
-        Add Employee
+      )}
+      {imageFile?.[0] && (
+        <div className="mt-2">
+          <Label>Image Preview</Label>
+          <img
+            src={URL.createObjectURL(imageFile[0])}
+            alt="Image Preview"
+            className="mt-1 h-20 w-20 rounded-full object-cover"
+          />
+        </div>
+      )}
+      <div>
+        <Label htmlFor="twitter">Twitter URL</Label>
+        <Input
+          id="twitter"
+          defaultValue={editingEmployee?.twitter}
+          {...register("twitter")}
+        />
+      </div>
+      <div>
+        <Label htmlFor="linkedin">LinkedIn URL</Label>
+        <Input
+          id="linkedin"
+          defaultValue={editingEmployee?.linkedin}
+          {...register("linkedin")}
+        />
+      </div>
+      <Button type="submit">
+        {editingEmployee ? "Update" : "Add"} Employee
       </Button>
-    </div>
+    </form>
   );
 }

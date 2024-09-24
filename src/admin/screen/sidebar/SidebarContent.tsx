@@ -91,7 +91,6 @@ const SidebarContent = () => {
                 }
               >
                 <Icon className="h-6 w-6" color={item.color} />{" "}
-                {/* Apply the color */}
                 <span
                   className={`ms-3 flex-1 whitespace-nowrap text-sm md:text-base ${item.label.replace(
                     /\s+/g,

@@ -15,7 +15,7 @@ interface OurStoryEditProps {
   onCancel: () => void;
 }
 
-export function OurStoryEdit({ content, onCancel }: OurStoryEditProps) {
+export function OurStoryEdit({ content, onCancel }: Readonly<OurStoryEditProps>) {
   const {
     register,
     handleSubmit,
@@ -29,8 +29,8 @@ export function OurStoryEdit({ content, onCancel }: OurStoryEditProps) {
     content.image,
   );
 
-  const handleImageChange = (e: any) => {
-    const file = e.target.files[0];
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {

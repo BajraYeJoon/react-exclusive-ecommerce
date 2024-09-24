@@ -5,5 +5,3 @@ export { default as FlashSaleAdmin } from "./flashSaleCards/FlashSaleCards";
 export { default as ConfirmationDialog } from "./confirmation/ConfirmationDialog";
 export { default as Banner } from "./banner/Banner";
 export { default as StaticContent } from "./CMS/StaticContent";
-// export { default as AdminDiscount } from "./discountOffers/DiscountMain";
-// export {default as DiscountCreator} from './discountOffers/Discount'

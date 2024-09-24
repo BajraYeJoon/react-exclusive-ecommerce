@@ -49,26 +49,7 @@ const Carousel = () => {
         className="mySwiper w-full"
       >
         {banner.length === 0 ? (
-          <div className="relative grid items-center gap-12 bg-gradient-to-r from-indigo-100 to-[#BBB3FF]  px-6 py-6 sm:px-12 lg:grid-cols-2 lg:py-0">
-            <div className="text-center lg:text-left">
-              <h2 className="mb-4 text-2xl font-medium text-foreground sm:text-3xl lg:text-5xl">
-                <FormattedMessage id="heroBanner" />
-              </h2>
-              <p className="mb-8 text-sm text-gray-700 sm:text-base">
-                <FormattedMessage id="heroBannerDescription" />
-              </p>
-              <Link to={`/${UserRoutes.Products}`}>
-                <Button size="lg" className="px-8 py-3 text-lg">
-                  <FormattedMessage id="exploreNow" />
-                </Button>
-              </Link>
-            </div>
-            <img
-              src="/shop.png"
-              alt="Hero image"
-              className="hidden max-w-sm items-end border-none object-contain lg:flex"
-            />
-          </div>
+          <NotFoundBanner />
         ) : (
           banner.map((content: Content) => (
             <SwiperSlide key={`banner-${uuidv4()}`}>
@@ -104,3 +85,28 @@ const Carousel = () => {
 };
 
 export default Carousel;
+
+function NotFoundBanner() {
+  return (
+    <div className="relative grid items-center gap-12 bg-gradient-to-r from-indigo-100 to-[#BBB3FF] px-6 py-6 sm:px-12 lg:grid-cols-2 lg:py-0">
+      <div className="text-center lg:text-left">
+        <h2 className="mb-4 text-2xl font-medium text-foreground sm:text-3xl lg:text-5xl">
+          <FormattedMessage id="heroBanner" />
+        </h2>
+        <p className="mb-8 text-sm text-gray-700 sm:text-base">
+          <FormattedMessage id="heroBannerDescription" />
+        </p>
+        <Link to={`/${UserRoutes.Products}`}>
+          <Button size="lg" className="px-8 py-3 text-lg">
+            <FormattedMessage id="exploreNow" />
+          </Button>
+        </Link>
+      </div>
+      <img
+        src="/shop.png"
+        alt="Hero image"
+        className="hidden max-w-sm items-end border-none object-contain lg:flex"
+      />
+    </div>
+  );
+}
