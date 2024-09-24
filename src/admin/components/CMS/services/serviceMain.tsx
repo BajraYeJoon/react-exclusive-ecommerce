@@ -17,19 +17,19 @@ import {
 } from "../../../../common/ui/dialog";
 import { Button } from "../../../../common/ui/button";
 import { Card, CardContent, CardFooter } from "../../../../common/ui/card";
-import { Label } from "../../../../common/ui/label";
-import { Input } from "../../../../common/ui/input";
 import { ServiceLoader } from "../../../../common/components/cmsLoader";
 import { toast } from "sonner";
+import ConfirmationDialog from "../../confirmation/ConfirmationDialog";
+import ServiceForm from "./serviceForm";
 
-interface Service {
+export interface Service {
   id: string;
   title: string;
   description: string;
-  icon: string; // URL of the icon image
+  icon: string;
 }
 
-interface ServiceFormInputs {
+export interface ServiceFormInputs {
   title: string;
   description: string;
   icon: FileList;
@@ -100,12 +100,6 @@ export default function ServiceManagement() {
     setIsEditDialogOpen(true);
   };
 
-  const handleDelete = (id: string) => {
-    if (window.confirm("Are you sure you want to delete this service?")) {
-      deleteServiceMutation.mutate(id);
-    }
-  };
-
   // if (error)
   //   return <div>Error loading services: {(error as Error).message}</div>;
 
@@ -157,14 +151,20 @@ export default function ServiceManagement() {
                   <Pencil className="mr-2 h-4 w-4" />
                   <span className="hidden sm:block">Edit</span>
                 </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleDelete(service.id)}
-                >
-                  <Trash2 className="mr-2 h-4 w-4" />
-                  <span className="hidden sm:block">Delete</span>
-                </Button>
+
+                <ConfirmationDialog
+                  triggerComponent={
+                    <>
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      <span className="hidden sm:block">Delete</span>
+                    </>
+                  }
+                  title="Delete Service"
+                  description="Are you sure you want to delete this service?"
+                  onConfirm={() => deleteServiceMutation.mutate(service.id)}
+                  confirmText="Delete"
+                  cancelText="No"
+                />
               </CardFooter>
             </Card>
           ))}
@@ -183,80 +183,4 @@ export default function ServiceManagement() {
   );
 }
 
-interface ServiceFormProps {
-  onSubmit: SubmitHandler<ServiceFormInputs>;
-  editingService?: Service | null;
-}
 
-function ServiceForm({ onSubmit, editingService }: ServiceFormProps) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    watch,
-  } = useForm<ServiceFormInputs>();
-  const iconFile = watch("icon");
-
-  return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <div>
-        <Label htmlFor="title">Title</Label>
-        <Input
-          id="title"
-          defaultValue={editingService?.title}
-          {...register("title", { required: "Title is required" })}
-        />
-        {errors.title && (
-          <p className="text-sm text-red-500">{errors.title.message}</p>
-        )}
-      </div>
-      <div>
-        <Label htmlFor="description">Description</Label>
-        <textarea
-          id="description"
-          defaultValue={editingService?.description}
-          {...register("description", { required: "Description is required" })}
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm placeholder-gray-400 shadow-sm sm:text-base"
-        />
-        {errors.description && (
-          <p className="text-sm text-red-500">{errors.description.message}</p>
-        )}
-      </div>
-      <div>
-        <Label htmlFor="icon">Icon</Label>
-        <Input
-          id="icon"
-          type="file"
-          accept="image/*"
-          {...register("icon", {
-            required: editingService ? false : "Icon is required",
-          })}
-        />
-        {errors.icon && (
-          <p className="text-sm text-red-500">{errors.icon.message}</p>
-        )}
-      </div>
-      {editingService && !iconFile?.[0] && (
-        <div className="mt-2">
-          <Label>Current Icon</Label>
-          <img
-            src={editingService.icon}
-            alt="Current Icon"
-            className="mt-1 h-20 w-20 rounded-full object-cover"
-          />
-        </div>
-      )}
-      {iconFile?.[0] && (
-        <div className="mt-2">
-          <Label>Icon Preview</Label>
-          <img
-            src={URL.createObjectURL(iconFile[0])}
-            alt="Icon Preview"
-            className="mt-1 h-20 w-20 rounded-full object-cover"
-          />
-        </div>
-      )}
-      <Button type="submit">{editingService ? "Update" : "Add"} Service</Button>
-    </form>
-  );
-}

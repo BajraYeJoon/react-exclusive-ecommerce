@@ -60,7 +60,7 @@ const Navbar = () => {
       }
       const res = await fetchProductsBySearch(query);
       setResults(res);
-    }, 1000);
+    }, 500);
 
     debouncedFetchResults(searchQuery);
   }, [searchQuery]);

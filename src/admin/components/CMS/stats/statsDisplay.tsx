@@ -9,19 +9,23 @@ interface StatsDisplayProps {
   onDelete: (id: number) => void;
 }
 
-export function StatsDisplay({ stats, onEdit, onDelete }: StatsDisplayProps) {
+export function StatsDisplay({
+  stats,
+  onEdit,
+  onDelete,
+}: Readonly<StatsDisplayProps>) {
   return (
     <section className="grid grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-4">
-      {stats.map((stat) => (
+      {stats?.map((stat) => (
         <Card
-          key={stat.id}
+          key={stat?.id}
           className="transition-all duration-300 hover:shadow-md"
         >
           <CardContent className="space-y-3 p-4">
             <div className="space-y-2 text-center">
-              <p className="text-3xl font-bold text-primary">{stat.value}</p>
+              <p className="text-3xl font-bold text-primary">{stat?.value}</p>
               <p className="text-sm text-muted-foreground">
-                {stat.description}
+                {stat?.description}
               </p>
             </div>
             <CardFooter className="flex items-center justify-center p-0">
@@ -32,7 +36,7 @@ export function StatsDisplay({ stats, onEdit, onDelete }: StatsDisplayProps) {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => onDelete(stat.id || 0)}
+                onClick={() => onDelete(stat?.id ?? 0)}
               >
                 <TrashIcon className="mr-2 h-4 w-4" />
                 <span className="hidden md:inline">Delete</span>

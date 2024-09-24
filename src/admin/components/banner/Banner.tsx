@@ -1,8 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useState, useMemo } from "react";
 import { Button } from "../../../common/ui/button";
-import ConfirmationDialog from "../confirmation/ConfirmationDialog";
-import { PlusCircle, Trash2Icon } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -35,6 +34,7 @@ import { AnalyticsCardSkeleton } from "../dashboard-component/featuredInfo/Featu
 import uuidv4 from "../../../common/lib/utils/uuid";
 import { fetchHeroBanner } from "../../../common/api/bannerApi";
 import { createBanner, deleteBanner } from "../../api/createBanner";
+import { BannerCard } from "./BannerCard";
 
 interface Product {
   id: number;
@@ -43,7 +43,7 @@ interface Product {
   price: number;
 }
 
-interface Banner {
+export interface Banner {
   id: number;
   title: string;
   brand: string;
@@ -54,13 +54,17 @@ interface BannerApiResponse {
   bannerData: Banner[];
 }
 
-const BannerManagement: React.FC = () => {
+const BannerManagement = () => {
   const queryClient = useQueryClient();
 
-  const { data: bannerData, isLoading: isBannersLoading } = useQuery<BannerApiResponse, Error>({
+  const { data: bannerData, isLoading: isBannersLoading } = useQuery<
+    BannerApiResponse,
+    Error
+  >({
     queryKey: ["banners"],
     queryFn: fetchHeroBanner,
   });
+  const banners = bannerData?.bannerData;
 
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -133,7 +137,7 @@ const BannerManagement: React.FC = () => {
   const table = useReactTable({
     data: products || [],
     columns,
-    pageCount: Math.ceil((products?.length || 0) / pagination.pageSize),
+    pageCount: Math.ceil((products?.length ?? 0) / pagination.pageSize),
     state: {
       pagination,
     },
@@ -144,12 +148,10 @@ const BannerManagement: React.FC = () => {
     onPaginationChange: setPagination,
   });
 
-  const banners = bannerData?.bannerData;
-
   return (
     <div className="container mx-auto p-6">
       <header className="mb-6 flex items-center justify-between">
-        <h1 className="text-lg font-bold text-gray-900 md:text-2xl">
+        <h1 className="text-lg font-bold text-background md:text-2xl">
           Banner Management
         </h1>
         <Dialog>
@@ -182,6 +184,8 @@ const BannerManagement: React.FC = () => {
     </div>
   );
 };
+
+export default BannerManagement;
 
 interface ProductTableProps {
   table: ReturnType<typeof useReactTable<Product>>;
@@ -253,11 +257,11 @@ interface BannerGridProps {
   deleteBannerMutation: ReturnType<typeof useMutation<void, Error, number>>;
 }
 
-const BannerGrid: React.FC<BannerGridProps> = ({
+const BannerGrid = ({
   banners,
   isLoading,
   deleteBannerMutation,
-}) => {
+}: BannerGridProps) => {
   if (banners?.length === 0) {
     return (
       <div className="col-span-full text-center text-gray-600">
@@ -288,43 +292,3 @@ const BannerGrid: React.FC<BannerGridProps> = ({
     </div>
   );
 };
-
-interface BannerCardProps {
-  banner: Banner;
-  deleteBannerMutation: ReturnType<typeof useMutation<void, Error, number>>;
-}
-
-const BannerCard: React.FC<BannerCardProps> = ({
-  banner,
-  deleteBannerMutation,
-}) => (
-  <div className="flex flex-col justify-between overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:shadow-lg">
-    <img
-      src={banner.image[0]}
-      alt={banner.title}
-      className="h-24 w-full object-cover md:h-48"
-    />
-    <div className="p-2 md:p-4">
-      <h2 className="mb-2 text-sm font-semibold text-gray-800 md:text-base">
-        {banner.title}
-      </h2>
-      <span className="text-xs font-medium text-gray-600">{banner.brand}</span>
-    </div>
-    <div className="flex flex-col justify-between gap-2 p-2 md:flex-row">
-      <ConfirmationDialog
-        triggerComponent={
-          <>
-            <Trash2Icon className="mr-2" size={14} /> Delete
-          </>
-        }
-        title="Delete Banner"
-        description="Are you sure you want to delete this banner?"
-        onConfirm={() => deleteBannerMutation.mutate(banner.id)}
-        confirmText="Delete"
-        cancelText="No"
-      />
-    </div>
-  </div>
-);
-
-export default BannerManagement;
