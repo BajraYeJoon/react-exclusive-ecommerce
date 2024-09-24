@@ -12,7 +12,7 @@
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
-    --card: 0, 0%, 98%;
+    --card:  0, 0%, 96%;
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
@@ -86,5 +86,20 @@
   } */
 
  
+}
+
+@keyframes smooth-bounce {
+  0%, 100% {
+    transform: translateY(0);
+    animation-timing-function: ease-in-out;
+  }
+  50% {
+    transform: translateY(-20px);
+    animation-timing-function: ease-in-out;
+  }
+}
+
+.smooth-bounce {
+  animation: smooth-bounce 2s infinite;
 }
 

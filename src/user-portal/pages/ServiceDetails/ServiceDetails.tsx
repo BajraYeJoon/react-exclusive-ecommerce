@@ -21,7 +21,7 @@ const ServiceDetails = () => {
   if (isLoading) return <ServiceLoader />;
 
   return (
-    <section className="grid grid-cols-1 place-items-center justify-evenly gap-12 sm:grid-cols-2 md:grid-cols-3 md:flex-row">
+    <section className="my-16 grid grid-cols-1 place-items-center justify-evenly gap-12 sm:grid-cols-2 md:grid-cols-3 md:flex-row">
       {serviceDetailsInfo.map((serviceDetail: ServiceDetail) => {
         return (
           <article

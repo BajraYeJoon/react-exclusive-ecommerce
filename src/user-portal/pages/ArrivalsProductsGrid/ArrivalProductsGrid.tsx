@@ -95,39 +95,36 @@ const GridItem = ({ product, additionalClasses }: GridItemProps) => {
 
   return (
     <div
-    key={product.id}
-    className={`relative flex h-full w-full items-end rounded-sm bg-foreground p-4 md:p-6 lg:p-6 ${additionalClasses}`}
-  >
-    <div
-      className="absolute inset-0 bg-cover bg-center"
-      style={{
-        backgroundImage: `url('${product.image[0]}')`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        backgroundBlendMode: "lighten",
-      }}
-    />
-  
-    {/* Gradient Overlay for Better Text Visibility */}
-    <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60" />
-  
-    <Link
-      to={`/${product.title}/${product.id}`}
-      className="relative z-10 space-y-2 text-white md:space-y-4"
+      key={product.id}
+      className={`relative flex h-full w-full items-end rounded-sm bg-foreground p-4 md:p-6 lg:p-6 ${additionalClasses}`}
     >
-      <h3 className="text-sm font-bold md:text-lg lg:text-lg">
-        {product.title.slice(0, 30)}...
-      </h3>
-      {/* Uncomment if you want to display additional content */}
-      {/* <p
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{
+          backgroundImage: `url('${product.image[0]}')`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          backgroundBlendMode: "lighten",
+        }}
+      />
+
+      <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60" />
+
+      <Link
+        to={`/${product.title}/${product.id}`}
+        className="relative z-10 space-y-2 text-white md:space-y-4"
+      >
+        <h3 className="text-sm font-bold md:text-lg lg:text-lg">
+          {product.title.slice(0, 30)}...
+        </h3>
+        {/* <p
         className="max-w-4xl overflow-hidden text-[10px] tracking-wide text-gray-400 md:text-[12px] lg:text-sm"
         dangerouslySetInnerHTML={{ __html: sanitizedContent.slice(0, 50) }}
       /> */}
-      <ShopNowButton id={product.id} />
-    </Link>
-  </div>
-  
+        <ShopNowButton id={product.id} />
+      </Link>
+    </div>
   );
 };
 

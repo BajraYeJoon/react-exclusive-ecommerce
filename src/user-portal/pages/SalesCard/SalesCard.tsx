@@ -111,9 +111,9 @@ function NoSalesCard() {
           className="w-full max-w-44 lg:max-w-xs"
         />
       </div>
-      <div className="absolute -left-24 -top-24 h-64 w-64 rounded-full bg-indigo-500 opacity-20"></div>
+      <div className="smooth-bounce absolute -left-24 -top-24 h-64 w-64 rounded-full bg-indigo-500 opacity-20 delay-1000"></div>
 
-      <div className="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-indigo-500 opacity-20"></div>
+      <div className="smooth-bounce absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-indigo-500 opacity-20"></div>
     </section>
   );
 }

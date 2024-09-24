@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 
 function AuthLayout() {
   return (
-    <section className="my-2 flex flex-1 items-center md:my-6 md:justify-center lg:my-12 lg:justify-between">
+    <section className="flex flex-1 items-center bg-background md:justify-center lg:justify-between">
       <img
         src="/s-banner.png"
         alt="Baner Image for Authentication"

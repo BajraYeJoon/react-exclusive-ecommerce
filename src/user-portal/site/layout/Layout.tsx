@@ -13,14 +13,12 @@ export const Loading = () => {
 
 const Layout = () => {
   return (
-    <div className="relative">
-      <div className="absolute top-0 -z-[10] h-full w-full bg-gradient-to-r from-purple-100/70 to-blue-50"></div>
-
+    <>
       <Banner />
       <Navbar />
       <Outlet />
       <Footer />
-    </div>
+    </>
   );
 };
 

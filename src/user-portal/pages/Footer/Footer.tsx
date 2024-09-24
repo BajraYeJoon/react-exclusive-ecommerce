@@ -44,7 +44,7 @@ const FooterSection: React.FC<FooterSectionProps> = ({ title, items }) => {
 const Footer = () => {
   return (
     <footer className="bg-foreground text-background">
-      <section className="mx-72 mt-16 flex flex-wrap gap-10 pb-6 pt-24 max-2xl:mx-8 md:justify-start lg:justify-between">
+      <section className="mx-72 flex flex-wrap gap-10 pb-6 pt-24 max-2xl:mx-8 md:justify-start lg:justify-between">
         <SubscribeSection />
         {footerData.sections.map((section, index) => (
           <FooterSection
