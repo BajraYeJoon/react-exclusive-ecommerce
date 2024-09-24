@@ -1,4 +1,39 @@
 {
-  "app.greeting": "¡Hola, Usuario!",
-  "app.description": "Esta es una simple aplicación de react"
+  "greeting": "¡Bienvenido!",
+  "saleMessage": "¡Oferta de verano para todos los trajes de baño y envío express gratis - 50% DE DESCUENTO!",
+  "shopNow": "Comprar ahora",
+  "Home": "Inicio",
+  "About": "Acerca de",
+  "Contact": "Contacto",
+  "Sign Up": "Registrarse",
+
+  "search.placeholder": "¿Que estas buscando?",
+
+  "heroBanner": "Descubre nuestra colección",
+  "heroBannerDescription": " Eleva tu estilo con nuestras nuevas prendas. Compra ahora y disfruta de descuentos exclusivos!",
+  "exploreNow": "Explora ahora",
+
+  "signup.name": "Nombre",
+  "signup.email": "Correo electrónico",
+  "signup.password": "Contraseña",
+  "signup.phoneNumber": "Número de teléfono",
+  "signup.createAccount": "Crea una cuenta",
+  "signup.enterDetails": "Ingresa tus detalles a continuación",
+  "signup.alreadyHaveAccount": "¿Ya tienes una cuenta?",
+  "signup.signIn": "Iniciar sesión",
+  "signup.createAccountButton": "Crear cuenta",
+  "signup.captchaError": "Por favor completa el reCAPTCHA.",
+  "signup.signupError": "Ocurrió un error durante el registro. Por favor intenta de nuevo.",
+
+  "signin.email": "Correo electrónico",
+  "signin.password": "Contraseña",
+  "signin.loginToAccount": "Inicia sesión en tu cuenta",
+  "signin.provideDetails": "Proporciona tus detalles a continuación",
+  "signin.loginButton": "Iniciar sesión",
+  "signin.forgotPassword": "¿Olvidaste tu contraseña?",
+  "signin.dontHaveAccount": "¿No tienes una cuenta?",
+  "signin.captchaError": "Por favor completa el reCAPTCHA.",
+  "signin.invalidCredentials": "Credenciales inválidas. Por favor verifica tu correo electrónico y contraseña.",
+  "signin.loginSuccess": "Has iniciado sesión correctamente.",
+  "signin.adminWelcome": "Bienvenido al panel de administración"
 }

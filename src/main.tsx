@@ -6,17 +6,20 @@ import App from "./App";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "./user-portal/context/useAuthContext";
 import { Toaster } from "sonner";
-import { RecoilRoot } from "recoil";
+import { RecoilRoot, useRecoilValue } from "recoil";
 import { IntlProvider } from "react-intl";
 import { Analytics } from "@vercel/analytics/react";
 import en_msg from "./user-portal/locales/en.json";
 import es_msg from "./user-portal/locales/es.json";
+import np_msg from "./user-portal/locales/np.json";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { languageState } from "./user-portal/atoms/languageState";
 // import * as Sentry from "@sentry/react";
 
-const messages = {
+const messages: { [key: string]: Record<string, string> } = {
   en: en_msg,
   es: es_msg,
+  np: np_msg,
 };
 
 // const options = {
@@ -33,7 +36,16 @@ const query = new QueryClient();
 //     },
 //   },
 // }
-const locale = "es";
+
+const LanguageWrapper = ({ children }: { children: React.ReactNode }) => {
+  const lang = useRecoilValue(languageState);
+
+  return (
+    <IntlProvider locale={lang} messages={messages[lang]}>
+      {children}
+    </IntlProvider>
+  );
+};
 
 // Sentry.init({
 //   dsn: "https://4f4232c9ac40c5d92c1055cf551e0dec@o4506301865918464.ingest.us.sentry.io/4507859866419200",
@@ -63,14 +75,14 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         options={options}
       > */}
       <RecoilRoot>
-        <IntlProvider locale={locale} messages={messages[locale]}>
+        <LanguageWrapper>
           <AuthProvider>
             <App />
             <Analytics />
             <ReactQueryDevtools initialIsOpen={false} />
             <Toaster />
           </AuthProvider>
-        </IntlProvider>
+        </LanguageWrapper>
       </RecoilRoot>
       {/* </PostHogProvider> */}
     </QueryClientProvider>

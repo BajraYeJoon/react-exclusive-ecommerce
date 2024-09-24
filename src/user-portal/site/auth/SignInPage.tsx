@@ -13,12 +13,13 @@ import { UserRoutes } from "../../utils/userLinks";
 import { Input } from "../../../common/ui/input";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useRef } from "react";
+import { useIntl, FormattedMessage } from "react-intl";
 
 const SignInPage = () => {
   const { login, isLoading } = useAuthContext();
   const navigate = useNavigate();
   const recaptcha = useRef<ReCAPTCHA>(null);
-
+  const intl = useIntl();
   const {
     register,
     handleSubmit,
@@ -32,7 +33,7 @@ const SignInPage = () => {
     const captchaValue = recaptcha?.current?.getValue();
 
     if (!captchaValue) {
-      toast.error("Please complete the reCAPTCHA");
+      toast.error(intl.formatMessage({ id: "signin.captchaError" }));
       return;
     }
 
@@ -42,16 +43,14 @@ const SignInPage = () => {
 
       if (user === Routes.Admin) {
         navigate(`/${Routes.Admin}/${Routes.Dashboard}`);
-        toast.success("Welcome to the admin panel");
+        toast.success(intl.formatMessage({ id: "signin.adminWelcome" }));
       } else {
         navigate(`/${UserRoutes.Profile}`);
-        toast.success("You are now logged in");
+        toast.success(intl.formatMessage({ id: "signin.loginSuccess" }));
       }
     } catch (error: any) {
       if (error.statusCode === 401) {
-        toast.error(
-          "Invalid credentials. Please check your email and password.",
-        );
+        toast.error(intl.formatMessage({ id: "signin.invalidCredentials" }));
         recaptcha?.current?.reset();
       } else {
         toast.error(error?.message);
@@ -62,17 +61,19 @@ const SignInPage = () => {
 
   return (
     <div className="sign-up-content w-[400px] space-y-8">
-      {" "}
-      <h2 className="text-lg lg:text-3xl">Login to your account</h2>
-      <p className="text-sm lg:text-base">Provide your details below</p>
+      <h2 className="text-lg lg:text-3xl">
+        <FormattedMessage id="signin.loginToAccount" />
+      </h2>
+      <p className="text-sm lg:text-base">
+        <FormattedMessage id="signin.provideDetails" />
+      </p>
       <form onSubmit={handleSubmit(onSubmit)} className="w-full">
-        {" "}
         <div className="flex w-full flex-col gap-4">
-          <Input type="text" placeholder="Email" {...register("email")} />
+          <Input type="text" placeholder={intl.formatMessage({ id: "signin.email" })} {...register("email")} />
 
           <Input
             type="password"
-            placeholder="Password"
+            placeholder={intl.formatMessage({ id: "signin.password" })}
             {...register("password")}
           />
 
@@ -85,18 +86,20 @@ const SignInPage = () => {
             {isLoading ? (
               <CgSpinner className="animate-spin" size={20} />
             ) : (
-              "Login"
+              <FormattedMessage id="signin.loginButton" />
             )}
           </Button>
-          {/* <GoogleSignInComponent text="Sign in with Google" /> */}
+
           <div className="flex justify-between gap-5">
             <Link to={"/forgot-password"}>
               <p className="text-sm text-primary underline">
-                Forgot your password
+                <FormattedMessage id="signin.forgotPassword" />
               </p>
             </Link>
             <Link to={"/sign-up"}>
-              <p className="text-sm underline">Don't have an account?</p>
+              <p className="text-sm underline">
+                <FormattedMessage id="signin.dontHaveAccount" />
+              </p>
             </Link>
           </div>
         </div>

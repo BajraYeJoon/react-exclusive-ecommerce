@@ -1,0 +1,39 @@
+{
+  "greeting": "स्वागतम्!",
+  "saleMessage": "गर्मीको बिक्री सबै स्विम सूटका लागि र निःशुल्क एक्सप्रेस डेलिभरी - ५०% छुट!",
+  "shopNow": "अहिल्यै किनमेल गर्नुहोस्",
+  "Home": "गृहपृष्ठ",
+  "About": "हाम्रोबारे",
+  "Contact": "सम्पर्क",
+  "Sign Up": "दर्ता गर्नुहोस्",
+
+  "search.placeholder": "को खोज्नुहोस्",
+
+  "heroBanner": "गृहपृष्ठ गर्नुहोस्",
+  "heroBannerDescription": "हाम्रो नयाँ संग्रह अन्वेषण गर्नुहोस्। हाम्रो नवीन आगमनहरूसँग तपाईंको शैली उच्च गर्नुहोस्। अहिले किनमेल गर्नुहोस् र विशेष छुटहरू उपभोग गर्नुहोस्!",
+  "exploreNow": "अब अन्वेषण गर्नुहोस्",
+
+  "signup.name": "नाम",
+  "signup.email": "इमेल",
+  "signup.password": "पासवर्ड",
+  "signup.phoneNumber": "फोन नम्बर",
+  "signup.createAccount": "खाता खोल्नुहोस्",
+  "signup.enterDetails": "तपाईंका विवरणहरू तल भर्नुहोस्",
+  "signup.alreadyHaveAccount": "के तपाईंको पहिल्यै खाता छ?",
+  "signup.signIn": "साइन इन गर्नुहोस्",
+  "signup.createAccountButton": "खाता खोल्नुहोस्",
+  "signup.captchaError": "कृपया reCAPTCHA पूरा गर्नुहोस्।",
+  "signup.signupError": "पञ्जिकरणको क्रममा त्रुटि भयो। कृपया फेरि प्रयास गर्नुहोस्।",
+
+  "signin.email": "इमेल",
+  "signin.password": "पासवर्ड",
+  "signin.loginToAccount": "तपाईंको खातामा लगइन गर्नुहोस्",
+  "signin.provideDetails": "तलका विवरणहरू दिनुहोस्",
+  "signin.loginButton": "लगइन गर्नुहोस्",
+  "signin.forgotPassword": "तपाईंको पासवर्ड बिर्सनुभयो?",
+  "signin.dontHaveAccount": "के तपाईंसँग खाता छैन?",
+  "signin.captchaError": "कृपया reCAPTCHA पूरा गर्नुहोस्।",
+  "signin.invalidCredentials": "अमान्य प्रमाणपत्रहरू। कृपया आफ्नो इमेल र पासवर्ड जाँच गर्नुहोस्।",
+  "signin.loginSuccess": "तपाईं सफलतापूर्वक लगइन गरिसक्नुभएको छ।",
+  "signin.adminWelcome": "व्यवस्थापक प्यानलमा स्वागत छ"
+}

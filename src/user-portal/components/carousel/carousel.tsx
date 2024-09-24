@@ -1,5 +1,4 @@
 import { ArrowRight } from "lucide-react";
-// import { SiApple } from "react-icons/si";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -11,6 +10,7 @@ import { Button } from "../../../common/ui/button";
 import { fetchHeroBanner } from "../../../common/api/bannerApi";
 import uuidv4 from "../../../common/lib/utils/uuid";
 import { UserRoutes } from "../../utils/userLinks";
+import { FormattedMessage } from "react-intl";
 
 interface Content {
   id: number;
@@ -49,19 +49,25 @@ const Carousel = () => {
         className="mySwiper w-full"
       >
         {banner.length === 0 ? (
-          <div className="flex w-full items-center justify-center bg-gradient-to-r from-blue-700 to-[#B06AB3] px-6 py-12 font-sans">
-            <div className="container mx-auto flex flex-col items-center justify-center text-center">
-              <h2 className="mb-4 text-3xl font-bold text-white sm:text-4xl">
-                Discover Our New Collection
+          <div className="relative grid items-center gap-12 bg-gradient-to-r from-[#BBB3FF] to-indigo-100 px-6 py-6 sm:px-12 lg:grid-cols-2 lg:py-0">
+            <div className="text-center lg:text-left">
+              <h2 className="mb-4 text-2xl font-medium text-foreground sm:text-3xl lg:text-5xl">
+                <FormattedMessage id="heroBanner" />
               </h2>
-              <p className="mb-8 text-center text-base text-white">
-                Elevate your style with our latest arrivals. Shop now and enjoy
-                exclusive discounts!
+              <p className="mb-8 text-sm text-gray-700 sm:text-base">
+                <FormattedMessage id="heroBannerDescription" />
               </p>
               <Link to={`/${UserRoutes.Products}`}>
-                <Button>Explore More</Button>
+                <Button size="lg" className="px-8 py-3 text-lg">
+                  <FormattedMessage id="exploreNow" />
+                </Button>
               </Link>
             </div>
+            <img
+              src="/shop.png"
+              alt="Hero image"
+              className="hidden max-w-sm items-end border-none object-contain lg:flex"
+            />
           </div>
         ) : (
           banner.map((content: Content) => (

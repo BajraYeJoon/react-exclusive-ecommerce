@@ -10,8 +10,10 @@ import { CgSpinner } from "react-icons/cg";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useRef } from "react";
 import { toast } from "sonner";
+import { FormattedMessage, useIntl } from "react-intl";
 
 const SignupPage = () => {
+  const intl = useIntl();
   const recaptcha = useRef<ReCAPTCHA>(null);
 
   const {
@@ -32,7 +34,7 @@ const SignupPage = () => {
     const captchaValue = recaptcha?.current?.getValue();
 
     if (!captchaValue) {
-      toast.error("Please complete the reCAPTCHA.");
+      toast.error(<FormattedMessage id="signup.captchaError" />);
       return;
     }
 
@@ -41,20 +43,24 @@ const SignupPage = () => {
       recaptcha?.current?.reset();
     } catch (err) {
       console.error("Signup error", err);
-      toast.error("An error occurred during signup. Please try again.");
+      toast.error(<FormattedMessage id="signup.signupError" />);
     }
   };
 
   return (
     <div className="sign-up-content flex w-[400px] flex-col space-y-4">
-      <h2 className="text-lg lg:text-3xl">Create an account</h2>
-      <p className="text-sm lg:text-base">Enter your details below</p>
+      <h2 className="text-lg lg:text-3xl">
+        <FormattedMessage id="signup.createAccount" />
+      </h2>
+      <p className="text-sm lg:text-base">
+        <FormattedMessage id="signup.enterDetails" />
+      </p>
       <form onSubmit={handleSubmit(onSubmit)} className="w-full">
         <div className="flex w-full flex-col gap-4">
           <div>
             <Input
               type="text"
-              placeholder="Name"
+              placeholder={intl.formatMessage({ id: "signup.name" })}
               {...register("name", {
                 setValueAs: (value: string) => value.trim(),
               })}
@@ -69,7 +75,7 @@ const SignupPage = () => {
             <Input
               id="email"
               type="email"
-              placeholder="Email"
+              placeholder={intl.formatMessage({ id: "signup.email" })}
               {...register("email")}
             />
             {errors.email && (
@@ -81,7 +87,7 @@ const SignupPage = () => {
           <div>
             <Input
               type="password"
-              placeholder="Password"
+              placeholder={intl.formatMessage({ id: "signup.password" })}
               {...register("password", {
                 setValueAs: (value: string) =>
                   value.trim().replace(/\s+/g, " "),
@@ -96,7 +102,7 @@ const SignupPage = () => {
           <div>
             <Input
               type="text"
-              placeholder="Phone Number"
+              placeholder={intl.formatMessage({ id: "signup.phoneNumber" })}
               {...register("phoneNumber")}
             />
             {errors.phoneNumber && (
@@ -113,16 +119,15 @@ const SignupPage = () => {
             {isSubmitting ? (
               <CgSpinner className="animate-spin" size={20} />
             ) : (
-              "Create Account"
+              <FormattedMessage id="signup.createAccountButton" />
             )}
           </Button>
         </div>
       </form>
-      {/* <GoogleSignInComponent text={"Sign up with Google"} /> */}
       <div className="inline-flex gap-3 text-sm">
-        Already have an account?{" "}
+        <FormattedMessage id="signup.alreadyHaveAccount" />{" "}
         <Link to="/sign-in" className="text-primary underline">
-          Sign in
+          <FormattedMessage id="signup.signIn" />
         </Link>
       </div>
     </div>

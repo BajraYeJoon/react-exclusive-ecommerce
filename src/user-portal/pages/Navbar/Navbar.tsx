@@ -23,6 +23,7 @@ import uuidv4 from "../../../common/lib/utils/uuid";
 import { debounce } from "../../utils/debounce";
 import { Routes } from "../../../admin/lib/links";
 import { Button } from "../../../common/ui/button";
+import { FormattedMessage, useIntl } from "react-intl";
 
 type SearchResultProps = {
   id: number;
@@ -37,6 +38,19 @@ const Navbar = () => {
   const [results, setResults] = useState<SearchResultProps[]>([]);
   const resultsRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const intl = useIntl();
+
+  useEffect(() => {
+    if (toggleMenu) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    };
+  }, [toggleMenu]);
 
   useEffect(() => {
     const debouncedFetchResults = debounce(async (query: string) => {
@@ -126,7 +140,7 @@ const Navbar = () => {
                       )
                     }
                   >
-                    {link.label}
+                    <FormattedMessage id={link.label} />
                   </NavLink>
                 </li>
               );
@@ -139,7 +153,7 @@ const Navbar = () => {
               type="text"
               ref={searchInputRef}
               className="w-full rounded-sm p-4 text-sm font-light tracking-wider placeholder:text-[10px] placeholder:text-muted-foreground/50 focus:border-[1px] md:block"
-              placeholder="What are you looking for?"
+              placeholder={intl.formatMessage({ id: "search.placeholder" })}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
               }}
@@ -241,7 +255,7 @@ const Navbar = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 top-[150px] z-40 flex w-full flex-col overflow-hidden bg-foreground lg:hidden"
+            className="fixed inset-0 top-28 z-40 flex w-full flex-col overflow-y-hidden bg-foreground lg:hidden"
           >
             <ul className="nav-menu mobile-nav-menu flex flex-col gap-4 space-y-2 px-4 py-4 font-bold tracking-wider">
               {navLinks.map((link) => {
@@ -264,7 +278,7 @@ const Navbar = () => {
                       {link.label === "Home" && <Home size={20} />}
                       {link.label === "Sign Up" && <User size={20} />}
                       {link.label === "Login" && <LogIn size={20} />}
-                      <span>{link.label}</span>
+                      <FormattedMessage id={link.label} />
                     </Link>
                   </motion.li>
                 );
