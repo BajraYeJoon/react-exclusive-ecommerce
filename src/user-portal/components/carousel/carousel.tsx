@@ -49,7 +49,7 @@ const Carousel = () => {
         className="mySwiper w-full"
       >
         {banner.length === 0 ? (
-          <div className="relative grid items-center gap-12 bg-gradient-to-r from-[#BBB3FF] to-indigo-100 px-6 py-6 sm:px-12 lg:grid-cols-2 lg:py-0">
+          <div className="relative grid items-center gap-12 bg-gradient-to-r from-indigo-100 to-[#BBB3FF]  px-6 py-6 sm:px-12 lg:grid-cols-2 lg:py-0">
             <div className="text-center lg:text-left">
               <h2 className="mb-4 text-2xl font-medium text-foreground sm:text-3xl lg:text-5xl">
                 <FormattedMessage id="heroBanner" />
@@ -74,11 +74,8 @@ const Carousel = () => {
             <SwiperSlide key={`banner-${uuidv4()}`}>
               <div className="carousel-content grid h-56 w-full grid-cols-2 overflow-hidden bg-foreground p-4 align-middle md:grid-cols-2 md:p-0 lg:h-96">
                 <div className="carousel-text flex flex-col items-start justify-center gap-0 text-background md:gap-6 md:pl-10 lg:pl-14">
-                  {/* <span className="brand-icon inline-flex items-center gap-3 md:gap-6"> */}
-                  {/* <SiApple className="text-md md:text-base lg:text-xl" /> */}
                   <span className="text-[10px] font-light md:text-base lg:text-lg">
                     {content.title}
-                    {/* </span> */}
                   </span>
                   <h3 className="carousel-title my-2 text-balance text-sm font-medium tracking-wide sm:leading-5 md:text-2xl lg:text-5xl lg:leading-[4.2rem]">
                     {content.title}

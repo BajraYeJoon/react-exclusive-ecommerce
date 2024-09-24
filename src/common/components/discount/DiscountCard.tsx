@@ -45,7 +45,7 @@ export default function DiscountCard() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="relative flex flex-col items-center justify-center gap-4 rounded-lg bg-gradient-to-br from-blue-50 to-purple-50 p-6 shadow-lg md:gap-6 md:p-8 lg:p-10"
+        className="relative flex flex-col items-center justify-center gap-4 rounded-lg bg-gradient-to-br from-[#BBB3FF]/30 to-purple-50 p-6 shadow-lg md:gap-6 md:p-8 lg:p-10"
       >
         <motion.div
           animate={{ rotate: [0, 10, -10, 0] }}

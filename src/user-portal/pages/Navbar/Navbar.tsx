@@ -108,7 +108,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar z-50 border-b">
+    <nav className="navbar border-b">
       <div className="navbar-container mx-72 flex items-center justify-between py-4 max-2xl:mx-6">
         <div className="logo-container flex items-center">
           <Link to="/" className="flex items-center">
