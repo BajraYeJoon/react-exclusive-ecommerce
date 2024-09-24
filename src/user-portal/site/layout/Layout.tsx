@@ -68,12 +68,15 @@ const Layout = () => {
 
   return (
     // <Suspense fallback={<EnhancedLoadingScreen />}>
-    <>
+    <div className="relative">
+      <div className="absolute top-0 z-[-2] h-screen bg-white bg-[radial-gradient(100%_50%_at_50%_0%,rgba(0,163,255,0.13)_0,rgba(0,163,255,0)_50%,rgba(0,163,255,0)_100%)]"></div>
+
+      {/* bg-gradient-to-r from-red-50 to-orange-50 */}
       <Banner />
       <Navbar />
       <Outlet />
       <Footer />
-    </>
+    </div>
     // </Suspense>
   );
 };

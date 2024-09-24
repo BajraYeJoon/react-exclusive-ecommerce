@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
-// import jsPDF from "jspdf";
-// import autoTable from "jspdf-autotable";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 import { Axios } from "../../../common/lib/axiosInstance";
 import { checkoutState } from "../../atoms/checkoutState";
@@ -35,7 +35,7 @@ type FormValues = {
 };
 
 export default function Checkout() {
-  const { register, handleSubmit, reset } = useForm<FormValues>();
+  const { register, handleSubmit } = useForm<FormValues>();
 
   const checkoutValues = useRecoilValue(checkoutState);
   const resetCartAfterOrderPlace = useSetRecoilState(cartState);
@@ -75,165 +75,196 @@ export default function Checkout() {
     },
   });
 
-  // const generateInvoice = (orderData: any) => {
-  //   const doc = new jsPDF();
-  //   doc.setFontSize(20);
-  //   doc.setTextColor(44, 62, 80);
-  //   doc.text("Invoice", 105, 15, { align: "center" });
+  const generateInvoice = (orderData: any) => {
+    try {
+      const doc = new jsPDF();
+      doc.setFontSize(20);
+      doc.setTextColor(44, 62, 80);
+      doc.text("Invoice", 105, 15, { align: "center" });
 
-  //   doc.setFontSize(12);
-  //   doc.setTextColor(52, 73, 94);
-  //   doc.text(`Order ID: ${orderData.id}`, 20, 30);
-  //   doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 37);
+      doc.setFontSize(12);
+      doc.setTextColor(52, 73, 94);
+      doc.text(`Order ID: ${orderData.id}`, 20, 30);
+      doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 37);
 
-  //   doc.setFontSize(14);
-  //   doc.text("Bill To:", 20, 50);
-  //   doc.setFontSize(12);
-  //   doc.text(
-  //     `${orderData.billingInfo.firstname} ${orderData.billingInfo.lastname}`,
-  //     20,
-  //     57,
-  //   );
-  //   doc.text(orderData.billingInfo.streetaddress, 20, 64);
-  //   doc.text(
-  //     `${orderData.billingInfo.country}, ${orderData.billingInfo.postalcode}`,
-  //     20,
-  //     71,
-  //   );
-  //   doc.text(`Phone: ${orderData.billingInfo.phone}`, 20, 78);
-  //   doc.text(`Email: ${orderData.billingInfo.email}`, 20, 85);
+      doc.setFontSize(14);
+      doc.text("Bill To:", 20, 50);
+      doc.setFontSize(12);
+      doc.text(
+        `${orderData.billingInfo.firstname} ${orderData.billingInfo.lastname}`,
+        20,
+        57,
+      );
+      doc.text(orderData.billingInfo.streetaddress, 20, 64);
+      doc.text(
+        `${orderData.billingInfo.country}, ${orderData.billingInfo.postalcode}`,
+        20,
+        71,
+      );
+      doc.text(`Phone: ${orderData.billingInfo.phone}`, 20, 78);
+      doc.text(`Email: ${orderData.billingInfo.email}`, 20, 85);
 
-  //   const tableData = orderData.itemId.map((item: any) => [
-  //     item.title,
-  //     item.quantity,
-  //     `$${item.price.toFixed(2)}`,
-  //     `$${(item.quantity * item.price)}`,
-  //   ]);
+      const tableData = orderData.itemId.map((item: any) => [
+        item.title,
+        item.quantity,
+        `$${item.price}`,
+        `$${item.quantity * item.price}`,
+      ]);
 
-  //   autoTable(doc, {
-  //     startY: 95,
-  //     head: [["Item", "Quantity", "Price", "Total"]],
-  //     body: tableData,
-  //     theme: "striped",
-  //     headStyles: { fillColor: [41, 128, 185], textColor: 255 },
-  //     styles: { textColor: 52, fontSize: 10 },
-  //   });
+      autoTable(doc, {
+        startY: 95,
+        head: [["Item", "Quantity", "Price", "Total"]],
+        body: tableData,
+        theme: "striped",
+        headStyles: { fillColor: [41, 128, 185], textColor: 255 },
+        styles: { textColor: 52, fontSize: 10 },
+      });
 
-  //   const finalY = (doc as any).lastAutoTable.finalY || 95;
-  //   doc.setFontSize(12);
-  //   doc.text(`Subtotal: $${orderData.totalPrice}`, 140, finalY + 15);
-  //   doc.text(`Shipping: $45.00`, 140, finalY + 22);
-  //   doc.text(
-  //     `Discount: $${(orderData.discount || 0)}`,
-  //     140,
-  //     finalY + 29,
-  //   );
-  //   doc.setFontSize(14);
-  //   doc.setFont("helvetica", "bold");
-  //   doc.text(
-  //     `Total: $${(orderData.totalPrice + 45 - (orderData.discount || 0))}`,
-  //     140,
-  //     finalY + 38,
-  //   );
+      const finalY = (doc as any).lastAutoTable.finalY || 95;
+      doc.setFontSize(12);
+      doc.text(`Subtotal: $${orderData.totalPrice}`, 140, finalY + 15);
+      doc.text(`Shipping: $45.00`, 140, finalY + 22);
+      doc.text(`Discount: $${orderData.discount || 0}`, 140, finalY + 29);
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text(
+        `Total: $${orderData.totalPrice + 45 - (orderData.discount || 0)}`,
+        140,
+        finalY + 38,
+      );
 
-  //   doc.setFontSize(10);
-  //   doc.setFont("helvetica", "normal");
-  //   doc.text("Thank you for your business!", 105, 280, { align: "center" });
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      doc.text("Thank you for your business!", 105, 280, { align: "center" });
 
-  //   doc.save(`invoice_${orderData.id}.pdf`);
-  // };
+      doc.save(`invoice_${orderData.id}.pdf`);
+      console.log("Invoice generated successfully");
+    } catch (error) {
+      console.error("Error generating invoice:", error);
+      toast.error("Failed to generate invoice. Please contact support.");
+    }
+  };
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    const orderData = {
-      itemId: checkoutValues.cartItems.map((item: any) => item.id),
-      totalPrice: checkoutValues.cartTotal,
-      billingInfo: {
-        firstname: data.fullName.split(" ")[0],
-        lastname: data.fullName.split(" ")[1] || "",
-        country: data.country || "Nepal",
-        streetaddress: data.streetAddress,
-        postalcode: data.postalCode,
-        phone: data.phone,
-        email: data.email,
-      },
-      paymentMethod: data.paymentMethod,
-    };
-
-    console.log(orderData);
-
     try {
+      const orderData = {
+        id: Date.now().toString(),
+        itemId: checkoutValues.cartItems.map((item: any) => ({
+          ...item,
+          title: item.title || "Unknown Item",
+          quantity: item.quantity || 1,
+          price: item.price || 0,
+        })),
+        totalPrice: checkoutValues.cartTotal,
+        billingInfo: {
+          firstname: data.fullName.split(" ")[0],
+          lastname: data.fullName.split(" ")[1] || "",
+          country: data.country || "Nepal",
+          streetaddress: data.streetAddress,
+          postalcode: data.postalCode,
+          phone: data.phone,
+          email: data.email,
+        },
+        paymentMethod: data.paymentMethod,
+        discount: couponCode ? 10 : 0,
+      };
+
+      // Check payment method
       if (data.paymentMethod === "khalti") {
+        const khaltiOrderData = {
+          itemId: checkoutValues.cartItems.map((item: any) => item.id),
+          totalPrice: orderData.totalPrice,
+          billingInfo: orderData.billingInfo,
+        };
+
+        // Khalti payment processing
         const initializePaymentResponse =
-          await paymentMutation.mutateAsync(orderData);
+          await paymentMutation.mutateAsync(khaltiOrderData);
+
+        if (data.paymentMethod === "khalti") {
+          try {
+            const initializePaymentResponse =
+              await paymentMutation.mutateAsync(orderData);
+            console.log(
+              "Payment initialization response:",
+              initializePaymentResponse,
+            );
+
+            if (initializePaymentResponse.data) {
+              const { signature, signed_field_names } =
+                initializePaymentResponse.data.paymentInitiate;
+              const { transaction_uuid } = initializePaymentResponse.data;
+              const total_amount =
+                initializePaymentResponse.data.purchasedProduct.totalPrice;
+
+              const form = document.createElement("form");
+              form.method = "POST";
+              form.action =
+                "https://rc-epay.esewa.com.np/api/epay/main/v2/form";
+              form.style.display = "none";
+
+              const fields = {
+                amount: total_amount.toString(),
+                tax_amount: "0",
+                total_amount: total_amount.toString(),
+                transaction_uuid: transaction_uuid,
+                product_code: "EPAYTEST",
+                product_service_charge: "0",
+                product_delivery_charge: "0",
+                success_url:
+                  "https://nest-ecommerce-1fqk.onrender.com/payment/verify",
+                failure_url: "https://developer.esewa.com.np/failure",
+                signed_field_names: signed_field_names,
+                signature: signature,
+              };
+
+              Object.entries(fields).forEach(([key, value]) => {
+                const input = document.createElement("input");
+                input.type = "hidden";
+                input.name = key;
+                input.value = value;
+                form.appendChild(input);
+              });
+
+              document.body.appendChild(form);
+              form.submit();
+              document.body.removeChild(form);
+
+              console.log("Khalti payment form submitted");
+              return;
+            }
+          } catch (khaltiError) {
+            console.error("Khalti payment initialization error:", khaltiError);
+            toast.error(
+              "Failed to initialize Khalti payment. Please try again.",
+            );
+            return;
+          }
+        }
 
         if (initializePaymentResponse.data) {
-          const { signature, signed_field_names } =
-            initializePaymentResponse.data.paymentInitiate;
-          const { transaction_uuid } = initializePaymentResponse.data;
-          const total_amount =
-            initializePaymentResponse.data.purchasedProduct.totalPrice;
 
-          const form = document.createElement("form");
-          form.method = "POST";
-          form.action = "https://rc-epay.esewa.com.np/api/epay/main/v2/form";
-          form.style.display = "none";
-
-          const fields = {
-            amount: total_amount.toString(),
-            tax_amount: "0",
-            total_amount: total_amount.toString(),
-            transaction_uuid: transaction_uuid,
-            product_code: "EPAYTEST",
-            product_service_charge: "0",
-            product_delivery_charge: "0",
-            success_url:
-              "https://nest-ecommerce-1fqk.onrender.com/payment/verify",
-            failure_url: "https://developer.esewa.com.np/failure",
-            signed_field_names: signed_field_names,
-            signature: signature,
-          };
-
-          Object.entries(fields).forEach(([key, value]) => {
-            const input = document.createElement("input");
-            input.type = "hidden";
-            input.name = key;
-            input.value = value;
-            form.appendChild(input);
-          });
-
-          document.body.appendChild(form);
-          form.submit();
-          document.body.removeChild(form);
-
+          generateInvoice(orderData);
           return;
         }
-      }
-
-      if (couponCode) {
-        await Axios.post("/coupon/apply", { couponCode: couponCode });
+      } else {
+        generateInvoice(orderData);
       }
 
       setOrderPlaceData(orderData);
-      reset();
       resetCheckoutCartAfterOrderPlace({
         cartItems: [],
         cartTotal: 0,
         subTotal: 0,
       });
       Cookies.remove("checkoutData");
-
-      // try {
       await removeCartAfterOrderPlace.mutateAsync();
       resetCartAfterOrderPlace([]);
-      // toast.success("Thank you for shopping with us!");
-      // } catch (error) {
-      // toast.error("Failed to remove cart items");
-      // }
       Cookies.set("order-placed", "true");
-      // generateInvoice(orderData);
-      navigate("/order-placed", {
-        replace: true,
-      });
+
+      // Navigate to the order confirmation page
+      navigate("/order-placed", { replace: true });
+      toast.success("Thank you for shopping with us!");
     } catch (error) {
       console.error("Checkout error:", error);
       toast.error("Failed to place order. Please try again.");
@@ -284,6 +315,7 @@ export default function Checkout() {
                 className="bg-gray-50"
               />
             </div>
+            {/*  */}
             <div className="space-y-2">
               <Label
                 htmlFor="country"

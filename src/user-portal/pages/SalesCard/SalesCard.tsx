@@ -96,11 +96,11 @@ function NoSalesCard() {
   return (
     <section className="relative overflow-hidden rounded-sm bg-gradient-to-r from-indigo-600 to-indigo-800 px-6 py-8 sm:px-8 lg:py-0">
       <div className="flex flex-col items-center lg:flex-row lg:items-center lg:justify-center">
-        <div className="max-w-xl text-center lg:text-left">
+        <div className="mt-0 max-w-xl text-center md:mt-4 lg:text-left">
           <h2 className="mb-2 text-xl font-bold leading-tight text-background sm:leading-tight md:text-3xl md:leading-tight">
             Stay Tuned for Upcoming Sales
           </h2>
-          <p className="mb-8 text-sm font-medium leading-relaxed text-background/50 sm:text-xl">
+          <p className="text-sm font-medium leading-relaxed text-background/50 sm:text-xl">
             Don't miss out on our exclusive offers! Sign up now to receive
             notifications about our upcoming sales and special promotions.
           </p>

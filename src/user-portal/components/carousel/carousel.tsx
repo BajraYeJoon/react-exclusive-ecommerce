@@ -10,6 +10,7 @@ import { Skeleton } from "../../../common/ui/skeleton";
 import { Button } from "../../../common/ui/button";
 import { fetchHeroBanner } from "../../../common/api/bannerApi";
 import uuidv4 from "../../../common/lib/utils/uuid";
+import { UserRoutes } from "../../utils/userLinks";
 
 interface Content {
   id: number;
@@ -57,7 +58,9 @@ const Carousel = () => {
                 Elevate your style with our latest arrivals. Shop now and enjoy
                 exclusive discounts!
               </p>
-              <Button>Explore More</Button>
+              <Link to={`/${UserRoutes.Products}`}>
+                <Button>Explore More</Button>
+              </Link>
             </div>
           </div>
         ) : (
@@ -75,7 +78,7 @@ const Carousel = () => {
                     {content.title}
                   </h3>
                   <Link
-                    to={`/product/${content.id}`}
+                    to={`/${content.title}/${content.id}`}
                     className="shop-now-link inline-flex items-center gap-1 border-b border-background/25 text-xs text-background md:text-base lg:text-lg"
                   >
                     Shop Now <ArrowRight size={20} className="ml-2" />

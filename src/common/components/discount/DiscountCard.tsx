@@ -39,14 +39,13 @@ export default function DiscountCard() {
     setTimeout(() => setCopiedCode(null), 2000);
   };
 
-
   if (!coupons || coupons.length === 0 || error)
     return (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="flex flex-col items-center justify-center gap-4 rounded-lg bg-gradient-to-br from-blue-50 to-purple-50 p-6 shadow-lg md:gap-6 md:p-8 lg:p-10"
+        className="relative flex flex-col items-center justify-center gap-4 rounded-lg bg-gradient-to-br from-blue-50 to-purple-50 p-6 shadow-lg md:gap-6 md:p-8 lg:p-10"
       >
         <motion.div
           animate={{ rotate: [0, 10, -10, 0] }}
@@ -64,15 +63,6 @@ export default function DiscountCard() {
           Our deals are taking a short break. Check back soon for amazing
           discounts!
         </p>
-
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          className="flex items-center space-x-2 rounded-full bg-primary px-4 py-2 text-white transition-colors hover:bg-primary/75 md:px-6 lg:px-8"
-          onClick={() => Axios.get("/coupon").then((res) => res.data)}
-        >
-          <RefreshCw size={20} />
-          <span className="text-sm md:text-base lg:text-lg">Refresh</span>
-        </motion.button>
       </motion.div>
     );
 
@@ -116,6 +106,3 @@ const CouponComponent = ({
     </motion.div>
   );
 };
-
-
-
