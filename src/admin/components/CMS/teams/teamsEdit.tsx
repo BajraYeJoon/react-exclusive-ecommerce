@@ -19,6 +19,7 @@ export default function EmployeeForm({ onSubmit, editingEmployee }: Readonly<Emp
   const imageFile = watch("image");
 
 
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>
@@ -26,7 +27,12 @@ export default function EmployeeForm({ onSubmit, editingEmployee }: Readonly<Emp
         <Input
           id="name"
           defaultValue={editingEmployee?.name}
-          {...register("name", { required: "Name is required" })}
+          {...register("name", {
+            required: "Name is required",
+            validate: (value) => {
+              return !!value.trim();
+            },
+          })}
         />
         {errors.name && (
           <p className="text-sm text-red-500">{errors.name.message}</p>
@@ -37,7 +43,12 @@ export default function EmployeeForm({ onSubmit, editingEmployee }: Readonly<Emp
         <Input
           id="position"
           defaultValue={editingEmployee?.position}
-          {...register("position", { required: "Position is required" })}
+          {...register("position", { required: "Position is required", 
+
+            validate: (value) => {
+              return !!value.trim();
+            },
+           })}
         />
         {errors.position && (
           <p className="text-sm text-red-500">{errors.position.message}</p>
@@ -51,8 +62,18 @@ export default function EmployeeForm({ onSubmit, editingEmployee }: Readonly<Emp
           accept="image/*"
           {...register("image", {
             required: editingEmployee ? false : "Image is required",
+            validate: {
+              validImage: (value) => {
+                return (
+                  (value instanceof FileList &&
+                    value[0].type.startsWith("image/")) ||
+                  "Only Images are supported"
+                );
+              },
+            },
           })}
         />
+
         {errors.image && (
           <p className="text-sm text-red-500">{errors.image.message}</p>
         )}

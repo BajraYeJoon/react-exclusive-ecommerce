@@ -133,7 +133,11 @@ export default function EmployeeManagement() {
         <EmployeeLoader />
       ) : (
         <>
-          <TeamsDisplay handleDelete={handleDelete} handleEdit={handleEdit} employees={employees}/>
+          <TeamsDisplay
+            handleDelete={handleDelete}
+            handleEdit={handleEdit}
+            employees={employees}
+          />
           <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
             <DialogContent>
               <DialogHeader>

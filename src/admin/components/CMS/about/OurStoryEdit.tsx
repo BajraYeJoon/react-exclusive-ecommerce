@@ -4,18 +4,16 @@ import { Input } from "../../../../common/ui/input";
 import { Button } from "../../../../common/ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateAbout } from "../../../../common/api/cms/about";
-import { toast } from "sonner";
 import { Label } from "../../../../common/ui/label";
 import { Textarea } from "../../../../common/ui/textarea";
 import { useState } from "react";
-import { Upload } from "lucide-react";
 
 interface OurStoryEditProps {
   content: OurStoryContent;
   onCancel: () => void;
 }
 
-export function OurStoryEdit({ content, onCancel }: Readonly<OurStoryEditProps>) {
+export function OurStoryEdit({ content, onCancel }: OurStoryEditProps) {
   const {
     register,
     handleSubmit,
@@ -25,6 +23,7 @@ export function OurStoryEdit({ content, onCancel }: Readonly<OurStoryEditProps>)
   });
 
   const queryClient = useQueryClient();
+
   const [preview, setPreview] = useState<string | ArrayBuffer | null>(
     content.image,
   );
@@ -44,10 +43,8 @@ export function OurStoryEdit({ content, onCancel }: Readonly<OurStoryEditProps>)
     mutationFn: updateAbout,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["about"] });
-      toast.success("Content updated successfully");
       onCancel();
     },
-    onError: () => toast.error("Please try again later"),
   });
 
   const onSubmit = (data: OurStoryContent) => {
@@ -79,7 +76,6 @@ export function OurStoryEdit({ content, onCancel }: Readonly<OurStoryEditProps>)
           <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>
         )}
       </div>
-
       <div>
         <Label
           htmlFor="paragraph"
@@ -99,35 +95,33 @@ export function OurStoryEdit({ content, onCancel }: Readonly<OurStoryEditProps>)
       </div>
 
       <div>
-        <Label
+        <label
           htmlFor="imageUrl"
           className="block text-sm font-medium text-gray-700"
         >
           Image URL
-        </Label>
+        </label>
         {content.image && (
-          <div className="mt-1 max-w-44">
+          <div className="mt-1">
             <img
               src={preview?.toString() ?? ""}
               alt="Current Image"
-              className="mb-2 h-16 w-16 rounded-full object-cover md:h-32 md:w-32"
+              className="mb-2 h-12 w-12"
             />
-            <div className="mt-1">
-              <input
-                type="file"
-                id="imageUrl"
-                {...register("image")}
-                className="hidden"
-                onChange={handleImageChange}
-              />
-              <Label
-                htmlFor="imageUrl"
-                className="flex w-full cursor-pointer items-center justify-center rounded-lg border border-gray-300 py-3 hover:bg-gray-50"
-              >
-                <Upload className="size-6" />
-                <span className="ml-2">Upload Image</span>
-              </Label>
-            </div>
+            <input
+              type="file"
+              id="imageUrl"
+              accept="image/*"
+              {...register("image", {
+                validate: {
+                  validImage: (value) => {
+                    return Array.isArray(value) && value[0] instanceof File && value[0]?.type?.startsWith("image/") || "Only Images are supported"
+                  },
+                },
+              })}
+              className="block w-fit cursor-pointer rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 focus:outline-none"
+              onChange={handleImageChange}
+            />
           </div>
         )}
         {errors.image && (

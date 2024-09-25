@@ -54,6 +54,15 @@ export default function ServiceForm({
           accept="image/*"
           {...register("icon", {
             required: editingService ? false : "Icon is required",
+            validate: {
+              validImage: (value) => {
+                return (
+                  (value instanceof FileList &&
+                    value[0].type.startsWith("image/")) ||
+                  "Only Images are supported"
+                );
+              },
+            },
           })}
         />
         {errors.icon && (
