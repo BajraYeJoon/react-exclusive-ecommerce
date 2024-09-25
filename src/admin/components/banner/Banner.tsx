@@ -75,6 +75,7 @@ const BannerManagement = () => {
     queryKey: ["products"],
     queryFn: fetchAllProducts,
   });
+  console.log(products, "produyccccttss");
 
   const [selectedBannerItems, setSelectedBannerItems] = useState<number[]>([]);
 
@@ -116,6 +117,7 @@ const BannerManagement = () => {
           <input
             type="radio"
             checked={selectedBannerItems.includes(row.original.id)}
+            // disabled={}
             onChange={() => handleCheckboxChange(row.original.id)}
           />
         ),
@@ -149,9 +151,9 @@ const BannerManagement = () => {
   });
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="mx-auto p-6">
       <header className="mb-6 flex items-center justify-between">
-        <h1 className="text-lg font-bold text-background md:text-2xl">
+        <h1 className="text-lg font-bold text-foreground md:text-2xl">
           Banner Management
         </h1>
         <Dialog>
@@ -192,7 +194,7 @@ interface ProductTableProps {
 }
 
 const ProductTable: React.FC<ProductTableProps> = ({ table }) => (
-  <div className="rounded-md border">
+  <div className="h-[600px] overflow-y-scroll rounded-md border">
     <Table>
       <TableHeader>
         {table.getHeaderGroups().map((headerGroup) => (
@@ -225,9 +227,9 @@ const ProductTable: React.FC<ProductTableProps> = ({ table }) => (
           </React.Fragment>
         ))}
       </TableHeader>
-      <TableBody>
-        {table.getRowModel().rows.length ? (
-          table.getRowModel().rows.map((row) => (
+      {table.getRowModel().rows.length ? (
+        <TableBody>
+          {table.getRowModel().rows.map((row) => (
             <TableRow key={row.id}>
               {row.getVisibleCells().map((cell) => (
                 <TableCell key={cell.id}>
@@ -235,18 +237,18 @@ const ProductTable: React.FC<ProductTableProps> = ({ table }) => (
                 </TableCell>
               ))}
             </TableRow>
-          ))
-        ) : (
-          <TableRow>
-            <TableCell
-              colSpan={table.getHeaderGroups().length}
-              className="h-24 text-center"
-            >
-              No results.
-            </TableCell>
-          </TableRow>
-        )}
-      </TableBody>
+          ))}
+        </TableBody>
+      ) : (
+        <TableBody>
+          <TableCell
+            colSpan={table.getHeaderGroups().length}
+            className="w- h-24 text-center"
+          >
+            No results.
+          </TableCell>
+        </TableBody>
+      )}
     </Table>
   </div>
 );

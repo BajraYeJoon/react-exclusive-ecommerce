@@ -14,19 +14,19 @@ export const BannerCard = ({
 }: BannerCardProps) => (
   <div className="flex flex-col justify-between overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:shadow-lg">
     <img
-      src={banner.image[0]}
-      alt={banner.title}
+      src={banner?.image[0]}
+      alt={banner?.title}
       className="h-24 w-full object-cover md:h-48"
     />
     <div className="p-2 md:p-4">
       <h2 className="mb-2 text-sm font-semibold text-gray-800 md:text-base">
         {banner.title}
       </h2>
-      <span className="text-xs font-medium text-gray-600">{banner.brand}</span>
+      <span className="text-xs font-medium text-gray-600">{banner?.brand}</span>
     </div>
     <div className="flex flex-col justify-between gap-2 p-2 md:flex-row">
       <ConfirmationDialog
-        triggerComponent={
+        triggerText={
           <>
             <Trash2Icon className="mr-2" size={14} /> Delete
           </>

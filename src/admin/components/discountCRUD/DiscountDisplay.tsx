@@ -43,12 +43,10 @@ export default function DiscountDisplay({
               variant={coupon?.type === "percentage" ? "secondary" : "default"}
               className="text-sm font-semibold"
             >
-              {coupon?.type === "percentage" ? (
-                <Percent className="mr-1 h-3 w-3" />
-              ) : (
+              {coupon?.type === "percentage" ? null : (
                 <DollarSign className="mr-1 h-3 w-3" />
               )}
-              {coupon?.value} {coupon?.type === "percentage" ? "%" : "off"}
+              {coupon?.value} {coupon?.type === "percentage" ? "% off" : "off"}
             </Badge>
           </CardHeader>
           <CardContent className="space-y-4 p-4">
