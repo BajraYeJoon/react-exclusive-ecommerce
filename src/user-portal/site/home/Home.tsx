@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { DiscountCard } from "../../../common/components";
 import {
   Hero,
@@ -15,7 +15,9 @@ import axios from "axios";
 
 const AIChatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<{ text: string; user: boolean }[]>(
+    [],
+  );
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -109,7 +111,7 @@ const AIChatbot = () => {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyPress={(e) => e.key === "Enter" && handleSend()}
+              onKeyDown={(e) => e.key === "Enter" && handleSend()}
               placeholder="Type your message..."
               className="flex-1 rounded-l-lg border p-2"
               disabled={isLoading}

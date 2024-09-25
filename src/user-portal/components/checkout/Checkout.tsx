@@ -1,22 +1,27 @@
-import React, { useEffect } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
-import { toast } from 'sonner';
-import Cookies from 'js-cookie';
-import { Axios } from '../../../common/lib/axiosInstance';
-import { deleteAllCartItems } from '../../api/cartApi';
-import { Card, CardContent, CardHeader, CardTitle } from '../../../common/ui/card';
-import { Input } from '../../../common/ui/input';
-import { Label } from '../../../common/ui/label';
-import { checkoutState } from '../../atoms/checkoutState';
-import { cartState } from '../../atoms/cartState';
-import { orderplaceState } from '../../atoms/orderplaceState';
-import { couponState } from '../../site';
-import { generateInvoice } from './generateInvoice';
-import { submitKhaltiPayment } from './khalitPayment';
-import { OrderSummary } from './orderSummary';
+import { useEffect } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRecoilValue, useSetRecoilState, useRecoilState } from "recoil";
+import { toast } from "sonner";
+import Cookies from "js-cookie";
+import { Axios } from "../../../common/lib/axiosInstance";
+import { deleteAllCartItems } from "../../api/cartApi";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../../common/ui/card";
+import { Input } from "../../../common/ui/input";
+import { Label } from "../../../common/ui/label";
+import { checkoutState } from "../../atoms/checkoutState";
+import { cartState } from "../../atoms/cartState";
+import { orderplaceState } from "../../atoms/orderplaceState";
+import { couponState } from "../../site";
+import { generateInvoice } from "./generateInvoice";
+import { submitKhaltiPayment } from "./khalitPayment";
+import { OrderSummary } from "./orderSummary";
 
 // Types
 type FormValues = {
@@ -26,7 +31,7 @@ type FormValues = {
   postalCode: string;
   phone: string;
   email: string;
-  paymentMethod: 'bank' | 'cash' | 'khalti';
+  paymentMethod: "bank" | "cash" | "khalti";
 };
 
 export type CartItem = {
@@ -37,7 +42,6 @@ export type CartItem = {
   image: string;
   total: number;
 };
-
 
 export type OrderData = {
   id: string;
@@ -56,10 +60,6 @@ export type OrderData = {
   discount: number;
 };
 
-
-
-
-
 export default function Checkout() {
   const { register, handleSubmit } = useForm<FormValues>();
   const checkoutValues = useRecoilValue(checkoutState);
@@ -73,7 +73,7 @@ export default function Checkout() {
   const setCheckoutData = useSetRecoilState(checkoutState);
 
   useEffect(() => {
-    const storedData = Cookies.get('checkoutData');
+    const storedData = Cookies.get("checkoutData");
     if (storedData) {
       setCheckoutData(JSON.parse(storedData));
     }
@@ -82,20 +82,21 @@ export default function Checkout() {
   const removeCartAfterOrderPlace = useMutation({
     mutationFn: deleteAllCartItems,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
     },
     onError: () => {
-      toast.error('Something went wrong. Please try again later.');
+      toast.error("Something went wrong. Please try again later.");
     },
   });
 
   const paymentMutation = useMutation({
-    mutationFn: (orderData: OrderData) => Axios.post('/payment/initialize-payment', orderData),
+    mutationFn: (orderData: OrderData) =>
+      Axios.post("/payment/initialize-payment", orderData),
     onSuccess: () => {
-      toast.success('Payment successful');
+      toast.success("Payment successful");
     },
     onError: () => {
-      toast.error('Something went wrong. Please try again later.');
+      toast.error("Something went wrong. Please try again later.");
     },
   });
 
@@ -106,9 +107,9 @@ export default function Checkout() {
         itemId: checkoutValues.cartItems,
         totalPrice: checkoutValues.cartTotal,
         billingInfo: {
-          firstname: data.fullName.split(' ')[0],
-          lastname: data.fullName.split(' ')[1] || '',
-          country: data.country || 'Nepal',
+          firstname: data.fullName.split(" ")[0],
+          lastname: data.fullName.split(" ")[1] || "",
+          country: data.country || "Nepal",
           streetaddress: data.streetAddress,
           postalcode: data.postalCode,
           phone: data.phone,
@@ -118,8 +119,9 @@ export default function Checkout() {
         discount: couponCode ? 10 : 0,
       };
 
-      if (data.paymentMethod === 'khalti') {
-        const initializePaymentResponse = await paymentMutation.mutateAsync(orderData);
+      if (data.paymentMethod === "khalti") {
+        const initializePaymentResponse =
+          await paymentMutation.mutateAsync(orderData);
         if (initializePaymentResponse.data) {
           await submitKhaltiPayment(initializePaymentResponse.data);
           return;
@@ -130,27 +132,34 @@ export default function Checkout() {
 
       // Process order
       setOrderPlaceData(orderData);
-      resetCheckoutCartAfterOrderPlace({ cartItems: [], cartTotal: 0, subTotal: 0 });
-      Cookies.remove('checkoutData');
+      resetCheckoutCartAfterOrderPlace({
+        cartItems: [],
+        cartTotal: 0,
+        subTotal: 0,
+      });
+      Cookies.remove("checkoutData");
       await removeCartAfterOrderPlace.mutateAsync();
       resetCartAfterOrderPlace([]);
-      Cookies.set('order-placed', 'true');
+      Cookies.set("order-placed", "true");
 
-      navigate('/order-placed', { replace: true });
-      toast.success('Thank you for shopping with us!');
+      navigate("/order-placed", { replace: true });
+      toast.success("Thank you for shopping with us!");
     } catch (error) {
-      console.error('Checkout error:', error);
-      toast.error('Failed to place order. Please try again.');
+      console.error("Checkout error:", error);
+      toast.error("Failed to place order. Please try again.");
     }
   };
 
   return (
     <section className="mx-64 my-12 max-2xl:mx-6">
-      <form onSubmit={handleSubmit(onSubmit)} className="grid gap-8 md:grid-cols-2">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="grid gap-8 md:grid-cols-2"
+      >
         <BillingDetailsForm register={register} />
-        <OrderSummary 
-          checkoutValues={checkoutValues} 
-          couponCode={couponCode} 
+        <OrderSummary
+          checkoutValues={checkoutValues}
+          couponCode={couponCode}
           register={register}
         />
       </form>
@@ -158,23 +167,38 @@ export default function Checkout() {
   );
 }
 
-const BillingDetailsForm= ({ register }: any) => (
+const BillingDetailsForm = ({ register }: any) => (
   <Card className="order-2 grid border-none bg-background shadow-none md:order-1">
     <CardHeader className="p-0 px-6 pb-4">
-      <CardTitle className="font-light tracking-wider">Billing Details</CardTitle>
+      <CardTitle className="font-light tracking-wider">
+        Billing Details
+      </CardTitle>
     </CardHeader>
     <CardContent className="space-y-4">
-      {['fullName', 'streetAddress', 'country', 'postalCode', 'phone', 'email'].map((field) => (
+      {[
+        "fullName",
+        "streetAddress",
+        "country",
+        "postalCode",
+        "phone",
+        "email",
+      ].map((field) => (
         <div key={field} className="space-y-2">
-          <Label htmlFor={field} className="font-ember text-sm text-foreground/40">
-            {field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, ' $1')}
+          <Label
+            htmlFor={field}
+            className="font-ember text-sm text-foreground/40"
+          >
+            {field.charAt(0).toUpperCase() +
+              field.slice(1).replace(/([A-Z])/g, " $1")}
             <span className="text-red-500">*</span>
           </Label>
           <Input
             id={field}
             {...register(field, { required: `${field} is required` })}
             className="bg-gray-50"
-            type={field === 'email' ? 'email' : field === 'phone' ? 'tel' : 'text'}
+            type={
+              field === "email" ? "email" : field === "phone" ? "tel" : "text"
+            }
           />
         </div>
       ))}

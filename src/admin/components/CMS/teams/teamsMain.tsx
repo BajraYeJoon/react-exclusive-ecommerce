@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {  SubmitHandler } from "react-hook-form";
-import { Pencil, Trash2, Plus, Linkedin, Twitter } from "lucide-react";
+import { Plus } from "lucide-react";
 import {
   addEmployee,
   deleteEmployee,
@@ -16,10 +16,8 @@ import {
   DialogTrigger,
 } from "../../../../common/ui/dialog";
 import { Button } from "../../../../common/ui/button";
-import { Card, CardContent, CardFooter } from "../../../../common/ui/card";
 import { EmployeeLoader } from "../../../../common/components/cmsLoader";
 import { toast } from "sonner";
-import { Link } from "react-router-dom";
 import EmployeeForm from "./teamsEdit";
 import { TeamsDisplay } from "./teamsDisplay";
 
