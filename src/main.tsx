@@ -80,7 +80,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <App />
             <Analytics />
             <ReactQueryDevtools initialIsOpen={false} />
-            <Toaster />
+            <Toaster richColors />
           </AuthProvider>
         </LanguageWrapper>
       </RecoilRoot>

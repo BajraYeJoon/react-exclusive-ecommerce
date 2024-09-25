@@ -8,6 +8,7 @@ export const sendOtp = async (email: string) => {
   );
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const verifyOtp = async (data: any) => {
   try {
     const response = await handleRequest(

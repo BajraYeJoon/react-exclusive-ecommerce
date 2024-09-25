@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "../../../common/ui/label";
 import { Input } from "../../../common/ui/input";
 import { Button } from "../../../common/ui/button";
@@ -18,20 +19,34 @@ import DiscountDisplay from "./DiscountDisplay";
 import { toast } from "sonner";
 import { PlusCircle } from "lucide-react";
 import { Coupon } from "../../../common/components/discount/DiscountCard";
+import { couponSchema } from "../../schema/discountSchema";
 
 export default function DiscountCRUD() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingCoupon, setEditingCoupon] = useState<Coupon | null>(null);
   const queryClient = useQueryClient();
-  const { register, handleSubmit, reset, setValue } = useForm<Coupon>();
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<Coupon>({
+    resolver: zodResolver(couponSchema),
+  });
 
   const { data: couponsData, isLoading } = useQuery({
     queryKey: ["coupons"],
     queryFn: () => Axios.get("/coupon").then((res) => res.data),
   });
 
-  console.log(couponsData,'fedfd')
-  const coupons = couponsData?.data || couponsData;
+  const coupons = useMemo(
+    () => (couponsData ? couponsData?.data || couponsData : []),
+    [couponsData],
+  );
+  console.log(coupons, "coupons");
 
   const addCouponMutation = useMutation<void, AxiosError, Coupon>({
     mutationFn: (newCoupon) => Axios.post("/coupon", newCoupon),
@@ -41,24 +56,44 @@ export default function DiscountCRUD() {
       reset();
       setIsDialogOpen(false);
     },
-    onError: () => toast.error("Failed to add coupon"),
+    onError: (error) =>
+      toast.error((error.response?.data as { message: string })?.message),
   });
 
   const updateCouponMutation = useMutation<void, AxiosError, { id: string }>({
     mutationFn: (updatedCoupon) =>
       Axios.patch(`/coupon/${updatedCoupon.id}`, updatedCoupon),
-    onSuccess: (updatedCoupon) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["coupons"] });
       toast.success("Coupon updated successfully");
-      console.log(updatedCoupon, "adsfasdfasfasdfasdf");
       setEditingCoupon(null);
       reset();
       setIsDialogOpen(false);
     },
-    onError: () => toast.error("Failed to update coupon"),
+    onError: (error) =>
+      toast.warning((error.response?.data as { message: string })?.message),
   });
 
   const onSubmit: SubmitHandler<Coupon> = (data) => {
+    const type = watch("type");
+    const value = watch("value");
+    const minPurchaseAmount = watch("minPurchaseAmount");
+
+    if (type === "percentage" && value > 30) {
+      toast.warning("Percentage value must not exceed 30.");
+      return;
+    }
+
+    if (type === "fixed_amount" && value > minPurchaseAmount) {
+      toast.warning("Value must not exceed the minimum purchase amount.");
+      return;
+    }
+
+    if (new Date(data.expirationDate) < new Date(data.startDate)) {
+      toast.warning("Expiration date must be after start date");
+      return;
+    }
+
     if (editingCoupon) {
       updateCouponMutation.mutate({ ...data, id: editingCoupon.id });
     } else {
@@ -70,14 +105,12 @@ export default function DiscountCRUD() {
     setEditingCoupon(coupon);
     Object.keys(coupon).forEach((key) => {
       const couponKey = key as keyof Coupon;
-
       if (couponKey === "startDate" || couponKey === "expirationDate") {
         setValue(couponKey, coupon[couponKey].split("T")[0]);
       } else {
         setValue(couponKey, coupon[couponKey]);
       }
     });
-
     setIsDialogOpen(true);
   };
 
@@ -112,16 +145,26 @@ export default function DiscountCRUD() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Name</Label>
-                  <Input {...register("name", { required: true })} />
+                  <Input {...register("name")} />
+                  {errors.name && (
+                    <span className="text-sm text-red-500">
+                      {errors.name.message}
+                    </span>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="code">Code</Label>
-                  <Input {...register("code", { required: true })} />
+                  <Input {...register("code")} />
+                  {errors.code && (
+                    <span className="text-sm text-red-500">
+                      {errors.code.message}
+                    </span>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="type">Type</Label>
                   <select
-                    {...register("type", { required: true })}
+                    {...register("type")}
                     className="w-full rounded border p-2"
                   >
                     <option value="" disabled>
@@ -130,6 +173,11 @@ export default function DiscountCRUD() {
                     <option value="fixed_amount">Fixed Amount</option>
                     <option value="percentage">Percentage</option>
                   </select>
+                  {errors.type && (
+                    <span className="text-sm text-red-500">
+                      {errors.type.message}
+                    </span>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="value">Value</Label>
@@ -137,40 +185,46 @@ export default function DiscountCRUD() {
                     type="number"
                     step="0.01"
                     {...register("value", {
-                      required: true,
-                      min: 0,
-                      validate: (value) =>
-                        Number(value) > 0 || "Value must be greater than 0",
                       valueAsNumber: true,
                     })}
                   />
+                  {errors.value && (
+                    <span className="text-sm text-red-500">
+                      {errors.value.message}
+                    </span>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="startDate">Start Date</Label>
-                  <Input
-                    type="date"
-                    {...register("startDate", { required: true })}
-                  />
+                  <Input type="date" {...register("startDate")} />
+                  {errors.startDate && (
+                    <span className="text-sm text-red-500">
+                      {errors.startDate.message}
+                    </span>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="expirationDate">Expiration Date</Label>
-                  <Input
-                    type="date"
-                    {...register("expirationDate", { required: true })}
-                  />
+                  <Input type="date" {...register("expirationDate")} />
+                  {errors.expirationDate && (
+                    <span className="text-sm text-red-500">
+                      {errors.expirationDate.message}
+                    </span>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="maxUsageCount">Max Usage Count</Label>
                   <Input
                     type="number"
                     {...register("maxUsageCount", {
-                      required: true,
-                      min: 0,
-                      validate: (value) =>
-                        Number.isInteger(Number(value)) || "Must be an integer",
                       valueAsNumber: true,
                     })}
                   />
+                  {errors.maxUsageCount && (
+                    <span className="text-sm text-red-500">
+                      {errors.maxUsageCount.message}
+                    </span>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="minPurchaseAmount">
@@ -178,14 +232,16 @@ export default function DiscountCRUD() {
                   </Label>
                   <Input
                     type="number"
+                    step="0.01"
                     {...register("minPurchaseAmount", {
-                      required: true,
-                      min: 0,
-                      validate: (value) =>
-                        Number.isInteger(Number(value)) || "Must be an integer",
                       valueAsNumber: true,
                     })}
                   />
+                  {errors.minPurchaseAmount && (
+                    <span className="text-sm text-red-500">
+                      {errors.minPurchaseAmount.message}
+                    </span>
+                  )}
                 </div>
               </div>
               <div className="flex justify-end space-x-2">
@@ -207,13 +263,11 @@ export default function DiscountCRUD() {
 
       {isLoading ? (
         <Loading />
+      ) : coupons.length === 0 ? (
+        <div className="text-center text-gray-600">No coupons available.</div>
       ) : (
         <DiscountDisplay handleEdit={handleEdit} coupons={coupons} />
       )}
     </div>
   );
 }
-
-// : coupons.length === 0 ? (
-//   <div className="text-center text-gray-600">No coupons available.</div>
-// ) :
