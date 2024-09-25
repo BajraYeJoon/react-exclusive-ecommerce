@@ -46,7 +46,6 @@ export default function DiscountCRUD() {
     () => (couponsData ? couponsData?.data || couponsData : []),
     [couponsData],
   );
-  console.log(coupons, "coupons");
 
   const addCouponMutation = useMutation<void, AxiosError, Coupon>({
     mutationFn: (newCoupon) => Axios.post("/coupon", newCoupon),
@@ -57,7 +56,10 @@ export default function DiscountCRUD() {
       setIsDialogOpen(false);
     },
     onError: (error) =>
-      toast.error((error.response?.data as { message: string })?.message),
+      toast.error(
+        (error.response?.data as { message: string })?.message ||
+          "Failed to add coupon",
+      ),
   });
 
   const updateCouponMutation = useMutation<void, AxiosError, { id: string }>({
@@ -71,7 +73,10 @@ export default function DiscountCRUD() {
       setIsDialogOpen(false);
     },
     onError: (error) =>
-      toast.warning((error.response?.data as { message: string })?.message),
+      toast.warning(
+        (error.response?.data as { message: string })?.message ||
+          "Failed to update coupon",
+      ),
   });
 
   const onSubmit: SubmitHandler<Coupon> = (data) => {
@@ -89,7 +94,7 @@ export default function DiscountCRUD() {
       return;
     }
 
-    if (new Date(data.expirationDate) < new Date(data.startDate)) {
+    if (new Date(data?.expirationDate) < new Date(data?.startDate)) {
       toast.warning("Expiration date must be after start date");
       return;
     }
@@ -106,7 +111,7 @@ export default function DiscountCRUD() {
     Object.keys(coupon).forEach((key) => {
       const couponKey = key as keyof Coupon;
       if (couponKey === "startDate" || couponKey === "expirationDate") {
-        setValue(couponKey, coupon[couponKey].split("T")[0]);
+        setValue(couponKey, coupon[couponKey]?.split("T")[0]);
       } else {
         setValue(couponKey, coupon[couponKey]);
       }
@@ -121,7 +126,7 @@ export default function DiscountCRUD() {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="coupon-display-wrapper mx-auto p-4">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold">Discount Coupons</h1>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -145,7 +150,9 @@ export default function DiscountCRUD() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Name</Label>
-                  <Input {...register("name")} />
+                  <Input
+                    {...register("name", { required: "Name is required" })}
+                  />
                   {errors.name && (
                     <span className="text-sm text-red-500">
                       {errors.name.message}
@@ -154,7 +161,9 @@ export default function DiscountCRUD() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="code">Code</Label>
-                  <Input {...register("code")} />
+                  <Input
+                    {...register("code", { required: "Code is required" })}
+                  />
                   {errors.code && (
                     <span className="text-sm text-red-500">
                       {errors.code.message}
@@ -164,7 +173,7 @@ export default function DiscountCRUD() {
                 <div className="space-y-2">
                   <Label htmlFor="type">Type</Label>
                   <select
-                    {...register("type")}
+                    {...register("type", { required: "Type is required" })}
                     className="w-full rounded border p-2"
                   >
                     <option value="" disabled>
@@ -186,6 +195,7 @@ export default function DiscountCRUD() {
                     step="0.01"
                     {...register("value", {
                       valueAsNumber: true,
+                      required: "Discount Value is required.",
                     })}
                   />
                   {errors.value && (
@@ -218,6 +228,7 @@ export default function DiscountCRUD() {
                     type="number"
                     {...register("maxUsageCount", {
                       valueAsNumber: true,
+                      required: "Max usage count is required.",
                     })}
                   />
                   {errors.maxUsageCount && (
@@ -235,6 +246,7 @@ export default function DiscountCRUD() {
                     step="0.01"
                     {...register("minPurchaseAmount", {
                       valueAsNumber: true,
+                      required: "Please enter minimum purchase amount.",
                     })}
                   />
                   {errors.minPurchaseAmount && (
