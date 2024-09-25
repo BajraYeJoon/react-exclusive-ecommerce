@@ -6,18 +6,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "../../../common/ui/car
 import { Badge } from "../../../common/ui/badge";
 import { Button } from "../../../common/ui/button";
 import ConfirmationDialog from "../confirmation/ConfirmationDialog";
+import { Axios } from "../../../common/lib/axiosInstance";
 
 export interface Coupon {
   id: string;
   name: string;
-  code: string; 
-  type: "fixed_amount" | "percentage"; 
-  value: number; 
+  code: string;
+  type: "fixed_amount" | "percentage";
+  value: number;
   startDate: string;
   expirationDate: string;
   maxUsageCount: number;
   minPurchaseAmount: number;
-  [key: string]: string | number; 
+  [key: string]: string | number;
 }
 
 interface DiscountDisplayProps {
@@ -33,10 +34,13 @@ const formatDate = (dateString: string) => {
   });
 };
 
-export default function DiscountDisplay({ handleEdit, coupons }: Readonly<DiscountDisplayProps>) {
+export default function DiscountDisplay({
+  handleEdit,
+  coupons,
+}: Readonly<DiscountDisplayProps>) {
   const queryClient = useQueryClient();
   const deleteCouponMutation = useMutation({
-    mutationFn: (id: string) => fetch(`/api/coupon/${id}`, { method: 'DELETE' }).then(res => res.json()),
+    mutationFn: (id: string) => Axios.delete(`/coupon/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["coupons"] });
       toast.success("Coupon deleted successfully");
@@ -99,7 +103,7 @@ export default function DiscountDisplay({ handleEdit, coupons }: Readonly<Discou
                 Edit
               </Button>
               <ConfirmationDialog
-                triggerComponent={
+                triggerText={
                   <>
                     <Trash2 className="mr-1 h-4 w-4" />
                     Delete

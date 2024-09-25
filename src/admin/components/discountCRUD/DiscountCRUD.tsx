@@ -47,9 +47,10 @@ export default function DiscountCRUD() {
   const updateCouponMutation = useMutation<void, AxiosError, { id: string }>({
     mutationFn: (updatedCoupon) =>
       Axios.patch(`/coupon/${updatedCoupon.id}`, updatedCoupon),
-    onSuccess: () => {
+    onSuccess: (updatedCoupon) => {
       queryClient.invalidateQueries({ queryKey: ["coupons"] });
       toast.success("Coupon updated successfully");
+      console.log(updatedCoupon, "adsfasdfasfasdfasdf");
       setEditingCoupon(null);
       reset();
       setIsDialogOpen(false);
