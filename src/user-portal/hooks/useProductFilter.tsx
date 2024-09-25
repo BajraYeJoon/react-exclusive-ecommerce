@@ -18,8 +18,6 @@ export interface FilterOptions {
   brands: string[];
   categories: string[];
   onSale: boolean;
-  minPrice?: number;
-  maxPrice?: number;
 }
 
 export type SortOption = "default" | "price-asc" | "price-desc";

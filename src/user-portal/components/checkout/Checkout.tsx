@@ -23,7 +23,6 @@ import { generateInvoice } from "./generateInvoice";
 import { submitKhaltiPayment } from "./khalitPayment";
 import { OrderSummary } from "./orderSummary";
 
-// Types
 type FormValues = {
   fullName: string;
   streetAddress: string;
@@ -130,7 +129,6 @@ export default function Checkout() {
         generateInvoice(orderData);
       }
 
-      // Process order
       setOrderPlaceData(orderData);
       resetCheckoutCartAfterOrderPlace({
         cartItems: [],

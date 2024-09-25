@@ -1,3 +1,4 @@
+import { Label } from "../../../common/ui/label";
 import { FilterOptions, SortOption } from "../../hooks/useProductFilter";
 
 interface FilterOptionsProps {
@@ -18,13 +19,13 @@ const ProductFilters = ({
   uniqueCategories,
 }: FilterOptionsProps) => {
   return (
-    <div className="mb-8 rounded-md border border-gray-200 bg-white p-4 shadow-sm">
+    <div className="mb-8 rounded-md border border-gray-200 bg-background p-4 shadow-sm">
       <h2 className="mb-4 text-lg font-semibold text-gray-900">Filters</h2>
       <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">
+          <Label className="mb-1 block text-sm font-medium text-gray-700">
             Sort By
-          </label>
+          </Label>
           <select
             value={sortOption}
             onChange={(e) => handleSortChange(e.target.value as SortOption)}
@@ -36,9 +37,9 @@ const ProductFilters = ({
           </select>
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">
+          <Label className="mb-1 block text-sm font-medium text-gray-700">
             Brand
-          </label>
+          </Label>
           <select
             onChange={(e) => {
               const value = e.target.value;
@@ -55,9 +56,9 @@ const ProductFilters = ({
           </select>
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">
+          <Label className="mb-1 block text-sm font-medium text-gray-700">
             Category
-          </label>
+          </Label>
           <select
             onChange={(e) => {
               const value = e.target.value;
@@ -67,8 +68,8 @@ const ProductFilters = ({
           >
             <option value="">All Categories</option>
             {uniqueCategories?.map((category) => (
-              <option key={category as string} value={category as string}>
-                {category as string}
+              <option key={category} value={category}>
+                {category}
               </option>
             ))}
           </select>
