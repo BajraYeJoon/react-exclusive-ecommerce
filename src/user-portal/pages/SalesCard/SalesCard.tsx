@@ -11,7 +11,6 @@ import { fetchSalesProduct } from "../../../common/api/productApi";
 import ProductCardSkeleton from "../../../common/components/productCardSkeleton/ProductCardSkeleton";
 import uuidv4 from "../../../common/lib/utils/uuid";
 import { Button } from "../../../common/ui/button";
-import { useId } from "react";
 
 interface SalesCardProps {
   title: string;

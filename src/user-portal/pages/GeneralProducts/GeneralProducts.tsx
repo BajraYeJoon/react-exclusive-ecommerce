@@ -22,11 +22,7 @@ const GeneralProducts = () => {
 
   return (
     <section className="general-products-container flex flex-col gap-4 lg:gap-20">
-      <PagesHeader
-        subHeading="Our Products"
-        Heading="Explore Our Products"
-        noArrow
-      />
+      <PagesHeader subHeading="Our Products" Heading="Explore Our Products" />
 
       {isLoading ? (
         <ProductCardSkeleton />
