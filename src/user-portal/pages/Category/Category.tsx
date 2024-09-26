@@ -1,4 +1,4 @@
-import { PagesHeader } from "../../components";
+import { NavigationArrows, PagesHeader } from "../../components";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -38,11 +38,29 @@ const Category = () => {
     skeletonCount = 6;
   }
 
+  const swiperKey = uuidv4();
+
   if (error) return <div>An error occurred: {error.message}</div>;
 
   return (
     <section className="category-container flex flex-col gap-2 border-b border-foreground/30 pb-5 md:gap-7 md:pb-14">
-      <PagesHeader subHeading="Categories" Heading="Browse by Category" />
+      <div className="flex items-center justify-between">
+        <PagesHeader
+          subHeading="Categories"
+          Heading="Browse By Category"
+          flashTimer
+        />
+        <div className="page-navigations flex items-center gap-2">
+          <NavigationArrows
+            direction="prev"
+            className={`arrow-left-${swiperKey}`}
+          />
+          <NavigationArrows
+            direction="next"
+            className={`arrow-right-${swiperKey}`}
+          />
+        </div>
+      </div>
       <div className="category-grid my-10">
         {isLoading ? (
           <div className="flex w-full gap-4">
@@ -69,9 +87,8 @@ const Category = () => {
             className="mySwiper flex h-24 md:h-32"
             modules={[Navigation]}
             navigation={{
-              enabled: true,
-              nextEl: ".arrow-right",
-              prevEl: ".arrow-left",
+              nextEl: `.arrow-right-${swiperKey}`,
+              prevEl: `.arrow-left-${swiperKey}`,
             }}
             breakpoints={{
               320: {

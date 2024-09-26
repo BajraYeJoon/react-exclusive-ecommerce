@@ -22,17 +22,21 @@ const GeneralProducts = () => {
 
   return (
     <section className="general-products-container flex flex-col gap-4 lg:gap-20">
-      <PagesHeader subHeading="Our Products" Heading="Explore Our Products" />
+      <PagesHeader
+        subHeading="Our Products"
+        Heading="Explore Our Products"
+        noArrow
+      />
 
-        {isLoading ? (
-          <ProductCardSkeleton /> 
-          ) : (
-            <div className="general-product-card-container grid h-fit w-full grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-              {generalProducts?.map((gproduct: any) => (
-                <ProductCard {...gproduct} key={uuidv4()} />
-              ))}
-            </div>
-          )}
+      {isLoading ? (
+        <ProductCardSkeleton />
+      ) : (
+        <div className="general-product-card-container grid h-fit w-full grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+          {generalProducts?.map((gproduct: any) => (
+            <ProductCard {...gproduct} key={uuidv4()} />
+          ))}
+        </div>
+      )}
 
       <Button className="mx-auto w-full md:w-fit">
         <Link to={"/products"}>View All Products</Link>

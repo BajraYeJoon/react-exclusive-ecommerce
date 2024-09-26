@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { PagesHeader, ProductCard } from "../../components";
+import { NavigationArrows, PagesHeader, ProductCard } from "../../components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -11,6 +11,7 @@ import { fetchSalesProduct } from "../../../common/api/productApi";
 import ProductCardSkeleton from "../../../common/components/productCardSkeleton/ProductCardSkeleton";
 import uuidv4 from "../../../common/lib/utils/uuid";
 import { Button } from "../../../common/ui/button";
+import { useId } from "react";
 
 interface SalesCardProps {
   title: string;
@@ -23,14 +24,11 @@ interface SalesCardProps {
 }
 
 const SalesCard = () => {
-  const {
-    data: salesData,
-
-    isLoading,
-  } = useQuery({
+  const { data: salesData, isLoading } = useQuery({
     queryKey: ["sale"],
     queryFn: fetchSalesProduct,
   });
+  const swiperKey = uuidv4();
 
   const salesValue = salesData ? salesData[0].products : [];
 
@@ -38,11 +36,25 @@ const SalesCard = () => {
 
   return (
     <section className="sales-card-container flex flex-col gap-5 border-b border-foreground/30 pb-8 md:gap-7 md:pb-14">
-      <PagesHeader
-        subHeading="Today's Sales"
-        Heading="Flash Sales"
-        flashTimer
-      />
+      <div className="flex items-center justify-between">
+        <PagesHeader
+          subHeading="Today's Sales"
+          Heading="Flash Sales"
+          flashTimer
+        />
+        {salesValue.length > 4 && (
+          <div className="page-navigations flex items-center gap-2">
+            <NavigationArrows
+              direction="prev"
+              className={`arrow-left-${swiperKey}`}
+            />
+            <NavigationArrows
+              direction="next"
+              className={`arrow-right-${swiperKey}`}
+            />
+          </div>
+        )}
+      </div>
 
       <div className="product-card-container w-full items-center justify-between gap-4 overflow-hidden">
         <Swiper
@@ -51,8 +63,8 @@ const SalesCard = () => {
           className="mySwiper"
           modules={[Navigation]}
           navigation={{
-            nextEl: ".arrow-right",
-            prevEl: ".arrow-left",
+            nextEl: `.arrow-right-${swiperKey}`,
+            prevEl: `.arrow-left-${swiperKey}`,
           }}
           breakpoints={{
             320: {
