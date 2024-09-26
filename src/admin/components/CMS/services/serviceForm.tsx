@@ -28,7 +28,10 @@ export default function ServiceForm({
         <Input
           id="title"
           defaultValue={editingService?.title}
-          {...register("title", { required: "Title is required" })}
+          {...register("title", {
+            required: "Title is required",
+            setValueAs: (value: string) => value.trim(),
+          })}
         />
         {errors.title && (
           <p className="text-sm text-red-500">{errors.title.message}</p>
@@ -39,7 +42,10 @@ export default function ServiceForm({
         <textarea
           id="description"
           defaultValue={editingService?.description}
-          {...register("description", { required: "Description is required" })}
+          {...register("description", {
+            required: "Description is required",
+            setValueAs: (value: string) => value.trim(),
+          })}
           className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm placeholder-gray-400 shadow-sm sm:text-base"
         />
         {errors.description && (
