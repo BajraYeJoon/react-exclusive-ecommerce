@@ -2,7 +2,7 @@ import { Calendar, Clock, Gift } from "lucide-react";
 import { Coupon, CouponProps } from "./DiscountCard";
 
 const CouponValue = ({ coupon }: { coupon: Coupon }) => (
-  <span className="text-3xl font-medium">
+  <span className="text-lg font-medium md:text-3xl">
     {coupon.type === "fixed_amount"
       ? `$${coupon.value.toFixed(2)} OFF`
       : `${coupon.value}% OFF`}
@@ -20,7 +20,7 @@ const CopyButton = ({
 }) => (
   <button
     onClick={onClick}
-    className="rounded-full bg-primary px-4 py-2 text-sm font-bold text-background transition-colors hover:bg-red-500/75"
+    className="rounded-full bg-primary px-4 py-2 text-xs font-light text-background transition-colors hover:bg-red-500/75"
   >
     {
       <>
@@ -36,7 +36,7 @@ const CopyButton = ({
 );
 
 const ExpirationDate = ({ date }: { date: string }) => (
-  <div className="flex items-center text-sm text-foreground/75">
+  <div className="flex items-center text-xs text-foreground/75">
     <Clock className="mr-1 h-4 w-4" />
     <span>Expires: {new Date(date).toLocaleDateString()}</span>
   </div>
@@ -44,14 +44,14 @@ const ExpirationDate = ({ date }: { date: string }) => (
 
 export const CouponDesign1 = ({ coupon, onCopy, isCopied }: CouponProps) => (
   <div className="relative overflow-hidden rounded-lg bg-gradient-to-br from-amber-100 to-amber-200 p-6 shadow-lg">
-    <div className="absolute -right-4 -top-4 h-24 w-24 rotate-12 bg-yellow-400" />
-    <h2 className="mb-2 text-2xl font-bold text-foreground/85">
+    <div className="absolute -right-4 -top-4 -z-10 h-24 w-24 rotate-12 bg-yellow-400 md:z-10" />
+    <h2 className="z-30 mb-2 text-sm font-bold text-foreground/85 md:text-lg lg:text-2xl">
       {coupon.name}
     </h2>
     <div className="mb-4 flex items-center">
       <CouponValue coupon={coupon} />
     </div>
-    <div className="mb-4 flex items-center justify-between">
+    <div className="mb-4 flex flex-col items-center justify-between gap-2 md:flex-row">
       <span className="rounded-full bg-yellow-300 px-3 py-1 text-sm font-semibold text-yellow-800">
         {coupon.code}
       </span>

@@ -37,7 +37,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(
-    Cookies.get("token") ? true : false,
+    Cookies.get("access_token") ? true : false,
   );
   const [isLoading, setIsLoading] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -76,13 +76,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         email,
         password,
       });
-      const data = response.data;
-      await fetchUserDetails(data.token);
+      const { accessToken, refreshToken } = response.data;
+      Cookies.set("access_token", accessToken, { expires: 1 / 24 }); // 1 hour
+      Cookies.set("refresh_token", refreshToken, { expires: 7 }); // 7 days
+      await fetchUserDetails(accessToken);
       setIsLoggedIn(true);
-      Cookies.set("token", data.token, { expires: 7 });
       loginFormReset();
-      Axios.defaults.headers.common["Authorization"] =
-        `Bearer ${Cookies.get("token")}`;
     } catch (error) {
       toast.error("Login failed, Please check your credentials");
     } finally {
@@ -127,12 +126,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setIsLoading(false);
     }
   };
-
   const logout = async () => {
     setIsLoggedIn(false);
     setIsAdmin(false);
     toast.success("You are now logged out");
-    Cookies.remove("token");
+    Cookies.remove("access_token");
+    Cookies.remove("refresh_token");
     Cookies.remove("user");
   };
 

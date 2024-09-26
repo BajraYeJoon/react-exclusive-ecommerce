@@ -53,13 +53,13 @@ const Carousel = () => {
         ) : (
           banner.map((content: Content) => (
             <SwiperSlide key={`banner-${uuidv4()}`}>
-              <div className="carousel-content grid h-56 w-full grid-cols-2 overflow-hidden bg-foreground p-4 align-middle md:grid-cols-2 md:p-0 lg:h-96">
-                <div className="carousel-text flex flex-col items-start justify-center gap-0 text-background md:gap-6 md:pl-10 lg:pl-14">
-                  <span className="text-[10px] font-light md:text-base lg:text-lg">
-                    {content.title}
+              <div className="carousel-content grid h-44 w-full grid-cols-2 overflow-hidden bg-foreground p-4 align-middle md:h-56 md:grid-cols-2 md:p-0 lg:h-96">
+                <div className="carousel-text flex flex-col items-start justify-center gap-0 text-background md:gap-2 md:pl-10 lg:gap-6 lg:pl-14">
+                  <span className="text-[9px] font-light md:text-sm">
+                    {content.title.slice(0, 30)}...
                   </span>
-                  <h3 className="carousel-title my-2 text-balance text-sm font-medium tracking-wide sm:leading-5 md:text-2xl lg:text-5xl lg:leading-[4.2rem]">
-                    {content.title}
+                  <h3 className="carousel-title my-2 text-ellipsis text-xs font-medium tracking-wide md:leading-5 lg:text-xl xl:text-2xl">
+                    {content.title.slice(0, 50)}...
                   </h3>
                   <Link
                     to={`/${content.title}/${content.id}`}
@@ -68,7 +68,7 @@ const Carousel = () => {
                     Shop Now <ArrowRight size={20} className="ml-2" />
                   </Link>
                 </div>
-                <div className="carousel-image flex w-full items-center">
+                <div className="carousel-image flex w-full items-center p-4">
                   <img
                     src={content.image[0]}
                     alt="Banner images for the products"

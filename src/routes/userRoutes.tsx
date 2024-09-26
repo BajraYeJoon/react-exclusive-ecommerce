@@ -35,7 +35,8 @@ export const userRoutes = [
   { path: UserRoutes.Contact, element: <Contact /> },
   {
     element: <AuthLayout />,
-    loader: () => (Cookies.get("token") ? redirect(UserRoutes.Profile) : null),
+    loader: () =>
+      Cookies.get("accesstoken") ? redirect(UserRoutes.Profile) : null,
     children: [
       { path: UserRoutes.SignUp, element: <SignupPage /> },
       { path: UserRoutes.SignIn, element: <SignInPage /> },
