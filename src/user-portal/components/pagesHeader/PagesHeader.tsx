@@ -1,4 +1,4 @@
-import NavigationArrows from "../navigationalArrows/NavigationalArrows";
+import React from "react";
 import { Link } from "react-router-dom";
 import CountdownTimer from "../flashSaleTimer/counttimer";
 import { Button } from "../../../common/ui/button";
@@ -12,22 +12,21 @@ interface PagesHeaderProps {
   cta?: string;
 }
 
-const PagesHeader = ({
+const PagesHeader: React.FC<PagesHeaderProps> = ({
   flashTimer,
   subHeading,
   Heading,
   cta,
-}: PagesHeaderProps) => {
+}) => {
   const { data: salesData } = useQuery({
     queryKey: ["sale"],
     queryFn: fetchSalesProduct,
   });
 
   const dateConversion = new Date(salesData && salesData[0]?.saleEnd);
-
   const CUSTOM_DAYS_IN_MS = dateConversion.getTime();
-
   const dateTimeAfterThreeDays = new Date(CUSTOM_DAYS_IN_MS);
+
   return (
     <div className="page-header-container flex flex-col gap-3">
       <div className="flex items-center gap-3 text-primary">
@@ -45,12 +44,7 @@ const PagesHeader = ({
             <CountdownTimer targetDate={dateTimeAfterThreeDays} />
           )}
         </div>
-        {!cta ? (
-          <div className="page-navigations flex items-center gap-2">
-            <NavigationArrows direction="prev" />
-            <NavigationArrows />
-          </div>
-        ) : (
+        {cta && (
           <Link to={`${cta}`} className="max-w-20 text-xs md:text-sm">
             <Button className="px-4 md:p-4">View All</Button>
           </Link>

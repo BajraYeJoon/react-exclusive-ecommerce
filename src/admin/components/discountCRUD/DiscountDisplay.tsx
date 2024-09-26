@@ -1,5 +1,13 @@
 
-import { Calendar, Code, DollarSign, Edit, Percent, Trash2, Tag, Users } from "lucide-react";
+import {
+  Calendar,
+  Code,
+  DollarSign,
+  Edit,
+  Trash2,
+  Tag,
+  Users,
+} from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../common/ui/card";
