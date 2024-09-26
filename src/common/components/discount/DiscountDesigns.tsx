@@ -20,7 +20,7 @@ const CopyButton = ({
 }) => (
   <button
     onClick={onClick}
-    className="rounded-full bg-primary px-4 py-2 text-xs font-light text-background transition-colors hover:bg-red-500/75"
+    className="rounded-full bg-primary px-4 py-2 text-[8px] font-light text-background transition-colors hover:bg-red-500/75 sm:text-xs"
   >
     {
       <>
@@ -43,7 +43,7 @@ const ExpirationDate = ({ date }: { date: string }) => (
 );
 
 export const CouponDesign1 = ({ coupon, onCopy, isCopied }: CouponProps) => (
-  <div className="relative overflow-hidden rounded-lg bg-gradient-to-br from-amber-100 to-amber-200 p-6 shadow-lg">
+  <div className="relative overflow-hidden rounded-lg bg-gradient-to-br from-amber-100 to-amber-200 p-4 shadow-lg sm:p-6">
     <div className="absolute -right-4 -top-4 -z-10 h-24 w-24 rotate-12 bg-yellow-400 md:z-10" />
     <h2 className="z-30 mb-2 text-sm font-bold text-foreground/85 md:text-lg lg:text-2xl">
       {coupon.name}

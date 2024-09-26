@@ -53,7 +53,7 @@ const Carousel = () => {
         ) : (
           banner.map((content: Content) => (
             <SwiperSlide key={`banner-${uuidv4()}`}>
-              <div className="carousel-content grid h-44 w-full grid-cols-2 overflow-hidden bg-foreground p-4 align-middle md:h-56 md:grid-cols-2 md:p-0 lg:h-96">
+              <div className="carousel-content grid h-44 w-full grid-cols-2 overflow-hidden bg-foreground p-4 align-middle md:h-56 md:grid-cols-2 md:p-0 lg:h-fit">
                 <div className="carousel-text flex flex-col items-start justify-center gap-0 text-background md:gap-2 md:pl-10 lg:gap-6 lg:pl-14">
                   <span className="text-[9px] font-light md:text-sm">
                     {content.title.slice(0, 30)}...
@@ -68,11 +68,11 @@ const Carousel = () => {
                     Shop Now <ArrowRight size={20} className="ml-2" />
                   </Link>
                 </div>
-                <div className="carousel-image flex w-full items-center p-4">
+                <div className="carousel-image flex w-full items-center p-4 md:h-[200px] md:opacity-100 lg:h-[300px]">
                   <img
                     src={content.image[0]}
                     alt="Banner images for the products"
-                    className="w-full rounded-sm border object-contain sm:border-0 md:mt-0 md:h-[200px] md:opacity-100 lg:h-[300px]"
+                    className="h-full w-full rounded-sm border object-cover sm:border-0 sm:object-contain md:mt-0"
                   />
                 </div>
               </div>
