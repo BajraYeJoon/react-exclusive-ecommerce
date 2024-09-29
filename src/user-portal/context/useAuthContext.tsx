@@ -78,9 +78,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
 
       console.log(response, "response from login");
-      const { accessToken } = response.data;
+      const { accessToken, refreshToken } = response.data;
       Cookies.set("access_token", accessToken, { expires: 7 }); // 1 hour
-      // Cookies.set("refresh_token", refreshToken, { expires: 7 }); // 7 days
+      Cookies.set("refresh_token", refreshToken, { expires: 7 }); // 7 days
       await fetchUserDetails(accessToken);
       setIsLoggedIn(true);
       loginFormReset();
