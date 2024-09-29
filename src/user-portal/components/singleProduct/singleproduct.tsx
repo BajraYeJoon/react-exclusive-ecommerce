@@ -27,6 +27,7 @@ import { toast } from "sonner";
 import { marked } from "marked";
 import "./styles.css";
 import DOMPurify from "dompurify";
+import RecommendedProducts from "../test/test";
 
 interface FeatureItemProps {
   icon: React.ReactNode;
@@ -48,6 +49,7 @@ const Singleproduct = () => {
     queryFn: () => fetchProductDetails(productId ?? ""),
   });
 
+  console.log(details?.id, "details");
 
   const htmlContent = details?.description ? marked(details.description) : "";
   const sanitizedContent = DOMPurify.sanitize(String(htmlContent));
@@ -58,7 +60,6 @@ const Singleproduct = () => {
   });
 
   const ratings = ratingsData?.data;
-  console.log(ratings, "ratings");
 
   useEffect(() => {
     if (details?.image?.length > 0) {
@@ -275,6 +276,11 @@ const Singleproduct = () => {
             )}
           </div>
         </div>
+      </div>
+
+      <div>
+        <h2>Recommended Products</h2>
+        {/* <RecommendedProducts currentProductId={details?.id} /> */}
       </div>
     </section>
   );
