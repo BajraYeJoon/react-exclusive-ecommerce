@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { Banner, Navbar, Footer } from "../../pages";
 import { LoaderCircle, Gift, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Cookies from "js-cookie";
+import { Button } from "../../../common/ui/button";
+import { UserRoutes } from "../../utils/userLinks";
 
 export const Loading = () => {
   return (
@@ -16,6 +18,13 @@ export const Loading = () => {
 
 const FloatingCard = () => {
   const [isVisible, setIsVisible] = useState(true);
+  const navigate = useNavigate();
+
+
+  const handleOfferClick = () => {
+    setIsVisible(false);
+    navigate(`${UserRoutes.Discount}`);
+  }
 
   return (
     <AnimatePresence>
@@ -51,9 +60,12 @@ const FloatingCard = () => {
             <p className="mt-2 text-sm">
               Special discounts for Dashain festival!
             </p>
-            <button className="mt-2 rounded-md bg-primary px-3 py-1 text-sm text-white transition-colors hover:bg-primary/90">
+            <Button
+              className="mt-3"
+              onClick={handleOfferClick}
+            >
               View Offers
-            </button>
+            </Button>
           </div>
         </motion.div>
       )}
@@ -102,7 +114,7 @@ const PopupBanner = () => {
               <img
                 src="https://pbs.twimg.com/media/F8Z83E3XcAA0Hsm?format=jpg&name=large"
                 alt="Special discount offer"
-                className="h-[500px] w-[500px] rounded-md"
+                className="h-auto w-auto rounded-md lg:h-[500px] lg:w-[500px]"
               />
             </div>
           </motion.div>

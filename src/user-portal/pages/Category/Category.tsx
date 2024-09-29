@@ -45,11 +45,7 @@ const Category = () => {
   return (
     <section className="category-container flex flex-col gap-2 border-b border-foreground/30 pb-5 md:gap-7 md:pb-14">
       <div className="flex items-center justify-between">
-        <PagesHeader
-          subHeading="Categories"
-          Heading="Browse By Category"
-          flashTimer
-        />
+        <PagesHeader subHeading="Categories" Heading="Browse By Category" />
         <div className="page-navigations flex items-center gap-2">
           <NavigationArrows
             direction="prev"

@@ -84,8 +84,15 @@
   /* html {
     font-family: 'Poppins', sans-serif;
   } */
+  
 
  
+}
+
+@layer utilities {
+  .spotlight-card-selector > div > div:nth-child(2) {
+    @apply bg-foreground h-full
+  }
 }
 
 @keyframes smooth-bounce {

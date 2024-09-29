@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { DiscountCard } from "../../../common/components";
 import {
   Hero,
   SalesCard,
@@ -12,6 +11,7 @@ import {
 } from "../../pages";
 import { MessageCircle, X } from "lucide-react";
 import axios from "axios";
+import { Spotlight } from "../../../common/components";
 
 const AIChatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -134,9 +134,10 @@ const Home = () => {
   return (
     <div className="relative mx-72 flex flex-col gap-28 overflow-x-hidden max-2xl:mx-6 max-2xl:gap-24">
       <Hero />
-      <DiscountCard />
+      {/* <DiscountCard /> */}
       <SalesCard />
       <Category />
+      <Spotlight />
       <BestProducts />
       <LimitedEditionCTA />
       <GeneralProducts />
