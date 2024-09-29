@@ -119,8 +119,21 @@ export default function Checkout() {
       };
 
       if (data.paymentMethod === "khalti") {
+        const khaltidata = {
+          itemId: checkoutValues.cartItems.map((item) => item.id),
+          totalPrice: checkoutValues.cartTotal,
+          billingInfo: {
+            firstname: data.fullName.split(" ")[0],
+            lastname: data.fullName.split(" ")[1] || "",
+            country: data.country || "Nepal",
+            streetaddress: data.streetAddress,
+            postalcode: data.postalCode,
+            phone: data.phone,
+            email: data.email,
+          },
+        };
         const initializePaymentResponse =
-          await paymentMutation.mutateAsync(orderData);
+          await paymentMutation.mutateAsync(khaltidata);
         if (initializePaymentResponse.data) {
           await submitKhaltiPayment(initializePaymentResponse.data);
           return;

@@ -27,7 +27,6 @@ import { toast } from "sonner";
 import { marked } from "marked";
 import "./styles.css";
 import DOMPurify from "dompurify";
-import RecommendedProducts from "../test/test";
 
 interface FeatureItemProps {
   icon: React.ReactNode;
