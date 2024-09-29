@@ -67,12 +67,12 @@ export default function DiscountCard() {
     );
 
   return (
-    <div>
+    <section className="mx-72 my-12 mb-12 max-2xl:mx-6 sm:mb-32 md:mb-44 lg:mb-56">
       <h3 className="mb-8 text-center text-sm font-medium text-gray-800 md:text-xl lg:text-3xl">
         Available Coupons
       </h3>
       <AnimatePresence>
-        <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-3">
+        <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
           {coupons.map((coupon, index) => (
             <CouponComponent
               key={coupon.id}
@@ -84,7 +84,7 @@ export default function DiscountCard() {
           ))}
         </div>
       </AnimatePresence>
-    </div>
+    </section>
   );
 }
 

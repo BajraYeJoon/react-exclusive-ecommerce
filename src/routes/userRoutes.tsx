@@ -3,6 +3,7 @@ import { redirect } from "react-router-dom";
 import { UserRoutes } from "../user-portal/utils/userLinks";
 
 import {
+  DiscountCard,
   ForgotPassword,
   NotFoundPage,
   OtpVerificationForm,
@@ -60,6 +61,7 @@ export const userRoutes = [
       </ProtectedRoute>
     ),
   },
+  { path: UserRoutes.Discount, element: <DiscountCard /> },
   { path: UserRoutes.Cart, element: <Cart /> },
   { path: UserRoutes.Products, element: <AllProducts /> },
   { path: UserRoutes.NewArrivals, element: <ArrivalsPage /> },

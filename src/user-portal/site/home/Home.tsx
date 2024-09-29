@@ -134,7 +134,7 @@ const Home = () => {
   return (
     <div className="relative mx-72 flex flex-col gap-28 overflow-x-hidden max-2xl:mx-6 max-2xl:gap-24">
       <Hero />
-      <DiscountCard />
+      {/* <DiscountCard /> */}
       <SalesCard />
       <Category />
       <BestProducts />
