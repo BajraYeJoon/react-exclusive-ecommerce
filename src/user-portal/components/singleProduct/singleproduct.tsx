@@ -62,7 +62,7 @@ const Singleproduct = () => {
 
   useEffect(() => {
     if (details?.image?.length > 0) {
-      setSelectedImage(details.image[0]);
+      setSelectedImage(details?.image[0]);
     }
   }, [details]);
 
@@ -76,7 +76,7 @@ const Singleproduct = () => {
 
   const handleRatingSubmit = async () => {
     try {
-      await Axios.post(`rating/create/${details.id}`, { rating, comment });
+      await Axios.post(`rating/create/${details?.id}`, { rating, comment });
       queryClient.invalidateQueries({ queryKey: ["ratings"] });
       setRating(0);
       setComment("");
@@ -101,15 +101,15 @@ const Singleproduct = () => {
                   <img
                     className="h-full w-full object-contain"
                     src={selectedImage}
-                    alt={`Product Details Image for ${details.title}`}
+                    alt={`Product Details Image for ${details?.title}`}
                   />
                 </div>
               </div>
 
-              {details.image?.length > 1 && (
+              {details?.image?.length > 1 && (
                 <div className="mt-2 w-full lg:order-1 lg:w-32 lg:flex-shrink-0">
                   <div className="flex flex-row items-start lg:flex-col">
-                    {details.image.map((image: string) => (
+                    {details?.image?.map((image: string) => (
                       <button
                         key={`iamge-${uuidv4()}`}
                         type="button"
@@ -123,7 +123,7 @@ const Singleproduct = () => {
                         <img
                           className="h-full w-full object-cover"
                           src={image}
-                          alt={`${details.title} image ${uuidv4()}`}
+                          alt={`${details?.title} image ${uuidv4()}`}
                         />
                       </button>
                     ))}

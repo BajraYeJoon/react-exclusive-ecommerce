@@ -7,6 +7,7 @@ import {
   ForgotPassword,
   NotFoundPage,
   OtpVerificationForm,
+  HomeCollections,
 } from "../common/components";
 import {
   About,
@@ -62,6 +63,7 @@ export const userRoutes = [
     ),
   },
   { path: UserRoutes.Discount, element: <DiscountCard /> },
+  { path: UserRoutes.Spotlight, element: <HomeCollections /> },
   { path: UserRoutes.Cart, element: <Cart /> },
   { path: UserRoutes.Products, element: <AllProducts /> },
   { path: UserRoutes.NewArrivals, element: <ArrivalsPage /> },

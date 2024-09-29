@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { DiscountCard } from "../../../common/components";
 import {
   Hero,
   SalesCard,
@@ -12,6 +11,7 @@ import {
 } from "../../pages";
 import { MessageCircle, X } from "lucide-react";
 import axios from "axios";
+import { Spotlight } from "../../../common/components";
 
 const AIChatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -137,6 +137,7 @@ const Home = () => {
       {/* <DiscountCard /> */}
       <SalesCard />
       <Category />
+      <Spotlight />
       <BestProducts />
       <LimitedEditionCTA />
       <GeneralProducts />

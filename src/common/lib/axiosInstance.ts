@@ -21,19 +21,20 @@ Axios.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (error.response && error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
-         await axios.get(`${baseURL}/auth/token-refresh`, {
+        const response = await axios.get(`${baseURL}/auth/token-refresh`, {
           withCredentials: true 
         });
-        
-        
-        const newAccessToken = Cookies.get("access_token");
+
+        const newAccessToken = response.data.access_token;
         if (newAccessToken) {
+          Cookies.set("access_token", newAccessToken);
           Axios.defaults.headers.common["Authorization"] = `Bearer ${newAccessToken}`;
+          originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
         }
-        
+
         return Axios(originalRequest);
       } catch (refreshError) {
         Cookies.remove("access_token");
