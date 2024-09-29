@@ -70,15 +70,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async ({ email, password, loginFormReset }: LoginProps) => {
     setIsLoading(true);
-
+  
     try {
       const response = await Axios.post("/auth/signin", {
         email,
         password,
       });
-      const { accessToken, refreshToken } = response.data;
-      Cookies.set("access_token", accessToken, { expires: 1 / 24 }); // 1 hour
-      Cookies.set("refresh_token", refreshToken, { expires: 7 }); // 7 days
+
+      console.log(response, "response from login");
+      const { accessToken } = response.data;
+      Cookies.set("access_token", accessToken, { expires: 7 }); // 1 hour
+      // Cookies.set("refresh_token", refreshToken, { expires: 7 }); // 7 days
       await fetchUserDetails(accessToken);
       setIsLoggedIn(true);
       loginFormReset();

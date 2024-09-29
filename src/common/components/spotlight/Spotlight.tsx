@@ -34,10 +34,10 @@ const Spotlight = () => {
               ))}
             </div>
             <div className="flex items-center justify-center gap-2 text-white">
-              <h4 className="text-3xl font-extrabold uppercase tracking-wide">
+              <h4 className="text-[1.5rem] font-extrabold uppercase tracking-wide">
                 Exclusive
               </h4>
-              <p className="text-3xl font-light tracking-tighter">
+              <p className="text-[1.5rem] font-light tracking-tight">
                 Collections
               </p>
             </div>
