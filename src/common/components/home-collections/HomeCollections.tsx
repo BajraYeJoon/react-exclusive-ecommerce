@@ -18,7 +18,7 @@ const HomeCollections = () => {
           </h1>
         </div>
 
-        <div className="grid h-fit w-full grid-cols-1 gap-4 *:h-44 *:w-full *:rounded-2xl md:h-[900px] md:grid-cols-6 md:grid-rows-8 md:*:h-full">
+        <div className="sm*:h-56 grid h-fit w-full grid-cols-1 gap-4 *:h-44 *:w-full *:rounded-2xl sm:grid-cols-2 md:h-[900px] md:grid-cols-6 md:grid-rows-8 md:*:h-full">
           <BrandSection
             logoSrc="/logo/champion.svg"
             brandName="Champion"
