@@ -4,7 +4,7 @@ import { UserRoutes } from "../../../user-portal/utils/userLinks";
 import { SpotLightHome } from "./SpotLightHome";
 import SpotlightDiscount from "./SpotlightDiscount";
 import { Badge } from "../../ui/badge";
-import { Truck } from "lucide-react";
+import { BadgeCheck, CheckIcon, CircleCheckBig, Truck } from "lucide-react";
 
 const Spotlight = () => {
   return (
@@ -21,7 +21,7 @@ const Spotlight = () => {
         <Link to={`/${UserRoutes.Spotlight}`}>
           <SpotLightHome />
         </Link>
-        <Link to={`/${UserRoutes.Spotlight}`}>
+        <Link to={`/${UserRoutes.Halloweeen}`}>
           <div className="bg-blend relative flex flex-col items-center justify-center gap-2 bg-[url('/spotlight/halloween.avif')] bg-cover bg-center bg-no-repeat text-white">
             <p className="font-creepster text-base">
               Irresistible products & Discounts
@@ -51,14 +51,21 @@ const Spotlight = () => {
                 </span>
               </p>
               <span className="text-center text-[8px] font-light">
-                * Terms and conditions apply. Charges may vary based on location
+                * Terms and conditions apply.
               </span>
             </div>
           </div>
         </Link>
-        <Link to={`/${UserRoutes.Spotlight}`}>
-          <div>1</div>
-          <div>2</div>
+        <Link to={`/${UserRoutes.Brands}`}>
+          <div className="bg-blend relative flex flex-col items-center justify-center gap-2 bg-[url('/spotlight/brand.png')] bg-cover bg-center bg-no-repeat text-white"></div>
+          <div className="flex items-center justify-center text-3xl font-extrabold capitalize italic tracking-wider text-white">
+            Brand Z
+            <CircleCheckBig
+              className="ml-1 font-extrabold text-yellow-500"
+              size={30}
+            />
+            ne
+          </div>
         </Link>
       </div>
     </section>

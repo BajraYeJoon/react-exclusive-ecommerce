@@ -63,7 +63,10 @@ export const userRoutes = [
     ),
   },
   { path: UserRoutes.Discount, element: <DiscountCard /> },
+  // Spotlight
   { path: UserRoutes.Spotlight, element: <HomeCollections /> },
+  { path: UserRoutes.Halloweeen, element: <div>Halloween Deals</div> },
+  { path: UserRoutes.Brands, element: <div>Exclusive Brands</div> },
   { path: UserRoutes.Cart, element: <Cart /> },
   { path: UserRoutes.Products, element: <AllProducts /> },
   { path: UserRoutes.NewArrivals, element: <ArrivalsPage /> },

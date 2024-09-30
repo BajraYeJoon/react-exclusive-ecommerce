@@ -4,6 +4,8 @@ export enum UserRoutes {
   Contact = "contact",
   Discount="offers",
   Spotlight= "home-collections",
+  Halloweeen="exlcusive-halloween",
+  Brands= "exclusive-brands",
   SignUp = "sign-up",
   SignIn = "sign-in",
   ForgotPassword = "forgot-password",
