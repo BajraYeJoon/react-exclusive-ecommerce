@@ -30,6 +30,7 @@ import {
 } from "../user-portal/components";
 import { ArrivalsPage } from "../user-portal/pages";
 import EmailVerification from "../user-portal/components/email/Verification";
+import VerifyPayment from "../user-portal/components/VerifyPayment";
 
 export const userRoutes = [
   { index: true, element: <Home /> },
@@ -93,4 +94,6 @@ export const userRoutes = [
     element: <FetchSingleCategory />,
   },
   { path: UserRoutes.NotFound, element: <NotFoundPage /> },
+  { path: "verifyPayment", element: <VerifyPayment /> },
 ];
+  

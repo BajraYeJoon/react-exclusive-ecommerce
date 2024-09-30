@@ -142,28 +142,26 @@ export default function Checkout() {
         paymentMethod: data.paymentMethod,
         discount: couponCode ? 10 : 0,
       };
-
+  
       console.log(orderData, "orderdatatatatata");
-
+  
       if (data.paymentMethod === "khalti") {
         const khaltiOrderData = extractKhaltiOrderData(orderData);
         try {
-          const initializePaymentResponse =
-            await paymentMutation.mutateAsync(khaltiOrderData);
-          console.log(
-            "Payment initialization response:",
-            initializePaymentResponse,
-          );
+          const initializePaymentResponse = await paymentMutation.mutateAsync(khaltiOrderData);
+          console.log("Payment initialization response:", initializePaymentResponse);
+          
           if (initializePaymentResponse.data) {
-            const { signature, signed_field_names } =
-              initializePaymentResponse.data.paymentInitiate;
+            const { signature, signed_field_names } = initializePaymentResponse.data.paymentInitiate;
             const { transaction_uuid } = initializePaymentResponse.data;
-            const total_amount =
-              initializePaymentResponse.data.purchasedProduct.totalPrice;
+            const total_amount = initializePaymentResponse.data.purchasedProduct.totalPrice;
+            
+            // Create and submit the form
             const form = document.createElement("form");
             form.method = "POST";
             form.action = "https://rc-epay.esewa.com.np/api/epay/main/v2/form";
             form.style.display = "none";
+            
             const fields = {
               amount: total_amount.toString(),
               tax_amount: "0",
@@ -172,11 +170,12 @@ export default function Checkout() {
               product_code: "EPAYTEST",
               product_service_charge: "0",
               product_delivery_charge: "0",
-              success_url: "http://localhost:5173/order-placed",
+              success_url: "http://localhost:5173/verifyPayment", // Updated success_url
               failure_url: "https://developer.esewa.com.np/failure",
               signed_field_names: signed_field_names,
               signature: signature,
             };
+            
             Object.entries(fields).forEach(([key, value]) => {
               const input = document.createElement("input");
               input.type = "hidden";
@@ -184,10 +183,13 @@ export default function Checkout() {
               input.value = value;
               form.appendChild(input);
             });
+            
             document.body.appendChild(form);
             form.submit();
             document.body.removeChild(form);
-            console.log("Khalti payment form submitted"); 
+            console.log("Khalti payment form submitted");
+            
+            // The rest of the process will be handled by the payment verification route
             return;
           }
         } catch (khaltiError) {
@@ -198,7 +200,7 @@ export default function Checkout() {
       } else {
         generateInvoice(orderData);
       }
-
+  
       setOrderPlaceData(orderData);
       resetCheckoutCartAfterOrderPlace({
         cartItems: [],
@@ -209,7 +211,7 @@ export default function Checkout() {
       await removeCartAfterOrderPlace.mutateAsync();
       resetCartAfterOrderPlace([]);
       Cookies.set("order-placed", "true");
-
+  
       navigate("/order-placed", { replace: true });
       toast.success("Thank you for shopping with us!");
     } catch (error) {
