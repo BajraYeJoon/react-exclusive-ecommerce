@@ -1,5 +1,12 @@
 export const submitKhaltiPayment = async (paymentData: any): Promise<void> => {
-    const { signature, signed_field_names, transaction_uuid, total_amount } = paymentData;
+
+   console.log(paymentData, 'paymenet dtatatatatatatat')
+
+   const { signature, signed_field_names } =
+   paymentData.paymentInitiate;
+ const { transaction_uuid } = paymentData;
+ const total_amount =
+   paymentData.purchasedProduct.totalPrice;
   
     const form = document.createElement('form');
     form.method = 'POST';

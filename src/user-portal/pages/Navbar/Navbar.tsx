@@ -255,7 +255,7 @@ const Navbar = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 top-28 z-40 flex w-full flex-col overflow-y-hidden bg-foreground lg:hidden"
+            className="fixed inset-0 top-36 z-40 flex w-full flex-col overflow-y-hidden bg-foreground sm:top-32 md:top-28 lg:hidden"
           >
             <ul className="nav-menu mobile-nav-menu flex flex-col gap-4 space-y-2 px-4 py-4 font-bold tracking-wider">
               {navLinks.map((link) => {

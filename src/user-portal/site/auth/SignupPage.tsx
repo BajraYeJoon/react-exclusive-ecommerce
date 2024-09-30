@@ -48,7 +48,7 @@ const SignupPage = () => {
   };
 
   return (
-    <div className="sign-up-content flex w-[400px] flex-col space-y-4">
+    <div className="sign-up-content flex w-full flex-col space-y-4 sm:w-[400px]">
       <h2 className="text-lg lg:text-3xl">
         <FormattedMessage id="signup.createAccount" />
       </h2>

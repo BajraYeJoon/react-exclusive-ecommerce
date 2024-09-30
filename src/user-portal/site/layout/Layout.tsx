@@ -31,21 +31,11 @@ const FloatingCard = () => {
       {isVisible && (
         <motion.div
           className="fixed right-4 top-0 z-50"
-          initial={{ y: -100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: -100, opacity: 0 }}
+          initial={{ x: 500, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          exit={{ x: 500, opacity: 0 }}
           transition={{ type: "spring", stiffness: 100, damping: 15 }}
         >
-          <motion.div
-            className="absolute left-1/2 w-0.5 -translate-x-1/2 transform bg-gray-400"
-            initial={{ height: 60 }}
-            transition={{
-              delay: 0.2,
-              type: "spring",
-              stiffness: 30,
-              damping: 50,
-            }}
-          />
           <div className="relative mt-[60px] rounded-lg border border-primary bg-white p-4 shadow-lg">
             <button
               onClick={() => setIsVisible(false)}
@@ -60,10 +50,7 @@ const FloatingCard = () => {
             <p className="mt-2 text-sm">
               Special discounts for Dashain festival!
             </p>
-            <Button
-              className="mt-3"
-              onClick={handleOfferClick}
-            >
+            <Button className="mt-3" onClick={handleOfferClick}>
               View Offers
             </Button>
           </div>

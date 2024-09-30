@@ -20,8 +20,9 @@ import { cartState } from "../../atoms/cartState";
 import { orderplaceState } from "../../atoms/orderplaceState";
 import { couponState } from "../../site";
 import { generateInvoice } from "./generateInvoice";
-import { submitKhaltiPayment } from "./khalitPayment";
+// import { submitKhaltiPayment } from "./khalitPayment";
 import { OrderSummary } from "./orderSummary";
+import Order from "../../../admin/components/dashboard-component/chart/order";
 
 type FormValues = {
   fullName: string;
@@ -43,7 +44,7 @@ export type CartItem = {
 };
 
 export type OrderData = {
-  id: string;
+  id: string | undefined;
   itemId: CartItem[];
   totalPrice: number;
   billingInfo: {
@@ -57,6 +58,20 @@ export type OrderData = {
   };
   paymentMethod: string;
   discount: number;
+};
+
+type KhaltiOrderData = {
+  itemId: string[];
+  totalPrice: number;
+  billingInfo: {
+    firstname: string;
+    lastname: string;
+    country: string;
+    streetaddress: string;
+    postalcode: string;
+    phone: string;
+    email: string;
+  };
 };
 
 export default function Checkout() {
@@ -88,8 +103,8 @@ export default function Checkout() {
     },
   });
 
-  const paymentMutation = useMutation({
-    mutationFn: (orderData: OrderData) =>
+  const paymentMutation = useMutation<any, any, KhaltiOrderData>({
+    mutationFn: (orderData: KhaltiOrderData) =>
       Axios.post("/payment/initialize-payment", orderData),
     onSuccess: () => {
       toast.success("Payment successful");
@@ -98,6 +113,16 @@ export default function Checkout() {
       toast.error("Something went wrong. Please try again later.");
     },
   });
+
+  function extractKhaltiOrderData(orderData: OrderData): KhaltiOrderData {
+    const { itemId, totalPrice, billingInfo } = orderData;
+    return {
+      itemId: itemId.map((item) => item.id),
+      totalPrice,
+      billingInfo,
+    };
+  }
+  
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
@@ -118,24 +143,57 @@ export default function Checkout() {
         discount: couponCode ? 10 : 0,
       };
 
+      console.log(orderData, "orderdatatatatata");
+
       if (data.paymentMethod === "khalti") {
-        const khaltidata = {
-          itemId: checkoutValues.cartItems.map((item) => item.id),
-          totalPrice: checkoutValues.cartTotal,
-          billingInfo: {
-            firstname: data.fullName.split(" ")[0],
-            lastname: data.fullName.split(" ")[1] || "",
-            country: data.country || "Nepal",
-            streetaddress: data.streetAddress,
-            postalcode: data.postalCode,
-            phone: data.phone,
-            email: data.email,
-          },
-        };
-        const initializePaymentResponse =
-          await paymentMutation.mutateAsync(khaltidata);
-        if (initializePaymentResponse.data) {
-          await submitKhaltiPayment(initializePaymentResponse.data);
+        const khaltiOrderData = extractKhaltiOrderData(orderData);
+        try {
+          const initializePaymentResponse =
+            await paymentMutation.mutateAsync(khaltiOrderData);
+          console.log(
+            "Payment initialization response:",
+            initializePaymentResponse,
+          );
+          if (initializePaymentResponse.data) {
+            const { signature, signed_field_names } =
+              initializePaymentResponse.data.paymentInitiate;
+            const { transaction_uuid } = initializePaymentResponse.data;
+            const total_amount =
+              initializePaymentResponse.data.purchasedProduct.totalPrice;
+            const form = document.createElement("form");
+            form.method = "POST";
+            form.action = "https://rc-epay.esewa.com.np/api/epay/main/v2/form";
+            form.style.display = "none";
+            const fields = {
+              amount: total_amount.toString(),
+              tax_amount: "0",
+              total_amount: total_amount.toString(),
+              transaction_uuid: transaction_uuid,
+              product_code: "EPAYTEST",
+              product_service_charge: "0",
+              product_delivery_charge: "0",
+              success_url:
+                "https://nest-ecommerce-1fqk.onrender.com/payment/verify",
+              failure_url: "https://developer.esewa.com.np/failure",
+              signed_field_names: signed_field_names,
+              signature: signature,
+            };
+            Object.entries(fields).forEach(([key, value]) => {
+              const input = document.createElement("input");
+              input.type = "hidden";
+              input.name = key;
+              input.value = value;
+              form.appendChild(input);
+            });
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
+            console.log("Khalti payment form submitted");
+            return;
+          }
+        } catch (khaltiError) {
+          console.error("Khalti payment initialization error:", khaltiError);
+          toast.error("Failed to initialize Khalti payment. Please try again.");
           return;
         }
       } else {
