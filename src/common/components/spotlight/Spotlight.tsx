@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import { PagesHeader } from "../../../user-portal/components";
-import { spotlightModel } from "../../lib/utils/constant";
 import { UserRoutes } from "../../../user-portal/utils/userLinks";
+import { SpotLightHome } from "./SpotLightHome";
+import SpotlightDiscount from "./SpotlightDiscount";
+import { Badge } from "../../ui/badge";
+import { Truck } from "lucide-react";
 
 const Spotlight = () => {
   return (
@@ -11,47 +14,53 @@ const Spotlight = () => {
         subHeading="Discover the latest products from our store"
       />
 
-      <Link to={`/${UserRoutes.Spotlight}`}>
-        <div className="spotlight-card-selector grid cursor-pointer grid-cols-4 gap-3 *:grid *:h-[400px] *:w-full *:grid-rows-[2fr_0.8fr] *:bg-red-300">
-          <div>
-            <div>1</div>
-            <div className="">2</div>
-          </div>
-          <div className="">
-            <div className="grid min-h-fit grid-cols-3">
-              {spotlightModel.map((spotlight) => (
-                <div className="relative h-36" key={spotlight.id}>
-                  <img
-                    src={spotlight.image}
-                    alt={spotlight.brand}
-                    className="h-full w-full object-cover object-top"
-                  />
-                  <div className="absolute bottom-0 left-0 right-0 h-full bg-gradient-to-t from-black to-transparent opacity-55"></div>
-                  <h3 className="absolute bottom-0 left-0 right-0 flex justify-center p-1 text-sm font-extralight tracking-wider text-white">
-                    {spotlight.brand}
-                  </h3>
-                </div>
-              ))}
+      <div className="spotlight-card-selector grid cursor-pointer grid-cols-4 gap-3 *:grid *:h-[400px] *:w-full *:grid-rows-[2fr_0.8fr] *:bg-gray-400">
+        <Link to={`/${UserRoutes.Discount}`}>
+          <SpotlightDiscount />
+        </Link>
+        <Link to={`/${UserRoutes.Spotlight}`}>
+          <SpotLightHome />
+        </Link>
+        <Link to={`/${UserRoutes.Spotlight}`}>
+          <div className="bg-blend relative flex flex-col items-center justify-center gap-2 bg-[url('/spotlight/halloween.avif')] bg-cover bg-center bg-no-repeat text-white">
+            <p className="font-creepster text-base">
+              Irresistible products & Discounts
+            </p>
+            <h3 className="font-creepster max-w-52 text-center text-5xl text-green-500">
+              Halloween Deals
+            </h3>
+            <div className="absolute bottom-2">
+              <Badge className="bg-gray-700 text-green-200">
+                <Truck size={16} className="mr-2" />
+                Quick shipping
+              </Badge>
             </div>
-            <div className="flex items-center justify-center gap-2 text-white">
-              <h4 className="text-[1.5rem] font-extrabold uppercase tracking-wide">
-                Exclusive
-              </h4>
-              <p className="text-[1.5rem] font-light tracking-tight">
-                Collections
+          </div>
+          <div className="grid grid-cols-2 items-center justify-center gap-5 p-4 text-white">
+            <div className="flex flex-col items-center justify-center font-bold tracking-wider">
+              <h4 className="text-xl">Starting at</h4>
+              <p className="text-4xl">$1.99</p>
+            </div>
+
+            <div className="flex flex-col items-center justify-center gap-2 text-xs">
+              <p className="font-medium">Shop Now Pay later</p>
+              <p>
+                . with{" "}
+                <span className="rounded-full bg-green-600 px-2 py-0.5 text-xs">
+                  esewa
+                </span>
               </p>
+              <span className="text-center text-[8px] font-light">
+                * Terms and conditions apply. Charges may vary based on location
+              </span>
             </div>
           </div>
-          <div>
-            <div>1</div>
-            <div>2</div>
-          </div>
-          <div>
-            <div>1</div>
-            <div>2</div>
-          </div>
-        </div>
-      </Link>
+        </Link>
+        <Link to={`/${UserRoutes.Spotlight}`}>
+          <div>1</div>
+          <div>2</div>
+        </Link>
+      </div>
     </section>
   );
 };

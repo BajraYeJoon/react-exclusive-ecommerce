@@ -172,8 +172,7 @@ export default function Checkout() {
               product_code: "EPAYTEST",
               product_service_charge: "0",
               product_delivery_charge: "0",
-              success_url:
-                "https://nest-ecommerce-1fqk.onrender.com/payment/verify",
+              success_url: "http://localhost:5173/order-placed",
               failure_url: "https://developer.esewa.com.np/failure",
               signed_field_names: signed_field_names,
               signature: signature,
@@ -188,7 +187,7 @@ export default function Checkout() {
             document.body.appendChild(form);
             form.submit();
             document.body.removeChild(form);
-            console.log("Khalti payment form submitted");
+            console.log("Khalti payment form submitted"); 
             return;
           }
         } catch (khaltiError) {

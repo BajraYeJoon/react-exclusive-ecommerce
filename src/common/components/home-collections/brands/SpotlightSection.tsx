@@ -9,7 +9,7 @@ const SpotlightSection = ({ imgSrc, className }: SpotlightSectionProps) => {
       <img
         src={imgSrc}
         alt=""
-        className="h-full w-full object-cover object-[center_top_10%]" // Adjust the object position as needed
+        className="h-full w-full object-cover object-[center_top_10%]"
       />
     </div>
   );
