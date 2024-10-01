@@ -20,7 +20,7 @@ export default function SpotlightDiscount() {
           </p>
         </div>
       </div>
-      <div className="flex items-center justify-center text-2xl font-semibold tracking-wider text-white hover:underline">
+      <div className="flex items-center justify-center text-xl font-medium tracking-wider text-white hover:underline">
         View All Discounts
       </div>
     </>

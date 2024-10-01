@@ -67,7 +67,7 @@
 
 @font-face {
   font-family: 'Ember';
-  src: url('/public/fonts/Helvetica.woff') format('woff');
+  src: url('/fonts/Helvetica.woff') format('woff');
   font-weight: normal; 
   font-style: normal;  
 }
