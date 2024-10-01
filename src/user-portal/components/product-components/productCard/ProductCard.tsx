@@ -13,6 +13,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "../../../../common/ui/button";
 import uuidv4 from "../../../../common/lib/utils/uuid";
 import { useIncreaseQuantity } from "../../../utils/cartutils";
+import { cn } from "../../../../common/lib/utils";
 
 interface ProductCardProps {
   title: string;
@@ -21,6 +22,7 @@ interface ProductCardProps {
   discountTag?: boolean;
   id: number;
   discountprice: number;
+  className?: string;
 }
 
 const ProductCard = ({
@@ -30,6 +32,7 @@ const ProductCard = ({
   discountTag,
   id,
   discountprice,
+  className,
 }: ProductCardProps) => {
   const { dimension } = useWindow();
   const { isLoggedIn, isAdmin } = useAuthContext();
@@ -149,7 +152,12 @@ const ProductCard = ({
       </div>
 
       <div className="my-4 space-y-2">
-        <h5 className="text-wrap text-sm font-semibold tracking-wide text-foreground/80 md:text-base">
+        <h5
+          className={cn(
+            "text-wrap text-sm font-semibold tracking-wide text-foreground/80 md:text-base",
+            className,
+          )}
+        >
           {title.slice(0, 20)}
         </h5>
 
