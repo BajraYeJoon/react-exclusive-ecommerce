@@ -37,7 +37,7 @@ const updateCategoryNameSchema = z.object({
   categoryName: z.string().min(1, "Category name is required"),
 });
 
-const AddCategoryForm = () => {
+export const AddCategoryForm = () => {
   const [editCategoryId, setEditCategoryId] = useState<number | null>(null);
   const queryClient = useQueryClient();
   const { data: categories, isLoading } = useQuery({
@@ -47,8 +47,6 @@ const AddCategoryForm = () => {
   const form = useForm({
     resolver: zodResolver(updateCategoryNameSchema),
   });
-
-
 
   const categoryDeleteMutation = useMutation({
     mutationFn: (id: number) => Axios.delete(`/category/${id}`),
@@ -81,7 +79,6 @@ const AddCategoryForm = () => {
     categoryDeleteMutation.mutate(id);
   };
 
-
   const updateNameonSubmit = (data: any) => {
     if (editCategoryId !== null) {
       handleCategoryEdit.mutate({
@@ -91,7 +88,6 @@ const AddCategoryForm = () => {
       queryClient.invalidateQueries({ queryKey: ["add"] });
     }
   };
-
 
   return (
     <div className="mx-6 flex flex-col space-y-8">
@@ -118,15 +114,15 @@ const AddCategoryForm = () => {
                     {category.name}
                   </Link>
                   <div className="absolute right-0 top-0 hidden flex-col text-lg group-hover:flex">
-                   
-                    <ConfirmationDialog 
-                      triggerComponent={<MdCancel className="group-hover:text-primary" />}
+                    <ConfirmationDialog
+                      triggerComponent={
+                        <MdCancel className="group-hover:text-primary" />
+                      }
                       onConfirm={() => handleCategoryDelete(category.id)}
                       title="Are you sure you want to remove this Category?"
                       description="It will remove all the products as well."
                       confirmText="Yes"
                       cancelText="No"
-
                     />
 
                     <Dialog>
@@ -177,4 +173,3 @@ const AddCategoryForm = () => {
   );
 };
 
-export default AddCategoryForm;

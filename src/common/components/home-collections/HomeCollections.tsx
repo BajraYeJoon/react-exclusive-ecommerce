@@ -2,7 +2,7 @@ import { CustomBreakcrumb } from "../../../user-portal/components";
 import BrandSection from "./brands/BrandsSection";
 import SpotlightSection from "./brands/SpotlightSection";
 
-const HomeCollections = () => {
+export const HomeCollections = () => {
   return (
     <div
       style={{
@@ -78,4 +78,3 @@ const HomeCollections = () => {
   );
 };
 
-export default HomeCollections;

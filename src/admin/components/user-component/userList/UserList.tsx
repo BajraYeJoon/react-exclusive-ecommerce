@@ -31,7 +31,7 @@ import { Axios } from "../../../../common/lib/axiosInstance";
 import { toast } from "sonner";
 import ConfirmationDialog from "../../confirmation/ConfirmationDialog";
 
-export default function UserList() {
+export const UserList = () => {
   const { data: usersData, isLoading } = useQuery({
     queryKey: ["users"],
     queryFn: fetchAllUsers,
@@ -195,4 +195,4 @@ export default function UserList() {
       </div>
     </div>
   );
-}
+};

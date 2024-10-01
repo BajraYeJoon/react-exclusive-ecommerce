@@ -30,7 +30,7 @@ type Product = {
   image: string;
 };
 
-export default function FlashSaleAdmin() {
+export const FlashSaleAdmin = () => {
   const queryClient = useQueryClient();
 
   const { data: flashSaleProductsData, isLoading } = useQuery({
@@ -172,4 +172,4 @@ export default function FlashSaleAdmin() {
       </div>
     </section>
   );
-}
+};

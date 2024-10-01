@@ -7,44 +7,61 @@ import {
   ForgotPassword,
   NotFoundPage,
   OtpVerificationForm,
-  HomeCollections,
 } from "../common/components";
-import {
-  About,
-  AuthLayout,
-  Cart,
-  Contact,
-  Home,
-  ProfilePage,
-  SignInPage,
-  SignupPage,
-} from "../user-portal/site";
-import {
-  AllProducts,
-  BrandZone,
-  Checkout,
-  Favorites,
-  FetchSingleCategory,
-  OrderPlaced,
-  ProtectedRoute,
-  Singleproduct,
-} from "../user-portal/components";
-import { ArrivalsPage } from "../user-portal/pages";
+
+import { ProtectedRoute } from "../user-portal/components";
 import EmailVerification from "../user-portal/components/email/Verification";
 import VerifyPayment from "../user-portal/components/VerifyPayment";
-import HalloweenMain from "../common/components/HalloweenPage/HalloweenMain";
+import { JSX } from "react/jsx-runtime";
 
 export const userRoutes = [
-  { index: true, element: <Home /> },
-  { path: UserRoutes.About, element: <About /> },
-  { path: UserRoutes.Contact, element: <Contact /> },
   {
-    element: <AuthLayout />,
+    index: true,
+    lazy: async () => {
+      const { Home } = await import("../user-portal/site/home/Home");
+      return { Component: Home };
+    },
+  },
+  {
+    path: UserRoutes.About,
+    lazy: async () => {
+      const { About } = await import("../user-portal/site/about/about");
+      return { Component: About };
+    },
+  },
+  {
+    path: UserRoutes.Contact,
+    lazy: async () => {
+      const { Contact } = await import("../user-portal/site/contact/contact");
+      return { Component: Contact };
+    },
+  },
+  {
+    lazy: async () => {
+      const { AuthLayout } = await import("../user-portal/site/auth/layout");
+      return { Component: AuthLayout };
+    },
     loader: () =>
       Cookies.get("accesstoken") ? redirect(UserRoutes.Profile) : null,
     children: [
-      { path: UserRoutes.SignUp, element: <SignupPage /> },
-      { path: UserRoutes.SignIn, element: <SignInPage /> },
+      {
+        path: UserRoutes.SignUp,
+        lazy: async () => {
+          const { SignupPage } = await import(
+            "../user-portal/site/auth/SignupPage"
+          );
+          return { Component: SignupPage };
+        },
+      },
+      {
+        path: UserRoutes.SignIn,
+        lazy: async () => {
+          const { SignInPage } = await import(
+            "../user-portal/site/auth/SignInPage"
+          );
+          return { Component: SignInPage };
+        },
+      },
       { path: UserRoutes.EmailVerification, element: <EmailVerification /> },
       { path: UserRoutes.ForgotPassword, element: <ForgotPassword /> },
       {
@@ -59,43 +76,33 @@ export const userRoutes = [
   },
   {
     path: UserRoutes.Profile,
-    element: (
-      <ProtectedRoute role="user">
-        <ProfilePage />
-      </ProtectedRoute>
-    ),
+    lazy: async () => {
+      const { ProfilePage } = await import("../user-portal/site/profile");
+      return {
+        Component: (props: JSX.IntrinsicAttributes) => (
+          <ProtectedRoute role="user">
+            <ProfilePage {...props} />
+          </ProtectedRoute>
+        ),
+      };
+    },
   },
   { path: UserRoutes.Discount, element: <DiscountCard /> },
-  // Spotlight
-  { path: UserRoutes.Spotlight, element: <HomeCollections /> },
-  { path: UserRoutes.Halloweeen, element: <HalloweenMain /> },
-  { path: UserRoutes.Brands, element: <BrandZone /> },
-  { path: UserRoutes.Cart, element: <Cart /> },
-  { path: UserRoutes.Products, element: <AllProducts /> },
-  { path: UserRoutes.NewArrivals, element: <ArrivalsPage /> },
-  { path: UserRoutes.Favorites, element: <Favorites /> },
   {
-    path: UserRoutes.Checkout,
-    element: (
-      <ProtectedRoute role="user">
-        <Checkout />
-      </ProtectedRoute>
-    ),
-    loader: () =>
-      !Cookies.get("checkoutData") ? redirect(`/${UserRoutes.Products}`) : null,
+    path: UserRoutes.Spotlight,
+    lazy: async () => {
+      const { HomeCollections } = await import(
+        "../common/components/home-collections/HomeCollections"
+      );
+      return { Component: HomeCollections };
+    },
   },
   {
-    path: UserRoutes.OrderPlaced,
-    element: <OrderPlaced />,
-    loader: () =>
-      !Cookies.get("order-placed") ? redirect(`/${UserRoutes.Products}`) : null,
+    path: "verifyPayment",
+    element: <VerifyPayment />,
   },
-  { path: UserRoutes.SingleProduct, element: <Singleproduct /> },
   {
-    path: UserRoutes.SingleCategory,
-    element: <FetchSingleCategory />,
+    path: UserRoutes.NotFound,
+    element: <NotFoundPage />,
   },
-  { path: UserRoutes.NotFound, element: <NotFoundPage /> },
-  { path: "/verifyPayment", element: <VerifyPayment /> },
 ];
-  

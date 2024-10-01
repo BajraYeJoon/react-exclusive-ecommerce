@@ -39,7 +39,7 @@ import { Loading } from "../../../user-portal/site";
 import ConfirmationDialog from "../confirmation/ConfirmationDialog";
 // import { useSearchParams } from "react-router-dom";
 
-export default function ProductsList() {
+export const ProductsList = () => {
   const [flashItem, setFlashItem] = useRecoilState<number[]>(flashSaleState);
   const { data: products, isLoading } = useQuery({
     queryKey: ["products"],
@@ -336,7 +336,7 @@ export default function ProductsList() {
       )}
     </div>
   );
-}
+};
 export function Filter({ column, table }: { column: any; table: any }) {
   const firstValue = table
     .getPreFilteredRowModel()

@@ -54,7 +54,7 @@ interface BannerApiResponse {
   bannerData: Banner[];
 }
 
-const BannerManagement = () => {
+export const BannerManagement = () => {
   const queryClient = useQueryClient();
 
   const { data: bannerData, isLoading: isBannersLoading } = useQuery<
@@ -187,7 +187,6 @@ const BannerManagement = () => {
   );
 };
 
-export default BannerManagement;
 
 interface ProductTableProps {
   table: ReturnType<typeof useReactTable<Product>>;
