@@ -31,6 +31,7 @@ import {
 import { ArrivalsPage } from "../user-portal/pages";
 import EmailVerification from "../user-portal/components/email/Verification";
 import VerifyPayment from "../user-portal/components/VerifyPayment";
+import HalloweenMain from "../common/components/HalloweenPage/HalloweenMain";
 
 export const userRoutes = [
   { index: true, element: <Home /> },
@@ -66,7 +67,7 @@ export const userRoutes = [
   { path: UserRoutes.Discount, element: <DiscountCard /> },
   // Spotlight
   { path: UserRoutes.Spotlight, element: <HomeCollections /> },
-  { path: UserRoutes.Halloweeen, element: <div>Halloween Deals</div> },
+  { path: UserRoutes.Halloweeen, element: <HalloweenMain /> },
   { path: UserRoutes.Brands, element: <div>Exclusive Brands</div> },
   { path: UserRoutes.Cart, element: <Cart /> },
   { path: UserRoutes.Products, element: <AllProducts /> },

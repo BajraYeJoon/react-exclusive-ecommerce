@@ -85,6 +85,10 @@
   font-style: normal;
 }
 
+.halloween-bg {
+  background: linear-gradient(179.4deg, rgb(12, 20, 69) -16.9%, rgb(71, 30, 84) 119.9%);
+}
+
 
 
 @layer base {
