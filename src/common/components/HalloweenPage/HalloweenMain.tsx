@@ -18,7 +18,6 @@ const HalloweenMain = () => {
         ),
       )
     : [];
-  console.log(halloweenValue, "adsfasdfasdfasdfasdf");
 
   return (
     <section className="halloween-bg">

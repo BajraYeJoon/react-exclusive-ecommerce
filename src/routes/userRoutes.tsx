@@ -21,6 +21,7 @@ import {
 } from "../user-portal/site";
 import {
   AllProducts,
+  BrandZone,
   Checkout,
   Favorites,
   FetchSingleCategory,
@@ -68,7 +69,7 @@ export const userRoutes = [
   // Spotlight
   { path: UserRoutes.Spotlight, element: <HomeCollections /> },
   { path: UserRoutes.Halloweeen, element: <HalloweenMain /> },
-  { path: UserRoutes.Brands, element: <div>Exclusive Brands</div> },
+  { path: UserRoutes.Brands, element: <BrandZone /> },
   { path: UserRoutes.Cart, element: <Cart /> },
   { path: UserRoutes.Products, element: <AllProducts /> },
   { path: UserRoutes.NewArrivals, element: <ArrivalsPage /> },
