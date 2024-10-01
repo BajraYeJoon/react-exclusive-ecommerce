@@ -22,7 +22,6 @@ import { couponState } from "../../site";
 import { generateInvoice } from "./generateInvoice";
 // import { submitKhaltiPayment } from "./khalitPayment";
 import { OrderSummary } from "./orderSummary";
-import Order from "../../../admin/components/dashboard-component/chart/order";
 
 type FormValues = {
   fullName: string;
