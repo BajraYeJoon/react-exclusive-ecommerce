@@ -95,14 +95,18 @@ const FollowUsSection: React.FC = () => {
           <QrCode className="h-20 w-20" />
           <div className="flex flex-col gap-2">
             <img
-              src="/footer-img/gplay.png"
+              src="https://res.cloudinary.com/dw55twddi/image/upload/v1727779303/exclusive/public/footer-img/gplay_qzpcd3.png"
               alt="Googe play"
+              loading="lazy"
+              decoding="async"
               className="w-full"
             />
             <img
-              src="/footer-img/appstore.png"
+              src="https://res.cloudinary.com/dw55twddi/image/upload/v1727779303/exclusive/public/footer-img/appstore_hvzjku.png"
               alt="Apple Store"
               className="w-full"
+              loading="lazy"
+              decoding="async"
             />
           </div>
         </div>

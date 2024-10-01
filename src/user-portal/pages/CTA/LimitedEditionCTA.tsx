@@ -31,8 +31,10 @@ const LimitedEditionCTA = () => {
         </Link>
       </div>
       <img
-        src="/limitededitioncta.webp"
+        src="https://res.cloudinary.com/dw55twddi/image/upload/v1727779305/exclusive/public/limitededitioncta_o5ibbk.webp"
         alt="Limited edition Product"
+        loading="lazy"
+        decoding="async"
         className="hidden h-12 w-auto object-contain drop-shadow-[0_0_100px_rgba(255,255,255,0.5)] md:block md:h-44 lg:h-72"
       />
     </section>

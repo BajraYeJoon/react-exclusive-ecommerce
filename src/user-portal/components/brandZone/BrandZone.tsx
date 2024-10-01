@@ -32,13 +32,13 @@ const BrandZone = () => {
             </span>
           </div>
         </div>
-        <div className="row-span-2 flex flex-col items-start justify-center bg-[url('/brand/bbanner1.png')] bg-cover bg-center bg-no-repeat pl-6 text-background md:row-span-3">
+        <div className="row-span-2 flex flex-col items-start justify-center bg-[url('https://res.cloudinary.com/dw55twddi/image/upload/v1727779307/exclusive/public/brand/bbanner1_iyx1be.png')] bg-cover bg-center bg-no-repeat pl-6 text-background md:row-span-3">
           <h3 className="text-base font-extrabold sm:text-2xl md:text-4xl">
             Global Disocunts
           </h3>
           <h4 className="text-xs sm:text-lg md:text-2xl">Get upto 50% off</h4>
         </div>
-        <div className="row-span-2 flex flex-col items-start justify-center gap-1 bg-[url('/brand/bbanner2.png')] bg-cover bg-center bg-no-repeat pl-6 text-background md:row-span-3 md:gap-3">
+        <div className="row-span-2 flex flex-col items-start justify-center gap-1 bg-[url('https://res.cloudinary.com/dw55twddi/image/upload/v1727779304/exclusive/public/brand/bbanner2_hfdra3.png')] bg-cover bg-center bg-no-repeat pl-6 text-background md:row-span-3 md:gap-3">
           <h4 className="font-serif text-base sm:text-xl md:text-3xl">Tarte</h4>
           <h3 className="text-lg font-extrabold sm:text-2xl md:text-4xl">
             Natural Cosmetics

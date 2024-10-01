@@ -98,6 +98,17 @@ export const userRoutes = [
     },
   },
   {
+    path: UserRoutes.Brands,
+    lazy: async () => {
+      const { default: BrandZone } = await import(
+        "../user-portal/components/brandZone/BrandZone"
+      );
+      return {
+        Component: BrandZone,
+      };
+    },
+  },
+  {
     path: "verifyPayment",
     element: <VerifyPayment />,
   },

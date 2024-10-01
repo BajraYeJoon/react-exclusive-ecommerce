@@ -4,7 +4,7 @@ import { Badge } from "../../ui/badge";
 export default function SpotlightHalloween() {
   return (
     <>
-      <div className="bg-blend relative flex flex-col items-center justify-center gap-2 bg-[url('/spotlight/halloween.avif')] bg-cover bg-center bg-no-repeat text-white">
+      <div className="bg-blend relative flex flex-col items-center justify-center gap-2 bg-[url('https://res.cloudinary.com/dw55twddi/image/upload/v1727779309/exclusive/public/spotlight/halloween_ynfmgu.avif')] bg-cover bg-center bg-no-repeat text-white">
         <p className="font-creepster max-w-24 text-center text-[10px] sm:max-w-fit sm:text-sm md:text-base">
           Irresistible products & Discounts
         </p>

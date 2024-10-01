@@ -22,6 +22,8 @@ const BrandSection = ({
       <img
         src={logoSrc}
         alt={brandName}
+        loading="lazy"
+        decoding="async"
         className={`absolute left-4 top-20 z-20 mb-4 ${logoWidth} object-contain object-top md:top-56`}
       />
       <BrandsDisplay brandName={brandName} slideDelay={slideDelay} />

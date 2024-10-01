@@ -1,7 +1,7 @@
 export default function SpotlightDiscount() {
   return (
     <>
-      <div className="bg-blend flex flex-col items-center justify-center gap-2 bg-[url('/spotlight/discount.avif')] bg-cover bg-bottom bg-no-repeat text-white">
+      <div className="bg-blend flex flex-col items-center justify-center gap-2 bg-[url('https://res.cloudinary.com/dw55twddi/image/upload/v1727779308/exclusive/public/spotlight/discount_wa5p2f.avif')] bg-cover bg-bottom bg-no-repeat text-white">
         <span className="font-merienda text-sm md:text-2xl">
           Discount Aisle
         </span>

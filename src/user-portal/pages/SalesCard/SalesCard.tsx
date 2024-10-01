@@ -117,8 +117,10 @@ function NoSalesCard() {
           </p>
         </div>
         <img
-          src="/sale.png"
+          src="https://res.cloudinary.com/dw55twddi/image/upload/v1727779308/exclusive/public/sale_brm1dp.png"
           alt="Upcoming Sales"
+          loading="lazy"
+          decoding="async"
           className="w-full max-w-44 lg:max-w-xs"
         />
       </div>

@@ -4,7 +4,7 @@ function AuthLayout() {
   return (
     <section className="flex items-center bg-background md:flex-1 md:justify-center lg:justify-between">
       <img
-        src="/s-banner.png"
+        src="https://res.cloudinary.com/dw55twddi/image/upload/v1727779307/exclusive/public/s-banner_ctpvpv.png"
         alt="Baner Image for Authentication"
         loading="lazy"
         decoding="async"
