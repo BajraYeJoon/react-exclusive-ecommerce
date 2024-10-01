@@ -1,3 +1,4 @@
+import { cn } from "../../../common/lib/utils";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,13 +10,15 @@ import {
 const CustomBreakcrumb = ({
   breadcrumbTitle,
   breadcrumbValue,
+  className,
 }: {
   breadcrumbTitle: string;
   breadcrumbValue?: string[];
+  className?: string;
 }) => {
   return (
     <Breadcrumb>
-      <BreadcrumbList>
+      <BreadcrumbList className={cn(className)}>
         <BreadcrumbItem>
           <BreadcrumbLink href="/">Home</BreadcrumbLink>
         </BreadcrumbItem>
