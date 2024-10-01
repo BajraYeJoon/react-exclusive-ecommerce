@@ -1,7 +1,7 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 import { compression } from "vite-plugin-compression2";
-import { visualizer } from 'rollup-plugin-visualizer';
+import { visualizer } from "rollup-plugin-visualizer";
 
 export default defineConfig({
   plugins: [
@@ -14,14 +14,17 @@ export default defineConfig({
       gzipSize: true,
       brotliSize: true,
     }),
-    
   ],
   build: {
-    minify: 'terser',
+    minify: "terser",
     terserOptions: {
       compress: {
         drop_console: true,
         drop_debugger: true,
+      },
+
+      format: {
+        comments: false,
       },
     },
   },
