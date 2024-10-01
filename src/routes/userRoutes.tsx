@@ -109,6 +109,15 @@ export const userRoutes = [
     },
   },
   {
+    path: UserRoutes.Halloweeen,
+    lazy: async () => {
+      const { default: HalloweenMain } = await import(
+        "../common/components/HalloweenPage/HalloweenMain"
+      );
+      return { Component: HalloweenMain };
+    },
+  },
+  {
     path: "verifyPayment",
     element: <VerifyPayment />,
   },
