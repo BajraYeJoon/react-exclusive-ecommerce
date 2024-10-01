@@ -94,6 +94,6 @@ export const userRoutes = [
     element: <FetchSingleCategory />,
   },
   { path: UserRoutes.NotFound, element: <NotFoundPage /> },
-  { path: "verifyPayment", element: <VerifyPayment /> },
+  { path: "/verifyPayment", element: <VerifyPayment /> },
 ];
   

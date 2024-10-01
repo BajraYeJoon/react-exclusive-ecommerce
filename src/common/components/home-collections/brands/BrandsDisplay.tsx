@@ -5,6 +5,7 @@ import { Autoplay, Navigation } from "swiper/modules";
 import { useQuery } from "@tanstack/react-query";
 import { fetchAllProducts } from "../../../api/productApi";
 import { Link } from "react-router-dom";
+import { Loading } from "../../../../user-portal/site";
 
 interface BrandSwiperProps {
   brandName: string;
@@ -21,7 +22,7 @@ interface ProductProps {
 }
 
 const BrandsDisplay = ({ brandName, slideDelay }: BrandSwiperProps) => {
-  const { data: products } = useQuery({
+  const { data: products, isLoading } = useQuery({
     queryKey: ["products"],
     queryFn: fetchAllProducts,
   });
@@ -30,6 +31,8 @@ const BrandsDisplay = ({ brandName, slideDelay }: BrandSwiperProps) => {
     (product: ProductProps) => product.brand === brandName,
   );
   console.log(brandProducts, brandName);
+
+  if (isLoading) return <Loading />;
 
   return (
     <div className="h-full w-full cursor-pointer">

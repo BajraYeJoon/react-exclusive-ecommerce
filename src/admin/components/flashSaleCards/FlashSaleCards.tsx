@@ -153,7 +153,7 @@ export default function FlashSaleAdmin() {
                 </Dialog>
                 <CardFooter className="justify-center overflow-hidden p-0">
                   <ConfirmationDialog
-                    triggerComponent={
+                    triggerText={
                       <>
                         <X className="mr-2 h-4 w-4" /> Remove from Sale
                       </>
