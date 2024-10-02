@@ -1,128 +1,101 @@
-import Cookies from "js-cookie";
+/* eslint-disable react-refresh/only-export-components */
+import { lazy } from "react";
 import { redirect } from "react-router-dom";
+import Cookies from "js-cookie";
 import { UserRoutes } from "../user-portal/utils/userLinks";
-
+import { ProtectedRoute } from "../user-portal/components";
 import {
   DiscountCard,
   ForgotPassword,
   NotFoundPage,
   OtpVerificationForm,
 } from "../common/components";
-
-import { ProtectedRoute } from "../user-portal/components";
 import EmailVerification from "../user-portal/components/email/Verification";
 import VerifyPayment from "../user-portal/components/VerifyPayment";
-import { JSX } from "react/jsx-runtime";
+
+const Home = lazy(() =>
+  import("../user-portal/site/home/Home").then((module) => ({
+    default: module.Home,
+  })),
+);
+const About = lazy(() =>
+  import("../user-portal/site/about/about").then((module) => ({
+    default: module.About,
+  })),
+);
+const Contact = lazy(() =>
+  import("../user-portal/site/contact/contact").then((module) => ({
+    default: module.Contact,
+  })),
+);
+const AuthLayout = lazy(() =>
+  import("../user-portal/site/auth/layout").then((module) => ({
+    default: module.AuthLayout,
+  })),
+);
+const SignupPage = lazy(() =>
+  import("../user-portal/site/auth/SignupPage").then((module) => ({
+    default: module.SignupPage,
+  })),
+);
+const SignInPage = lazy(() =>
+  import("../user-portal/site/auth/SignInPage").then((module) => ({
+    default: module.SignInPage,
+  })),
+);
+const ProfilePage = lazy(() =>
+  import("../user-portal/site/profile").then((module) => ({
+    default: module.ProfilePage,
+  })),
+);
+const HomeCollections = lazy(() =>
+  import("../common/components/home-collections/HomeCollections").then(
+    (module) => ({ default: module.HomeCollections }),
+  ),
+);
+const BrandZone = lazy(
+  () => import("../user-portal/components/brandZone/BrandZone"),
+);
+const HalloweenMain = lazy(
+  () => import("../common/components/HalloweenPage/HalloweenMain"),
+);
+
+// Helper functions
+const isAuthenticated = () => !!Cookies.get("access_token");
+const hasKey = () => !!Cookies.get("key");
 
 export const userRoutes = [
+  { index: true, element: <Home /> },
+  { path: UserRoutes.About, element: <About /> },
+  { path: UserRoutes.Contact, element: <Contact /> },
   {
-    index: true,
-    lazy: async () => {
-      const { Home } = await import("../user-portal/site/home/Home");
-      return { Component: Home };
-    },
-  },
-  {
-    path: UserRoutes.About,
-    lazy: async () => {
-      const { About } = await import("../user-portal/site/about/about");
-      return { Component: About };
-    },
-  },
-  {
-    path: UserRoutes.Contact,
-    lazy: async () => {
-      const { Contact } = await import("../user-portal/site/contact/contact");
-      return { Component: Contact };
-    },
-  },
-  {
-    lazy: async () => {
-      const { AuthLayout } = await import("../user-portal/site/auth/layout");
-      return { Component: AuthLayout };
-    },
-    loader: () =>
-      Cookies.get("accesstoken") ? redirect(UserRoutes.Profile) : null,
+    element: <AuthLayout />,
+    loader: () => (isAuthenticated() ? redirect(UserRoutes.Profile) : null),
     children: [
-      {
-        path: UserRoutes.SignUp,
-        lazy: async () => {
-          const { SignupPage } = await import(
-            "../user-portal/site/auth/SignupPage"
-          );
-          return { Component: SignupPage };
-        },
-      },
-      {
-        path: UserRoutes.SignIn,
-        lazy: async () => {
-          const { SignInPage } = await import(
-            "../user-portal/site/auth/SignInPage"
-          );
-          return { Component: SignInPage };
-        },
-      },
+      { path: UserRoutes.SignUp, element: <SignupPage /> },
+      { path: UserRoutes.SignIn, element: <SignInPage /> },
       { path: UserRoutes.EmailVerification, element: <EmailVerification /> },
       { path: UserRoutes.ForgotPassword, element: <ForgotPassword /> },
       {
         path: UserRoutes.VerifyOtp,
         element: <OtpVerificationForm />,
         loader: () =>
-          !Cookies.get("key")
-            ? redirect(`/${UserRoutes.ForgotPassword}`)
-            : null,
+          hasKey() ? null : redirect(`/${UserRoutes.ForgotPassword}`),
       },
     ],
   },
   {
     path: UserRoutes.Profile,
-    lazy: async () => {
-      const { ProfilePage } = await import("../user-portal/site/profile");
-      return {
-        Component: (props: JSX.IntrinsicAttributes) => (
-          <ProtectedRoute role="user">
-            <ProfilePage {...props} />
-          </ProtectedRoute>
-        ),
-      };
-    },
+    element: (
+      <ProtectedRoute role="user">
+        <ProfilePage />
+      </ProtectedRoute>
+    ),
   },
   { path: UserRoutes.Discount, element: <DiscountCard /> },
-  {
-    path: UserRoutes.Spotlight,
-    lazy: async () => {
-      const { HomeCollections } = await import(
-        "../common/components/home-collections/HomeCollections"
-      );
-      return { Component: HomeCollections };
-    },
-  },
-  {
-    path: UserRoutes.Brands,
-    lazy: async () => {
-      const { default: BrandZone } = await import(
-        "../user-portal/components/brandZone/BrandZone"
-      );
-      return {
-        Component: BrandZone,
-      };
-    },
-  },
-  {
-    path: UserRoutes.Halloweeen,
-    lazy: async () => {
-      const { default: HalloweenMain } = await import(
-        "../common/components/HalloweenPage/HalloweenMain"
-      );
-      return { Component: HalloweenMain };
-    },
-  },
-  {
-    path: "verifyPayment",
-    element: <VerifyPayment />,
-  },
-  {
-    path: UserRoutes.NotFound,
-    element: <NotFoundPage />,
-  },
+  { path: UserRoutes.Spotlight, element: <HomeCollections /> },
+  { path: UserRoutes.Brands, element: <BrandZone /> },
+  { path: UserRoutes.Halloweeen, element: <HalloweenMain /> },
+  { path: "verifyPayment", element: <VerifyPayment /> },
+  { path: UserRoutes.NotFound, element: <NotFoundPage /> },
 ];
