@@ -5,6 +5,7 @@ import { Axios } from "../../common/lib/axiosInstance";
 
 const VerifyPayment = () => {
   const [verifying, setVerifying] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -24,13 +25,22 @@ const VerifyPayment = () => {
           toast.success("Payment verified successfully!");
           navigate("/order-placed", { replace: true });
         } else {
-          toast.error("Payment verification failed. Please contact support.");
-          navigate("/checkout", { replace: true });
+          throw new Error(
+            "Payment verification failed. Please contact support.",
+          );
         }
       } catch (error) {
         console.error("Payment verification error:", error);
-        toast.error("An error occurred during payment verification.");
-        navigate("/checkout", { replace: true });
+        setError(
+          error instanceof Error ? error.message : "An unknown error occurred",
+        );
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : "An error occurred during payment verification.",
+        );
+        // Delay navigation to allow the user to see the error message
+        setTimeout(() => navigate("/checkout", { replace: true }), 3000);
       } finally {
         setVerifying(false);
       }
@@ -43,7 +53,11 @@ const VerifyPayment = () => {
     return <div>Verifying payment... Please wait.</div>;
   }
 
-  return <div>hi there</div>;
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  return null; // Component will unmount after successful verification
 };
 
 export default VerifyPayment;

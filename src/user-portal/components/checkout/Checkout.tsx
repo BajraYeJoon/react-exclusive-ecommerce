@@ -161,7 +161,6 @@ export default function Checkout() {
             const total_amount =
               initializePaymentResponse.data.purchasedProduct.totalPrice;
 
-            // Create and submit the form
             const form = document.createElement("form");
             form.method = "POST";
             form.action = "https://rc-epay.esewa.com.np/api/epay/main/v2/form";
