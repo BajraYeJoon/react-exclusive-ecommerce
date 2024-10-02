@@ -174,7 +174,8 @@ export default function Checkout() {
               product_code: "EPAYTEST",
               product_service_charge: "0",
               product_delivery_charge: "0",
-              success_url: "https://api.nischal-dahal.com.np/esewa/verify",
+              success_url:
+                "https://nest-ecommerce-1fqk.onrender.com/payment/verify",
               failure_url: "https://api.nischal-dahal.com.np/esewa/failure",
               signed_field_names: signed_field_names,
               signature: signature,
