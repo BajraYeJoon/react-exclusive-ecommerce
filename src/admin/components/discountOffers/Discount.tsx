@@ -29,7 +29,7 @@
 //   const { handleSubmit } = methods;
 
 //   const onSubmit = (data: DiscountData) => {
-//     console.log(data);
+//    
 //   };
 
 //   const nextStep = () => setStep(step + 1);

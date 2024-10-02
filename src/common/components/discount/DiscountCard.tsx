@@ -31,8 +31,6 @@ export default function DiscountCard() {
     queryFn: () => Axios.get("/coupon").then((res) => res.data),
   });
 
-  console.log(coupons);
-
   const copyCode = (code: string) => {
     navigator.clipboard.writeText(code);
     setCopiedCode(code);

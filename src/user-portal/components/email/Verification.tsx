@@ -19,8 +19,6 @@ export default function EmailVerification() {
       const searchParams = new URLSearchParams(location.search);
       const token = searchParams.get("token");
 
-      console.log(token, "token");
-
       if (!token) {
         setVerificationStatus("error");
         toast.error("Token is missing or invalid.");

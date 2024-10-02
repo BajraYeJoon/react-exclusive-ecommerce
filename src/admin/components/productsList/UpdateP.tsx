@@ -239,7 +239,6 @@ export default function UpdateProductForm({ initialData, setDialogOpen }: any) {
   };
 
   const onSubmit = async (data: any) => {
-    console.log(data);
     await updateProductMutation.mutate(data);
     setDialogOpen(false);
   };

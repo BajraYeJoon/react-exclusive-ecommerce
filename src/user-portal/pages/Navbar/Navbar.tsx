@@ -102,7 +102,6 @@ const Navbar = () => {
   const cartquantity = cart?.length || 0;
 
   const clearSearch = () => {
-    console.log("Clear search clicked");
     setSearchQuery("");
     if (searchInputRef.current) {
       searchInputRef.current.value = "";

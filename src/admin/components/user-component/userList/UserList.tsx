@@ -64,8 +64,6 @@ export const UserList = () => {
 
   const removeUser = async (userId: number) => {
     deleteUserMutation.mutate(userId);
-
-    console.log("rererere");
   };
 
   const columns = useMemo<ColumnDef<any>[]>(

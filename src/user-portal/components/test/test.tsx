@@ -23,16 +23,16 @@
 //     const getRecommendations = () => {
 //       if (!allProducts) return;
 
-//       console.log("All products:", allProducts);
-//       console.log("Current product ID:", currentProductId);
+//      
+//      
 
 //       const currentProduct = allProducts.find((p) => p.id === currentProductId);
 //       if (!currentProduct) {
-//         console.log("Current product not found");
+//        
 //         return;
 //       }
 
-//       console.log("Current product:", currentProduct);
+//      
 
 //       // Get products in the same categories
 //       const sameCategories = allProducts.filter(
@@ -47,7 +47,7 @@
 //           ),
 //       );
 
-//       console.log("Products in same categories:", sameCategories);
+//      
 
 //       // Sort by number of matching categories and take top 3
 //       const topRecommendations = sameCategories
@@ -62,7 +62,7 @@
 //         .sort((a, b) => b.matchingCategories - a.matchingCategories)
 //         .slice(0, 3);
 
-//       console.log("Top recommendations:", topRecommendations);
+//      
 
 //       setRecommendations(topRecommendations);
 //     };

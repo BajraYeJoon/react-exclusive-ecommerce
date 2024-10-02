@@ -48,8 +48,6 @@ const Singleproduct = () => {
     queryFn: () => fetchProductDetails(productId ?? ""),
   });
 
-  console.log(details?.id, "details");
-
   const htmlContent = details?.description ? marked(details.description) : "";
   const sanitizedContent = DOMPurify.sanitize(String(htmlContent));
 
@@ -276,7 +274,6 @@ const Singleproduct = () => {
           </div>
         </div>
       </div>
-
     </section>
   );
 };

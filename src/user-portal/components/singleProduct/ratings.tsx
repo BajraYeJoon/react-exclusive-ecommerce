@@ -2,8 +2,6 @@ import { Star, StarIcon } from "lucide-react";
 import uuidv4 from "../../../common/lib/utils/uuid";
 
 export default function Reviews({ values }: any) {
-  console.log(values, "ratings values");
-
   const totalReviews = values?.totalRating;
   const averageRating = values?.averageRating;
 

@@ -155,16 +155,14 @@ export default function AddNewProductDialog() {
       }
     });
 
-    console.log("Form Data:", Object.fromEntries(formData));
+   
 
     try {
       const response = await Axios.post("/product/create", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      console.log("API Response:", response);
       if (response.status === 201) {
-        console.log("Product created successfully:", response.data);
         setCurrentStep(0);
         reset();
         setProductImages([]);

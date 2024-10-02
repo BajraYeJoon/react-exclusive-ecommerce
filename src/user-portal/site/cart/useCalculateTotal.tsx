@@ -24,7 +24,6 @@ export const useCalculateTotal = () => {
           }, 0)
         : 0;
 
-      console.log("Subtotal:", subTotal);
       const charge = 45;
       let discountAmount = 0;
 

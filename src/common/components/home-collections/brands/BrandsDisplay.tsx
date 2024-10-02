@@ -30,7 +30,6 @@ const BrandsDisplay = ({ brandName, slideDelay }: BrandSwiperProps) => {
   const brandProducts = products?.filter(
     (product: ProductProps) => product.brand === brandName,
   );
-  console.log(brandProducts, brandName);
 
   if (isLoading) return <Loading />;
 

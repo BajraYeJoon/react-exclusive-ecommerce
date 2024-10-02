@@ -976,7 +976,7 @@ var drawChart = (function (exports) {
    *
    * ```js
    * const pm = require('picomatch');
-   * console.log(pm.scan('foo/bar/*.js'));
+   *
    * { isGlob: true, input: 'foo/bar/*.js', base: 'foo/bar', glob: '*.js' }
    * ```
    * @param {String} `str`
@@ -2415,8 +2415,8 @@ var drawChart = (function (exports) {
    * // picomatch(glob[, options]);
    *
    * const isMatch = picomatch('*.!(*a)');
-   * console.log(isMatch('a.a')); //=> false
-   * console.log(isMatch('a.b')); //=> true
+   *
+   *
    * ```
    * @name picomatch
    * @param {String|Array} `globs` One or more glob patterns.
@@ -2501,7 +2501,7 @@ var drawChart = (function (exports) {
    * const picomatch = require('picomatch');
    * // picomatch.test(input, regex[, options]);
    *
-   * console.log(picomatch.test('foo/bar', /^(?:([^/]*?)\/([^/]*?))$/));
+   *
    * // { isMatch: true, match: [ 'foo/', 'foo', 'bar' ], output: 'foo/bar' }
    * ```
    * @param {String} `input` String to test.
@@ -2546,7 +2546,7 @@ var drawChart = (function (exports) {
    * ```js
    * const picomatch = require('picomatch');
    * // picomatch.matchBase(input, glob[, options]);
-   * console.log(picomatch.matchBase('foo/bar.js', '*.js'); // true
+   *
    * ```
    * @param {String} `input` String to test.
    * @param {RegExp|String} `glob` Glob pattern or regex created by [.makeRe](#makeRe).
@@ -2566,8 +2566,8 @@ var drawChart = (function (exports) {
    * const picomatch = require('picomatch');
    * // picomatch.isMatch(string, patterns[, options]);
    *
-   * console.log(picomatch.isMatch('a.a', ['b.*', '*.a'])); //=> true
-   * console.log(picomatch.isMatch('a.a', 'b.*')); //=> false
+   *
+   *
    * ```
    * @param {String|Array} str The string to test.
    * @param {String|Array} patterns One or more glob patterns to use for matching.
@@ -2605,7 +2605,7 @@ var drawChart = (function (exports) {
    * // picomatch.scan(input[, options]);
    *
    * const result = picomatch.scan('!./foo/*.js');
-   * console.log(result);
+   *
    * { prefix: '!./',
    *   input: '!./foo/*.js',
    *   start: 3,
@@ -2634,7 +2634,7 @@ var drawChart = (function (exports) {
    * const state = picomatch.parse('*.js');
    * // picomatch.compileRe(state[, options]);
    *
-   * console.log(picomatch.compileRe(state));
+   *
    * //=> /^(?:(?!\.)(?=.)[^/]*?\.js)$/
    * ```
    * @param {String} `state` The object returned from the `.parse` method.
@@ -2702,7 +2702,7 @@ var drawChart = (function (exports) {
    * // picomatch.toRegex(source[, options]);
    *
    * const { output } = picomatch.parse('*.js');
-   * console.log(picomatch.toRegex(output));
+   *
    * //=> /^(?:(?!\.)(?=.)[^/]*?\.js)$/
    * ```
    * @param {String} `source` Regular expression source string.

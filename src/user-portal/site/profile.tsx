@@ -38,8 +38,6 @@ export function ProfilePage() {
     queryFn: fetchUserDetails,
   });
 
-  console.log(userdetail, "usedetails");
-
   useEffect(() => {
     if (activeTab === "wishlist") {
       navigate("/favorites");

@@ -86,7 +86,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         password,
       });
 
-      console.log(response, "response from login");
       const { accessToken, refreshToken } = response.data;
       Cookies.set("access_token", accessToken, { expires: 7 }); // 1 hour
       Cookies.set("refresh_token", refreshToken, { expires: 7 }); // 7 days

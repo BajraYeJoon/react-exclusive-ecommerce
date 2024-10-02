@@ -75,7 +75,6 @@ export const BannerManagement = () => {
     queryKey: ["products"],
     queryFn: fetchAllProducts,
   });
-  console.log(products, "produyccccttss");
 
   const [selectedBannerItems, setSelectedBannerItems] = useState<number[]>([]);
 
