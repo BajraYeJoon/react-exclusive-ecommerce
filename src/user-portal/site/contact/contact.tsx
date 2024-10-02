@@ -32,10 +32,9 @@ const Contact = () => {
   };
 
   return (
-    <section className="relative mx-8 my-6 h-fit md:mx-12 md:my-12 lg:mx-auto lg:max-w-7xl">
+    <section className="relative mx-72 my-6 h-fit max-2xl:mx-6 md:my-12">
       <CustomBreakcrumb breadcrumbTitle="Contact Us" />
-
-      <div className="my-8 flex flex-col items-center gap-8 md:flex-row md:items-start md:gap-12">
+      <div className="my-8 flex w-full flex-col items-center justify-center gap-8 md:flex-row md:items-start md:gap-12">
         <div className="flex flex-col justify-evenly gap-6 border p-5 px-8 shadow-lg">
           <div className="flex flex-col items-start gap-3 lg:gap-4">
             <h2 className="inline-flex items-center gap-3 text-xl">

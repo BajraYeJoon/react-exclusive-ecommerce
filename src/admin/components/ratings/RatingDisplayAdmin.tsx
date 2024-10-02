@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from "../../../common/ui/card";
 import { useState } from "react";
+import uuidv4 from "../../../common/lib/utils/uuid";
 
 const RatingDisplayAdmin = () => {
   const { data: productRatingsData } = useQuery({
@@ -56,7 +57,7 @@ function ProductRatings({ product }: any) {
       <CardContent>
         {(expanded ? product.ratings : product.ratings.slice(0, 1)).map(
           (rating: any) => (
-            <RatingItem key={rating.id} rating={rating} />
+            <RatingItem key={`${rating.id}-${uuidv4()}`} rating={rating} />
           ),
         )}
         {!expanded && product.ratings.length > 1 && (
@@ -82,14 +83,11 @@ function RatingItem({ rating }: any) {
       <div className="flex-1">
         <div className="flex items-center justify-between">
           <h3 className="font-semibold">{rating.user}</h3>
-          <span className="text-sm text-gray-500">
-            {new Date(rating.createdAt).toLocaleString()}
-          </span>
         </div>
         <div className="mt-1 flex items-center">
           {[...Array(5)].map((_, i) => (
             <Star
-              key={i}
+              key={`reviewStart-${uuidv4()}`}
               className={`h-4 w-4 ${i < rating.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
             />
           ))}

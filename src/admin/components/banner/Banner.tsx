@@ -157,7 +157,7 @@ export const BannerManagement = () => {
           Banner Management
         </h1>
         <Dialog>
-          <DialogTrigger>
+          <DialogTrigger asChild>
             <Button className="flex items-center">
               <PlusCircle className="mr-2" size={14} />
               Add New Banner

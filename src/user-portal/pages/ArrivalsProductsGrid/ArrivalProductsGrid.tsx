@@ -118,22 +118,16 @@ const GridItem = ({ product, additionalClasses }: GridItemProps) => {
         <h3 className="text-sm font-bold md:text-lg lg:text-lg">
           {product.title.slice(0, 30)}...
         </h3>
-        {/* <p
-        className="max-w-4xl overflow-hidden text-[10px] tracking-wide text-gray-400 md:text-[12px] lg:text-sm"
-        dangerouslySetInnerHTML={{ __html: sanitizedContent.slice(0, 50) }}
-      /> */}
-        <ShopNowButton id={product.id} />
+        <ShopNowButton />
       </Link>
     </div>
   );
 };
 
-const ShopNowButton = ({ id }: any) => (
-  <Link to={`/products/${id}`}>
-    <Button variant={"ghost"} size={"ghostsize"} className="mt-2">
-      Shop Now <ArrowRightIcon className="ml-2 h-4 w-4" />
-    </Button>
-  </Link>
+const ShopNowButton = () => (
+  <Button variant={"ghost"} size={"ghostsize"} className="mt-2">
+    Shop Now <ArrowRightIcon className="ml-2 h-4 w-4" />
+  </Button>
 );
 
 export default ArrivalProductsGrid;

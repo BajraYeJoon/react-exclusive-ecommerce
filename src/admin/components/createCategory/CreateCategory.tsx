@@ -105,10 +105,9 @@ export const AddCategoryForm = () => {
           ) : (
             <>
               {categories?.map((category: { id: number; name: string }) => (
-                <Button
+                <div
                   key={category.id}
-                  variant={"outline"}
-                  className="group relative"
+                  className="group relative rounded-md border border-foreground/15 px-4 py-3"
                 >
                   <Link to={`/admin/products?category=${category.name}`}>
                     {category.name}
@@ -116,7 +115,9 @@ export const AddCategoryForm = () => {
                   <div className="absolute right-0 top-0 hidden flex-col text-lg group-hover:flex">
                     <ConfirmationDialog
                       triggerComponent={
-                        <MdCancel className="group-hover:text-primary" />
+                        <>
+                          <MdCancel className="group-hover:text-primary" />
+                        </>
                       }
                       onConfirm={() => handleCategoryDelete(category.id)}
                       title="Are you sure you want to remove this Category?"
@@ -163,7 +164,7 @@ export const AddCategoryForm = () => {
                       </DialogContent>
                     </Dialog>
                   </div>
-                </Button>
+                </div>
               ))}
             </>
           )}

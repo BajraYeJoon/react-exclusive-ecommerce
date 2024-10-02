@@ -37,6 +37,7 @@ import AddNewProductDialog from "./AddNewProductDialog";
 import UpdateProductForm from "./UpdateP";
 import { Loading } from "../../../user-portal/site";
 import ConfirmationDialog from "../confirmation/ConfirmationDialog";
+import { LoaderCircle } from "lucide-react";
 // import { useSearchParams } from "react-router-dom";
 
 export const ProductsList = () => {
@@ -164,7 +165,11 @@ export const ProductsList = () => {
             </Dialog>
 
             <ConfirmationDialog
-              triggerComponent={<FaTrash className="text-primary" />}
+              triggerComponent={
+                <>
+                  <FaTrash className="text-primary" />
+                </>
+              }
               title="Are you sure you want to delete this product?"
               description="This action cannot be undone."
               onConfirm={() => handleDelete(row.original.id)}
@@ -258,24 +263,15 @@ export const ProductsList = () => {
           </TableHeader>
 
           <TableBody>
-            {isLoading ? (
-              <Loading />
-            ) : (
-              <>
-                {table.getRowModel().rows.map((row) => (
-                  <TableRow key={row.id}>
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className="px-2 py-3">
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
+            {table.getRowModel().rows.map((row) => (
+              <TableRow key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id} className="px-2 py-3">
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
                 ))}
-              </>
-            )}
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </div>

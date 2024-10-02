@@ -23,6 +23,24 @@ export const userRoutes = [
     },
   },
   {
+    path: UserRoutes.Products,
+    lazy: async () => {
+      const { default: AllProducts } = await import(
+        "../user-portal/components/product-components/allProducts/AllProducts"
+      );
+      return { Component: AllProducts };
+    },
+  },
+  {
+    path: UserRoutes.NewArrivals,
+    lazy: async () => {
+      const { default: NewArrivals } = await import(
+        "../user-portal/pages/ArrivalsProductsGrid/ArrivalsPage"
+      );
+      return { Component: NewArrivals };
+    },
+  },
+  {
     path: UserRoutes.About,
     lazy: async () => {
       const { About } = await import("../user-portal/site/about/about");
