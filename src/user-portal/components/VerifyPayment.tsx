@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "sonner";
 import { Axios } from "../../common/lib/axiosInstance";
 
-const VerifyPayment: React.FC = () => {
+const VerifyPayment = () => {
   const [verifying, setVerifying] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
@@ -43,7 +43,7 @@ const VerifyPayment: React.FC = () => {
     return <div>Verifying payment... Please wait.</div>;
   }
 
-  return null;
+  return <div>hi there</div>;
 };
 
 export default VerifyPayment;
