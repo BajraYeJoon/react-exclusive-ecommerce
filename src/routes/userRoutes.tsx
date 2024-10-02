@@ -14,14 +14,57 @@ import EmailVerification from "../user-portal/components/email/Verification";
 import VerifyPayment from "../user-portal/components/VerifyPayment";
 import { JSX } from "react/jsx-runtime";
 
-export const userRoutes = [
+// Authentication Routes
+const authRoutes = [
   {
-    index: true,
+    path: UserRoutes.SignUp,
     lazy: async () => {
-      const { Home } = await import("../user-portal/site/home/Home");
-      return { Component: Home };
+      const { SignupPage } = await import(
+        "../user-portal/site/auth/SignupPage"
+      );
+      return { Component: SignupPage };
     },
   },
+  {
+    path: UserRoutes.SignIn,
+    lazy: async () => {
+      const { SignInPage } = await import(
+        "../user-portal/site/auth/SignInPage"
+      );
+      return { Component: SignInPage };
+    },
+  },
+  { path: UserRoutes.EmailVerification, element: <EmailVerification /> },
+  { path: UserRoutes.ForgotPassword, element: <ForgotPassword /> },
+  {
+    path: UserRoutes.VerifyOtp,
+    element: <OtpVerificationForm />,
+    loader: () =>
+      !Cookies.get("key")
+        ? redirect(`/${UserRoutes.ForgotPassword}`)
+        : null,
+  },
+];
+
+// User Profile Routes
+const profileRoutes = [
+  {
+    path: UserRoutes.Profile,
+    lazy: async () => {
+      const { ProfilePage } = await import("../user-portal/site/profile");
+      return {
+        Component: (props: JSX.IntrinsicAttributes) => (
+          <ProtectedRoute role="user">
+            <ProfilePage {...props} />
+          </ProtectedRoute>
+        ),
+      };
+    },
+  },
+];
+
+// Product Routes
+const productRoutes = [
   {
     path: UserRoutes.Products,
     lazy: async () => {
@@ -31,6 +74,55 @@ export const userRoutes = [
       return { Component: AllProducts };
     },
   },
+  {
+    path: UserRoutes.Favorites,
+    lazy: async () => {
+      const { default: Favorites } = await import(
+        "../user-portal/components/favorites/Favorites"
+      );
+      return { Component: Favorites };
+    },
+  },
+  {
+    path: UserRoutes.SingleCategory,
+    lazy: async () => {
+      const { default: SingleCategory } = await import(
+        "../user-portal/components/fetchSingleCategory/FetchSingleCategory"
+      );
+      return { Component: SingleCategory };
+    },
+  },
+  {
+    path: UserRoutes.SingleProduct,
+    lazy: async () => {
+      const { default: SingleProduct } = await import(
+        "../user-portal/components/singleProduct/singleproduct"
+      );
+      return { Component: SingleProduct };
+    },
+  },
+  {
+    path: UserRoutes.NewArrivals,
+    lazy: async () => {
+      const { default: NewArrivals } = await import(
+        "../user-portal/pages/ArrivalsProductsGrid/ArrivalsPage"
+      );
+      return { Component: NewArrivals };
+    },
+  },
+  {
+    path: UserRoutes.Brands,
+    lazy: async () => {
+      const { default: BrandZone } = await import(
+        "../user-portal/components/brandZone/BrandZone"
+      );
+      return { Component: BrandZone };
+    },
+  },
+];
+
+// Cart and Checkout Routes
+const cartCheckoutRoutes = [
   {
     path: UserRoutes.Cart,
     lazy: async () => {
@@ -47,15 +139,10 @@ export const userRoutes = [
       return { Component: Checkout };
     },
   },
-  {
-    path: UserRoutes.NewArrivals,
-    lazy: async () => {
-      const { default: NewArrivals } = await import(
-        "../user-portal/pages/ArrivalsProductsGrid/ArrivalsPage"
-      );
-      return { Component: NewArrivals };
-    },
-  },
+];
+
+// Pages Routes
+const pagesRoutes = [
   {
     path: UserRoutes.About,
     lazy: async () => {
@@ -70,57 +157,6 @@ export const userRoutes = [
       return { Component: Contact };
     },
   },
-  {
-    lazy: async () => {
-      const { AuthLayout } = await import("../user-portal/site/auth/layout");
-      return { Component: AuthLayout };
-    },
-    loader: () =>
-      Cookies.get("accesstoken") ? redirect(UserRoutes.Profile) : null,
-    children: [
-      {
-        path: UserRoutes.SignUp,
-        lazy: async () => {
-          const { SignupPage } = await import(
-            "../user-portal/site/auth/SignupPage"
-          );
-          return { Component: SignupPage };
-        },
-      },
-      {
-        path: UserRoutes.SignIn,
-        lazy: async () => {
-          const { SignInPage } = await import(
-            "../user-portal/site/auth/SignInPage"
-          );
-          return { Component: SignInPage };
-        },
-      },
-      { path: UserRoutes.EmailVerification, element: <EmailVerification /> },
-      { path: UserRoutes.ForgotPassword, element: <ForgotPassword /> },
-      {
-        path: UserRoutes.VerifyOtp,
-        element: <OtpVerificationForm />,
-        loader: () =>
-          !Cookies.get("key")
-            ? redirect(`/${UserRoutes.ForgotPassword}`)
-            : null,
-      },
-    ],
-  },
-  {
-    path: UserRoutes.Profile,
-    lazy: async () => {
-      const { ProfilePage } = await import("../user-portal/site/profile");
-      return {
-        Component: (props: JSX.IntrinsicAttributes) => (
-          <ProtectedRoute role="user">
-            <ProfilePage {...props} />
-          </ProtectedRoute>
-        ),
-      };
-    },
-  },
   { path: UserRoutes.Discount, element: <DiscountCard /> },
   {
     path: UserRoutes.Spotlight,
@@ -129,17 +165,6 @@ export const userRoutes = [
         "../common/components/home-collections/HomeCollections"
       );
       return { Component: HomeCollections };
-    },
-  },
-  {
-    path: UserRoutes.Brands,
-    lazy: async () => {
-      const { default: BrandZone } = await import(
-        "../user-portal/components/brandZone/BrandZone"
-      );
-      return {
-        Component: BrandZone,
-      };
     },
   },
   {
@@ -155,8 +180,37 @@ export const userRoutes = [
     path: "verifyPayment",
     element: <VerifyPayment />,
   },
+];
+
+// Error Handling Route
+const errorRoutes = [
   {
     path: UserRoutes.NotFound,
     element: <NotFoundPage />,
   },
+];
+
+// Main User Routes Array
+export const userRoutes = [
+  {
+    index: true,
+    lazy: async () => {
+      const { Home } = await import("../user-portal/site/home/Home");
+      return { Component: Home };
+    },
+  },
+  {
+    lazy: async () => {
+      const { AuthLayout } = await import("../user-portal/site/auth/layout");
+      return { Component: AuthLayout };
+    },
+    loader: () =>
+      Cookies.get("accesstoken") ? redirect(UserRoutes.Profile) : null,
+    children: authRoutes,
+  },
+  ...profileRoutes,
+  ...productRoutes,
+  ...cartCheckoutRoutes,
+  ...pagesRoutes,
+  ...errorRoutes,
 ];

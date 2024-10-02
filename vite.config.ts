@@ -29,6 +29,7 @@ export default defineConfig({
 
       format: {
         comments: false,
+        beautify: false,
       },
     },
     rollupOptions: {
