@@ -18,7 +18,16 @@ interface SignupProps {
   formReset: () => void;
 }
 
+export interface AxiosError {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+}
+
 interface SignupResponse {
+  message(message: string): unknown;
   status: number;
   data: any;
   token: string;
@@ -70,7 +79,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async ({ email, password, loginFormReset }: LoginProps) => {
     setIsLoading(true);
-  
+
     try {
       const response = await Axios.post("/auth/signin", {
         email,
@@ -85,8 +94,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setIsLoggedIn(true);
       loginFormReset();
     } catch (error) {
-      toast.error("Login failed, Please check your credentials");
-    } finally {
       setIsLoading(false);
     }
   };
@@ -114,16 +121,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           "Signup successful. Please check your email to verify your account.",
         );
         formReset();
-      } else if (response.status === 400) {
-        toast.error("You are already registered. Please Login");
-        formReset();
-      } else {
-        console.error("Signup failed", response.data);
-        toast.error("Signup failed");
       }
     } catch (error) {
-      console.error("Signup failed", error);
-      toast.error("Signup failed");
+      const axiosError = error as AxiosError;
+      toast.error(axiosError?.response?.data?.message);
     } finally {
       setIsLoading(false);
     }

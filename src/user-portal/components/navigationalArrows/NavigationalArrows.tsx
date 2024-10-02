@@ -1,5 +1,4 @@
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import "../../pages/SalesCard/styles.css";
 import { cn } from "../../../common/lib/utils";
 
 interface NavigationArrowsProps {

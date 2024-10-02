@@ -42,6 +42,24 @@ export const couponState = atom<string>({
   default: "",
 });
 
+interface CartItem {
+  product: {
+    id: number;
+    title: string;
+    image: string[];
+    price: number;
+    stock: number;
+  };
+  quantity: number;
+}
+
+interface Coupon {
+  code: string;
+  type: "fixed_amount" | "percentage";
+  value: number;
+  startDate: string;
+}
+
 const Cart = () => {
   const [, setCheckoutData] = useRecoilState(checkoutState);
   const [discount, setDiscount] = useRecoilState(discountState);
@@ -102,7 +120,7 @@ const Cart = () => {
 
     const checkoutData = {
       id: uuid().toString().substring(2, 15),
-      cartItems: cartItems.map((item: any) => ({
+      cartItems: cartItems.map((item: CartItem) => ({
         id: item.product.id,
         title: item.product.title,
         image: item.product.image[0],
@@ -126,7 +144,7 @@ const Cart = () => {
   };
 
   const validateCoupon = (code: string) => {
-    const coupon = coupons?.find((coupon: any) => {
+    const coupon = coupons?.find((coupon: Coupon) => {
       const startDate = new Date(coupon.startDate);
       return coupon.code === code && startDate <= new Date();
     });
@@ -194,7 +212,7 @@ const Cart = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {cartItems.map((item: any) => (
+          {cartItems.map((item: CartItem) => (
             <TableRow key={item.product.id}>
               <TableCell>
                 <div className="flex flex-col items-start md:flex-row md:space-x-4">

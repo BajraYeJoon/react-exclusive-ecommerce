@@ -34,7 +34,6 @@ const BestProducts = () => {
           nextEl: ".arrow-right",
           prevEl: ".arrow-left",
         }}
-        // onNavigationNext={handleNext}
         breakpoints={{
           320: {
             slidesPerView: 2,
@@ -55,7 +54,7 @@ const BestProducts = () => {
         ) : (
           <>
             {bestSellingProducts?.map((bestProductCard: any) => (
-              <SwiperSlide key={`bestproduct-${uuidv4()}`} className="">
+              <SwiperSlide key={`bestproduct-${uuidv4()}`}>
                 <ProductCard {...bestProductCard} />
               </SwiperSlide>
             ))}

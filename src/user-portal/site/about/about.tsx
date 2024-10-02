@@ -79,21 +79,31 @@ const About = () => {
           <StatsLoader />
         ) : (
           <div className="grid grid-cols-2 justify-center gap-4 md:grid-cols-3 lg:grid-cols-4">
-            {stats?.map(({ description, value, id }: any) => (
-              <div
-                className="group flex flex-col items-center justify-center gap-9 rounded-md border border-foreground/25 px-9 py-5 hover:bg-primary md:flex-row lg:px-12"
-                key={id}
-              >
-                <div className="space-y-3 text-center">
-                  <p className="group-hover:text-color-text-1 max-3xl:text-3xl text-4xl transition-colors duration-300 ease-in-out max-2xl:text-xl">
-                    {value}
-                  </p>
-                  <p className="group-hover:text-color-text-1 text-lg transition-colors duration-300 ease-in-out max-2xl:text-base">
-                    {description}
-                  </p>
+            {stats?.map(
+              ({
+                description,
+                value,
+                id,
+              }: {
+                description: string;
+                value: string | number;
+                id: number;
+              }) => (
+                <div
+                  className="group flex flex-col items-center justify-center gap-9 rounded-md border border-foreground/25 px-9 py-5 hover:bg-primary md:flex-row lg:px-12"
+                  key={id}
+                >
+                  <div className="space-y-3 text-center">
+                    <p className="group-hover:text-color-text-1 max-3xl:text-3xl text-4xl transition-colors duration-300 ease-in-out max-2xl:text-xl">
+                      {value}
+                    </p>
+                    <p className="group-hover:text-color-text-1 text-lg transition-colors duration-300 ease-in-out max-2xl:text-base">
+                      {description}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ),
+            )}
           </div>
         )}
 

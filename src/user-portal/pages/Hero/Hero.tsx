@@ -1,5 +1,4 @@
 import { Carousel } from "../../components";
-import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "../../../common/ui/skeleton";
@@ -40,20 +39,7 @@ const Hero = () => {
                   <Link to={`/category/${category?.name}/${category?.id}`}>
                     <h3 className="hover:font-bold">{category?.name}</h3>
                   </Link>
-                  {category?.subcategories && <ChevronRight />}
                 </div>
-
-                {category.subcategories && (
-                  <div className="subcategories absolute -right-6 top-0 z-20 mt-2 hidden border bg-white p-2 shadow-lg group-hover:block">
-                    <ul>
-                      {category?.subcategories?.map((subcategory) => (
-                        <li key={`subcategory-${uuidv4()}`}>
-                          <Link to={"/products"}>{subcategory}</Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
               </li>
             ))}
           </ul>

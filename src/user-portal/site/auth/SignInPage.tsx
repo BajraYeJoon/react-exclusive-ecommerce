@@ -3,7 +3,7 @@ import { LoginFormData } from "../../schemas/types";
 import { LoginFormSchema } from "../../schemas/zodSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../../../common/ui/button";
-import { useAuthContext } from "../../context/useAuthContext";
+import { AxiosError, useAuthContext } from "../../context/useAuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
@@ -37,25 +37,21 @@ const SignInPage = () => {
       return;
     }
 
-    try {
-      await login({ email, password, loginFormReset });
-      const user = JSON.parse(Cookies.get("user") || "{}");
+    await login({ email, password, loginFormReset });
+    const user = JSON.parse(Cookies.get("user") ?? "{}");
 
+    try {
       if (user === Routes.Admin) {
         navigate(`/${Routes.Admin}/${Routes.Dashboard}`);
         toast.success(intl.formatMessage({ id: "signin.adminWelcome" }));
-      } else {
+      } else if (user === "user") {
         navigate(`/${UserRoutes.Profile}`);
         toast.success(intl.formatMessage({ id: "signin.loginSuccess" }));
       }
-    } catch (error: any) {
-      if (error.statusCode === 401) {
-        toast.error(intl.formatMessage({ id: "signin.invalidCredentials" }));
-        recaptcha?.current?.reset();
-      } else {
-        toast.error(error?.message);
-        recaptcha?.current?.reset();
-      }
+    } catch (error) {
+      console.error("Login error", error);
+      const axiosError = error as AxiosError;
+      toast.error(axiosError?.response?.data?.message);
     }
   };
 
@@ -69,7 +65,11 @@ const SignInPage = () => {
       </p>
       <form onSubmit={handleSubmit(onSubmit)} className="w-full">
         <div className="flex w-full flex-col gap-4">
-          <Input type="text" placeholder={intl.formatMessage({ id: "signin.email" })} {...register("email")} />
+          <Input
+            type="text"
+            placeholder={intl.formatMessage({ id: "signin.email" })}
+            {...register("email")}
+          />
 
           <Input
             type="password"
