@@ -118,11 +118,11 @@ const ProductCard = ({
         <div className="absolute right-4 top-4 flex flex-col gap-2">
           {!isAdmin && (
             <button
-              className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-foreground/20 lg:h-7 lg:w-7"
+              className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-foreground/20 md:h-8 md:w-8 lg:h-7 lg:w-7"
               onClick={handleFavoriteClick}
             >
               <HeartIcon
-                size={dimension.width < 768 ? 12 : 18}
+                size={dimension.width < 768 ? 16 : 18}
                 fill={isFavorite(id) ? "red" : "none"}
                 className={isFavorite(id) ? "text-primary" : ""}
               />
@@ -131,9 +131,9 @@ const ProductCard = ({
 
           <Link
             to={`/product/${id}`}
-            className="flex h-4 w-4 items-center justify-center rounded-full bg-foreground/20 lg:h-7 lg:w-7"
+            className="flex h-6 w-6 items-center justify-center rounded-full bg-foreground/20 md:h-8 md:w-8 lg:h-7 lg:w-7"
           >
-            <EyeIcon size={dimension.width < 768 ? 12 : 18} />
+            <EyeIcon size={dimension.width < 768 ? 16 : 18} />
           </Link>
         </div>
 

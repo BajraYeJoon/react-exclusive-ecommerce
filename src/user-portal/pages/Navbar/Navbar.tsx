@@ -8,6 +8,8 @@ import {
   Home,
   User,
   LogIn,
+  Info,
+  Mail,
 } from "lucide-react";
 import { NavLink, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -255,7 +257,7 @@ const Navbar = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 top-36 z-40 flex w-full flex-col overflow-y-hidden bg-foreground sm:top-32 md:top-28 lg:hidden"
+            className="fixed inset-0 top-[9.5rem] z-40 flex w-full flex-col overflow-y-hidden bg-foreground sm:top-[8rem] md:top-28 lg:hidden"
           >
             <ul className="nav-menu mobile-nav-menu flex flex-col gap-4 space-y-2 px-4 py-4 font-bold tracking-wider">
               {navLinks.map((link) => {
@@ -277,6 +279,8 @@ const Navbar = () => {
                     >
                       {link.label === "Home" && <Home size={20} />}
                       {link.label === "Sign Up" && <User size={20} />}
+                      {link.label === "About" && <Info size={20} />}
+                      {link.label === "Contact" && <Mail size={20} />}
                       {link.label === "Login" && <LogIn size={20} />}
                       <FormattedMessage id={link.label} />
                     </Link>

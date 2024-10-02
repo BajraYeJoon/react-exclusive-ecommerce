@@ -12,7 +12,13 @@ const VerifyPayment: React.FC = () => {
     const verifyPayment = async () => {
       try {
         const queryParams = new URLSearchParams(location.search);
-        const response = await Axios.post("/payment/verify", queryParams);
+        const data = queryParams.get("data");
+
+        if (!data) {
+          throw new Error("Missing payment data.");
+        }
+
+        const response = await Axios.post("/payment/verify", { data });
 
         if (response.data.success) {
           toast.success("Payment verified successfully!");

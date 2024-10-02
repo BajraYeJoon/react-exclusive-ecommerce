@@ -32,6 +32,22 @@ export const userRoutes = [
     },
   },
   {
+    path: UserRoutes.Cart,
+    lazy: async () => {
+      const { Cart } = await import("../user-portal/site/cart/cart");
+      return { Component: Cart };
+    },
+  },
+  {
+    path: UserRoutes.Checkout,
+    lazy: async () => {
+      const { default: Checkout } = await import(
+        "../user-portal/components/checkout/Checkout"
+      );
+      return { Component: Checkout };
+    },
+  },
+  {
     path: UserRoutes.NewArrivals,
     lazy: async () => {
       const { default: NewArrivals } = await import(

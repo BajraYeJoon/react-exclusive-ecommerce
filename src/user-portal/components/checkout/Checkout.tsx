@@ -107,6 +107,7 @@ export default function Checkout() {
       Axios.post("/payment/initialize-payment", orderData),
     onSuccess: () => {
       toast.success("Payment successful");
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
     },
     onError: () => {
       toast.error("Something went wrong. Please try again later.");
@@ -121,7 +122,6 @@ export default function Checkout() {
       billingInfo,
     };
   }
-  
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
@@ -141,15 +141,19 @@ export default function Checkout() {
         paymentMethod: data.paymentMethod,
         discount: couponCode ? 10 : 0,
       };
-  
+
       console.log(orderData, "orderdatatatatata");
-  
+
       if (data.paymentMethod === "khalti") {
         const khaltiOrderData = extractKhaltiOrderData(orderData);
         try {
-          const initializePaymentResponse = await paymentMutation.mutateAsync(khaltiOrderData);
-          console.log("Payment initialization response:", initializePaymentResponse);
-          
+          const initializePaymentResponse =
+            await paymentMutation.mutateAsync(khaltiOrderData);
+          console.log(
+            "Payment initialization response:",
+            initializePaymentResponse,
+          );
+
           if (initializePaymentResponse.data) {
             const { signature, signed_field_names } =
               initializePaymentResponse.data.paymentInitiate;
@@ -171,7 +175,7 @@ export default function Checkout() {
               product_code: "EPAYTEST",
               product_service_charge: "0",
               product_delivery_charge: "0",
-              success_url: "http://localhost:5173/verifyPayment",
+              success_url: "https://exlusivenp.vercel.app/verifyPayment",
               failure_url: "https://developer.esewa.com.np/failure",
               signed_field_names: signed_field_names,
               signature: signature,
@@ -200,7 +204,7 @@ export default function Checkout() {
       } else {
         generateInvoice(orderData);
       }
-  
+
       setOrderPlaceData(orderData);
       resetCheckoutCartAfterOrderPlace({
         cartItems: [],
@@ -211,7 +215,7 @@ export default function Checkout() {
       await removeCartAfterOrderPlace.mutateAsync();
       resetCartAfterOrderPlace([]);
       Cookies.set("order-placed", "true");
-  
+
       navigate("/order-placed", { replace: true });
       toast.success("Thank you for shopping with us!");
     } catch (error) {
