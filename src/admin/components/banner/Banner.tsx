@@ -88,7 +88,9 @@ export const BannerManagement = () => {
   };
 
   const bannerMutation = useMutation<void, Error, void>({
-    mutationFn: () => createBanner(selectedBannerItems),
+    mutationFn: async () => {
+      await createBanner(selectedBannerItems);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["banners"] });
       toast.success("Banner created successfully");
