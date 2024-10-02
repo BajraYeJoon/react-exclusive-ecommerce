@@ -174,8 +174,8 @@ export default function Checkout() {
               product_code: "EPAYTEST",
               product_service_charge: "0",
               product_delivery_charge: "0",
-              success_url: "https://exlusivenp.vercel.app/verifyPayment",
-              failure_url: "https://developer.esewa.com.np/failure",
+              success_url: "https://api.nischal-dahal.com.np/esewa/verify",
+              failure_url: "https://api.nischal-dahal.com.np/esewa/failure",
               signed_field_names: signed_field_names,
               signature: signature,
             };
