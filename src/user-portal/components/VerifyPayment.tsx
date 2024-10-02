@@ -19,16 +19,8 @@ const VerifyPayment = () => {
           throw new Error("Missing payment data.");
         }
 
-        const response = await Axios.post("/payment/verify", { data });
+        await Axios.post("/payment/verify", { data });
 
-        if (response.data.success) {
-          toast.success("Payment verified successfully!");
-          navigate("/order-placed", { replace: true });
-        } else {
-          throw new Error(
-            "Payment verification failed. Please contact support.",
-          );
-        }
       } catch (error) {
         console.error("Payment verification error:", error);
         setError(
@@ -39,7 +31,6 @@ const VerifyPayment = () => {
             ? error.message
             : "An error occurred during payment verification.",
         );
-        // Delay navigation to allow the user to see the error message
         setTimeout(() => navigate("/checkout", { replace: true }), 3000);
       } finally {
         setVerifying(false);
@@ -57,7 +48,7 @@ const VerifyPayment = () => {
     return <div>Error: {error}</div>;
   }
 
-  return null; // Component will unmount after successful verification
+  return null; 
 };
 
 export default VerifyPayment;
