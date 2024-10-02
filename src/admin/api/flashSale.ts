@@ -14,7 +14,9 @@ export const getFlashSale = async () => {
   );
 };
 
-export const addProductToFlashSale = async (payload: FlashSalePayload) => {
+export const addProductToFlashSale = async (
+  payload: FlashSalePayload,
+): Promise<FlashSalePayload> => {
   return handleRequest(
     () => Axios.post("/sale/additem", payload).then((res) => res.data.data),
     `Error adding products ${payload.products} to flash sales`,

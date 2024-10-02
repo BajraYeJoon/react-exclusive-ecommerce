@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, UseFormRegister } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRecoilValue, useSetRecoilState, useRecoilState } from "recoil";
@@ -30,7 +30,7 @@ type FormValues = {
   postalCode: string;
   phone: string;
   email: string;
-  paymentMethod: "bank" | "cash" | "khalti";
+  paymentMethod: string;
 };
 
 export type CartItem = {
@@ -73,6 +73,27 @@ type KhaltiOrderData = {
   };
 };
 
+type ResponseType = {
+  data: {
+    paymentInitiate: {
+      signature: string;
+      signed_field_names: string;
+    };
+    transaction_uuid: string;
+    purchasedProduct: {
+      totalPrice: number;
+    };
+  };
+};
+
+const fields: (keyof FormValues)[] = [
+  "fullName",
+  "streetAddress",
+  "country",
+  "postalCode",
+  "phone",
+  "email",
+];
 export default function Checkout() {
   const { register, handleSubmit } = useForm<FormValues>();
   const checkoutValues = useRecoilValue(checkoutState);
@@ -102,7 +123,7 @@ export default function Checkout() {
     },
   });
 
-  const paymentMutation = useMutation<any, any, KhaltiOrderData>({
+  const paymentMutation = useMutation<ResponseType, Error, KhaltiOrderData>({
     mutationFn: (orderData: KhaltiOrderData) =>
       Axios.post("/payment/initialize-payment", orderData),
     onSuccess: () => {
@@ -241,7 +262,11 @@ export default function Checkout() {
   );
 }
 
-const BillingDetailsForm = ({ register }: any) => (
+const BillingDetailsForm = ({
+  register,
+}: {
+  register: UseFormRegister<FormValues>;
+}) => (
   <Card className="order-2 grid border-none bg-background shadow-none md:order-1">
     <CardHeader className="p-0 px-6 pb-4">
       <CardTitle className="font-light tracking-wider">
@@ -249,14 +274,7 @@ const BillingDetailsForm = ({ register }: any) => (
       </CardTitle>
     </CardHeader>
     <CardContent className="space-y-4">
-      {[
-        "fullName",
-        "streetAddress",
-        "country",
-        "postalCode",
-        "phone",
-        "email",
-      ].map((field) => (
+      {fields.map((field) => (
         <div key={field} className="space-y-2">
           <Label
             htmlFor={field}
