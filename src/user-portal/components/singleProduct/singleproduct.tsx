@@ -277,10 +277,6 @@ const Singleproduct = () => {
         </div>
       </div>
 
-      <div>
-        <h2>Recommended Products</h2>
-        {/* <RecommendedProducts currentProductId={details?.id} /> */}
-      </div>
     </section>
   );
 };

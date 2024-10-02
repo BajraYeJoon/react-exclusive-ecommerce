@@ -39,7 +39,7 @@ const ServiceDetails = () => {
               <h4 className="uppecase text-base font-bold uppercase tracking-wide md:text-[20px]">
                 {serviceDetail.title}
               </h4>
-              <p className="text-sm font-light md:text-base">
+              <p className="text-sm font-light capitalize md:text-base">
                 {serviceDetail.description}
               </p>
             </div>

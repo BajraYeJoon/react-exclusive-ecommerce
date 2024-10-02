@@ -19,19 +19,19 @@ interface ProductCardProps {
   title: string;
   price: number;
   image: string;
-  discountTag?: boolean;
   id: number;
   discountprice: number;
   className?: string;
+  discountTag?: boolean;
 }
 
 const ProductCard = ({
   title,
   price,
   image,
-  discountTag,
   id,
   discountprice,
+  discountTag,
   className,
 }: ProductCardProps) => {
   const { dimension } = useWindow();
@@ -109,11 +109,12 @@ const ProductCard = ({
           />
         </Link>
 
-        {discountTag && (
-          <span className="absolute left-2 top-2 rounded-sm bg-primary px-2 py-1 text-[10px] font-light text-background">
-            {Math.round(((price - 50) / price) * 100)}%
-          </span>
-        )}
+        {discountTag ||
+          (discountprice && (
+            <span className="absolute left-2 top-2 rounded-sm bg-primary px-2 py-1 text-[10px] font-light text-background">
+              {discountprice}% OFF
+            </span>
+          ))}
 
         <div className="absolute right-4 top-4 flex flex-col gap-2">
           {!isAdmin && (

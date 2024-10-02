@@ -84,7 +84,7 @@ const SalesCard = () => {
             <>
               {salesValue?.map((productCard: SalesCardProps) => (
                 <SwiperSlide key={`salesPRODUCT-${uuidv4()}`} className="">
-                  <ProductCard {...productCard} discountTag />
+                  <ProductCard {...productCard} />
                 </SwiperSlide>
               ))}
             </>
