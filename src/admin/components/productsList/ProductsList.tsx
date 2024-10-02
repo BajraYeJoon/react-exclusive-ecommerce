@@ -35,14 +35,12 @@ import ProductDetails from "./ProductDetails";
 import uuidv4 from "../../../common/lib/utils/uuid";
 import AddNewProductDialog from "./AddNewProductDialog";
 import UpdateProductForm from "./UpdateP";
-import { Loading } from "../../../user-portal/site";
 import ConfirmationDialog from "../confirmation/ConfirmationDialog";
-import { LoaderCircle } from "lucide-react";
 // import { useSearchParams } from "react-router-dom";
 
 export const ProductsList = () => {
   const [flashItem, setFlashItem] = useRecoilState<number[]>(flashSaleState);
-  const { data: products, isLoading } = useQuery({
+  const { data: products } = useQuery({
     queryKey: ["products"],
     queryFn: fetchAllProducts,
   });
