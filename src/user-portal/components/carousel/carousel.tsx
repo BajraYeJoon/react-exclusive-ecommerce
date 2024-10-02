@@ -70,7 +70,11 @@ const Carousel = () => {
                 </div>
                 <div className="carousel-image flex w-full items-center p-4 md:h-[200px] md:opacity-100 lg:h-[300px]">
                   <img
-                    src={content.image[0]}
+                    // src={content.image[0]}
+                    srcSet={`${content.image[0]} 480w, ${content.image[0]} 800w, ${content.image[0]} 1200w`}
+                    // sizes="(max-width: 600px) 480px, (max-width: 1200px) 800px, 1200px"
+                    loading="lazy"
+                    decoding="async"
                     alt="Banner images for the products"
                     className="h-full w-full rounded-sm border object-cover sm:border-0 sm:object-contain md:mt-0"
                   />

@@ -113,14 +113,15 @@ const PopupBanner = () => {
 
 const Layout = () => {
   return (
-    <>
+    <div className="relative">
+      {/* <div className="absolute inset-0 -z-20 bg-gradient-to-t from-[#dfe9f3] to-[#ffffff] opacity-80"></div>{" "} */}
       <Banner />
       <Navbar />
       <FloatingCard />
       <PopupBanner />
       <Outlet />
       <Footer />
-    </>
+    </div>
   );
 };
 
