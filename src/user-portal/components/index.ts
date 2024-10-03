@@ -1,5 +1,4 @@
 export { default as Carousel } from "./carousel/carousel";
-export { default as FlashSaleTimer } from "./flashSaleTimer/FlashSaleTimer";
 export { default as NavigationArrows } from "./navigationalArrows/NavigationalArrows";
 export { default as PagesHeader } from "./pagesHeader/PagesHeader";
 export { default as ProductCard } from "./product-components/productCard/ProductCard";

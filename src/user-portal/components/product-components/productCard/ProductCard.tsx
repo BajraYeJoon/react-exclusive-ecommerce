@@ -96,11 +96,11 @@ const ProductCard = ({
 	};
 
 	return (
-		<section className="mt-4 w-full max-w-72">
-			<div className="group relative h-32 w-full overflow-hidden rounded-b-md bg-card md:h-56">
+		<section className="mt-4 w-full max-w-64 overflow-hidden">
+			<div className="group relative h-44 w-full overflow-hidden rounded-b-md bg-card md:h-64">
 				<Link to={`/${title?.toLowerCase().split(" ").join("-")}/${id}`}>
 					<img
-						className="h-full w-full object-contain p-4 transition-opacity duration-300 group-hover:opacity-40 md:p-8 lg:p-8"
+						className="h-full w-full object-contain p-2 md:p-4 lg:p-6 transition-opacity duration-300 group-hover:opacity-40"
 						src={
 							image && image[0] ? image[0] : "https://via.placeholder.com/150"
 						}
@@ -119,6 +119,7 @@ const ProductCard = ({
 				<div className="absolute right-4 top-4 flex flex-col gap-2">
 					{!isAdmin && (
 						<button
+							type="button"
 							className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-foreground/20 md:h-8 md:w-8 lg:h-7 lg:w-7"
 							onClick={handleFavoriteClick}
 						>
@@ -132,7 +133,7 @@ const ProductCard = ({
 
 					<Link
 						to={`/product/${id}`}
-						className="flex h-6 w-6 items-center justify-center rounded-full bg-foreground/20 md:h-8 md:w-8 lg:h-7 lg:w-7"
+						className=" h-6 w-6 hidden group-hover:flex items-center justify-center rounded-full bg-foreground/20 md:h-8 md:w-8 lg:h-7 lg:w-7"
 					>
 						<EyeIcon size={dimension.width < 768 ? 16 : 18} />
 					</Link>

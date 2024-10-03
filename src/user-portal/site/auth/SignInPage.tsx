@@ -56,7 +56,7 @@ const SignInPage = () => {
 	};
 
 	return (
-		<div className="sign-up-content w-[400px] space-y-8">
+		<div className="sign-up-content md:w-[400px] space-y-8">
 			<h2 className="text-lg lg:text-3xl">
 				<FormattedMessage id="signin.loginToAccount" />
 			</h2>

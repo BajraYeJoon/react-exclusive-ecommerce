@@ -4,11 +4,13 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { fetchSalesProduct } from "../../../common/api/productApi";
 import ProductCardSkeleton from "../../../common/components/productCardSkeleton/ProductCardSkeleton";
 import uuidv4 from "../../../common/lib/utils/uuid";
 import { Button } from "../../../common/ui/button";
+import useWindow from "../../../common/lib/useWindow";
+import { UserRoutes } from "../../utils/userLinks";
 
 interface SalesCardProps {
 	title: string;
@@ -26,6 +28,8 @@ const SalesCard = () => {
 		queryFn: fetchSalesProduct,
 	});
 	const swiperKey = uuidv4();
+	const { dimension } = useWindow();
+	const navigate = useNavigate();
 
 	const salesValue = salesData ? salesData[0].products : [];
 
@@ -39,18 +43,19 @@ const SalesCard = () => {
 					Heading="Flash Sales"
 					flashTimer
 				/>
-				{salesValue.length > 4 && (
-					<div className="page-navigations flex items-center gap-2">
-						<NavigationArrows
-							direction="prev"
-							className={`arrow-left-${swiperKey}`}
-						/>
-						<NavigationArrows
-							direction="next"
-							className={`arrow-right-${swiperKey}`}
-						/>
-					</div>
-				)}
+				{salesValue.length > 4 ||
+					(dimension.width < 768 && (
+						<div className="page-navigations flex items-center gap-2">
+							<NavigationArrows
+								direction="prev"
+								className={`arrow-left-${swiperKey}`}
+							/>
+							<NavigationArrows
+								direction="next"
+								className={`arrow-right-${swiperKey}`}
+							/>
+						</div>
+					))}
 			</div>
 
 			<div className="product-card-container w-full items-center justify-between gap-4 overflow-hidden">
@@ -68,10 +73,10 @@ const SalesCard = () => {
 							slidesPerView: 2,
 						},
 						640: {
-							slidesPerView: 2,
+							slidesPerView: 3,
 						},
 						768: {
-							slidesPerView: 3,
+							slidesPerView: 4,
 						},
 						1024: {
 							slidesPerView: 4,
@@ -83,7 +88,7 @@ const SalesCard = () => {
 					) : (
 						<>
 							{salesValue?.map((productCard: SalesCardProps) => (
-								<SwiperSlide key={`salesPRODUCT-${uuidv4()}`} className="">
+								<SwiperSlide key={`salesPRODUCT-${uuidv4()}`}>
 									<ProductCard {...productCard} />
 								</SwiperSlide>
 							))}
@@ -92,8 +97,11 @@ const SalesCard = () => {
 				</Swiper>
 			</div>
 
-			<Button className="mx-auto w-full md:w-fit">
-				<Link to={"/products"}>View All Products</Link>
+			<Button
+				className="mx-auto w-full sm:w-fit"
+				onClick={() => navigate(`${UserRoutes.Products}`)}
+			>
+				View All Products
 			</Button>
 		</section>
 	);
@@ -122,9 +130,9 @@ function NoSalesCard() {
 					className="w-full max-w-44 lg:max-w-xs"
 				/>
 			</div>
-			<div className="smooth-bounce absolute -left-24 -top-24 h-64 w-64 rounded-full bg-indigo-500 opacity-20 delay-1000"></div>
+			<div className="smooth-bounce absolute -left-24 -top-24 h-64 w-64 rounded-full bg-indigo-500 opacity-20 delay-1000" />
 
-			<div className="smooth-bounce absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-indigo-500 opacity-20"></div>
+			<div className="smooth-bounce absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-indigo-500 opacity-20" />
 		</section>
 	);
 }

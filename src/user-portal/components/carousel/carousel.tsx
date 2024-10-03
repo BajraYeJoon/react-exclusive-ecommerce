@@ -53,12 +53,12 @@ const Carousel = () => {
 				) : (
 					banner.map((content: Content) => (
 						<SwiperSlide key={`banner-${uuidv4()}`}>
-							<div className="carousel-content grid h-44 w-full grid-cols-2 overflow-hidden bg-foreground p-4 align-middle md:h-56 md:grid-cols-2 md:p-0 lg:h-fit">
-								<div className="carousel-text flex flex-col items-start justify-center gap-0 text-background md:gap-2 md:pl-10 lg:gap-6 lg:pl-14">
+							<div className="carousel-content grid h-44 w-full grid-cols-2 overflow-hidden bg-foreground p-4 place-items-center md:h-56 md:grid-cols-2 md:p-0 lg:h-fit">
+								<div className="carousel-text flex h-full w-full flex-col items-start justify-center gap-0 text-background md:gap-2 pl-2 md:pl-10 lg:pl-14 lg:gap-6 ">
 									<span className="text-[9px] font-light md:text-sm">
 										{content.title.slice(0, 30)}...
 									</span>
-									<h3 className="carousel-title my-2 text-ellipsis text-xs font-medium tracking-wide md:leading-5 lg:text-xl xl:text-2xl">
+									<h3 className="carousel-title my-2 text-ellipsis text-sm sm:text-lg font-medium tracking-wide md:leading-5 md:text-xl xl:text-3xl">
 										{content.title.slice(0, 50)}...
 									</h3>
 									<Link
@@ -68,15 +68,13 @@ const Carousel = () => {
 										Shop Now <ArrowRight size={20} className="ml-2" />
 									</Link>
 								</div>
-								<div className="carousel-image flex w-full items-center p-4 md:h-[200px] md:opacity-100 lg:h-[300px]">
+								<div className="carousel-image flex w-full justify-center h-fit sm:h-[180px] md:h-[200px] items-center md:p-4 md:opacity-100 lg:h-[300px]">
 									<img
-										// src={content.image[0]}
-										srcSet={`${content.image[0]} 480w, ${content.image[0]} 800w, ${content.image[0]} 1200w`}
-										// sizes="(max-width: 600px) 480px, (max-width: 1200px) 800px, 1200px"
+										src={content.image[0]}
 										loading="lazy"
 										decoding="async"
 										alt="Banner images for the products"
-										className="h-full w-full rounded-sm border object-cover sm:border-0 sm:object-contain md:mt-0"
+										className="h-full w-full rounded-sm object-top  object-cover  sm:object-cover md:mt-0"
 									/>
 								</div>
 							</div>

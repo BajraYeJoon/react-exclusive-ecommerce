@@ -16,12 +16,12 @@ const LimitedEditionCTA = () => {
 	const CUSTOM_DAYS_IN_MS = dateConversion.getTime();
 
 	return (
-		<section className="flex flex-col items-center rounded-md bg-foreground py-10 md:flex-row md:rounded-none md:px-10 md:py-20 lg:px-16">
-			<div className="flex flex-1 flex-col items-start justify-between gap-6 md:gap-8">
+		<section className="flex flex-col items-center justify-center rounded-md bg-foreground py-10 sm:flex-row md:rounded-none md:px-10 md:py-20 lg:px-16">
+			<div className="flex flex-1 flex-col items-center sm:items-start justify-between gap-6 md:gap-4 w-full">
 				<span className="text-lg capitalize text-accent max-2xl:text-base">
 					Categories
 				</span>
-				<h2 className="max-w-xl text-background md:leading-[70px] lg:text-6xl">
+				<h2 className="max-w-xl text-3xl sm:text-xl md:text-2xl text-background lg:leading-[70px] lg:text-4xl ">
 					Enhance your music experience
 				</h2>
 
@@ -35,7 +35,7 @@ const LimitedEditionCTA = () => {
 				alt="Limited edition Product"
 				loading="lazy"
 				decoding="async"
-				className="hidden h-12 w-auto object-contain drop-shadow-[0_0_100px_rgba(255,255,255,0.5)] md:block md:h-44 lg:h-72"
+				className="hidden h-12 w-auto object-contain drop-shadow-[0_0_100px_rgba(255,255,255,0.5)] sm:block sm:h-52 md:h-64 lg:h-72"
 			/>
 		</section>
 	);

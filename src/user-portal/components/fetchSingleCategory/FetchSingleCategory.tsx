@@ -14,7 +14,7 @@ const FetchSingleCategory = () => {
 		error,
 	} = useQuery({
 		queryKey: ["category"],
-		queryFn: () => fetchProductByCategory(parseInt(categoryId ?? "20")),
+		queryFn: () => fetchProductByCategory(Number.parseInt(categoryId ?? "20")),
 	});
 
 	const productsByCategory = category?.data?.products || [];
@@ -31,7 +31,7 @@ const FetchSingleCategory = () => {
 					{category?.data?.name}
 				</h1>
 			</div>
-			<div className="product-card-container grid h-fit w-full grid-cols-2 items-center justify-between gap-4 overflow-hidden md:grid-cols-3 lg:grid-cols-4">
+			<div className="product-card-container grid h-fit w-full grid-cols-2 sm:grid-cols-3 items-center justify-between gap-4 overflow-hidden md:grid-cols-4 lg:grid-cols-5">
 				{productsByCategory?.map((category: any) => (
 					<ProductCard key={category?.id} {...category} />
 				))}

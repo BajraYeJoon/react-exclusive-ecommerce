@@ -23,14 +23,14 @@ const GeneralProducts = () => {
 			{isLoading ? (
 				<ProductCardSkeleton />
 			) : (
-				<div className="general-product-card-container grid h-fit w-full grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+				<div className="general-product-card-container grid h-fit w-full grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4">
 					{generalProducts?.map((gproduct: any) => (
 						<ProductCard {...gproduct} key={uuidv4()} />
 					))}
 				</div>
 			)}
 
-			<Button className="mx-auto w-full md:w-fit">
+			<Button className="mx-auto w-full sm:w-fit">
 				<Link to={"/products"}>View All Products</Link>
 			</Button>
 		</section>

@@ -20,7 +20,7 @@ const DateTimeDisplay = ({
 			<span className="font-ember text-xs font-light text-foreground md:text-sm">
 				{type}
 			</span>
-			<span className="text-xs font-extrabold text-foreground md:text-3xl">
+			<span className="text-xl font-extrabold text-foreground md:text-3xl">
 				{value}
 			</span>
 		</div>

@@ -29,7 +29,7 @@ const Category = () => {
 	});
 	const { dimension } = useWindow();
 
-	let skeletonCount;
+	let skeletonCount: number;
 	if (dimension.width < 768) {
 		skeletonCount = 3;
 	} else if (dimension.width < 1024) {
@@ -78,7 +78,7 @@ const Category = () => {
 					</div>
 				) : (
 					<Swiper
-						spaceBetween={20}
+						spaceBetween={10}
 						pagination={{ clickable: true }}
 						className="mySwiper flex h-24 md:h-32"
 						modules={[Navigation]}
@@ -91,13 +91,13 @@ const Category = () => {
 								slidesPerView: 3,
 							},
 							540: {
-								slidesPerView: 3,
+								slidesPerView: 4,
 							},
 							640: {
-								slidesPerView: 3,
+								slidesPerView: 4,
 							},
 							768: {
-								slidesPerView: 4,
+								slidesPerView: 5,
 							},
 							1024: {
 								slidesPerView: 6,

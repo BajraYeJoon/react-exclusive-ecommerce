@@ -55,6 +55,7 @@ const AllProducts = () => {
 			<div className="mb-8 flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
 				<h1 className="text-2xl font-bold text-gray-900">All Products</h1>
 				<button
+					type="button"
 					onClick={() => setIsFilterOpen(!isFilterOpen)}
 					className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
 				>
@@ -74,7 +75,7 @@ const AllProducts = () => {
 				/>
 			)}
 
-			<div className="grid grid-cols-2 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+			<div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
 				{paginatedProducts.map((product: ProductType) => (
 					<ProductCard key={product.id} {...product} />
 				))}

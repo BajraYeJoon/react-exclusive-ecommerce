@@ -1,6 +1,11 @@
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import uuidv4 from "../../../common/lib/utils/uuid";
 
+type faqProps = {
+	question: string;
+	answer: string;
+};
+
 const faqData = [
 	{
 		question: "What are your shipping options and how long will delivery take?",
@@ -26,18 +31,18 @@ const faqData = [
 
 const Faq = () => {
 	return (
-		<section className="mx-auto max-w-7xl mb-8 px-4 sm:px-6 lg:px-8">
+		<section className="mx-auto space-y-12 w-full lg:max-w-7xl mb-8 px-4 sm:px-6 lg:px-8">
 			<div className="mb-2">
-				<h6 className="mb-2 text-center sm:text-base text-xs md:text-lg font-medium text-indigo-600">
+				<h6 className="mb-2 text-center sm:text-base text-xs md:text-lg font-medium text-primary">
 					FAQs
 				</h6>
-				<h2 className="font-manrope text-center text-xl md:text-2xl lg:text-4xl font-bold leading-[3.25rem] text-gray-900">
+				<h2 className=" text-center text-lg md:text-xl lg:text-3xl font-bold leading-[3.25rem] text-gray-900">
 					Frequently asked questions
 				</h2>
 			</div>
 
 			<div className="space-y-4">
-				{faqData.map((item) => (
+				{faqData.map((item: faqProps) => (
 					<details
 						key={`faq-${uuidv4()}`}
 						className="group border border-gray-200 rounded-lg p-4 transition-all duration-500 ease-in-out"
@@ -51,7 +56,7 @@ const Faq = () => {
 								<FaChevronUp />
 							</span>
 						</summary>
-						<p className="mt-2 text-xs sm:text-sm  md:text-base leading-6 text-gray-700 transition-opacity duration-500 ease-in-out group-open:opacity-100 group-open:max-h-screen max-h-0 overflow-hidden">
+						<p className="mt-2 text-xs sm:text-sm  md:text-base leading-6 text-gray-700 transition-opacity duration-500 ease-in-out group-open:opacity-100 group-open:max-h-screen max-h-0 overflow-hidden first-letter:text-lg first-letter:align-bottom">
 							{item.answer}
 						</p>
 					</details>
