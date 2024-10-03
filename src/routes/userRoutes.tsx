@@ -13,6 +13,7 @@ import { ProtectedRoute } from "../user-portal/components";
 import EmailVerification from "../user-portal/components/email/Verification";
 import VerifyPayment from "../user-portal/components/VerifyPayment";
 import { JSX } from "react/jsx-runtime";
+import Onboarding from "../user-portal/components/onboarding";
 
 // Authentication Routes
 const authRoutes = [
@@ -41,6 +42,10 @@ const authRoutes = [
 		element: <OtpVerificationForm />,
 		loader: () =>
 			!Cookies.get("key") ? redirect(`/${UserRoutes.ForgotPassword}`) : null,
+	},
+	{
+		path: "onboarding",
+		element: <Onboarding />,
 	},
 ];
 

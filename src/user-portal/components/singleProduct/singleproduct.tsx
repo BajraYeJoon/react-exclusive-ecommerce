@@ -27,6 +27,7 @@ import { toast } from "sonner";
 import { marked } from "marked";
 import "./styles.css";
 import DOMPurify from "dompurify";
+import RecommendedProducts from "../test/test";
 
 interface FeatureItemProps {
 	icon: React.ReactNode;
@@ -85,194 +86,197 @@ const Singleproduct = () => {
 	};
 
 	return (
-		<section className="py-12 sm:py-16">
-			<div className="container mx-auto px-4">
-				<CustomBreakcrumb
-					breadcrumbTitle={`${details?.brand && details?.brand}`}
-				/>
+		<section className="container mx-auto px-4 py-12 sm:py-16">
+			<CustomBreakcrumb
+				breadcrumbTitle={`${details?.brand && details?.brand}`}
+			/>
 
-				<div className="lg:col-gap-12 xl:col-gap-16 mt-8 grid grid-cols-1 gap-12 lg:mt-12 lg:grid-cols-5 lg:gap-16">
-					<div className="col-auto lg:col-span-3 lg:row-end-1">
-						<div className="lg:flex lg:items-start">
-							<div className="w-full lg:order-2 lg:ml-5">
-								<div className="h-56 w-full overflow-hidden rounded-lg md:h-[400px] lg:h-[500px]">
-									<img
-										className="h-full w-full object-contain"
-										src={selectedImage}
-										alt={`Product Details Image for ${details?.title}`}
-									/>
+			<div className="lg:col-gap-12 xl:col-gap-16 mt-8 grid grid-cols-1 gap-12 lg:mt-12 lg:grid-cols-5 lg:gap-16">
+				<div className="col-auto lg:col-span-3 lg:row-end-1">
+					<div className="lg:flex lg:items-start">
+						<div className="w-full lg:order-2 lg:ml-5">
+							<div className="h-56 w-full overflow-hidden rounded-lg md:h-[400px] lg:h-[500px]">
+								<img
+									className="h-full w-full object-contain"
+									src={selectedImage}
+									alt={`Product Details Image for ${details?.title}`}
+								/>
+							</div>
+						</div>
+
+						{details?.image?.length > 1 && (
+							<div className="mt-2 w-full lg:order-1 lg:w-32 lg:flex-shrink-0">
+								<div className="flex flex-row items-start lg:flex-col">
+									{details?.image?.map((image: string) => (
+										<button
+											key={`iamge-${uuidv4()}`}
+											type="button"
+											className={`flex-0 mb-3 aspect-square h-20 overflow-hidden rounded-lg border-2 ${
+												selectedImage === image
+													? "border-gray-900"
+													: "border-transparent"
+											} text-center`}
+											onClick={() => setSelectedImage(image)}
+										>
+											<img
+												className="h-full w-full object-cover"
+												src={image}
+												alt={`${details?.title} image ${uuidv4()}`}
+											/>
+										</button>
+									))}
 								</div>
 							</div>
-
-							{details?.image?.length > 1 && (
-								<div className="mt-2 w-full lg:order-1 lg:w-32 lg:flex-shrink-0">
-									<div className="flex flex-row items-start lg:flex-col">
-										{details?.image?.map((image: string) => (
-											<button
-												key={`iamge-${uuidv4()}`}
-												type="button"
-												className={`flex-0 mb-3 aspect-square h-20 overflow-hidden rounded-lg border-2 ${
-													selectedImage === image
-														? "border-gray-900"
-														: "border-transparent"
-												} text-center`}
-												onClick={() => setSelectedImage(image)}
-											>
-												<img
-													className="h-full w-full object-cover"
-													src={image}
-													alt={`${details?.title} image ${uuidv4()}`}
-												/>
-											</button>
-										))}
-									</div>
-								</div>
-							)}
-						</div>
-					</div>
-
-					<div className="flex flex-col gap-2 lg:col-span-2 lg:row-span-2 lg:row-end-2">
-						<h1 className="text-3xl font-light">
-							{details.title}
-							<span
-								className={cn(
-									`ml-3 inline-flex w-fit flex-wrap justify-center rounded-full bg-foreground/10 px-2 py-1 text-xs font-medium text-foreground/70`,
-									details.availability === true ? "bg-green-400" : "bg-red-400",
-								)}
-							>
-								{details.availability === true ? " in stock" : " out of stock"}
-							</span>
-						</h1>
-						<p className="text-base text-gray-400">
-							{details?.brand && details?.brand}
-						</p>
-						<div className="flex items-center text-yellow-300 underline">
-							{Array.from({ length: Math.ceil(ratings?.totalRating) }).map(
-								() => (
-									<BiStar
-										key={`star-${uuidv4()}`}
-										size={20}
-										className="text-yellow-500"
-									/>
-								),
-							)}
-
-							<p className="ml-2 text-sm font-medium text-yellow-600">
-								{ratings ? ratings.allRatings[0].ratings.length : 0} Reviews
-							</p>
-						</div>
-						<h1 className="text-lg">
-							Price:{" "}
-							<span className="text-2xl text-red-700">${details.price}</span>
-						</h1>
-						{!isAdmin && details.availability === true && (
-							<Button
-								className="mt-6"
-								onClick={() => addToCart({ id: details?.id, type: "add" })}
-							>
-								<ShoppingBasket className="mr-4" />
-								Add to cart
-							</Button>
-						)}
-						<div className="mt-6 max-w-fit overflow-ellipsis break-normal">
-							<h3 className="mb-4 text-base font-medium lg:text-lg">
-								Description:
-							</h3>
-							<div
-								className="prose prose-sm markdown-content max-w-none overflow-hidden text-gray-700"
-								dangerouslySetInnerHTML={{ __html: sanitizedContent }}
-							/>
-						</div>
-
-						<hr className="w-full bg-foreground/35" />
-						{details.sizes && (
-							<>
-								<h2 className="text-forerground mt-8 text-base">
-									Available Sizes
-								</h2>
-								<Button variant={"outline"} className="uppercase">
-									{" "}
-									{details.sizes}
-								</Button>
-							</>
-						)}
-
-						<ul className="mt-8 space-y-2 border p-4">
-							<FeatureItem
-								icon={<CgGlobeAlt size={50} />}
-								title="Free shipping worldwide"
-								description="Enter your postal code for product availability"
-							/>
-							<hr className="w-full bg-foreground" />
-							<FeatureItem
-								icon={<FcCancel size={50} />}
-								title="Cancel Anytime"
-								description={details.returnpolicy}
-							/>
-						</ul>
-
-						{ratings?.totalRating === 0 ? (
-							<div className="flex items-center justify-center rounded-lg border border-gray-300 bg-gray-50 p-4">
-								<MdAddCircleOutline size={24} className="mr-2 text-gray-500" />
-								<h3 className="text-gray-700">No ratings for this product</h3>
-								{isLoggedIn && !isAdmin && (
-									<Dialog>
-										<DialogTrigger>
-											<Button variant="outline" className="ml-4">
-												Add Rating
-											</Button>
-										</DialogTrigger>
-										<DialogContent className="sm:max-w-[425px]">
-											<DialogHeader>
-												<DialogTitle>Add Your Rating</DialogTitle>
-											</DialogHeader>
-											<div className="grid gap-4 py-4">
-												<div className="flex items-center justify-center space-x-2">
-													{[1, 2, 3, 4, 5].map((star) => (
-														<button
-															key={star}
-															onClick={() => setRating(star)}
-															className="rounded text-2xl focus:outline-none"
-														>
-															{star <= rating ? (
-																<StarIcon className="text-yellow-500" />
-															) : (
-																<MdStarOutline className="text-gray-400" />
-															)}
-														</button>
-													))}
-												</div>
-												<textarea
-													placeholder="Add your comment"
-													value={comment}
-													onChange={(e) => setComment(e.target.value)}
-													rows={4}
-													className="w-full rounded border border-gray-300 p-2 focus:outline-none"
-												/>
-											</div>
-											<div className="flex justify-end space-x-2">
-												<DialogTrigger asChild>
-													<Button variant="secondary">Cancel</Button>
-												</DialogTrigger>
-												<Button
-													onClick={handleRatingSubmit}
-													disabled={rating === 0}
-												>
-													Submit
-												</Button>
-											</div>
-										</DialogContent>
-									</Dialog>
-								)}
-							</div>
-						) : (
-							<>
-								{/* {details.ratings?.map((rating: any) => { */}
-								<Reviews values={ratings} key={`${uuidv4()}`} />;{/* })} */}
-							</>
 						)}
 					</div>
 				</div>
+
+				<div className="flex flex-col gap-2 lg:col-span-2 lg:row-span-2 lg:row-end-2">
+					<h1 className="text-3xl font-light">
+						{details.title}
+						<span
+							className={cn(
+								`ml-3 inline-flex w-fit flex-wrap justify-center rounded-full bg-foreground/10 px-2 py-1 text-xs font-medium text-foreground/70`,
+								details.availability === true ? "bg-green-400" : "bg-red-400",
+							)}
+						>
+							{details.availability === true ? " in stock" : " out of stock"}
+						</span>
+					</h1>
+					<p className="text-base text-gray-400">
+						{details?.brand && details?.brand}
+					</p>
+					<div className="flex items-center text-yellow-300 underline">
+						{Array.from({ length: Math.ceil(ratings?.totalRating) }).map(() => (
+							<BiStar
+								key={`star-${uuidv4()}`}
+								size={20}
+								className="text-yellow-500"
+							/>
+						))}
+
+						<p className="ml-2 text-sm font-medium text-yellow-600">
+							{ratings ? ratings.allRatings[0].ratings.length : 0} Reviews
+						</p>
+					</div>
+					<h1 className="text-lg">
+						Price:{" "}
+						<span className="text-2xl text-red-700">${details.price}</span>
+					</h1>
+					{!isAdmin && details.availability === true && (
+						<Button
+							className="mt-6"
+							onClick={() => addToCart({ id: details?.id, type: "add" })}
+						>
+							<ShoppingBasket className="mr-4" />
+							Add to cart
+						</Button>
+					)}
+					<div className="mt-6 max-w-fit overflow-ellipsis break-normal">
+						<h3 className="mb-4 text-base font-medium lg:text-lg">
+							Description:
+						</h3>
+						<div
+							className="prose prose-sm markdown-content max-w-none overflow-hidden text-gray-700"
+							dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+						/>
+					</div>
+
+					<hr className="w-full bg-foreground/35" />
+					{details.sizes && (
+						<>
+							<h2 className="text-forerground mt-8 text-base">
+								Available Sizes
+							</h2>
+							<Button variant={"outline"} className="uppercase">
+								{" "}
+								{details.sizes}
+							</Button>
+						</>
+					)}
+
+					<ul className="mt-8 space-y-2 border p-4">
+						<FeatureItem
+							icon={<CgGlobeAlt size={50} />}
+							title="Free shipping worldwide"
+							description="Enter your postal code for product availability"
+						/>
+						<hr className="w-full bg-foreground" />
+						<FeatureItem
+							icon={<FcCancel size={50} />}
+							title="Cancel Anytime"
+							description={details.returnpolicy}
+						/>
+					</ul>
+
+					{ratings?.totalRating === 0 ? (
+						<div className="flex items-center justify-center rounded-lg border border-gray-300 bg-gray-50 p-4">
+							<MdAddCircleOutline size={24} className="mr-2 text-gray-500" />
+							<h3 className="text-gray-700">No ratings for this product</h3>
+							{isLoggedIn && !isAdmin && (
+								<Dialog>
+									<DialogTrigger>
+										<Button variant="outline" className="ml-4">
+											Add Rating
+										</Button>
+									</DialogTrigger>
+									<DialogContent className="sm:max-w-[425px]">
+										<DialogHeader>
+											<DialogTitle>Add Your Rating</DialogTitle>
+										</DialogHeader>
+										<div className="grid gap-4 py-4">
+											<div className="flex items-center justify-center space-x-2">
+												{[1, 2, 3, 4, 5].map((star) => (
+													<button
+														type="button"
+														key={star}
+														onClick={() => setRating(star)}
+														className="rounded text-2xl focus:outline-none"
+													>
+														{star <= rating ? (
+															<StarIcon className="text-yellow-500" />
+														) : (
+															<MdStarOutline className="text-gray-400" />
+														)}
+													</button>
+												))}
+											</div>
+											<textarea
+												placeholder="Add your comment"
+												value={comment}
+												onChange={(e) => setComment(e.target.value)}
+												rows={4}
+												className="w-full rounded border border-gray-300 p-2 focus:outline-none"
+											/>
+										</div>
+										<div className="flex justify-end space-x-2">
+											<DialogTrigger asChild>
+												<Button variant="secondary">Cancel</Button>
+											</DialogTrigger>
+											<Button
+												onClick={handleRatingSubmit}
+												disabled={rating === 0}
+											>
+												Submit
+											</Button>
+										</div>
+									</DialogContent>
+								</Dialog>
+							)}
+						</div>
+					) : (
+						<>
+							{/* {details.ratings?.map((rating: any) => { */}
+							<Reviews values={ratings} key={`${uuidv4()}`} />;{/* })} */}
+						</>
+					)}
+				</div>
+			</div>
+			<div className="my-4 space-y-4">
+				<h2 className="text-sm sm:text-base font-medium md:text-lg">
+					People who bought this item also bought
+				</h2>
+				<RecommendedProducts currentProductId={details?.id} />
 			</div>
 		</section>
 	);

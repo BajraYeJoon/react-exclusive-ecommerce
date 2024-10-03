@@ -45,8 +45,10 @@ const SignInPage = () => {
 				navigate(`/${Routes.Admin}/${Routes.Dashboard}`);
 				toast.success(intl.formatMessage({ id: "signin.adminWelcome" }));
 			} else if (user === "user") {
-				navigate(`/${UserRoutes.Profile}`);
+				// navigate(`/${UserRoutes.Profile}`);
+				navigate("/onboarding");
 				toast.success(intl.formatMessage({ id: "signin.loginSuccess" }));
+				
 			}
 		} catch (error) {
 			console.error("Login error", error);

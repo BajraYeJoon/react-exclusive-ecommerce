@@ -79,10 +79,7 @@ const ProductCard = ({
 	};
 
 	const isFavorite = (id: number) => {
-		return (
-			// Array.isArray(favorites.data) &&
-			favorites.some((item: { id: number }) => item.id === id)
-		);
+		return favorites.some((item: { id: number }) => item.id === id);
 	};
 
 	const { mutate: addToCart } = useIncreaseQuantity();
@@ -101,9 +98,7 @@ const ProductCard = ({
 				<Link to={`/${title?.toLowerCase().split(" ").join("-")}/${id}`}>
 					<img
 						className="h-full w-full object-contain p-2 md:p-4 lg:p-6 transition-opacity duration-300 group-hover:opacity-40"
-						src={
-							image && image[0] ? image[0] : "https://via.placeholder.com/150"
-						}
+						src={image?.[0] ? image[0] : "https://via.placeholder.com/150"}
 						alt={title}
 						loading="lazy"
 					/>
@@ -116,13 +111,9 @@ const ProductCard = ({
 						</span>
 					))}
 
-				<div className="absolute right-4 top-4 flex flex-col gap-2">
+				<div className="absolute right-4 top-4 *:bg-foreground/30 *:flex *:items-center *:justify-center *:cursor-pointer *:rounded-full flex flex-col *:h-6 *:w-6 gap-2 *:md:h-8 *:md:w-8 *:lg:h-7 *:lg:w-7">
 					{!isAdmin && (
-						<button
-							type="button"
-							className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-foreground/20 md:h-8 md:w-8 lg:h-7 lg:w-7"
-							onClick={handleFavoriteClick}
-						>
+						<button type="button" onClick={handleFavoriteClick}>
 							<HeartIcon
 								size={dimension.width < 768 ? 16 : 18}
 								fill={isFavorite(id) ? "red" : "none"}
@@ -131,10 +122,7 @@ const ProductCard = ({
 						</button>
 					)}
 
-					<Link
-						to={`/product/${id}`}
-						className=" h-6 w-6 hidden group-hover:flex items-center justify-center rounded-full bg-foreground/20 md:h-8 md:w-8 lg:h-7 lg:w-7"
-					>
+					<Link to={`/${title}/${id}`}>
 						<EyeIcon size={dimension.width < 768 ? 16 : 18} />
 					</Link>
 				</div>
@@ -165,7 +153,7 @@ const ProductCard = ({
 
 				<div className="flex items-center justify-start gap-3 font-medium">
 					<span className="text-base text-primary">${price}</span>
-					{discountprice && (
+					{!!discountprice && (
 						<span className="text-foreground/40 line-through">
 							{discountprice}
 						</span>

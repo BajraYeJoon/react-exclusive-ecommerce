@@ -1,18 +1,19 @@
 import { useState } from "react";
 
 export interface ProductType {
-	id: number;
-	title: string;
-	price: number;
-	rating: number;
-	image: string;
-	availability: boolean;
-	brand: string;
-	categories: { id: number; name: string }[];
-	onSale: boolean;
-	stock: number;
-	discountprice: number;
-}
+		id: number;
+		title: string;
+		price: number;
+		rating: number;
+		image: string;
+		availability: boolean;
+		brand: string;
+		categories: { id: number; name: string }[];
+		onSale: boolean;
+		stock: number;
+		discountprice: number;
+		description: string;
+	}
 
 export interface FilterOptions {
 	brands: string[];
