@@ -16,96 +16,96 @@ import { useRef } from "react";
 import { useIntl, FormattedMessage } from "react-intl";
 
 const SignInPage = () => {
-  const { login, isLoading } = useAuthContext();
-  const navigate = useNavigate();
-  const recaptcha = useRef<ReCAPTCHA>(null);
-  const intl = useIntl();
-  const {
-    register,
-    handleSubmit,
-    reset: loginFormReset,
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(LoginFormSchema),
-  });
+	const { login, isLoading } = useAuthContext();
+	const navigate = useNavigate();
+	const recaptcha = useRef<ReCAPTCHA>(null);
+	const intl = useIntl();
+	const {
+		register,
+		handleSubmit,
+		reset: loginFormReset,
+	} = useForm<LoginFormData>({
+		resolver: zodResolver(LoginFormSchema),
+	});
 
-  const onSubmit = async (data: LoginFormData) => {
-    const { email, password } = data;
-    const captchaValue = recaptcha?.current?.getValue();
+	const onSubmit = async (data: LoginFormData) => {
+		const { email, password } = data;
+		const captchaValue = recaptcha?.current?.getValue();
 
-    if (!captchaValue) {
-      toast.error(intl.formatMessage({ id: "signin.captchaError" }));
-      return;
-    }
+		if (!captchaValue) {
+			toast.error(intl.formatMessage({ id: "signin.captchaError" }));
+			return;
+		}
 
-    await login({ email, password, loginFormReset });
-    const user = JSON.parse(Cookies.get("user") ?? "{}");
+		await login({ email, password, loginFormReset });
+		const user = JSON.parse(Cookies.get("user") ?? "{}");
 
-    try {
-      if (user === Routes.Admin) {
-        navigate(`/${Routes.Admin}/${Routes.Dashboard}`);
-        toast.success(intl.formatMessage({ id: "signin.adminWelcome" }));
-      } else if (user === "user") {
-        navigate(`/${UserRoutes.Profile}`);
-        toast.success(intl.formatMessage({ id: "signin.loginSuccess" }));
-      }
-    } catch (error) {
-      console.error("Login error", error);
-      const axiosError = error as AxiosError;
-      toast.error(axiosError?.response?.data?.message);
-    }
-  };
+		try {
+			if (user === Routes.Admin) {
+				navigate(`/${Routes.Admin}/${Routes.Dashboard}`);
+				toast.success(intl.formatMessage({ id: "signin.adminWelcome" }));
+			} else if (user === "user") {
+				navigate(`/${UserRoutes.Profile}`);
+				toast.success(intl.formatMessage({ id: "signin.loginSuccess" }));
+			}
+		} catch (error) {
+			console.error("Login error", error);
+			const axiosError = error as AxiosError;
+			toast.error(axiosError?.response?.data?.message);
+		}
+	};
 
-  return (
-    <div className="sign-up-content w-[400px] space-y-8">
-      <h2 className="text-lg lg:text-3xl">
-        <FormattedMessage id="signin.loginToAccount" />
-      </h2>
-      <p className="text-sm lg:text-base">
-        <FormattedMessage id="signin.provideDetails" />
-      </p>
-      <form onSubmit={handleSubmit(onSubmit)} className="w-full">
-        <div className="flex w-full flex-col gap-4">
-          <Input
-            type="text"
-            placeholder={intl.formatMessage({ id: "signin.email" })}
-            {...register("email")}
-          />
+	return (
+		<div className="sign-up-content w-[400px] space-y-8">
+			<h2 className="text-lg lg:text-3xl">
+				<FormattedMessage id="signin.loginToAccount" />
+			</h2>
+			<p className="text-sm lg:text-base">
+				<FormattedMessage id="signin.provideDetails" />
+			</p>
+			<form onSubmit={handleSubmit(onSubmit)} className="w-full">
+				<div className="flex w-full flex-col gap-4">
+					<Input
+						type="text"
+						placeholder={intl.formatMessage({ id: "signin.email" })}
+						{...register("email")}
+					/>
 
-          <Input
-            type="password"
-            placeholder={intl.formatMessage({ id: "signin.password" })}
-            {...register("password")}
-          />
+					<Input
+						type="password"
+						placeholder={intl.formatMessage({ id: "signin.password" })}
+						{...register("password")}
+					/>
 
-          <ReCAPTCHA
-            ref={recaptcha}
-            sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY || ""}
-          />
+					<ReCAPTCHA
+						ref={recaptcha}
+						sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY || ""}
+					/>
 
-          <Button type="submit" className="w-full">
-            {isLoading ? (
-              <CgSpinner className="animate-spin" size={20} />
-            ) : (
-              <FormattedMessage id="signin.loginButton" />
-            )}
-          </Button>
+					<Button type="submit" className="w-full">
+						{isLoading ? (
+							<CgSpinner className="animate-spin" size={20} />
+						) : (
+							<FormattedMessage id="signin.loginButton" />
+						)}
+					</Button>
 
-          <div className="flex justify-between gap-5">
-            <Link to={"/forgot-password"}>
-              <p className="text-sm text-primary underline">
-                <FormattedMessage id="signin.forgotPassword" />
-              </p>
-            </Link>
-            <Link to={"/sign-up"}>
-              <p className="text-sm underline">
-                <FormattedMessage id="signin.dontHaveAccount" />
-              </p>
-            </Link>
-          </div>
-        </div>
-      </form>
-    </div>
-  );
+					<div className="flex justify-between gap-5">
+						<Link to={"/forgot-password"}>
+							<p className="text-sm text-primary underline">
+								<FormattedMessage id="signin.forgotPassword" />
+							</p>
+						</Link>
+						<Link to={"/sign-up"}>
+							<p className="text-sm underline">
+								<FormattedMessage id="signin.dontHaveAccount" />
+							</p>
+						</Link>
+					</div>
+				</div>
+			</form>
+		</div>
+	);
 };
 
 export { SignInPage };

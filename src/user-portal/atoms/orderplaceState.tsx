@@ -1,45 +1,45 @@
 import { atom } from "recoil";
 
 export const orderplaceState = atom<{
-  itemId: any[];
-  totalPrice: number;
-  billingInfo: {
-    firstname: string;
+	itemId: any[];
+	totalPrice: number;
+	billingInfo: {
+		firstname: string;
 
-    lastname: string;
+		lastname: string;
 
-    country: string;
+		country: string;
 
-    streetaddress: string;
+		streetaddress: string;
 
-    postalcode: string;
+		postalcode: string;
 
-    phone: string;
+		phone: string;
 
-    email: string;
-  };
+		email: string;
+	};
 }>({
-  key: "orderplaceState",
+	key: "orderplaceState",
 
-  default: {
-    itemId: [],
+	default: {
+		itemId: [],
 
-    totalPrice: 0,
+		totalPrice: 0,
 
-    billingInfo: {
-      firstname: "",
+		billingInfo: {
+			firstname: "",
 
-      lastname: "",
+			lastname: "",
 
-      country: "",
+			country: "",
 
-      streetaddress: "",
+			streetaddress: "",
 
-      postalcode: "",
+			postalcode: "",
 
-      phone: "",
+			phone: "",
 
-      email: "",
-    },
-  },
+			email: "",
+		},
+	},
 });

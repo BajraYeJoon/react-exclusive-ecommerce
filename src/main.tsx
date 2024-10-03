@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 // import { PostHogProvider } from "posthog-js/react";
@@ -17,9 +17,9 @@ import { languageState } from "./user-portal/atoms/languageState";
 // import * as Sentry from "@sentry/react";
 
 const messages: { [key: string]: Record<string, string> } = {
-  en: en_msg,
-  es: es_msg,
-  np: np_msg,
+	en: en_msg,
+	es: es_msg,
+	np: np_msg,
 };
 
 // const options = {
@@ -38,13 +38,13 @@ const query = new QueryClient();
 // }
 
 const LanguageWrapper = ({ children }: { children: React.ReactNode }) => {
-  const lang = useRecoilValue(languageState);
+	const lang = useRecoilValue(languageState);
 
-  return (
-    <IntlProvider locale={lang} messages={messages[lang]}>
-      {children}
-    </IntlProvider>
-  );
+	return (
+		<IntlProvider locale={lang} messages={messages[lang]}>
+			{children}
+		</IntlProvider>
+	);
 };
 
 // Sentry.init({
@@ -68,23 +68,23 @@ const LanguageWrapper = ({ children }: { children: React.ReactNode }) => {
 // });
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <QueryClientProvider client={query}>
-      {/* <PostHogProvider
+	<React.StrictMode>
+		<QueryClientProvider client={query}>
+			{/* <PostHogProvider
         apiKey="phc_fQcn9SW8lEM635UzO6NIJQwS4OPo2tsakZJriWF44Nx"
         options={options}
       > */}
-      <RecoilRoot>
-        <LanguageWrapper>
-          <AuthProvider>
-            <App />
-            <Analytics />
-            <ReactQueryDevtools initialIsOpen={false} />
-            <Toaster richColors />
-          </AuthProvider>
-        </LanguageWrapper>
-      </RecoilRoot>
-      {/* </PostHogProvider> */}
-    </QueryClientProvider>
-  </React.StrictMode>,
+			<RecoilRoot>
+				<LanguageWrapper>
+					<AuthProvider>
+						<App />
+						<Analytics />
+						<ReactQueryDevtools initialIsOpen={false} />
+						<Toaster richColors />
+					</AuthProvider>
+				</LanguageWrapper>
+			</RecoilRoot>
+			{/* </PostHogProvider> */}
+		</QueryClientProvider>
+	</React.StrictMode>,
 );

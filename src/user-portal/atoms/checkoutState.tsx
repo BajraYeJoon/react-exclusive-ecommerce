@@ -8,11 +8,11 @@ import { atom } from "recoil";
 // });
 
 export const checkoutState = atom({
-  key: "checkoutState",
-  default: {
-    cartItems: [],
-    cartTotal: 0,
-    subTotal: 0,
-    // effects_UNSTABLE: [persistAtom],
-  },
+	key: "checkoutState",
+	default: {
+		cartItems: [],
+		cartTotal: 0,
+		subTotal: 0,
+		// effects_UNSTABLE: [persistAtom],
+	},
 });

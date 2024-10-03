@@ -23,16 +23,16 @@
 //     const getRecommendations = () => {
 //       if (!allProducts) return;
 
-//      
-//      
+//
+//
 
 //       const currentProduct = allProducts.find((p) => p.id === currentProductId);
 //       if (!currentProduct) {
-//        
+//
 //         return;
 //       }
 
-//      
+//
 
 //       // Get products in the same categories
 //       const sameCategories = allProducts.filter(
@@ -47,7 +47,7 @@
 //           ),
 //       );
 
-//      
+//
 
 //       // Sort by number of matching categories and take top 3
 //       const topRecommendations = sameCategories
@@ -62,7 +62,7 @@
 //         .sort((a, b) => b.matchingCategories - a.matchingCategories)
 //         .slice(0, 3);
 
-//      
+//
 
 //       setRecommendations(topRecommendations);
 //     };

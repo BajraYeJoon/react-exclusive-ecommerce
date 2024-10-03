@@ -1,7 +1,7 @@
 import Analytics from "../analytics/Analytics";
 
 const Dashboard = () => {
-  return <Analytics />;
+	return <Analytics />;
 };
 
 export default Dashboard;

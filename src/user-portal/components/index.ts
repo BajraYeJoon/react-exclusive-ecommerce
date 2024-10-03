@@ -18,5 +18,4 @@ export { default as GeneralInfo } from "./profile/generalInfo";
 export { default as Orders } from "./profile/orderInfo";
 export { default as PaymentInfo } from "./profile/paymentInfo";
 export { default as ProductFilters } from "./filters/ProductFilters";
-export { default as BrandZone} from './brandZone/BrandZone'
-
+export { default as BrandZone } from "./brandZone/BrandZone";
