@@ -17,13 +17,13 @@ export const verifyOtp = async (data: any) => {
 		);
 
 		if (response.status === 200) {
-			toast.success("Password reset successfully");
-			return response.data;
-		} else {
-			toast.error("Failed to reset password");
+      toast.success("Password reset successfully");
+      return response.data;
+    }
+    toast.error("Failed to reset password");
 
-			return null;
-		}
+    return null;
+		
 	} catch (error) {
 		toast.error("Failed to reset password");
 		console.error(error);

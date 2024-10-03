@@ -1,4 +1,3 @@
-import React from "react";
 import { Mail, Phone, User, Calendar } from "lucide-react";
 import { Card, CardContent } from "../../../../common/ui/card";
 import {
@@ -24,7 +23,7 @@ interface Props {
 	info: UserInfo;
 }
 
-export default function UserProfileCard({ info }: Props) {
+export default function UserProfileCard({ info }: Readonly<Props>) {
 	return (
 		<Card className="relative overflow-hidden">
 			<div className="h-32 bg-gradient-to-r from-cyan-500 to-blue-500" />

@@ -146,6 +146,7 @@ const AdminLayout = () => {
 
 				<div className="fixed bottom-5 right-5">
 					<button
+						type="button"
 						onClick={startTour}
 						className="rounded-lg bg-blue-500 px-4 py-2 text-white shadow-lg hover:bg-blue-600"
 					>

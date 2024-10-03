@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ChevronsUpDown, Check, X } from "lucide-react";
 import { Input } from "../../../common/ui/input";
 
@@ -81,7 +81,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
 						value={searchTerm}
 						onChange={(e) => setSearchTerm(e.target.value)}
 					/>
-					<ul className="max-h-72 overflow-auto" role="listbox">
+					<ul className="max-h-72 overflow-auto">
 						{filteredCategories.length === 0 ? (
 							<li className="px-4 py-2 text-gray-500">No category found.</li>
 						) : (
@@ -90,6 +90,11 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
 									key={category.id}
 									className="flex cursor-pointer items-center px-4 py-2 hover:bg-gray-100"
 									onClick={() => handleCategoryToggle(category.id)}
+									onKeyDown={(e) => {
+										if (e.key === "Enter") {
+											handleCategoryToggle(category.id);
+										}
+									}}
 								>
 									<Check
 										className={`mr-2 h-4 w-4 ${

@@ -174,7 +174,7 @@ export default function AddNewProductDialog() {
 			};
 			console.error("Error submitting form:", axiosError.response || error);
 			setError(
-				axiosError.response?.data?.message ||
+				axiosError.response?.data?.message ??
 					"Failed to create product. Please try again.",
 			);
 			toast.error("Failed to create product. Please try again later.");

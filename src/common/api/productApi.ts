@@ -3,23 +3,23 @@ import { handleRequest } from "./handleRequest";
 
 export const fetchSalesProduct = async () => {
 	return handleRequest(
-		() => Axios.get(`/sale`).then((res) => res.data.data),
-		"Error fetching sales product",
-	);
+    () => Axios.get("/sale").then((res) => res.data.data),
+    "Error fetching sales product",
+  );
 };
 
 export const fetchAllProducts = async () => {
 	return handleRequest(
-		() => Axios.get(`/product/all`).then((res) => res.data),
-		"Error fetching all products",
-	);
+    () => Axios.get("/product/all").then((res) => res.data),
+    "Error fetching all products",
+  );
 };
 
 export const fetchNewArrivals = async () => {
 	return handleRequest(
-		() => Axios.get(`/product/newarrival`).then((res) => res.data),
-		"Error fetching new arrivals",
-	);
+    () => Axios.get("/product/newarrival").then((res) => res.data),
+    "Error fetching new arrivals",
+  );
 };
 
 export const fetchProductsBySearch = async (search: string) => {
@@ -32,9 +32,9 @@ export const fetchProductsBySearch = async (search: string) => {
 
 export const fetchBestSellingProducts = async () => {
 	return handleRequest(
-		() => Axios.get(`/product/bestselling`).then((res) => res.data.data),
-		"Error fetching best selling products",
-	);
+    () => Axios.get("/product/bestselling").then((res) => res.data.data),
+    "Error fetching best selling products",
+  );
 };
 
 export const fetchProductDetails = async (id: string) => {

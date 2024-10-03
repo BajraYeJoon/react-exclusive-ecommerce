@@ -36,7 +36,7 @@ const Header = () => {
 
 					<DropdownMenu>
 						<DropdownMenuTrigger>
-							<div className="profile-badge h-6 w-6 cursor-pointer overflow-hidden rounded-full bg-foreground/35"></div>
+							<div className="profile-badge h-6 w-6 cursor-pointer overflow-hidden rounded-full bg-foreground/35" />
 						</DropdownMenuTrigger>
 						<DropdownMenuContent>
 							<DropdownMenuLabel>My Account</DropdownMenuLabel>

@@ -1,8 +1,8 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
 	useReactTable,
-	ColumnDef,
+	type ColumnDef,
 	getCoreRowModel,
 	getPaginationRowModel,
 	getSortedRowModel,
@@ -36,7 +36,6 @@ import uuidv4 from "../../../common/lib/utils/uuid";
 import AddNewProductDialog from "./AddNewProductDialog";
 import UpdateProductForm from "./UpdateP";
 import ConfirmationDialog from "../confirmation/ConfirmationDialog";
-// import { useSearchParams } from "react-router-dom";
 
 export const ProductsList = () => {
 	const [flashItem, setFlashItem] = useRecoilState<number[]>(flashSaleState);
@@ -75,9 +74,9 @@ export const ProductsList = () => {
 		setFlashItem((prev: number[]) => {
 			if (prev.includes(productId)) {
 				return prev.filter((id) => id !== productId);
-			} else {
-				return [...prev, productId];
 			}
+			return [...prev, productId];
+			
 		});
 	};
 
@@ -163,11 +162,7 @@ export const ProductsList = () => {
 						</Dialog>
 
 						<ConfirmationDialog
-							triggerComponent={
-								<>
-									<FaTrash className="text-primary" />
-								</>
-							}
+							triggerComponent={<FaTrash className="text-primary" />}
 							title="Are you sure you want to delete this product?"
 							description="This action cannot be undone."
 							onConfirm={() => handleDelete(row.original.id)}

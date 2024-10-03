@@ -7,13 +7,6 @@ import {
 } from "../../../../common/ui/dialog";
 import UserDialogContent from "../userDetail/UserDialogContent";
 
-// interface NewUsersProps {
-//   name: string;
-//   email: string;
-//   id: number;
-//   // avatarlink: string;
-// }
-
 const NewUsers = ({ values }: any) => {
 	return (
 		<li className="py-3 sm:py-4">
@@ -22,7 +15,7 @@ const NewUsers = ({ values }: any) => {
 					<img
 						className="h-8 w-8 rounded-full"
 						src="https://i.pravatar.cc/300"
-						alt="Neil image"
+						alt="avatar"
 					/>
 				</div>
 				<div className="ms-4 min-w-0 flex-1">
