@@ -1,5 +1,5 @@
 import { Label } from "../../../common/ui/label";
-import { FilterOptions, SortOption } from "../../hooks/useProductFilter";
+import type { FilterOptions, SortOption } from "../../hooks/useProductFilter";
 
 interface FilterOptionsProps {
 	filterOptions: FilterOptions;

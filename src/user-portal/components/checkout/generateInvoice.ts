@@ -1,5 +1,5 @@
 import jsPDF from "jspdf";
-import { OrderData } from "./Checkout";
+import type { OrderData } from "./Checkout";
 import autoTable from "jspdf-autotable";
 import { toast } from "sonner";
 

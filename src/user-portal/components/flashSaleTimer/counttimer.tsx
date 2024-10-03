@@ -57,16 +57,16 @@ const CountdownTimer = ({ targetDate }: { targetDate: Date }) => {
 
 	if (days + hours + minutes + seconds <= 0) {
 		return <ExpiredNotice />;
-	} else {
-		return (
-			<ShowCounter
-				days={days}
-				hours={hours}
-				minutes={minutes}
-				seconds={seconds}
-			/>
-		);
 	}
+	return (
+		<ShowCounter
+			days={days}
+			hours={hours}
+			minutes={minutes}
+			seconds={seconds}
+		/>
+	);
+	
 };
 
 export default CountdownTimer;

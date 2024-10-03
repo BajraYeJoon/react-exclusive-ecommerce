@@ -1,6 +1,6 @@
 import { Button } from "../../../common/ui/button";
 import { Card, CardContent } from "../../../common/ui/card";
-import { CartItem } from "./Checkout";
+import type { CartItem } from "./Checkout";
 
 type CheckoutValues = {
 	cartItems: CartItem[];

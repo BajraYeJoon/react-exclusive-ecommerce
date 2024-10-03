@@ -3,16 +3,16 @@ import { Axios } from "../../common/lib/axiosInstance";
 
 export const fetchCart = async () => {
 	return handleRequest(
-		() => Axios.get(`/cart`).then((res) => res.data.data),
-		"Error fetching cart",
-	);
+    () => Axios.get("/cart").then((res) => res.data.data),
+    "Error fetching cart",
+  );
 };
 
 export const deleteAllCartItems = async () => {
 	return handleRequest(
-		() => Axios.delete(`/cart/deleteall`).then((res) => res.data),
-		"Error deleting all cart items",
-	);
+    () => Axios.delete("/cart/deleteall").then((res) => res.data),
+    "Error deleting all cart items",
+  );
 };
 
 export const modifyQuantityInCart = async (id: number, type: string) => {

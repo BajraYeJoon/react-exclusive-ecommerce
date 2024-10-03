@@ -1,6 +1,6 @@
 import { PagesHeader } from "../../components";
 import { Button } from "../../../common/ui/button";
-import { NewArrivalsProductProps } from "./ArrivalsPage";
+import type { NewArrivalsProductProps } from "./ArrivalsPage";
 import { useQuery } from "@tanstack/react-query";
 import { fetchNewArrivals } from "../../../common/api/productApi";
 import uuidv4 from "../../../common/lib/utils/uuid";
@@ -33,9 +33,9 @@ const ArrivalProductsGrid = () => {
 		>
 			<div className="w-full space-y-2 md:space-y-4">
 				<div className="space-y-2 text-background">
-					<div className="h-6 w-3/4 rounded-md bg-gray-300"></div>
-					<div className="h-4 w-1/2 rounded-md bg-gray-300"></div>
-					<div className="h-8 w-1/4 rounded-md bg-gray-300"></div>
+					<div className="h-6 w-3/4 rounded-md bg-gray-300" />
+					<div className="h-4 w-1/2 rounded-md bg-gray-300" />
+					<div className="h-8 w-1/4 rounded-md bg-gray-300" />
 				</div>
 			</div>
 		</div>

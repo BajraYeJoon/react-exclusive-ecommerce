@@ -1,5 +1,9 @@
 import { useEffect } from "react";
-import { useForm, SubmitHandler, UseFormRegister } from "react-hook-form";
+import {
+	useForm,
+	type SubmitHandler,
+	type UseFormRegister,
+} from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRecoilValue, useSetRecoilState, useRecoilState } from "recoil";

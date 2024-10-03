@@ -28,9 +28,9 @@ const Onboarding = () => {
 
 			if (checked) {
 				return alreadyCategorySelect.filter((id) => id !== categoryId);
-			} else {
-				return [...alreadyCategorySelect, categoryId];
 			}
+			return [...alreadyCategorySelect, categoryId];
+			
 		});
 	};
 

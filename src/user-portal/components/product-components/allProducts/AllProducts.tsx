@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState, useMemo } from "react";
 import { fetchAllProducts } from "../../../../common/api/productApi";
 import {
-	ProductType,
+	type ProductType,
 	useProductFilters,
 } from "../../../hooks/useProductFilter";
 import { ProductCardSkeleton } from "../../../../common/components";

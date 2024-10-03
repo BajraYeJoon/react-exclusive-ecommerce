@@ -17,14 +17,14 @@ export const deleteFavorites = async (id: number) => {
 
 export const fetchFavorites = async () => {
 	return handleRequest(
-		() => Axios.get(`/wishlist`).then((res) => res.data),
-		"Error fetching favorites",
-	);
+    () => Axios.get("/wishlist").then((res) => res.data),
+    "Error fetching favorites",
+  );
 };
 
 export const deleteAllFavorites = async () => {
 	return handleRequest(
-		() => Axios.delete(`/wishlist/deleteall`).then((res) => res.data),
-		"Error deleting all favorites",
-	);
+    () => Axios.delete("/wishlist/deleteall").then((res) => res.data),
+    "Error deleting all favorites",
+  );
 };

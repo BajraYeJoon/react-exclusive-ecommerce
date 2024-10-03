@@ -15,7 +15,10 @@ const Orders = () => {
 						<p className="text-sm text-gray-600">Placed on: {order.date}</p>
 						<p className="text-sm">Status: {order.status}</p>
 						<p className="text-sm">Total: ${order.total.toFixed(2)}</p>
-						<button className="mt-2 rounded-md border border-gray-300 px-3 py-1 text-sm hover:bg-gray-100 focus:outline-none focus:ring-2">
+						<button
+							type="button"
+							className="mt-2 rounded-md border border-gray-300 px-3 py-1 text-sm hover:bg-gray-100 focus:outline-none focus:ring-2"
+						>
 							View Details
 						</button>
 					</div>
