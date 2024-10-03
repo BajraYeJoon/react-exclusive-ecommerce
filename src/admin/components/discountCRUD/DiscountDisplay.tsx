@@ -20,7 +20,7 @@ import { Button } from "../../../common/ui/button";
 import ConfirmationDialog from "../confirmation/ConfirmationDialog";
 import { Axios } from "../../../common/lib/axiosInstance";
 import { formatDate } from "../../lib/utils/formatDate";
-import { Coupon, DiscountDisplayProps } from "./types";
+import type { Coupon, DiscountDisplayProps } from "./types";
 
 export default function DiscountDisplay({
 	handleEdit,
