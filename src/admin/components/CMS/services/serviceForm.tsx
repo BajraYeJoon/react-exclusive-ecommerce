@@ -1,5 +1,5 @@
-import { SubmitHandler, useForm } from "react-hook-form";
-import { Service, ServiceFormInputs } from "./serviceMain";
+import { type SubmitHandler, useForm } from "react-hook-form";
+import type { Service, ServiceFormInputs } from "./serviceMain";
 import { Label } from "../../../../common/ui/label";
 import { Input } from "../../../../common/ui/input";
 import { Button } from "../../../../common/ui/button";

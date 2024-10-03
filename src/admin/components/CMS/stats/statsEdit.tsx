@@ -1,5 +1,5 @@
 import { useFieldArray, useForm } from "react-hook-form";
-import { Stat } from "./statsMain";
+import type { Stat } from "./statsMain";
 import { Input } from "../../../../common/ui/input";
 import { Button } from "../../../../common/ui/button";
 

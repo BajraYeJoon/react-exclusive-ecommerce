@@ -1,6 +1,6 @@
 import { Button } from "../../../../common/ui/button";
 import { Card, CardContent, CardFooter } from "../../../../common/ui/card";
-import { Stat } from "./statsMain";
+import type { Stat } from "./statsMain";
 import { PencilIcon, TrashIcon } from "lucide-react";
 
 interface StatsDisplayProps {

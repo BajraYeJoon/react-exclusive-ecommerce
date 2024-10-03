@@ -1,5 +1,5 @@
-import { useMutation } from "@tanstack/react-query";
-import { Banner } from "./Banner";
+import type { useMutation } from "@tanstack/react-query";
+import type { Banner } from "./Banner";
 import ConfirmationDialog from "../confirmation/ConfirmationDialog";
 import { Trash2Icon } from "lucide-react";
 

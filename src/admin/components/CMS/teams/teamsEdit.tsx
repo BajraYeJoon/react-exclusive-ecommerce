@@ -1,5 +1,5 @@
-import { SubmitHandler, useForm } from "react-hook-form";
-import { Employee, EmployeeFormInputs } from "./teamsMain";
+import { type SubmitHandler, useForm } from "react-hook-form";
+import type { Employee, EmployeeFormInputs } from "./teamsMain";
 import { Label } from "../../../../common/ui/label";
 import { Input } from "../../../../common/ui/input";
 import { Button } from "../../../../common/ui/button";
@@ -85,7 +85,7 @@ export default function EmployeeForm({
 					<Label>Current Image</Label>
 					<img
 						src={editingEmployee.image}
-						alt="Current Image"
+						alt="Current Preview of the emloye"
 						className="mt-1 h-20 w-20 rounded-full object-cover"
 					/>
 				</div>
@@ -95,7 +95,7 @@ export default function EmployeeForm({
 					<Label>Image Preview</Label>
 					<img
 						src={URL.createObjectURL(imageFile[0])}
-						alt="Image Preview"
+						alt="Preview of the emloyee"
 						className="mt-1 h-20 w-20 rounded-full object-cover"
 					/>
 				</div>

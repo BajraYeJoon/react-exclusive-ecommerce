@@ -19,7 +19,7 @@ import {
 	TableRow,
 } from "../../../common/ui/table";
 import {
-	ColumnDef,
+	type ColumnDef,
 	flexRender,
 	getCoreRowModel,
 	getFilteredRowModel,

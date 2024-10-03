@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { type SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "../../../common/ui/label";
 import { Input } from "../../../common/ui/input";
@@ -13,12 +13,12 @@ import {
 	DialogTrigger,
 } from "../../../common/ui/dialog";
 import { Axios } from "../../../common/lib/axiosInstance";
-import { AxiosError } from "axios";
+import type { AxiosError } from "axios";
 import { Loading } from "../../../user-portal/site";
 import DiscountDisplay from "./DiscountDisplay";
 import { toast } from "sonner";
 import { PlusCircle } from "lucide-react";
-import { Coupon } from "../../../common/components/discount/DiscountCard";
+import type { Coupon } from "../../../common/components/discount/DiscountCard";
 import { couponSchema } from "../../schema/discountSchema";
 
 export default function DiscountCRUD() {
@@ -108,14 +108,14 @@ export default function DiscountCRUD() {
 
 	const handleEdit = (coupon: Coupon) => {
 		setEditingCoupon(coupon);
-		Object.keys(coupon).forEach((key) => {
+		for (const key of Object.keys(coupon)) {
 			const couponKey = key as keyof Coupon;
 			if (couponKey === "startDate" || couponKey === "expirationDate") {
 				setValue(couponKey, coupon[couponKey]?.split("T")[0]);
 			} else {
 				setValue(couponKey, coupon[couponKey]);
 			}
-		});
+		}
 		setIsDialogOpen(true);
 	};
 

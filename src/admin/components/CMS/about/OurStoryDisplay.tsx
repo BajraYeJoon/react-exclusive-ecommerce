@@ -1,4 +1,4 @@
-import { OurStoryContent } from "./aboutMain";
+import type { OurStoryContent } from "./aboutMain";
 
 interface OurStoryDisplayProps {
 	content: OurStoryContent;

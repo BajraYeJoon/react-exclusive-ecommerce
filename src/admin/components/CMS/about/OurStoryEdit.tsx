@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { OurStoryContent } from "./aboutMain";
+import type { OurStoryContent } from "./aboutMain";
 import { Input } from "../../../../common/ui/input";
 import { Button } from "../../../../common/ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -13,7 +13,10 @@ interface OurStoryEditProps {
 	onCancel: () => void;
 }
 
-export function OurStoryEdit({ content, onCancel }: OurStoryEditProps) {
+export function OurStoryEdit({
+	content,
+	onCancel,
+}: Readonly<OurStoryEditProps>) {
 	const {
 		register,
 		handleSubmit,
@@ -105,7 +108,7 @@ export function OurStoryEdit({ content, onCancel }: OurStoryEditProps) {
 					<div className="mt-1">
 						<img
 							src={preview?.toString() ?? ""}
-							alt="Current Image"
+							alt="Preview Images"
 							className="mb-2 h-12 w-12"
 						/>
 						<input

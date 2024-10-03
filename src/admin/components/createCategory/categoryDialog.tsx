@@ -13,7 +13,7 @@ import { Label } from "../../../common/ui/label";
 import { Input } from "../../../common/ui/input";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Axios } from "../../../common/lib/axiosInstance";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { type FieldValues, type SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 export const CategoryDialog = () => {

@@ -81,7 +81,7 @@ export default function Stats() {
 	});
 
 	const onSubmit = (data: Stat) => {
-		if (currentStat && currentStat.id) {
+		if (currentStat?.id) {
 			updateMutation.mutate({ ...currentStat, ...data });
 		} else {
 			addMutation.mutate(data);
