@@ -30,12 +30,11 @@ const RecommendedProducts = ({
 						currentProduct.categories.some(
 							(currentCat: { id: number; name: string }) =>
 								currentCat.id === cat.id,
-							console.log(cat, "cart"),
 						),
 					),
 			);
 
-			const topRecommendations = sameCategories.slice(0, 3);
+			const topRecommendations = sameCategories.slice(0, 5);
 
 			setRecommendations(topRecommendations);
 		};

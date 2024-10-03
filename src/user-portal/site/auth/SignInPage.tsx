@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
-import { LoginFormData } from "../../schemas/types";
+import type { LoginFormData } from "../../schemas/types";
 import { LoginFormSchema } from "../../schemas/zodSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../../../common/ui/button";
-import { AxiosError, useAuthContext } from "../../context/useAuthContext";
+import { type AxiosError, useAuthContext } from "../../context/useAuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
@@ -45,11 +45,15 @@ const SignInPage = () => {
 				navigate(`/${Routes.Admin}/${Routes.Dashboard}`);
 				toast.success(intl.formatMessage({ id: "signin.adminWelcome" }));
 			} else if (user === "user") {
-				// navigate(`/${UserRoutes.Profile}`);
-				navigate("/onboarding");
-				toast.success(intl.formatMessage({ id: "signin.loginSuccess" }));
-				
+				if (localStorage.getItem("categories") !== null) {
+					navigate(`/${UserRoutes.Profile}`);
+				} else {
+					navigate("/onboarding");
+				}
 			}
+			toast.success(intl.formatMessage({ id: "signin.loginSuccess" }));
+				
+			
 		} catch (error) {
 			console.error("Login error", error);
 			const axiosError = error as AxiosError;

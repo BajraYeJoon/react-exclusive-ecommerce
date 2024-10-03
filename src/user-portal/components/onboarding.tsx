@@ -1,11 +1,11 @@
 import { DialogDescription } from "@radix-ui/react-dialog";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { fetchCategories } from "../../common/api/categoryApi";
 import { Dialog, DialogContent, DialogHeader } from "../../common/ui/dialog";
 import { Button } from "../../common/ui/button";
-import { use } from "marked";
 import { useQuery } from "@tanstack/react-query";
+import { UserRoutes } from "../utils/userLinks";
 
 interface Category {
 	id: string;
@@ -15,6 +15,7 @@ interface Category {
 const Onboarding = () => {
 	const [open, setOpen] = useState(true);
 	const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+	const navigate = useNavigate();
 
 	const { data: categories } = useQuery({
 		queryKey: ["categories"],
@@ -34,11 +35,11 @@ const Onboarding = () => {
 	};
 
 	const handleClick = () => {
-		setSelectedCategories(selectedCategories);
+		localStorage.setItem("categories", JSON.stringify(selectedCategories));
 		setOpen(false);
+		navigate(`/${UserRoutes.Profile}`);
 	};
 
-	useEffect(() => {}, []);
 
 	return (
 		<Dialog open={open} onOpenChange={() => {}}>
@@ -47,7 +48,7 @@ const Onboarding = () => {
 				<DialogDescription className="flex flex-wrap gap-4">
 					<h2>Choose some categories to get started</h2>
 					<div className="flex flex-wrap gap-2">
-						{categories?.slice(0, 10).map((category) => (
+						{categories?.slice(0, 10).map((category: Category) => (
 							<Button
 								key={category.id}
 								variant={
@@ -62,9 +63,7 @@ const Onboarding = () => {
 						))}
 					</div>
 				</DialogDescription>
-				<Link to="/">
-					<Button onClick={handleClick}>Let's go</Button>
-				</Link>
+				<Button onClick={handleClick}>Let's go</Button>
 			</DialogContent>
 		</Dialog>
 	);

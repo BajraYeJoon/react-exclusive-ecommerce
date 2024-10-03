@@ -12,7 +12,7 @@ import {
 import { ProtectedRoute } from "../user-portal/components";
 import EmailVerification from "../user-portal/components/email/Verification";
 import VerifyPayment from "../user-portal/components/VerifyPayment";
-import { JSX } from "react/jsx-runtime";
+import type { JSX } from "react/jsx-runtime";
 import Onboarding from "../user-portal/components/onboarding";
 
 // Authentication Routes
@@ -208,7 +208,7 @@ export const userRoutes = [
 			return { Component: AuthLayout };
 		},
 		loader: () =>
-			Cookies.get("accesstoken") ? redirect(UserRoutes.Profile) : null,
+			Cookies.get("access_token") ? redirect(UserRoutes.Profile) : null,
 		children: authRoutes,
 	},
 	...profileRoutes,
