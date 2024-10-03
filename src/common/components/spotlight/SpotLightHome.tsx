@@ -12,7 +12,7 @@ export const SpotLightHome = () => {
 							alt={spotlight.brand}
 							className="h-full w-full object-cover object-top"
 						/>
-						<div className="absolute bottom-0 left-0 right-0 h-full bg-gradient-to-t from-black to-transparent opacity-55"></div>
+						<div className="absolute bottom-0 left-0 right-0 h-full bg-gradient-to-t from-black to-transparent opacity-55" />
 						<h3 className="absolute bottom-0 left-0 right-0 flex justify-center p-1 text-[8px] font-extralight tracking-wider text-white md:text-sm">
 							{spotlight.brand}
 						</h3>

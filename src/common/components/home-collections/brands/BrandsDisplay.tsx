@@ -63,7 +63,7 @@ const BrandsDisplay = ({ brandName, slideDelay }: BrandSwiperProps) => {
 							</div>
 						</Link>
 
-						<div className="absolute bottom-0 left-0 right-0 h-full bg-gradient-to-t from-gray-600 to-transparent opacity-55"></div>
+						<div className="absolute bottom-0 left-0 right-0 h-full bg-gradient-to-t from-gray-600 to-transparent opacity-55" />
 					</SwiperSlide>
 				))}
 			</Swiper>

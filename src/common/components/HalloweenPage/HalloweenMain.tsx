@@ -23,7 +23,7 @@ const HalloweenMain = () => {
 		<section className="halloween-bg">
 			<div className="relative flex flex-col gap-4 py-4">
 				<div className="halloween-collections-container grid h-[150px] w-full grid-cols-[2fr_0.8fr] gap-4 *:rounded-lg md:h-[300px] lg:h-[600px]">
-					<div className="relative w-full overflow-hidden bg-[url('https://res.cloudinary.com/dw55twddi/image/upload/v1727779305/exclusive/public/halloween/hall_cvnjgs.webp')] bg-cover bg-top bg-no-repeat"></div>
+					<div className="relative w-full overflow-hidden bg-[url('https://res.cloudinary.com/dw55twddi/image/upload/v1727779305/exclusive/public/halloween/hall_cvnjgs.webp')] bg-cover bg-top bg-no-repeat" />
 					<div className="relative w-full overflow-hidden bg-[url('https://res.cloudinary.com/dw55twddi/image/upload/v1727779304/exclusive/public/halloween/hall-2_t7ffce.webp')] bg-cover bg-top bg-no-repeat">
 						<div className="absolute left-16 top-16 hidden flex-col items-center justify-center gap-3 md:flex">
 							<p className="font-creepster text-2xl">Halloween</p>
@@ -65,7 +65,7 @@ const HalloweenMain = () => {
 
 					{/* Banner */}
 					<div className="relative h-[150px] w-full overflow-hidden rounded-lg bg-[url('https://res.cloudinary.com/dw55twddi/image/upload/v1727779305/exclusive/public/halloween/save_e6dkku.webp')] bg-cover bg-top bg-no-repeat">
-						<div className="absolute bottom-0 left-0 right-0 h-full bg-gradient-to-r from-gray-900 to-transparent opacity-55"></div>
+						<div className="absolute bottom-0 left-0 right-0 h-full bg-gradient-to-r from-gray-900 to-transparent opacity-55" />
 						<div className="absolute left-2 top-8 space-y-3 px-3">
 							<h1 className="text-left text-sm font-bold leading-none tracking-wider text-white sm:text-base md:text-xl md:leading-10 lg:text-3xl">
 								Save Big on Halloween

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../ui/button";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { type FieldValues, type SubmitHandler, useForm } from "react-hook-form";
 import { Input } from "../../ui/input";
 import { sendOtp, verifyOtp } from "../../api/forgotPassword";
 import { useRecoilValue } from "recoil";

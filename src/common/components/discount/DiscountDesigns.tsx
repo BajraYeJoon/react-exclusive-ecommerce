@@ -1,5 +1,5 @@
 import { Calendar, Clock, Gift } from "lucide-react";
-import { Coupon, CouponProps } from "./DiscountCard";
+import type { Coupon, CouponProps } from "./DiscountCard";
 
 const CouponValue = ({ coupon }: { coupon: Coupon }) => (
 	<span className="text-lg font-medium md:text-3xl">
@@ -19,19 +19,16 @@ const CopyButton = ({
 	startDate: string;
 }) => (
 	<button
+		type="button"
 		onClick={onClick}
 		className="rounded-full bg-primary px-4 py-2 text-[8px] font-light text-background transition-colors hover:bg-red-500/75 sm:text-xs"
 	>
-		{
-			<>
-				{new Date(startDate).toLocaleDateString() ===
-				new Date().toLocaleDateString() ? (
-					<span>Coming Soon!!</span>
-				) : (
-					<>{isCopied ? "Copied!" : "Copy Code"}</>
-				)}
-			</>
-		}
+		{new Date(startDate).toLocaleDateString() ===
+		new Date().toLocaleDateString() ? (
+			<span>Coming Soon!!</span>
+		) : (
+			<>{isCopied ? "Copied!" : "Copy Code"}</>
+		)}
 	</button>
 );
 

@@ -5,7 +5,7 @@ import useWindow from "../../lib/useWindow";
 const ProductCardSkeleton = () => {
 	const { dimension } = useWindow();
 
-	let skeletonCount;
+	let skeletonCount: number;
 	if (dimension.width > 1024) {
 		skeletonCount = 8;
 	} else if (dimension.width > 768) {
@@ -24,12 +24,12 @@ const ProductCardSkeleton = () => {
 					<div className="mb-4 flex h-32 items-center justify-center rounded bg-gray-300 md:h-48">
 						<ImageIcon className="h-10 w-10 text-gray-200" />
 					</div>
-					<div className="mb-2.5 h-2 rounded-full bg-gray-200"></div>
-					<div className="mb-2.5 h-2 rounded-full bg-gray-200"></div>
+					<div className="mb-2.5 h-2 rounded-full bg-gray-200" />
+					<div className="mb-2.5 h-2 rounded-full bg-gray-200" />
 
 					<div>
-						<div className="mb-2 h-2.5 w-20 rounded-full bg-gray-200"></div>
-						<div className="h-2 w-20 rounded-full bg-gray-200"></div>
+						<div className="mb-2 h-2.5 w-20 rounded-full bg-gray-200" />
+						<div className="h-2 w-20 rounded-full bg-gray-200" />
 					</div>
 					<span className="sr-only">Loading...</span>
 				</div>
