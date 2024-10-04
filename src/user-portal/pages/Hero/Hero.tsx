@@ -4,11 +4,18 @@ import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "../../../common/ui/skeleton";
 import { fetchCategories } from "../../../common/api/categoryApi";
 import uuidv4 from "../../../common/lib/utils/uuid";
+import { motion } from "framer-motion";
 interface Category {
 	id: number;
 	name: string;
 	subcategories: string[];
 }
+
+const FADE_DOWN_ANIMATION_VARIANTS = {
+	hidden: { opacity: 0, y: -10 },
+	show: { opacity: 1, y: 0, transition: { type: "spring" } },
+};
+
 
 const Hero = () => {
 	const { data: heroCategoriesData, isLoading } = useQuery({
@@ -32,20 +39,38 @@ const Hero = () => {
 						))}
 					</div>
 				) : (
-					<ul className="flex flex-col gap-3 font-medium tracking-tighter">
+					<motion.ul
+						className="flex flex-col gap-3 font-medium tracking-tighter"
+						initial="hidden"
+						animate="show"
+						viewport={{ once: true }}
+						variants={{
+							show: {
+								transition: {
+									staggerChildren: 0.1,
+								},
+							},
+						}}
+					>
 						{heroCategories?.map((category: Category) => (
-							<li key={category?.id} className="group relative cursor-pointer">
-								<div className="flex items-center justify-between">
-									<Link to={`/category/${category?.name}/${category?.id}`}>
-										<h3 className="hover:font-bold">{category?.name}</h3>
-									</Link>
-								</div>
-							</li>
+							<motion.li
+								key={category?.id}
+								className="group relative cursor-pointer"
+							>
+								<Link
+									to={`/category/${category?.name}/${category?.id}`}
+									className="flex items-center justify-between"
+								>
+									<motion.h3 variants={FADE_DOWN_ANIMATION_VARIANTS}>
+										{category?.name}
+									</motion.h3>
+								</Link>
+							</motion.li>
 						))}
-					</ul>
+					</motion.ul>
 				)}
 			</aside>
-			<div className="hidden min-h-full w-px bg-foreground/20 lg:block"></div>
+			<div className="hidden min-h-full w-px bg-foreground/20 lg:block" />
 
 			<Carousel />
 		</section>

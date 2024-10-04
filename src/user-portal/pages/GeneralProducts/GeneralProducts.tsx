@@ -5,12 +5,11 @@ import { fetchAllProducts } from "../../../common/api/productApi";
 import ProductCardSkeleton from "../../../common/components/productCardSkeleton/ProductCardSkeleton";
 import uuidv4 from "../../../common/lib/utils/uuid";
 import { Link } from "react-router-dom";
-const GeneralProducts = () => {
-	const {
-		data: generalProducts,
+import { motion } from "framer-motion";
+import { containerVariants } from "../../../common/lib/utils/motionVariants";
 
-		isLoading,
-	} = useQuery({
+const GeneralProducts = () => {
+	const { data: generalProducts, isLoading } = useQuery({
 		queryKey: ["generalProducts"],
 		queryFn: fetchAllProducts,
 		select: (generalProducts) => generalProducts.slice(0, 8),
@@ -23,11 +22,17 @@ const GeneralProducts = () => {
 			{isLoading ? (
 				<ProductCardSkeleton />
 			) : (
-				<div className="general-product-card-container grid h-fit w-full grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4">
+				<motion.div
+					className="general-product-card-container grid h-fit w-full grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4"
+					variants={containerVariants}
+					initial="hidden"
+					whileInView="visible"
+					viewport={{ once: true, amount: 0.2 }}
+				>
 					{generalProducts?.map((gproduct: any) => (
 						<ProductCard {...gproduct} key={uuidv4()} />
 					))}
-				</div>
+				</motion.div>
 			)}
 
 			<Button className="mx-auto w-full sm:w-fit">

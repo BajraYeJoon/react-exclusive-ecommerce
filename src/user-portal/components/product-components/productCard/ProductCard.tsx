@@ -14,6 +14,8 @@ import { Button } from "../../../../common/ui/button";
 import uuidv4 from "../../../../common/lib/utils/uuid";
 import { useIncreaseQuantity } from "../../../utils/cartutils";
 import { cn } from "../../../../common/lib/utils";
+import { motion } from "framer-motion";
+
 
 interface ProductCardProps {
 	title: string;
@@ -92,8 +94,23 @@ const ProductCard = ({
 		isFavorite(id) ? handleRemoveFavorite() : handleAddFavorite();
 	};
 
+	const cardVariants = {
+		hidden: { opacity: 0, y: 50 },
+		visible: {
+			opacity: 1,
+			y: 0,
+			transition: {
+				duration: 0.5,
+				ease: "easeOut",
+			},
+		},
+	};
+
 	return (
-		<section className="mt-4 w-full max-w-64 overflow-hidden">
+		<motion.section
+			className="mt-4 w-full max-w-64 overflow-hidden"
+			variants={cardVariants}
+		>
 			<div className="group relative h-44 w-full overflow-hidden rounded-b-md bg-card md:h-64">
 				<Link to={`/${title?.toLowerCase().split(" ").join("-")}/${id}`}>
 					<img
@@ -168,7 +185,7 @@ const ProductCard = ({
 					))}
 				</div>
 			</div>
-		</section>
+		</motion.section>
 	);
 };
 

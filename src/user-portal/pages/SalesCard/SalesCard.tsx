@@ -11,6 +11,8 @@ import uuidv4 from "../../../common/lib/utils/uuid";
 import { Button } from "../../../common/ui/button";
 import useWindow from "../../../common/lib/useWindow";
 import { UserRoutes } from "../../utils/userLinks";
+import { motion } from "framer-motion";
+import { containerVariants } from "../../../common/lib/utils/motionVariants";
 
 interface SalesCardProps {
 	title: string;
@@ -58,7 +60,13 @@ const SalesCard = () => {
 					))}
 			</div>
 
-			<div className="product-card-container w-full items-center justify-between gap-4 overflow-hidden">
+			<motion.div
+				className="product-card-container w-full items-center justify-between gap-4 overflow-hidden"
+				variants={containerVariants}
+				initial="hidden"
+				whileInView="visible"
+				viewport={{ once: true, amount: 0.1 }}
+			>
 				<Swiper
 					spaceBetween={20}
 					pagination={{ clickable: true }}
@@ -95,7 +103,7 @@ const SalesCard = () => {
 						</>
 					)}
 				</Swiper>
-			</div>
+			</motion.div>
 
 			<Button
 				className="mx-auto w-full sm:w-fit"
