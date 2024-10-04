@@ -136,7 +136,7 @@ const Singleproduct = () => {
 						{details.title}
 						<span
 							className={cn(
-								`ml-3 inline-flex w-fit flex-wrap justify-center rounded-full bg-foreground/10 px-2 py-1 text-xs font-medium text-foreground/70`,
+								"ml-3 inline-flex w-fit flex-wrap justify-center rounded-full bg-foreground/10 px-2 py-1 text-xs font-medium text-foreground/70",
 								details.availability === true ? "bg-green-400" : "bg-red-400",
 							)}
 						>

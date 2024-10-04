@@ -32,8 +32,8 @@ const ArrivalsPage = () => {
 	}
 
 	return (
-		<section className="mx-72 mt-10 gap-40 max-2xl:mx-6 max-2xl:gap-28 md:mt-16">
-			<div className="product-card-container grid w-full grid-cols-2 items-center justify-center gap-4 overflow-hidden sm:grid-cols-3 lg:grid-cols-4 lg:justify-start">
+		<section className="arrivals-page-container mx-72 mt-10 gap-40 max-2xl:mx-6 max-2xl:gap-28 md:mt-16">
+			<div className="arrivals-wrapper grid w-full grid-cols-2 items-center justify-center gap-4 overflow-hidden sm:grid-cols-3 lg:grid-cols-4 lg:justify-start">
 				{!newArrivals ? (
 					<Card className="mx-auto w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl">
 						<CardHeader>
