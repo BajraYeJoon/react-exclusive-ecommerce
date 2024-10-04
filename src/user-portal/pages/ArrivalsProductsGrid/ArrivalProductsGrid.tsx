@@ -100,7 +100,7 @@ const GridItem = ({ product, additionalClasses }: GridItemProps) => {
 			className={`relative flex h-full w-full group  items-end overflow-hidden rounded-sm bg-foreground  p-4 md:p-6 lg:p-6 ${additionalClasses}`}
 		>
 			<div
-				className="absolute inset-0 scale-100 group-hover:scale-105 duration-300 ease-in transition-transform bg-cover bg-center"
+				className="absolute inset-0 scale-105 group-hover:scale-100 duration-300 ease-in transition-transform bg-cover bg-center"
 				style={{
 					backgroundImage: `url('${product.image[0]}')`,
 					backgroundSize: "cover",

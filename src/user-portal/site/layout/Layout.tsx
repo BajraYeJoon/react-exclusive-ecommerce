@@ -29,7 +29,7 @@ const FloatingCard = () => {
 		<AnimatePresence>
 			{isVisible && (
 				<motion.div
-					className="fixed right-4 top-0 z-50"
+					className="fixed right-4 top-0 z-20"
 					initial={{ x: 500, opacity: 0 }}
 					animate={{ x: 0, opacity: 1 }}
 					exit={{ x: 500, opacity: 0 }}
@@ -37,6 +37,7 @@ const FloatingCard = () => {
 				>
 					<div className="relative mt-[60px] rounded-lg border border-primary bg-white p-4 shadow-lg">
 						<button
+							type="button"
 							onClick={() => setIsVisible(false)}
 							className="absolute -right-2 -top-2 rounded-full bg-red-500 p-1 text-white transition-colors hover:bg-red-600"
 						>

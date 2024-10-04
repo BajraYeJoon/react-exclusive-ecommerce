@@ -131,7 +131,7 @@ export default function Checkout() {
 		mutationFn: (orderData: KhaltiOrderData) =>
 			Axios.post("/payment/initialize-payment", orderData),
 		onSuccess: () => {
-			toast.success("Payment successful");
+			toast.success("Please wait while we redirect you to Khalti payment gateway...");
 			queryClient.invalidateQueries({ queryKey: ["cart"] });
 		},
 		onError: () => {

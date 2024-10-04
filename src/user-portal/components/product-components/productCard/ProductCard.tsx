@@ -15,6 +15,7 @@ import uuidv4 from "../../../../common/lib/utils/uuid";
 import { useIncreaseQuantity } from "../../../utils/cartutils";
 import { cn } from "../../../../common/lib/utils";
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 
 interface ProductCardProps {
@@ -106,6 +107,8 @@ const ProductCard = ({
 		},
 	};
 
+	const [imageIndex, setImageIndex] = useState(0);
+
 	return (
 		<motion.section
 			className="mt-4 w-full max-w-64 overflow-hidden"
@@ -115,9 +118,13 @@ const ProductCard = ({
 				<Link to={`/${title?.toLowerCase().split(" ").join("-")}/${id}`}>
 					<img
 						className="h-full w-full object-contain p-2 md:p-4 lg:p-6 transition-opacity duration-300 group-hover:opacity-40"
-						src={image?.[0] ? image[0] : "https://via.placeholder.com/150"}
+						src={image[imageIndex]}
 						alt={title}
 						loading="lazy"
+						onMouseOver={() => setImageIndex(1)}
+						onMouseOut={() => setImageIndex(0)}
+						onFocus={() => {}}
+						onBlur={() => {}}
 					/>
 				</Link>
 
@@ -139,7 +146,10 @@ const ProductCard = ({
 						</button>
 					)}
 
-					<Link to={`/${title}/${id}`}>
+					<Link
+						to={`/${title?.toLowerCase().split(" ").join("-")}/${id}`}
+						replace={true}
+					>
 						<EyeIcon size={dimension.width < 768 ? 16 : 18} />
 					</Link>
 				</div>

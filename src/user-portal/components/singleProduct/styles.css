@@ -13,6 +13,12 @@
 	font-size: 14px;
 }
 
+@media screen and (max-width: 768px) {
+	.markdown-content li {
+		font-size: 12px;
+	}
+}
+
 .markdown-content h1,
 .markdown-content h2,
 .markdown-content h3,
