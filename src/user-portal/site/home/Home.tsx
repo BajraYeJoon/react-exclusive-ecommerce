@@ -11,6 +11,7 @@ import {
 import { Spotlight } from "../../../common/components";
 import Faq from "../../components/faq/FAQ";
 import { Feedback } from "../../components/feedback/Feedback";
+import Blogs from "../../components/blogs/Blogs";
 
 const offer_gif =
 	"https://res.cloudinary.com/dw55twddi/image/upload/v1727926551/exclusive/public/khgif_ebuksr.gif";
@@ -42,6 +43,8 @@ const Home = () => {
 				<ArrivalProductsGrid />
 				<ServiceDetails />
 				<Faq />
+
+				<Blogs />
 			</div>
 			<Feedback />
 		</>

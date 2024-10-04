@@ -15,6 +15,7 @@ import np_msg from "./user-portal/locales/np.json";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { languageState } from "./user-portal/atoms/languageState";
 // import * as Sentry from "@sentry/react";
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 
 const messages: { [key: string]: Record<string, string> } = {
 	en: en_msg,
@@ -67,6 +68,11 @@ const LanguageWrapper = ({ children }: { children: React.ReactNode }) => {
 //   replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
 // });
 
+const client = new ApolloClient({
+	uri: "https://ap-south-1.cdn.hygraph.com/content/clj5ck2rt008i01uiasys799g/master",
+	cache: new InMemoryCache(),
+});
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
 	<React.StrictMode>
 		<QueryClientProvider client={query}>
@@ -74,16 +80,18 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         apiKey="phc_fQcn9SW8lEM635UzO6NIJQwS4OPo2tsakZJriWF44Nx"
         options={options}
       > */}
-			<RecoilRoot>
-				<LanguageWrapper>
-					<AuthProvider>
-						<App />
-						<Analytics />
-						<ReactQueryDevtools initialIsOpen={false} />
-						<Toaster richColors />
-					</AuthProvider>
-				</LanguageWrapper>
-			</RecoilRoot>
+			<ApolloProvider client={client}>
+				<RecoilRoot>
+					<LanguageWrapper>
+						<AuthProvider>
+							<App />
+							<Analytics />
+							<ReactQueryDevtools initialIsOpen={false} />
+							<Toaster richColors />
+						</AuthProvider>
+					</LanguageWrapper>
+				</RecoilRoot>
+			</ApolloProvider>
 			{/* </PostHogProvider> */}
 		</QueryClientProvider>
 	</React.StrictMode>,
